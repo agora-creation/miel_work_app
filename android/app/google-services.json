@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "66212259980",
+    "project_id": "miel-work-project",
+    "storage_bucket": "miel-work-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:66212259980:android:0c87140f712c46b83933a9",
+        "android_client_info": {
+          "package_name": "com.agoracreation.miel_work_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDaAh4qXyu73GIkKmbHxgFirqmJfkcfe0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
