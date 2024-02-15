@@ -8,7 +8,7 @@ class UserModel {
   String _uid = '';
   String _token = '';
   String _organizationId = '';
-  List<String> _groupIds = [];
+  List<String> groupIds = [];
   DateTime _createdAt = DateTime.now();
 
   String get id => _id;
@@ -18,7 +18,6 @@ class UserModel {
   String get uid => _uid;
   String get token => _token;
   String get organizationId => _organizationId;
-  List<String> get groupIds => _groupIds;
   DateTime get createdAt => _createdAt;
 
   UserModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
@@ -31,7 +30,7 @@ class UserModel {
     _uid = data['uid'] ?? '';
     _token = data['token'] ?? '';
     _organizationId = data['organizationId'] ?? '';
-    _groupIds = data['groupIds'] ?? [];
+    groupIds = _convertGroupIds(data['groupIds']);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
   }
 
@@ -43,7 +42,7 @@ class UserModel {
     _uid = data['uid'] ?? '';
     _token = data['token'] ?? '';
     _organizationId = data['organizationId'] ?? '';
-    _groupIds = data['groupIds'] ?? [];
+    groupIds = _convertGroupIds(data['groupIds']);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
   }
 
@@ -55,7 +54,15 @@ class UserModel {
         'uid': _uid,
         'token': _token,
         'organizationId': _organizationId,
-        'groupIds': _groupIds,
+        'groupIds': groupIds,
         'createdAt': _createdAt,
       };
+
+  List<String> _convertGroupIds(List list) {
+    List<String> ret = [];
+    for (dynamic id in list) {
+      ret.add('$id');
+    }
+    return ret;
+  }
 }
