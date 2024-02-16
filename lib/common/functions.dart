@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void pushScreen(BuildContext context, Widget widget) {
@@ -19,6 +20,16 @@ void pushReplacementScreen(BuildContext context, Widget widget) {
       builder: (context) => widget,
       fullscreenDialog: true,
     ),
+  );
+}
+
+Future showBottomUpScreen(BuildContext context, Widget widget) async {
+  await showMaterialModalBottomSheet(
+    expand: true,
+    isDismissible: false,
+    enableDrag: false,
+    context: context,
+    builder: (context) => widget,
   );
 }
 

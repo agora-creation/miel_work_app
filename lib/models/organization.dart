@@ -4,7 +4,6 @@ import 'package:miel_work_app/models/user.dart';
 
 class OrganizationModel {
   String _id = '';
-  String _code = '';
   String _name = '';
   List<GroupModel> groups = [];
   List<UserModel> adminUsers = [];
@@ -12,7 +11,6 @@ class OrganizationModel {
   DateTime _createdAt = DateTime.now();
 
   String get id => _id;
-  String get code => _code;
   String get name => _name;
   DateTime get createdAt => _createdAt;
 
@@ -21,7 +19,6 @@ class OrganizationModel {
     Map<String, dynamic>? data = snapshot.data();
     if (data == null) return;
     _id = data['id'] ?? '';
-    _code = data['code'] ?? '';
     _name = data['name'] ?? '';
     groups = _convertGroups(data['groups']);
     adminUsers = _convertUsers(data['adminUsers']);

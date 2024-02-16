@@ -63,7 +63,7 @@ class CustomTextFormField extends StatelessWidget {
         ),
         labelStyle: TextStyle(color: color),
         focusColor: color,
-        fillColor: kGrey4Color,
+        fillColor: kGrey200Color,
       ),
     );
   }
