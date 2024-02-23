@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/providers/user.dart';
+import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/calendar.dart';
 import 'package:miel_work_app/screens/chat.dart';
 import 'package:miel_work_app/screens/group.dart';
@@ -24,7 +24,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
+    final userProvider = Provider.of<LoginProvider>(context);
 
     return Scaffold(
       appBar: AppBar(

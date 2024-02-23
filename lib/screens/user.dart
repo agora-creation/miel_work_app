@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/providers/user.dart';
+import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/login.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
 import 'package:miel_work_app/widgets/user_info_list.dart';
 
 class UserScreen extends StatefulWidget {
-  final UserProvider userProvider;
+  final LoginProvider userProvider;
 
   const UserScreen({
     required this.userProvider,

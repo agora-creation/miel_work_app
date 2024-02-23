@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/providers/user.dart';
+import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/home.dart';
 import 'package:miel_work_app/screens/login.dart';
 import 'package:miel_work_app/screens/splash.dart';
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: UserProvider.initialize()),
+        ChangeNotifierProvider.value(value: LoginProvider.initialize()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -62,7 +62,7 @@ class SplashController extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
+    final userProvider = Provider.of<LoginProvider>(context);
     switch (userProvider.status) {
       case AuthStatus.uninitialized:
         return const SplashScreen();

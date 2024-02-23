@@ -4,7 +4,6 @@ class NoticeModel {
   String _id = '';
   String _organizationId = '';
   String _groupId = '';
-  String _userId = '';
   String _title = '';
   String _content = '';
   String _file = '';
@@ -13,7 +12,6 @@ class NoticeModel {
   String get id => _id;
   String get organizationId => _organizationId;
   String get groupId => _groupId;
-  String get userId => _userId;
   String get title => _title;
   String get content => _content;
   String get file => _file;
@@ -25,7 +23,6 @@ class NoticeModel {
     _id = data['id'] ?? '';
     _organizationId = data['organizationId'] ?? '';
     _groupId = data['groupId'] ?? '';
-    _userId = data['userId'] ?? '';
     _title = data['title'] ?? '';
     _content = data['content'] ?? '';
     _file = data['file'] ?? '';

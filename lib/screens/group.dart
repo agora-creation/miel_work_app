@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/providers/user.dart';
+import 'package:miel_work_app/providers/login.dart';
 
 class GroupScreen extends StatefulWidget {
-  final UserProvider userProvider;
+  final LoginProvider userProvider;
 
   const GroupScreen({
     required this.userProvider,

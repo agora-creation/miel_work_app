@@ -1,17 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:miel_work_app/models/group.dart';
-import 'package:miel_work_app/models/user.dart';
 
 class OrganizationModel {
   String _id = '';
   String _name = '';
-  List<GroupModel> groups = [];
-  List<UserModel> adminUsers = [];
-  List<UserModel> generalUsers = [];
+  String _adminUserId = '';
+  List<String> userIds = [];
   DateTime _createdAt = DateTime.now();
 
   String get id => _id;
   String get name => _name;
+  String get adminUserId => _adminUserId;
   DateTime get createdAt => _createdAt;
 
   OrganizationModel.fromSnapshot(
@@ -20,25 +18,16 @@ class OrganizationModel {
     if (data == null) return;
     _id = data['id'] ?? '';
     _name = data['name'] ?? '';
-    groups = _convertGroups(data['groups']);
-    adminUsers = _convertUsers(data['adminUsers']);
-    generalUsers = _convertUsers(data['generalUsers']);
+    _adminUserId = data['adminUserId'] ?? '';
+    userIds = _convertUserIds(data['userIds']);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
   }
 
-  List<GroupModel> _convertGroups(List list) {
-    List<GroupModel> converted = [];
-    for (Map data in list) {
-      converted.add(GroupModel.fromMap(data));
+  List<String> _convertUserIds(List list) {
+    List<String> ret = [];
+    for (dynamic id in list) {
+      ret.add('$id');
     }
-    return converted;
-  }
-
-  List<UserModel> _convertUsers(List list) {
-    List<UserModel> converted = [];
-    for (Map data in list) {
-      converted.add(UserModel.fromMap(data));
-    }
-    return converted;
+    return ret;
   }
 }

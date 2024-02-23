@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/providers/user.dart';
+import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/home.dart';
 import 'package:miel_work_app/widgets/custom_button_lg.dart';
 import 'package:miel_work_app/widgets/custom_login_card.dart';
@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
+    final userProvider = Provider.of<LoginProvider>(context);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontFamily: 'SourceHanSansJP-Bold',
                       ),
                     ),
-                    Text('団体の管理者からメールアドレスとパスワードを貰い、ログインしてください。'),
+                    Text('管理者からメールアドレスとパスワードを貰い、ログインしてください。'),
                   ],
                 ),
               ),

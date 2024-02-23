@@ -9,6 +9,7 @@ class WorkModel {
   DateTime _startedAt = DateTime.now();
   DateTime _endedAt = DateTime.now();
   List<WorkBreakModel> workBreaks = [];
+  int _status = 0;
   DateTime _createdAt = DateTime.now();
 
   String get id => _id;
@@ -17,6 +18,7 @@ class WorkModel {
   String get userId => _userId;
   DateTime get startedAt => _startedAt;
   DateTime get endedAt => _endedAt;
+  int get status => _status;
   DateTime get createdAt => _createdAt;
 
   WorkModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
@@ -29,6 +31,7 @@ class WorkModel {
     _startedAt = data['startedAt'].toDate() ?? DateTime.now();
     _endedAt = data['endedAt'].toDate() ?? DateTime.now();
     workBreaks = _convertWorkBreaks(data['workBreaks']);
+    _status = data['status'] ?? 0;
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
   }
 

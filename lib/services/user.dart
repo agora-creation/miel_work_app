@@ -9,6 +9,22 @@ class UserService {
     firestore.collection(collection).doc(values['id']).update(values);
   }
 
+  Future<bool> emailCheck({
+    required String email,
+  }) async {
+    bool ret = false;
+    await firestore
+        .collection(collection)
+        .where('email', isEqualTo: email)
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        ret = true;
+      }
+    });
+    return ret;
+  }
+
   Future<UserModel?> selectData({
     required String email,
     required String password,

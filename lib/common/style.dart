@@ -13,6 +13,7 @@ const kRed300Color = Color(0xFFE57373);
 const kBlueColor = Color(0xFF2196F3);
 const kCyanColor = Color(0xFF00BCD4);
 const kOrangeColor = Color(0xFFFF9800);
+const kYellowColor = Color(0xFFFFEB3B);
 
 ThemeData customTheme() {
   return ThemeData(
