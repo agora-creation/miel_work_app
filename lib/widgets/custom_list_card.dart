@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/style.dart';
 
-class HomeGridCard extends StatelessWidget {
+class CustomListCard extends StatelessWidget {
   final String label;
   final Widget child;
   final Function()? onTap;
 
-  const HomeGridCard({
+  const CustomListCard({
     required this.label,
     required this.child,
     this.onTap,

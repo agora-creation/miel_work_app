@@ -24,7 +24,7 @@ class _NoticeScreenState extends State<NoticeScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'お知らせ一覧',
+          'お知らせ',
           style: TextStyle(color: kBlackColor),
         ),
         shape: const Border(

@@ -24,7 +24,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'チャットルーム一覧',
+          'チャットルーム',
           style: TextStyle(color: kBlackColor),
         ),
         shape: const Border(

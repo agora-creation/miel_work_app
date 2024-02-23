@@ -8,7 +8,8 @@ import 'package:miel_work_app/screens/manual.dart';
 import 'package:miel_work_app/screens/notice.dart';
 import 'package:miel_work_app/screens/user_setting.dart';
 import 'package:miel_work_app/widgets/custom_appbar_title.dart';
-import 'package:miel_work_app/widgets/home_grid_card.dart';
+import 'package:miel_work_app/widgets/custom_icon_card.dart';
+import 'package:miel_work_app/widgets/custom_list_card.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -46,31 +47,21 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.zero,
             gridDelegate: kHome2Grid,
             children: [
-              HomeGridCard(
+              CustomIconCard(
+                icon: Icons.picture_as_pdf,
                 label: '業務マニュアル',
-                child: const Expanded(
-                  child: Center(
-                    child: Text(
-                      'ありません',
-                      style: TextStyle(color: kBlackColor),
-                    ),
-                  ),
-                ),
+                color: kWhiteColor,
+                backgroundColor: kRedColor,
                 onTap: () => pushScreen(
                   context,
                   const ManualScreen(),
                 ),
               ),
-              HomeGridCard(
+              CustomIconCard(
+                icon: Icons.notifications,
                 label: 'お知らせ',
-                child: const Expanded(
-                  child: Center(
-                    child: Text(
-                      'ありません',
-                      style: TextStyle(color: kBlackColor),
-                    ),
-                  ),
-                ),
+                color: kBlackColor,
+                backgroundColor: kWhiteColor,
                 onTap: () => pushScreen(
                   context,
                   const NoticeScreen(),
@@ -78,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          HomeGridCard(
+          CustomListCard(
             label: 'チャット',
             child: const Column(
               children: [
@@ -92,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const ChatScreen(),
             ),
           ),
-          HomeGridCard(
+          CustomListCard(
             label: 'スケジュール',
             child: const Column(
               children: [
@@ -106,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const CalendarScreen(),
             ),
           ),
-          HomeGridCard(
+          CustomListCard(
             label: '勤怠打刻',
             child: const Column(
               children: [
@@ -115,10 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            onTap: () => pushScreen(
-              context,
-              const CalendarScreen(),
-            ),
+            onTap: () {},
           ),
           GridView(
             shrinkWrap: true,
@@ -126,50 +114,32 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.zero,
             gridDelegate: kHome3Grid,
             children: [
-              HomeGridCard(
+              CustomIconCard(
+                icon: Icons.gas_meter,
+                iconSize: 40,
                 label: 'メーター検針',
-                child: const Expanded(
-                  child: Center(
-                    child: Text(
-                      'ありません',
-                      style: TextStyle(color: kBlackColor),
-                    ),
-                  ),
-                ),
-                onTap: () => pushScreen(
-                  context,
-                  const ManualScreen(),
-                ),
+                labelFontSize: 14,
+                color: kBlackColor,
+                backgroundColor: kYellowColor,
+                onTap: () {},
               ),
-              HomeGridCard(
+              CustomIconCard(
+                icon: Icons.edit_note,
+                iconSize: 40,
                 label: '稟議申請',
-                child: const Expanded(
-                  child: Center(
-                    child: Text(
-                      'ありません',
-                      style: TextStyle(color: kBlackColor),
-                    ),
-                  ),
-                ),
-                onTap: () => pushScreen(
-                  context,
-                  const NoticeScreen(),
-                ),
+                labelFontSize: 14,
+                color: kBlackColor,
+                backgroundColor: kOrangeColor,
+                onTap: () {},
               ),
-              HomeGridCard(
+              CustomIconCard(
+                icon: Icons.group,
+                iconSize: 40,
                 label: 'スタッフ管理',
-                child: const Expanded(
-                  child: Center(
-                    child: Text(
-                      'ありません',
-                      style: TextStyle(color: kBlackColor),
-                    ),
-                  ),
-                ),
-                onTap: () => pushScreen(
-                  context,
-                  const NoticeScreen(),
-                ),
+                labelFontSize: 14,
+                color: kBlackColor,
+                backgroundColor: kGreyColor,
+                onTap: () {},
               ),
             ],
           ),

@@ -24,7 +24,7 @@ class _ManualScreenState extends State<ManualScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          '業務マニュアル一覧',
+          '業務マニュアル',
           style: TextStyle(color: kBlackColor),
         ),
         shape: const Border(
