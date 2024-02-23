@@ -4,7 +4,9 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/calendar.dart';
 import 'package:miel_work_app/screens/chat.dart';
+import 'package:miel_work_app/screens/draft.dart';
 import 'package:miel_work_app/screens/manual.dart';
+import 'package:miel_work_app/screens/meter.dart';
 import 'package:miel_work_app/screens/notice.dart';
 import 'package:miel_work_app/screens/user_setting.dart';
 import 'package:miel_work_app/widgets/custom_appbar_title.dart';
@@ -97,17 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
               const CalendarScreen(),
             ),
           ),
-          CustomListCard(
-            label: '勤怠打刻',
-            child: const Column(
-              children: [
-                ListTile(
-                  title: Text('現在は出勤しておりません'),
-                ),
-              ],
-            ),
-            onTap: () {},
-          ),
           GridView(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -121,7 +112,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 labelFontSize: 14,
                 color: kBlackColor,
                 backgroundColor: kYellowColor,
-                onTap: () {},
+                onTap: () => pushScreen(
+                  context,
+                  const MeterScreen(),
+                ),
               ),
               CustomIconCard(
                 icon: Icons.edit_note,
@@ -130,20 +124,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 labelFontSize: 14,
                 color: kBlackColor,
                 backgroundColor: kOrangeColor,
-                onTap: () {},
-              ),
-              CustomIconCard(
-                icon: Icons.group,
-                iconSize: 40,
-                label: 'スタッフ管理',
-                labelFontSize: 14,
-                color: kBlackColor,
-                backgroundColor: kGreyColor,
-                onTap: () {},
+                onTap: () => pushScreen(
+                  context,
+                  const DraftScreen(),
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
         ],
       ),
     );
