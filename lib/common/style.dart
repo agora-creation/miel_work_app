@@ -50,13 +50,12 @@ ThemeData customTheme() {
   );
 }
 
-const kErrorStyle = TextStyle(
-  color: kRedColor,
-  fontSize: 14,
+const SliverGridDelegate kHome2Grid = SliverGridDelegateWithFixedCrossAxisCount(
+  crossAxisCount: 2,
 );
 
-const SliverGridDelegate kHomeGrid = SliverGridDelegateWithFixedCrossAxisCount(
-  crossAxisCount: 2,
+const SliverGridDelegate kHome3Grid = SliverGridDelegateWithFixedCrossAxisCount(
+  crossAxisCount: 3,
 );
 
 DateTime kFirstDate = DateTime.now().subtract(const Duration(days: 1095));

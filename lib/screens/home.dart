@@ -4,13 +4,10 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/calendar.dart';
 import 'package:miel_work_app/screens/chat.dart';
-import 'package:miel_work_app/screens/group.dart';
 import 'package:miel_work_app/screens/manual.dart';
 import 'package:miel_work_app/screens/notice.dart';
-import 'package:miel_work_app/screens/user.dart';
-import 'package:miel_work_app/screens/users.dart';
-import 'package:miel_work_app/screens/work.dart';
-import 'package:miel_work_app/widgets/group_list_tile.dart';
+import 'package:miel_work_app/screens/user_setting.dart';
+import 'package:miel_work_app/widgets/custom_appbar_title.dart';
 import 'package:miel_work_app/widgets/home_grid_card.dart';
 import 'package:provider/provider.dart';
 
@@ -24,39 +21,41 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<LoginProvider>(context);
+    final loginProvider = Provider.of<LoginProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(userProvider.user?.name ?? ''),
+        title: CustomAppbarTitle(loginProvider: loginProvider),
         actions: [
           IconButton(
             onPressed: () => showBottomUpScreen(
               context,
-              UserScreen(userProvider: userProvider),
+              UserSettingScreen(loginProvider: loginProvider),
             ),
             icon: const Icon(Icons.more_vert),
           ),
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         children: [
-          GroupListTile(
-            onTap: () => pushScreen(
-              context,
-              GroupScreen(userProvider: userProvider),
-            ),
-          ),
-          const SizedBox(height: 8),
           GridView(
             shrinkWrap: true,
-            gridDelegate: kHomeGrid,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            gridDelegate: kHome2Grid,
             children: [
               HomeGridCard(
                 label: '業務マニュアル',
-                child: Container(),
+                child: const Expanded(
+                  child: Center(
+                    child: Text(
+                      'ありません',
+                      style: TextStyle(color: kBlackColor),
+                    ),
+                  ),
+                ),
                 onTap: () => pushScreen(
                   context,
                   const ManualScreen(),
@@ -64,7 +63,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               HomeGridCard(
                 label: 'お知らせ',
-                child: Container(),
+                child: const Expanded(
+                  child: Center(
+                    child: Text(
+                      'ありません',
+                      style: TextStyle(color: kBlackColor),
+                    ),
+                  ),
+                ),
                 onTap: () => pushScreen(
                   context,
                   const NoticeScreen(),
@@ -77,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: const Column(
               children: [
                 ListTile(
-                  title: Text('メッセージはありません'),
+                  title: Text('未読メッセージはありません'),
                 ),
               ],
             ),
@@ -100,24 +106,69 @@ class _HomeScreenState extends State<HomeScreen> {
               const CalendarScreen(),
             ),
           ),
+          HomeGridCard(
+            label: '勤怠打刻',
+            child: const Column(
+              children: [
+                ListTile(
+                  title: Text('現在は出勤しておりません'),
+                ),
+              ],
+            ),
+            onTap: () => pushScreen(
+              context,
+              const CalendarScreen(),
+            ),
+          ),
           GridView(
             shrinkWrap: true,
-            gridDelegate: kHomeGrid,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            gridDelegate: kHome3Grid,
             children: [
               HomeGridCard(
-                label: 'スタッフ管理',
-                child: Container(),
+                label: 'メーター検針',
+                child: const Expanded(
+                  child: Center(
+                    child: Text(
+                      'ありません',
+                      style: TextStyle(color: kBlackColor),
+                    ),
+                  ),
+                ),
                 onTap: () => pushScreen(
                   context,
-                  const UsersScreen(),
+                  const ManualScreen(),
                 ),
               ),
               HomeGridCard(
-                label: '勤怠打刻',
-                child: Container(),
+                label: '稟議申請',
+                child: const Expanded(
+                  child: Center(
+                    child: Text(
+                      'ありません',
+                      style: TextStyle(color: kBlackColor),
+                    ),
+                  ),
+                ),
                 onTap: () => pushScreen(
                   context,
-                  const WorkScreen(),
+                  const NoticeScreen(),
+                ),
+              ),
+              HomeGridCard(
+                label: 'スタッフ管理',
+                child: const Expanded(
+                  child: Center(
+                    child: Text(
+                      'ありません',
+                      style: TextStyle(color: kBlackColor),
+                    ),
+                  ),
+                ),
+                onTap: () => pushScreen(
+                  context,
+                  const NoticeScreen(),
                 ),
               ),
             ],

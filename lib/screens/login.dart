@@ -18,11 +18,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  String? errorText;
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<LoginProvider>(context);
+    final loginProvider = Provider.of<LoginProvider>(context);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -53,12 +52,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               CustomLoginCard(
                 children: [
-                  errorText != null
-                      ? Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Text('$errorText', style: kErrorStyle),
-                        )
-                      : Container(),
                   CustomTextFormField(
                     controller: emailController,
                     textInputType: TextInputType.emailAddress,
@@ -85,17 +78,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       labelColor: kWhiteColor,
                       backgroundColor: kBlueColor,
                       onPressed: () async {
-                        String? result = await userProvider.login(
+                        String? error = await loginProvider.login(
                           email: emailController.text,
                           password: passwordController.text,
                         );
-                        if (result != null) {
-                          setState(() {
-                            errorText = result;
-                          });
+                        if (error != null) {
+                          if (!mounted) return;
+                          showMessage(context, error, false);
                           return;
                         }
                         if (!mounted) return;
+                        showMessage(context, 'ログインに成功しました', true);
                         pushReplacementScreen(
                           context,
                           const HomeScreen(),

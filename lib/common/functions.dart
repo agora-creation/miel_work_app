@@ -9,7 +9,7 @@ void showMessage(BuildContext context, String msg, bool success) {
   showAlertBanner(
     context,
     () {},
-    const CustomAlertBanner(),
+    CustomAlertBanner(msg: msg, success: success),
     alertBannerLocation: AlertBannerLocation.top,
   );
 }

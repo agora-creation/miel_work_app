@@ -11,13 +11,13 @@ class OrganizationService {
     OrganizationModel? ret;
     await firestore
         .collection(collection)
-        .where('userIds', arrayContains: [userId])
+        .where('userIds', arrayContains: userId)
         .get()
         .then((value) {
-          if (value.docs.isNotEmpty) {
-            ret = OrganizationModel.fromSnapshot(value.docs.first);
-          }
-        });
+      if (value.docs.isNotEmpty) {
+        ret = OrganizationModel.fromSnapshot(value.docs.first);
+      }
+    });
     return ret;
   }
 }

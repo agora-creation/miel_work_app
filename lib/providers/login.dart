@@ -89,7 +89,7 @@ class LoginProvider with ChangeNotifier {
           await _auth?.signOut();
           _status = AuthStatus.unauthenticated;
           notifyListeners();
-          error = 'メールアドレスまたはパスワードが間違ってます';
+          error = '団体が見つかりません';
         }
       } else {
         await _auth?.signOut();
@@ -101,6 +101,56 @@ class LoginProvider with ChangeNotifier {
       _status = AuthStatus.unauthenticated;
       notifyListeners();
       error = 'ログインに失敗しました';
+    }
+    return error;
+  }
+
+  Future<String?> updateName({
+    required String name,
+  }) async {
+    String? error;
+    if (name == '') return '名前を入力してください';
+    try {
+      _userService.update({
+        'id': _user?.id,
+        'name': name,
+      });
+    } catch (e) {
+      error = e.toString();
+    }
+    return error;
+  }
+
+  Future<String?> updateEmail({
+    required String email,
+  }) async {
+    String? error;
+    if (email == '') return 'メールアドレスを入力してください';
+    try {
+      _userService.update({
+        'id': _user?.id,
+        'email': email,
+      });
+      await setPrefsString('email', email);
+    } catch (e) {
+      error = e.toString();
+    }
+    return error;
+  }
+
+  Future<String?> updatePassword({
+    required String password,
+  }) async {
+    String? error;
+    if (password == '') return 'パスワードを入力してください';
+    try {
+      _userService.update({
+        'id': _user?.id,
+        'password': password,
+      });
+      await setPrefsString('password', password);
+    } catch (e) {
+      error = e.toString();
     }
     return error;
   }

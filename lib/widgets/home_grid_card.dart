@@ -25,7 +25,10 @@ class HomeGridCard extends StatelessWidget {
         surfaceTintColor: kWhiteColor,
         elevation: 8,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          padding: const EdgeInsets.symmetric(
+            vertical: 8,
+            horizontal: 12,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -33,12 +36,16 @@ class HomeGridCard extends StatelessWidget {
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   border: Border(
-                    bottom: BorderSide(color: kBlackColor),
+                    bottom: BorderSide(color: kGrey600Color),
                   ),
                 ),
                 child: Text(
                   label,
-                  style: const TextStyle(color: kBlackColor),
+                  style: const TextStyle(
+                    color: kBlackColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               child,

@@ -15,13 +15,13 @@ class OrganizationGroupService {
         .collection(collection)
         .doc(organizationId)
         .collection(subCollection)
-        .where('userIds', arrayContains: [userId])
+        .where('userIds', arrayContains: userId)
         .get()
         .then((value) {
-          if (value.docs.isNotEmpty) {
-            ret = OrganizationGroupModel.fromSnapshot(value.docs.first);
-          }
-        });
+      if (value.docs.isNotEmpty) {
+        ret = OrganizationGroupModel.fromSnapshot(value.docs.first);
+      }
+    });
     return ret;
   }
 }
