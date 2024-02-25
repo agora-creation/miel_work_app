@@ -33,9 +33,9 @@ class _ManualPdfScreenState extends State<ManualPdfScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         centerTitle: true,
-        title: const Text(
-          'PDFファイル詳細',
-          style: TextStyle(color: kBlackColor),
+        title: Text(
+          widget.manual.title,
+          style: const TextStyle(color: kBlackColor),
         ),
         shape: const Border(
           bottom: BorderSide(color: kGrey600Color),

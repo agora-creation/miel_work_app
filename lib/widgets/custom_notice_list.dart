@@ -1,0 +1,32 @@
+import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/functions.dart';
+import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/notice.dart';
+
+class CustomNoticeList extends StatelessWidget {
+  final NoticeModel notice;
+  final Function()? onTap;
+
+  const CustomNoticeList({
+    required this.notice,
+    this.onTap,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: kGrey600Color),
+        ),
+      ),
+      child: ListTile(
+        title: Text(notice.title),
+        subtitle: Text(dateText('yyyy/MM/dd HH:mm', notice.createdAt)),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: onTap,
+      ),
+    );
+  }
+}
