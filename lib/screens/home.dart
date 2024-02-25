@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 backgroundColor: kRedColor,
                 onTap: () => pushScreen(
                   context,
-                  const ManualScreen(),
+                  ManualScreen(loginProvider: loginProvider),
                 ),
               ),
               CustomIconCard(

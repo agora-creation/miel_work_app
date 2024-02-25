@@ -11,6 +11,7 @@ import 'package:miel_work_app/screens/login.dart';
 import 'package:miel_work_app/screens/splash.dart';
 import 'package:miel_work_app/services/fm.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
+          SfGlobalLocalizations.delegate,
         ],
         supportedLocales: const [Locale('ja')],
         locale: const Locale('ja'),
