@@ -29,7 +29,7 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
         backgroundColor: kWhiteColor,
         automaticallyImplyLeading: false,
         title: const Text(
-          '設定',
+          'スタッフ設定',
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
