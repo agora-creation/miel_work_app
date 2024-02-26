@@ -24,7 +24,7 @@ class _DraftScreenState extends State<DraftScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          '稟議申請',
+          '稟議申請一覧',
           style: TextStyle(color: kBlackColor),
         ),
         shape: const Border(

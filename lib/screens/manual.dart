@@ -38,7 +38,7 @@ class _ManualScreenState extends State<ManualScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          '業務マニュアル',
+          '業務マニュアル一覧',
           style: TextStyle(color: kBlackColor),
         ),
         shape: const Border(
@@ -48,14 +48,17 @@ class _ManualScreenState extends State<ManualScreen> {
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: manualService.streamList(
           organizationId: widget.loginProvider.organization?.id,
-          groupId: widget.loginProvider.group?.id,
         ),
         builder: (context, snapshot) {
           List<ManualModel> manuals = [];
           if (snapshot.hasData) {
             for (DocumentSnapshot<Map<String, dynamic>> doc
                 in snapshot.data!.docs) {
-              manuals.add(ManualModel.fromSnapshot(doc));
+              ManualModel manual = ManualModel.fromSnapshot(doc);
+              if (manual.groupId == widget.loginProvider.group?.id ||
+                  manual.groupId == '') {
+                manuals.add(manual);
+              }
             }
           }
           return ListView.builder(

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/screens/calendar.dart';
 import 'package:miel_work_app/screens/chat.dart';
 import 'package:miel_work_app/screens/draft.dart';
 import 'package:miel_work_app/screens/manual.dart';
 import 'package:miel_work_app/screens/meter.dart';
 import 'package:miel_work_app/screens/notice.dart';
+import 'package:miel_work_app/screens/plan.dart';
 import 'package:miel_work_app/screens/user_setting.dart';
 import 'package:miel_work_app/widgets/custom_appbar_title.dart';
 import 'package:miel_work_app/widgets/custom_icon_card.dart';
@@ -52,8 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
               CustomIconCard(
                 icon: Icons.picture_as_pdf,
                 label: '業務マニュアル',
-                color: kWhiteColor,
-                backgroundColor: kRedColor,
+                color: kBlackColor,
+                backgroundColor: kWhiteColor,
                 onTap: () => pushScreen(
                   context,
                   ManualScreen(loginProvider: loginProvider),
@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             onTap: () => pushScreen(
               context,
-              const CalendarScreen(),
+              const PlanScreen(),
             ),
           ),
           GridView(

@@ -24,7 +24,7 @@ class _MeterScreenState extends State<MeterScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'メーター検針',
+          'メーター検針入力',
           style: TextStyle(color: kBlackColor),
         ),
         shape: const Border(

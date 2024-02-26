@@ -36,7 +36,7 @@ class _NoticeScreenState extends State<NoticeScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'お知らせ',
+          'お知らせ一覧',
           style: TextStyle(color: kBlackColor),
         ),
         shape: const Border(
@@ -46,14 +46,17 @@ class _NoticeScreenState extends State<NoticeScreen> {
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: noticeService.streamList(
           organizationId: widget.loginProvider.organization?.id,
-          groupId: widget.loginProvider.group?.id,
         ),
         builder: (context, snapshot) {
           List<NoticeModel> notices = [];
           if (snapshot.hasData) {
             for (DocumentSnapshot<Map<String, dynamic>> doc
                 in snapshot.data!.docs) {
-              notices.add(NoticeModel.fromSnapshot(doc));
+              NoticeModel notice = NoticeModel.fromSnapshot(doc);
+              if (notice.groupId == widget.loginProvider.group?.id ||
+                  notice.groupId == '') {
+                notices.add(notice);
+              }
             }
           }
           return ListView.builder(

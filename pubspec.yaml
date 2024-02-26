@@ -25,6 +25,7 @@ dependencies:
   alert_banner: ^1.0.1
   syncfusion_localizations: ^23.2.7
   syncfusion_flutter_pdfviewer: ^23.2.7
+  syncfusion_flutter_calendar: ^23.2.7
 
   firebase_core: ^2.25.4
   firebase_auth: ^4.17.4

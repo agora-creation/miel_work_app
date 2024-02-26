@@ -24,15 +24,29 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'チャットルーム',
+          'チャットルーム一覧',
           style: TextStyle(color: kBlackColor),
         ),
         shape: const Border(
           bottom: BorderSide(color: kGrey600Color),
         ),
       ),
-      body: Column(
-        children: [],
+      body: ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: kGrey600Color),
+              ),
+            ),
+            child: ListTile(
+              title: Text('スタッフ$index'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {},
+            ),
+          );
+        },
       ),
     );
   }
