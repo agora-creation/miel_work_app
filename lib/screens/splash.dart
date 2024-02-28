@@ -17,7 +17,7 @@ class SplashScreen extends StatelessWidget {
                 border: Border(bottom: BorderSide(color: kWhiteColor)),
               ),
               child: const Text(
-                'みえるWORK',
+                'ひろめWORK',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -27,7 +27,7 @@ class SplashScreen extends StatelessWidget {
               ),
             ),
             const SpinKitCubeGrid(
-              color: kWhiteColor,
+              color: kBlackColor,
             ),
           ],
         ),

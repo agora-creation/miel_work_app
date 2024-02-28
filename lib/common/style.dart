@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-const kBackgroundColor = Color(0xFF5C6BC0);
+const kBackgroundColor = Color(0xFFFFD54F);
 const kWhiteColor = Color(0xFFFFFFFF);
 const kBlackColor = Color(0xFF333333);
 const kGreyColor = Color(0xFF9E9E9E);
@@ -25,20 +25,20 @@ ThemeData customTheme() {
       centerTitle: false,
       systemOverlayStyle: SystemUiOverlayStyle.dark,
       titleTextStyle: TextStyle(
-        color: kWhiteColor,
+        color: kBlackColor,
         fontSize: 18,
         fontWeight: FontWeight.bold,
         fontFamily: 'SourceHanSansJP-Bold',
       ),
-      iconTheme: IconThemeData(color: kWhiteColor),
+      iconTheme: IconThemeData(color: kBlackColor),
     ),
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: kWhiteColor),
-      bodyMedium: TextStyle(color: kWhiteColor),
-      bodySmall: TextStyle(color: kWhiteColor),
+      bodyLarge: TextStyle(color: kBlackColor),
+      bodyMedium: TextStyle(color: kBlackColor),
+      bodySmall: TextStyle(color: kBlackColor),
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: kWhiteColor,
+      backgroundColor: kBlueColor,
       elevation: 5,
       extendedTextStyle: TextStyle(
         fontWeight: FontWeight.bold,

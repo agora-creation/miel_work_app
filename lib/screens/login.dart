@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: const Text('みえるWORK'),
+          title: const Text('ひろめWORK'),
         ),
         body: Center(
           child: Column(
