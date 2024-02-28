@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 const kBackgroundColor = Color(0xFFFFD54F);
+const kHomeBackgroundColor = Color(0xFFFFECB3);
 const kWhiteColor = Color(0xFFFFFFFF);
 const kBlackColor = Color(0xFF333333);
 const kGreyColor = Color(0xFF9E9E9E);
@@ -12,6 +13,8 @@ const kRedColor = Color(0xFFF44336);
 const kRed400Color = Color(0xFFEF5350);
 const kBlueColor = Color(0xFF2196F3);
 const kCyanColor = Color(0xFF00BCD4);
+const kTealColor = Color(0xFF009688);
+const kTeal400Color = Color(0xFF26A69A);
 const kOrangeColor = Color(0xFFFF9800);
 const kYellowColor = Color(0xFFFFEB3B);
 

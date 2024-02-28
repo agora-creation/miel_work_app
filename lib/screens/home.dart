@@ -27,7 +27,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final loginProvider = Provider.of<LoginProvider>(context);
 
     return Scaffold(
+      backgroundColor: kHomeBackgroundColor,
       appBar: AppBar(
+        backgroundColor: kHomeBackgroundColor,
         automaticallyImplyLeading: false,
         title: CustomAppbarTitle(loginProvider: loginProvider),
         actions: [
@@ -105,6 +107,15 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.zero,
             gridDelegate: kHome3Grid,
             children: [
+              CustomIconCard(
+                icon: Icons.view_timeline,
+                iconSize: 40,
+                label: 'シフト表',
+                labelFontSize: 14,
+                color: kBlackColor,
+                backgroundColor: kTeal300Color,
+                onTap: () {},
+              ),
               CustomIconCard(
                 icon: Icons.gas_meter,
                 iconSize: 40,
