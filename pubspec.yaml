@@ -47,6 +47,9 @@ flutter:
 
   uses-material-design: true
 
+  assets:
+    - assets/images/
+
   fonts:
     - family: SourceHanSansJP-Bold
       fonts:
@@ -54,3 +57,10 @@ flutter:
     - family: SourceHanSansJP-Regular
       fonts:
         - asset: assets/fonts/SourceHanSansJP-Regular.otf
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: 'assets/images/icon.png'
+  adaptive_icon_background: '#FFD54F'
+  adaptive_icon_foreground: 'assets/images/icon_adaptive_foreground.png'
