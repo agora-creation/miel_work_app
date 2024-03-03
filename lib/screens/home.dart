@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/chat.dart';
-import 'package:miel_work_app/screens/draft.dart';
+import 'package:miel_work_app/screens/group.dart';
 import 'package:miel_work_app/screens/manual.dart';
-import 'package:miel_work_app/screens/meter.dart';
 import 'package:miel_work_app/screens/notice.dart';
 import 'package:miel_work_app/screens/plan.dart';
+import 'package:miel_work_app/screens/plan_shift.dart';
 import 'package:miel_work_app/screens/user_setting.dart';
+import 'package:miel_work_app/screens/users.dart';
 import 'package:miel_work_app/widgets/custom_appbar_title.dart';
 import 'package:miel_work_app/widgets/custom_icon_card.dart';
 import 'package:miel_work_app/widgets/custom_list_card.dart';
+import 'package:miel_work_app/widgets/group_select_card.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context);
+    final homeProvider = Provider.of<HomeProvider>(context);
 
     return Scaffold(
       backgroundColor: kHomeBackgroundColor,
@@ -45,6 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: ListView(
         padding: const EdgeInsets.all(8),
         children: [
+          GroupSelectCard(
+            loginProvider: loginProvider,
+            homeProvider: homeProvider,
+          ),
           GridView(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -58,7 +66,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 backgroundColor: kWhiteColor,
                 onTap: () => pushScreen(
                   context,
-                  ManualScreen(loginProvider: loginProvider),
+                  ManualScreen(
+                    loginProvider: loginProvider,
+                    homeProvider: homeProvider,
+                  ),
                 ),
               ),
               CustomIconCard(
@@ -68,7 +79,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 backgroundColor: kWhiteColor,
                 onTap: () => pushScreen(
                   context,
-                  NoticeScreen(loginProvider: loginProvider),
+                  NoticeScreen(
+                    loginProvider: loginProvider,
+                    homeProvider: homeProvider,
+                  ),
                 ),
               ),
             ],
@@ -84,7 +98,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             onTap: () => pushScreen(
               context,
-              const ChatScreen(),
+              ChatScreen(
+                loginProvider: loginProvider,
+                homeProvider: homeProvider,
+              ),
             ),
           ),
           CustomListCard(
@@ -98,7 +115,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             onTap: () => pushScreen(
               context,
-              const PlanScreen(),
+              PlanScreen(
+                loginProvider: loginProvider,
+                homeProvider: homeProvider,
+              ),
             ),
           ),
           GridView(
@@ -113,51 +133,76 @@ class _HomeScreenState extends State<HomeScreen> {
                 label: 'シフト表',
                 labelFontSize: 14,
                 color: kBlackColor,
-                backgroundColor: kTeal400Color,
-                onTap: () {},
-              ),
-              CustomIconCard(
-                icon: Icons.gas_meter,
-                iconSize: 40,
-                label: 'メーター検針',
-                labelFontSize: 14,
-                color: kBlackColor,
-                backgroundColor: kYellowColor,
+                backgroundColor: kTeal300Color,
                 onTap: () => pushScreen(
                   context,
-                  const MeterScreen(),
+                  PlanShiftScreen(
+                    loginProvider: loginProvider,
+                    homeProvider: homeProvider,
+                  ),
                 ),
               ),
-              CustomIconCard(
-                icon: Icons.edit_note,
-                iconSize: 40,
-                label: '稟議申請',
-                labelFontSize: 14,
-                color: kBlackColor,
-                backgroundColor: kOrangeColor,
-                onTap: () => pushScreen(
-                  context,
-                  const DraftScreen(),
-                ),
-              ),
-              CustomIconCard(
-                icon: Icons.edit_note,
-                iconSize: 40,
-                label: '報告申請',
-                labelFontSize: 14,
-                color: kBlackColor,
-                backgroundColor: kOrangeColor,
-                onTap: () {},
-              ),
-              CustomIconCard(
-                icon: Icons.groups,
-                iconSize: 40,
-                label: 'スタッフ管理',
-                labelFontSize: 14,
-                color: kWhiteColor,
-                backgroundColor: kGreyColor,
-                onTap: () {},
-              ),
+              // CustomIconCard(
+              //   icon: Icons.gas_meter,
+              //   iconSize: 40,
+              //   label: 'メーター検針',
+              //   labelFontSize: 14,
+              //   color: kBlackColor,
+              //   backgroundColor: kYellowColor,
+              //   onTap: () {},
+              // ),
+              // CustomIconCard(
+              //   icon: Icons.edit_note,
+              //   iconSize: 40,
+              //   label: '稟議申請',
+              //   labelFontSize: 14,
+              //   color: kBlackColor,
+              //   backgroundColor: kOrangeColor,
+              //   onTap: () {},
+              // ),
+              // CustomIconCard(
+              //   icon: Icons.edit_note,
+              //   iconSize: 40,
+              //   label: '報告申請',
+              //   labelFontSize: 14,
+              //   color: kBlackColor,
+              //   backgroundColor: kOrangeColor,
+              //   onTap: () {},
+              // ),
+              loginProvider.isAdmin()
+                  ? CustomIconCard(
+                      icon: Icons.category,
+                      iconSize: 40,
+                      label: 'グループ管理',
+                      labelFontSize: 14,
+                      color: kWhiteColor,
+                      backgroundColor: kGrey600Color,
+                      onTap: () => pushScreen(
+                        context,
+                        GroupScreen(
+                          loginProvider: loginProvider,
+                          homeProvider: homeProvider,
+                        ),
+                      ),
+                    )
+                  : Container(),
+              loginProvider.isAdmin()
+                  ? CustomIconCard(
+                      icon: Icons.groups,
+                      iconSize: 40,
+                      label: 'スタッフ管理',
+                      labelFontSize: 14,
+                      color: kWhiteColor,
+                      backgroundColor: kGrey600Color,
+                      onTap: () => pushScreen(
+                        context,
+                        UsersScreen(
+                          loginProvider: loginProvider,
+                          homeProvider: homeProvider,
+                        ),
+                      ),
+                    )
+                  : Container(),
             ],
           ),
           const SizedBox(height: 8),

@@ -1,16 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/organization_group.dart';
+import 'package:miel_work_app/models/plan.dart';
+import 'package:miel_work_app/providers/home.dart';
+import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/services/plan.dart';
+import 'package:miel_work_app/widgets/custom_calendar.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart' as sfc;
 
 class PlanScreen extends StatefulWidget {
-  const PlanScreen({super.key});
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+
+  const PlanScreen({
+    required this.loginProvider,
+    required this.homeProvider,
+    super.key,
+  });
 
   @override
   State<PlanScreen> createState() => _PlanScreenState();
 }
 
 class _PlanScreenState extends State<PlanScreen> {
-  List<sfc.Appointment> appointments = [];
+  PlanService planService = PlanService();
 
   @override
   Widget build(BuildContext context) {
@@ -30,29 +44,56 @@ class _PlanScreenState extends State<PlanScreen> {
           'スケジュールカレンダー',
           style: TextStyle(color: kBlackColor),
         ),
-        shape: const Border(
-          bottom: BorderSide(color: kGrey600Color),
-        ),
-      ),
-      body: sfc.SfCalendar(
-        view: sfc.CalendarView.month,
-        showNavigationArrow: true,
-        showDatePickerButton: true,
-        headerDateFormat: 'yyyy年MM月',
-        onTap: (calendarTapDetails) {
-          print(calendarTapDetails.date);
-        },
-        onViewChanged: (viewChangedDetails) {
-          // print(viewChangedDetails.visibleDates);
-        },
-        monthViewSettings: const sfc.MonthViewSettings(
-          appointmentDisplayMode: sfc.MonthAppointmentDisplayMode.appointment,
-          monthCellStyle: sfc.MonthCellStyle(
-            textStyle: TextStyle(fontSize: 16),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.settings),
           ),
+        ],
+        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+      ),
+      body: SafeArea(
+        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: planService.streamList(
+            organizationId: widget.loginProvider.organization?.id,
+          ),
+          builder: (context, snapshot) {
+            List<sfc.Appointment> appointments = [];
+            if (snapshot.hasData) {
+              for (DocumentSnapshot<Map<String, dynamic>> doc
+                  in snapshot.data!.docs) {
+                PlanModel plan = PlanModel.fromSnapshot(doc);
+                OrganizationGroupModel? group =
+                    widget.homeProvider.currentGroup;
+                if (group == null) {
+                  appointments.add(sfc.Appointment(
+                    id: plan.id,
+                    resourceIds: plan.userIds,
+                    subject: '[${plan.category}]${plan.subject}',
+                    startTime: plan.startedAt,
+                    endTime: plan.endedAt,
+                    isAllDay: plan.allDay,
+                    color: plan.color,
+                  ));
+                } else if (plan.groupId == group.id || plan.groupId == '') {
+                  appointments.add(sfc.Appointment(
+                    id: plan.id,
+                    resourceIds: plan.userIds,
+                    subject: '[${plan.category}]${plan.subject}',
+                    startTime: plan.startedAt,
+                    endTime: plan.endedAt,
+                    isAllDay: plan.allDay,
+                    color: plan.color,
+                  ));
+                }
+              }
+            }
+            return CustomCalendar(
+              dataSource: _DataSource(appointments),
+              onTap: (details) {},
+            );
+          },
         ),
-        cellBorderColor: kGrey600Color,
-        dataSource: _DataSource(appointments),
       ),
     );
   }

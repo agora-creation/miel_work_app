@@ -5,6 +5,10 @@ class OrganizationService {
   String collection = 'organization';
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  void update(Map<String, dynamic> values) {
+    firestore.collection(collection).doc(values['id']).update(values);
+  }
+
   Future<OrganizationModel?> selectData({
     required String userId,
   }) async {

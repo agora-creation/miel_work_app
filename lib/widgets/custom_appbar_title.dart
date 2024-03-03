@@ -14,10 +14,14 @@ class CustomAppbarTitle extends StatelessWidget {
     String userName = loginProvider.user?.name ?? '';
     String orgName = loginProvider.organization?.name ?? '';
     String groupName = loginProvider.group?.name ?? '';
+    String admin = '';
+    if (loginProvider.isAdmin()) {
+      admin = '(★)';
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(userName),
+        Text('$userName$admin'),
         Text(
           '$orgName $groupName',
           style: const TextStyle(fontSize: 14),

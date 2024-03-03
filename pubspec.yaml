@@ -26,6 +26,12 @@ dependencies:
   syncfusion_localizations: ^23.2.7
   syncfusion_flutter_pdfviewer: ^23.2.7
   syncfusion_flutter_calendar: ^23.2.7
+  file_picker: ^6.1.1
+  file_selector: ^1.0.3
+  pdf: ^3.10.8
+  universal_html: ^2.2.4
+  common_utils: ^2.1.0
+  multiple_stream_builder: ^3.0.2
 
   firebase_core: ^2.25.4
   firebase_auth: ^4.17.4

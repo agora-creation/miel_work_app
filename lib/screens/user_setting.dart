@@ -78,6 +78,18 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
               ),
             ),
           ),
+          widget.loginProvider.isAdmin()
+              ? CustomSettingList(
+                  label: '現在の管理者',
+                  value: '',
+                  onTap: () => showDialog(
+                    context: context,
+                    builder: (context) => ModPasswordDialog(
+                      loginProvider: widget.loginProvider,
+                    ),
+                  ),
+                )
+              : Container(),
           const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.all(16),

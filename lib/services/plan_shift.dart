@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:miel_work_app/models/plan_shift.dart';
 
-class NoticeService {
-  String collection = 'notice';
+class PlanShiftService {
+  String collection = 'planShift';
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   String id() {
@@ -20,13 +21,29 @@ class NoticeService {
     firestore.collection(collection).doc(values['id']).delete();
   }
 
+  Future<PlanShiftModel?> selectData({
+    required String id,
+  }) async {
+    PlanShiftModel? ret;
+    await firestore
+        .collection(collection)
+        .where('id', isEqualTo: id)
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        ret = PlanShiftModel.fromSnapshot(value.docs.first);
+      }
+    });
+    return ret;
+  }
+
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
   }) {
     return FirebaseFirestore.instance
         .collection(collection)
         .where('organizationId', isEqualTo: organizationId ?? 'error')
-        .orderBy('createdAt', descending: true)
+        .orderBy('startedAt', descending: true)
         .snapshots();
   }
 }

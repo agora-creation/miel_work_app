@@ -14,7 +14,7 @@ class SplashScreen extends StatelessWidget {
           children: [
             Container(
               decoration: const BoxDecoration(
-                border: Border(bottom: BorderSide(color: kWhiteColor)),
+                border: Border(bottom: BorderSide(color: kBlackColor)),
               ),
               child: const Text(
                 'ひろめWORK',

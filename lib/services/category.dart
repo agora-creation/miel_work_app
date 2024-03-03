@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:miel_work_app/models/category.dart';
 
-class NoticeService {
-  String collection = 'notice';
+class CategoryService {
+  String collection = 'category';
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   String id() {
@@ -20,13 +21,30 @@ class NoticeService {
     firestore.collection(collection).doc(values['id']).delete();
   }
 
+  Future<List<CategoryModel>> selectList({
+    required String? organizationId,
+  }) async {
+    List<CategoryModel> ret = [];
+    await firestore
+        .collection(collection)
+        .where('organizationId', isEqualTo: organizationId ?? 'error')
+        .orderBy('createdAt', descending: false)
+        .get()
+        .then((value) {
+      for (DocumentSnapshot<Map<String, dynamic>> map in value.docs) {
+        ret.add(CategoryModel.fromSnapshot(map));
+      }
+    });
+    return ret;
+  }
+
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
   }) {
     return FirebaseFirestore.instance
         .collection(collection)
         .where('organizationId', isEqualTo: organizationId ?? 'error')
-        .orderBy('createdAt', descending: true)
+        .orderBy('createdAt', descending: false)
         .snapshots();
   }
 }

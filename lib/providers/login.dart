@@ -34,6 +34,12 @@ class LoginProvider with ChangeNotifier {
   OrganizationGroupModel? _group;
   OrganizationGroupModel? get group => _group;
 
+  bool isAdmin() {
+    List<String> orgAdminUserIds = _organization?.adminUserIds ?? [];
+    String userId = _user?.id ?? '';
+    return orgAdminUserIds.contains(userId);
+  }
+
   LoginProvider.initialize() : _auth = FirebaseAuth.instance {
     _auth?.authStateChanges().listen(_onStateChanged);
   }
@@ -159,14 +165,14 @@ class LoginProvider with ChangeNotifier {
     await _auth?.signOut();
     _status = AuthStatus.unauthenticated;
     await allRemovePrefs();
-    _user = null;
-    _organization = null;
-    _group = null;
     _userService.update({
       'id': _user?.id,
       'uid': '',
       'token': '',
     });
+    _user = null;
+    _organization = null;
+    _group = null;
     notifyListeners();
     return Future.delayed(Duration.zero);
   }

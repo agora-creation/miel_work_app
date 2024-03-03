@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/manual.dart';
+import 'package:miel_work_app/models/organization_group.dart';
+import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/manual_pdf.dart';
 import 'package:miel_work_app/services/manual.dart';
@@ -10,9 +12,11 @@ import 'package:miel_work_app/widgets/custom_manual_list.dart';
 
 class ManualScreen extends StatefulWidget {
   final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
 
   const ManualScreen({
     required this.loginProvider,
+    required this.homeProvider,
     super.key,
   });
 
@@ -41,9 +45,7 @@ class _ManualScreenState extends State<ManualScreen> {
           '業務マニュアル一覧',
           style: TextStyle(color: kBlackColor),
         ),
-        shape: const Border(
-          bottom: BorderSide(color: kGrey600Color),
-        ),
+        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: manualService.streamList(
@@ -55,8 +57,10 @@ class _ManualScreenState extends State<ManualScreen> {
             for (DocumentSnapshot<Map<String, dynamic>> doc
                 in snapshot.data!.docs) {
               ManualModel manual = ManualModel.fromSnapshot(doc);
-              if (manual.groupId == widget.loginProvider.group?.id ||
-                  manual.groupId == '') {
+              OrganizationGroupModel? group = widget.homeProvider.currentGroup;
+              if (group == null) {
+                manuals.add(manual);
+              } else if (manual.groupId == group.id || manual.groupId == '') {
                 manuals.add(manual);
               }
             }
@@ -76,6 +80,12 @@ class _ManualScreenState extends State<ManualScreen> {
           );
         },
       ),
+      floatingActionButton: widget.loginProvider.isAdmin()
+          ? FloatingActionButton(
+              onPressed: () {},
+              child: const Icon(Icons.add, color: kWhiteColor),
+            )
+          : Container(),
     );
   }
 }

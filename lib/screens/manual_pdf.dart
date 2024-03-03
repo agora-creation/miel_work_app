@@ -37,9 +37,7 @@ class _ManualPdfScreenState extends State<ManualPdfScreen> {
           widget.manual.title,
           style: const TextStyle(color: kBlackColor),
         ),
-        shape: const Border(
-          bottom: BorderSide(color: kGrey600Color),
-        ),
+        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: SfPdfViewer.network(file.path),
     );

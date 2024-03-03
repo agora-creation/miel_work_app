@@ -6,6 +6,7 @@ class ManualModel {
   String _groupId = '';
   String _title = '';
   String _file = '';
+  List<String> readUserIds = [];
   DateTime _createdAt = DateTime.now();
 
   String get id => _id;
@@ -23,6 +24,15 @@ class ManualModel {
     _groupId = data['groupId'] ?? '';
     _title = data['title'] ?? '';
     _file = data['file'] ?? '';
+    readUserIds = _convertReadUserIds(data['readUserIds']);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
+  }
+
+  List<String> _convertReadUserIds(List list) {
+    List<String> ret = [];
+    for (dynamic id in list) {
+      ret.add('$id');
+    }
+    return ret;
   }
 }

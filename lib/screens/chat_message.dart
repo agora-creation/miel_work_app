@@ -1,0 +1,185 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/functions.dart';
+import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/chat.dart';
+import 'package:miel_work_app/models/chat_message.dart';
+import 'package:miel_work_app/models/user.dart';
+import 'package:miel_work_app/providers/chat_message.dart';
+import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/services/chat_message.dart';
+import 'package:miel_work_app/services/user.dart';
+import 'package:miel_work_app/widgets/message_form_field.dart';
+import 'package:miel_work_app/widgets/message_list.dart';
+import 'package:provider/provider.dart';
+
+class ChatMessageScreen extends StatefulWidget {
+  final ChatModel chat;
+
+  const ChatMessageScreen({
+    required this.chat,
+    super.key,
+  });
+
+  @override
+  State<ChatMessageScreen> createState() => _ChatMessageScreenState();
+}
+
+class _ChatMessageScreenState extends State<ChatMessageScreen> {
+  ChatMessageService messageService = ChatMessageService();
+  UserService userService = UserService();
+  List<UserModel> users = [];
+
+  void _init() async {
+    users = await userService.selectList(
+      userIds: widget.chat.userIds,
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final loginProvider = Provider.of<LoginProvider>(context);
+    final messageProvider = Provider.of<ChatMessageProvider>(context);
+    UserModel? loginUser = loginProvider.user;
+    return Scaffold(
+      backgroundColor: kWhiteColor,
+      appBar: AppBar(
+        backgroundColor: kWhiteColor,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.chevron_left,
+            color: kBlackColor,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        centerTitle: true,
+        title: Text(
+          widget.chat.name,
+          style: const TextStyle(color: kBlackColor),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => ChatUsersDialog(
+                chat: widget.chat,
+                users: users,
+              ),
+            ),
+            icon: const Icon(
+              Icons.groups,
+              color: kBlueColor,
+            ),
+          )
+        ],
+        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+      ),
+      body: SafeArea(
+        child: Focus(
+          focusNode: messageProvider.contentFocusNode,
+          child: GestureDetector(
+            onTap: messageProvider.contentFocusNode.requestFocus,
+            child: Container(
+              color: kGrey200Color,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                      stream: messageService.streamList(chatId: widget.chat.id),
+                      builder: (context, snapshot) {
+                        List<ChatMessageModel> messages = [];
+                        if (snapshot.hasData) {
+                          for (DocumentSnapshot<Map<String, dynamic>> doc
+                              in snapshot.data!.docs) {
+                            messages.add(ChatMessageModel.fromSnapshot(doc));
+                          }
+                        }
+                        if (messages.isEmpty) {
+                          return const Center(child: Text('メッセージがありません'));
+                        }
+                        return ListView.builder(
+                          padding: const EdgeInsets.all(8),
+                          reverse: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: messages.length,
+                          itemBuilder: (context, index) {
+                            ChatMessageModel message = messages[index];
+                            return MessageList(
+                              message: message,
+                              isMe: message.userId == loginUser?.id,
+                              onTapImage: () {},
+                              users: users,
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  MessageFormField(
+                    controller: TextEditingController(),
+                    galleryPressed: () {},
+                    sendPressed: () async {
+                      String? error = await messageProvider.send(
+                        chat: widget.chat,
+                        loginUser: loginUser,
+                      );
+                      if (error != null) {
+                        if (!mounted) return;
+                        showMessage(context, error, false);
+                        return;
+                      }
+                    },
+                    enabled: widget.chat.userIds.contains(loginUser?.id),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ChatUsersDialog extends StatelessWidget {
+  final ChatModel chat;
+  final List<UserModel> users;
+
+  const ChatUsersDialog({
+    required this.chat,
+    required this.users,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      contentPadding: const EdgeInsets.symmetric(
+        vertical: 8,
+        horizontal: 4,
+      ),
+      backgroundColor: kWhiteColor,
+      surfaceTintColor: kWhiteColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: users.map((user) {
+            return ListTile(title: Text(user.name));
+          }).toList(),
+        ),
+      ),
+    );
+  }
+}

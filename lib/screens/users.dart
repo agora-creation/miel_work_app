@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/providers/home.dart';
+import 'package:miel_work_app/providers/login.dart';
 
 class UsersScreen extends StatefulWidget {
-  const UsersScreen({super.key});
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+
+  const UsersScreen({
+    required this.loginProvider,
+    required this.homeProvider,
+    super.key,
+  });
 
   @override
   State<UsersScreen> createState() => _UsersScreenState();
@@ -27,12 +36,7 @@ class _UsersScreenState extends State<UsersScreen> {
           'スタッフ管理',
           style: TextStyle(color: kBlackColor),
         ),
-        shape: const Border(
-          bottom: BorderSide(color: kGrey600Color),
-        ),
-      ),
-      body: Column(
-        children: [],
+        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
     );
   }

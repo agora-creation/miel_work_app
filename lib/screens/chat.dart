@@ -1,14 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/chat.dart';
+import 'package:miel_work_app/models/organization_group.dart';
+import 'package:miel_work_app/providers/home.dart';
+import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/screens/chat_message.dart';
+import 'package:miel_work_app/services/chat.dart';
+import 'package:miel_work_app/widgets/chat_room_list.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+
+  const ChatScreen({
+    required this.loginProvider,
+    required this.homeProvider,
+    super.key,
+  });
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  ChatService chatService = ChatService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,24 +45,38 @@ class _ChatScreenState extends State<ChatScreen> {
           'チャットルーム一覧',
           style: TextStyle(color: kBlackColor),
         ),
-        shape: const Border(
-          bottom: BorderSide(color: kGrey600Color),
-        ),
+        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
-      body: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return Container(
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: kGrey600Color),
-              ),
-            ),
-            child: ListTile(
-              title: Text('スタッフ$index'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () {},
-            ),
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: chatService.streamList(
+          organizationId: widget.loginProvider.organization?.id,
+        ),
+        builder: (context, snapshot) {
+          List<ChatModel> chats = [];
+          if (snapshot.hasData) {
+            for (DocumentSnapshot<Map<String, dynamic>> doc
+                in snapshot.data!.docs) {
+              ChatModel chat = ChatModel.fromSnapshot(doc);
+              OrganizationGroupModel? group = widget.homeProvider.currentGroup;
+              if (group == null) {
+                chats.add(chat);
+              } else if (chat.groupId == group.id || chat.groupId == '') {
+                chats.add(chat);
+              }
+            }
+          }
+          return ListView.builder(
+            itemCount: chats.length,
+            itemBuilder: (context, index) {
+              ChatModel chat = chats[index];
+              return ChatRoomList(
+                chat: chat,
+                onTap: () => pushScreen(
+                  context,
+                  ChatMessageScreen(chat: chat),
+                ),
+              );
+            },
           );
         },
       ),

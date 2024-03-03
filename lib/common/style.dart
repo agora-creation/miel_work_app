@@ -14,7 +14,7 @@ const kRed400Color = Color(0xFFEF5350);
 const kBlueColor = Color(0xFF2196F3);
 const kCyanColor = Color(0xFF00BCD4);
 const kTealColor = Color(0xFF009688);
-const kTeal400Color = Color(0xFF26A69A);
+const kTeal300Color = Color(0xFF4DD0E1);
 const kOrangeColor = Color(0xFFFF9800);
 const kYellowColor = Color(0xFFFFEB3B);
 
@@ -44,6 +44,7 @@ ThemeData customTheme() {
       backgroundColor: kBlueColor,
       elevation: 5,
       extendedTextStyle: TextStyle(
+        color: kWhiteColor,
         fontWeight: FontWeight.bold,
         fontFamily: 'SourceHanSansJP-Bold',
       ),
@@ -60,6 +61,28 @@ const SliverGridDelegate kHome2Grid = SliverGridDelegateWithFixedCrossAxisCount(
 const SliverGridDelegate kHome3Grid = SliverGridDelegateWithFixedCrossAxisCount(
   crossAxisCount: 3,
 );
+
+List<Color> kPlanColors = const [
+  Color(0xFFF44336),
+  Color(0xFFE91E63),
+  Color(0xFF9C27B0),
+  Color(0xFF673AB7),
+  Color(0xFF3F51B5),
+  Color(0xFF2196F3),
+  Color(0xFF03A9F4),
+  Color(0xFF00BCD4),
+  Color(0xFF009688),
+  Color(0xFF4CAF50),
+  Color(0xFF8BC34A),
+  Color(0xFFCDDC39),
+  Color(0xFFFFEB3B),
+  Color(0xFFFFC107),
+  Color(0xFFFF9800),
+  Color(0xFFFF5722),
+  Color(0xFF795548),
+  Color(0xFF9E9E9E),
+  Color(0xFF607D8B),
+];
 
 DateTime kFirstDate = DateTime.now().subtract(const Duration(days: 1095));
 DateTime kLastDate = DateTime.now().add(const Duration(days: 1095));

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 
 class GroupScreen extends StatefulWidget {
-  final LoginProvider userProvider;
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
 
   const GroupScreen({
-    required this.userProvider,
+    required this.loginProvider,
+    required this.homeProvider,
     super.key,
   });
 
@@ -30,42 +33,10 @@ class _GroupScreenState extends State<GroupScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          '団体／グループの設定',
+          'グループ管理',
           style: TextStyle(color: kBlackColor),
         ),
-        shape: const Border(
-          bottom: BorderSide(color: kGrey600Color),
-        ),
-      ),
-      body: Column(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: kGrey600Color),
-              ),
-            ),
-            child: RadioListTile(
-              value: '1',
-              groupValue: '1',
-              title: const Text('ひろめ市場 インフォメーション'),
-              onChanged: (value) {},
-            ),
-          ),
-          Container(
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: kGrey600Color),
-              ),
-            ),
-            child: RadioListTile(
-              value: '2',
-              groupValue: '1',
-              title: const Text('ひろめ市場 食器センター'),
-              onChanged: (value) {},
-            ),
-          ),
-        ],
+        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
     );
   }
