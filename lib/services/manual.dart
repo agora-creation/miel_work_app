@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:miel_work_app/models/manual.dart';
+import 'package:miel_work_app/models/organization_group.dart';
+import 'package:miel_work_app/models/user.dart';
 
 class ManualService {
   String collection = 'manual';
@@ -28,5 +31,41 @@ class ManualService {
         .where('organizationId', isEqualTo: organizationId ?? 'error')
         .orderBy('createdAt', descending: true)
         .snapshots();
+  }
+
+  bool checkAlert({
+    required QuerySnapshot<Map<String, dynamic>>? data,
+    required OrganizationGroupModel? currentGroup,
+    required UserModel? user,
+  }) {
+    bool ret = false;
+    for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
+      ManualModel manual = ManualModel.fromSnapshot(doc);
+      if (currentGroup == null) {
+        ret = !manual.readUserIds.contains(user?.id);
+      } else if (manual.groupId == currentGroup.id || manual.groupId == '') {
+        ret = !manual.readUserIds.contains(user?.id);
+      }
+      if (ret) {
+        return ret;
+      }
+    }
+    return ret;
+  }
+
+  List<ManualModel> generateList({
+    required QuerySnapshot<Map<String, dynamic>>? data,
+    required OrganizationGroupModel? currentGroup,
+  }) {
+    List<ManualModel> ret = [];
+    for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
+      ManualModel manual = ManualModel.fromSnapshot(doc);
+      if (currentGroup == null) {
+        ret.add(manual);
+      } else if (manual.groupId == currentGroup.id || manual.groupId == '') {
+        ret.add(manual);
+      }
+    }
+    return ret;
   }
 }

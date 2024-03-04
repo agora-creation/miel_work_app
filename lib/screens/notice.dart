@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/notice.dart';
-import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/notice_detail.dart';
@@ -54,16 +53,10 @@ class _NoticeScreenState extends State<NoticeScreen> {
         builder: (context, snapshot) {
           List<NoticeModel> notices = [];
           if (snapshot.hasData) {
-            for (DocumentSnapshot<Map<String, dynamic>> doc
-                in snapshot.data!.docs) {
-              NoticeModel notice = NoticeModel.fromSnapshot(doc);
-              OrganizationGroupModel? group = widget.homeProvider.currentGroup;
-              if (group == null) {
-                notices.add(notice);
-              } else if (notice.groupId == group.id || notice.groupId == '') {
-                notices.add(notice);
-              }
-            }
+            notices = noticeService.generateList(
+              data: snapshot.data,
+              currentGroup: widget.homeProvider.currentGroup,
+            );
           }
           return ListView.builder(
             itemCount: notices.length,
@@ -71,9 +64,13 @@ class _NoticeScreenState extends State<NoticeScreen> {
               NoticeModel notice = notices[index];
               return CustomNoticeList(
                 notice: notice,
+                user: widget.loginProvider.user,
                 onTap: () => pushScreen(
                   context,
-                  NoticeDetailScreen(notice: notice),
+                  NoticeDetailScreen(
+                    loginProvider: widget.loginProvider,
+                    notice: notice,
+                  ),
                 ),
               );
             },

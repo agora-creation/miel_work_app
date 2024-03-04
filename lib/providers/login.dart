@@ -184,14 +184,14 @@ class LoginProvider with ChangeNotifier {
   }
 
   Future logout() async {
-    await _auth?.signOut();
-    _status = AuthStatus.unauthenticated;
-    await allRemovePrefs();
     _userService.update({
       'id': _user?.id,
       'uid': '',
       'token': '',
     });
+    await _auth?.signOut();
+    _status = AuthStatus.unauthenticated;
+    await allRemovePrefs();
     _user = null;
     _organization = null;
     _group = null;

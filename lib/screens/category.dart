@@ -54,10 +54,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
         builder: (context, snapshot) {
           List<CategoryModel> categories = [];
           if (snapshot.hasData) {
-            for (DocumentSnapshot<Map<String, dynamic>> doc
-                in snapshot.data!.docs) {
-              categories.add(CategoryModel.fromSnapshot(doc));
-            }
+            categories = categoryService.generateList(
+              data: snapshot.data,
+            );
           }
           return ListView.builder(
             itemCount: categories.length,

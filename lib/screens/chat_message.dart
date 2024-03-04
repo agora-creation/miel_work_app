@@ -100,10 +100,9 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                       builder: (context, snapshot) {
                         List<ChatMessageModel> messages = [];
                         if (snapshot.hasData) {
-                          for (DocumentSnapshot<Map<String, dynamic>> doc
-                              in snapshot.data!.docs) {
-                            messages.add(ChatMessageModel.fromSnapshot(doc));
-                          }
+                          messages = messageService.generateList(
+                            data: snapshot.data,
+                          );
                         }
                         if (messages.isEmpty) {
                           return const Center(child: Text('メッセージがありません'));

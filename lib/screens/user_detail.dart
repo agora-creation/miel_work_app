@@ -61,6 +61,12 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
         ));
       }
     }
+    bool deleteDisabled = false;
+    List<String> adminUserIds =
+        widget.loginProvider.organization?.adminUserIds ?? [];
+    if (adminUserIds.contains(widget.user.id)) {
+      deleteDisabled = true;
+    }
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
@@ -150,31 +156,33 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
               },
             ),
             const SizedBox(height: 24),
-            LinkText(
-              label: 'このスタッフを削除する',
-              color: kRedColor,
-              onTap: () async {
-                String? error = await userProvider.delete(
-                  organization: widget.loginProvider.organization,
-                  user: widget.user,
-                  group: widget.userInGroup,
-                );
-                if (error != null) {
-                  if (!mounted) return;
-                  showMessage(context, error, false);
-                  return;
-                }
-                await widget.loginProvider.reload();
-                widget.homeProvider.setGroups(
-                  organizationId:
-                      widget.loginProvider.organization?.id ?? 'error',
-                );
-                widget.getUsers();
-                if (!mounted) return;
-                showMessage(context, 'スタッフを削除しました', true);
-                Navigator.pop(context);
-              },
-            ),
+            !deleteDisabled
+                ? LinkText(
+                    label: 'このスタッフを削除する',
+                    color: kRedColor,
+                    onTap: () async {
+                      String? error = await userProvider.delete(
+                        organization: widget.loginProvider.organization,
+                        user: widget.user,
+                        group: widget.userInGroup,
+                      );
+                      if (error != null) {
+                        if (!mounted) return;
+                        showMessage(context, error, false);
+                        return;
+                      }
+                      await widget.loginProvider.reload();
+                      widget.homeProvider.setGroups(
+                        organizationId:
+                            widget.loginProvider.organization?.id ?? 'error',
+                      );
+                      widget.getUsers();
+                      if (!mounted) return;
+                      showMessage(context, 'スタッフを削除しました', true);
+                      Navigator.pop(context);
+                    },
+                  )
+                : Container(),
           ],
         ),
       ),

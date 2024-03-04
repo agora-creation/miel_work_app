@@ -27,11 +27,13 @@ class ChatMessageProvider with ChangeNotifier {
         'userId': loginUser.id,
         'content': contentController.text,
         'image': '',
+        'readUserIds': [loginUser.id],
         'createdAt': DateTime.now(),
       });
       _chatService.update({
         'id': chat.id,
         'lastMessage': contentController.text,
+        'updatedAt': DateTime.now(),
       });
       contentController.clear();
       contentFocusNode.unfocus();

@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:miel_work_app/models/notice.dart';
+import 'package:miel_work_app/models/organization_group.dart';
+import 'package:miel_work_app/models/user.dart';
 
 class NoticeService {
   String collection = 'notice';
@@ -28,5 +31,41 @@ class NoticeService {
         .where('organizationId', isEqualTo: organizationId ?? 'error')
         .orderBy('createdAt', descending: true)
         .snapshots();
+  }
+
+  bool checkAlert({
+    required QuerySnapshot<Map<String, dynamic>>? data,
+    required OrganizationGroupModel? currentGroup,
+    required UserModel? user,
+  }) {
+    bool ret = false;
+    for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
+      NoticeModel notice = NoticeModel.fromSnapshot(doc);
+      if (currentGroup == null) {
+        ret = !notice.readUserIds.contains(user?.id);
+      } else if (notice.groupId == currentGroup.id || notice.groupId == '') {
+        ret = !notice.readUserIds.contains(user?.id);
+      }
+      if (ret) {
+        return ret;
+      }
+    }
+    return ret;
+  }
+
+  List<NoticeModel> generateList({
+    required QuerySnapshot<Map<String, dynamic>>? data,
+    required OrganizationGroupModel? currentGroup,
+  }) {
+    List<NoticeModel> ret = [];
+    for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
+      NoticeModel notice = NoticeModel.fromSnapshot(doc);
+      if (currentGroup == null) {
+        ret.add(notice);
+      } else if (notice.groupId == currentGroup.id || notice.groupId == '') {
+        ret.add(notice);
+      }
+    }
+    return ret;
   }
 }

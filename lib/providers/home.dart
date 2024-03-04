@@ -58,8 +58,7 @@ class HomeProvider with ChangeNotifier {
         'userIds': [],
         'name': name,
         'lastMessage': '',
-        'personal': false,
-        'priority': 1,
+        'updatedAt': DateTime.now(),
         'createdAt': DateTime.now(),
       });
       setGroups(organizationId: organization.id);

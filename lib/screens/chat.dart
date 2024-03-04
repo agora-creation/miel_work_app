@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/chat.dart';
-import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/chat_message.dart';
@@ -54,16 +53,10 @@ class _ChatScreenState extends State<ChatScreen> {
         builder: (context, snapshot) {
           List<ChatModel> chats = [];
           if (snapshot.hasData) {
-            for (DocumentSnapshot<Map<String, dynamic>> doc
-                in snapshot.data!.docs) {
-              ChatModel chat = ChatModel.fromSnapshot(doc);
-              OrganizationGroupModel? group = widget.homeProvider.currentGroup;
-              if (group == null) {
-                chats.add(chat);
-              } else if (chat.groupId == group.id || chat.groupId == '') {
-                chats.add(chat);
-              }
-            }
+            chats = chatService.generateList(
+              data: snapshot.data,
+              currentGroup: widget.homeProvider.currentGroup,
+            );
           }
           return ListView.builder(
             itemCount: chats.length,

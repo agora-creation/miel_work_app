@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:miel_work_app/models/chat.dart';
+import 'package:miel_work_app/models/organization_group.dart';
 
 class ChatService {
   String collection = 'chat';
@@ -68,5 +69,21 @@ class ChatService {
         .where('organizationId', isEqualTo: organizationId ?? 'error')
         .orderBy('priority', descending: false)
         .snapshots();
+  }
+
+  List<ChatModel> generateList({
+    required QuerySnapshot<Map<String, dynamic>>? data,
+    required OrganizationGroupModel? currentGroup,
+  }) {
+    List<ChatModel> ret = [];
+    for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
+      ChatModel chat = ChatModel.fromSnapshot(doc);
+      if (currentGroup == null) {
+        ret.add(chat);
+      } else if (chat.groupId == currentGroup.id || chat.groupId == '') {
+        ret.add(chat);
+      }
+    }
+    return ret;
   }
 }

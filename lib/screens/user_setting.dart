@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/user.dart';
+import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/login.dart';
 import 'package:miel_work_app/services/user.dart';
@@ -13,9 +14,11 @@ import 'package:miel_work_app/widgets/link_text.dart';
 
 class UserSettingScreen extends StatefulWidget {
   final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
 
   const UserSettingScreen({
     required this.loginProvider,
+    required this.homeProvider,
     super.key,
   });
 
@@ -31,10 +34,11 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
   void _init() async {
     users = await userService.selectList(
       userIds: widget.loginProvider.organization?.userIds ?? [],
+      removeGroups: widget.homeProvider.groups,
     );
+    List<String> adminUserIds =
+        widget.loginProvider.organization?.adminUserIds ?? [];
     for (UserModel user in users) {
-      List<String> adminUserIds =
-          widget.loginProvider.organization?.adminUserIds ?? [];
       if (adminUserIds.contains(user.id)) {
         if (usersText != '') usersText += ',';
         usersText += user.name;

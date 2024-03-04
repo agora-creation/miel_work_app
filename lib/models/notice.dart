@@ -6,7 +6,6 @@ class NoticeModel {
   String _groupId = '';
   String _title = '';
   String _content = '';
-  String _file = '';
   List<String> readUserIds = [];
   DateTime _createdAt = DateTime.now();
 
@@ -15,7 +14,6 @@ class NoticeModel {
   String get groupId => _groupId;
   String get title => _title;
   String get content => _content;
-  String get file => _file;
   DateTime get createdAt => _createdAt;
 
   NoticeModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
@@ -26,7 +24,6 @@ class NoticeModel {
     _groupId = data['groupId'] ?? '';
     _title = data['title'] ?? '';
     _content = data['content'] ?? '';
-    _file = data['file'] ?? '';
     readUserIds = _convertReadUserIds(data['readUserIds']);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
   }

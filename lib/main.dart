@@ -9,6 +9,8 @@ import 'package:miel_work_app/providers/category.dart';
 import 'package:miel_work_app/providers/chat_message.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/providers/manual.dart';
+import 'package:miel_work_app/providers/notice.dart';
 import 'package:miel_work_app/providers/plan.dart';
 import 'package:miel_work_app/providers/plan_shift.dart';
 import 'package:miel_work_app/providers/user.dart';
@@ -47,6 +49,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(value: LoginProvider.initialize()),
         ChangeNotifierProvider.value(value: HomeProvider()),
+        ChangeNotifierProvider.value(value: ManualProvider()),
+        ChangeNotifierProvider.value(value: NoticeProvider()),
         ChangeNotifierProvider.value(value: ChatMessageProvider()),
         ChangeNotifierProvider.value(value: PlanProvider()),
         ChangeNotifierProvider.value(value: PlanShiftProvider()),

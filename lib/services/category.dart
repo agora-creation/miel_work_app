@@ -47,4 +47,14 @@ class CategoryService {
         .orderBy('createdAt', descending: false)
         .snapshots();
   }
+
+  List<CategoryModel> generateList({
+    required QuerySnapshot<Map<String, dynamic>>? data,
+  }) {
+    List<CategoryModel> ret = [];
+    for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
+      ret.add(CategoryModel.fromSnapshot(doc));
+    }
+    return ret;
+  }
 }

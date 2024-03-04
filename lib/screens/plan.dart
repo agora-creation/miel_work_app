@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/models/organization_group.dart';
-import 'package:miel_work_app/models/plan.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/category.dart';
@@ -65,33 +63,10 @@ class _PlanScreenState extends State<PlanScreen> {
           builder: (context, snapshot) {
             List<sfc.Appointment> appointments = [];
             if (snapshot.hasData) {
-              for (DocumentSnapshot<Map<String, dynamic>> doc
-                  in snapshot.data!.docs) {
-                PlanModel plan = PlanModel.fromSnapshot(doc);
-                OrganizationGroupModel? group =
-                    widget.homeProvider.currentGroup;
-                if (group == null) {
-                  appointments.add(sfc.Appointment(
-                    id: plan.id,
-                    resourceIds: plan.userIds,
-                    subject: '[${plan.category}]${plan.subject}',
-                    startTime: plan.startedAt,
-                    endTime: plan.endedAt,
-                    isAllDay: plan.allDay,
-                    color: plan.color,
-                  ));
-                } else if (plan.groupId == group.id || plan.groupId == '') {
-                  appointments.add(sfc.Appointment(
-                    id: plan.id,
-                    resourceIds: plan.userIds,
-                    subject: '[${plan.category}]${plan.subject}',
-                    startTime: plan.startedAt,
-                    endTime: plan.endedAt,
-                    isAllDay: plan.allDay,
-                    color: plan.color,
-                  ));
-                }
-              }
+              appointments = planService.generateList(
+                data: snapshot.data,
+                currentGroup: widget.homeProvider.currentGroup,
+              );
             }
             return CustomCalendar(
               dataSource: _DataSource(appointments),

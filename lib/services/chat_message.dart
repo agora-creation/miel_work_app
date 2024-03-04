@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:miel_work_app/models/chat_message.dart';
 
 class ChatMessageService {
   String collection = 'chat';
@@ -52,5 +53,15 @@ class ChatMessageService {
         .collection(subCollection)
         .orderBy('createdAt', descending: true)
         .snapshots();
+  }
+
+  List<ChatMessageModel> generateList({
+    required QuerySnapshot<Map<String, dynamic>>? data,
+  }) {
+    List<ChatMessageModel> ret = [];
+    for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
+      ret.add(ChatMessageModel.fromSnapshot(doc));
+    }
+    return ret;
   }
 }

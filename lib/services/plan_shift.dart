@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/plan_shift.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart' as sfc;
 
 class PlanShiftService {
   String collection = 'planShift';
@@ -45,5 +48,40 @@ class PlanShiftService {
         .where('organizationId', isEqualTo: organizationId ?? 'error')
         .orderBy('startedAt', descending: true)
         .snapshots();
+  }
+
+  List<sfc.Appointment> generateList({
+    required QuerySnapshot<Map<String, dynamic>>? data,
+    required OrganizationGroupModel? currentGroup,
+  }) {
+    List<sfc.Appointment> ret = [];
+    for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
+      PlanShiftModel planShift = PlanShiftModel.fromSnapshot(doc);
+      if (currentGroup == null) {
+        ret.add(sfc.Appointment(
+          id: planShift.id,
+          resourceIds: planShift.userIds,
+          subject: '勤務予定',
+          startTime: planShift.startedAt,
+          endTime: planShift.endedAt,
+          isAllDay: planShift.allDay,
+          color: kBlueColor,
+          notes: 'planShift',
+        ));
+      } else if (planShift.groupId == currentGroup.id ||
+          planShift.groupId == '') {
+        ret.add(sfc.Appointment(
+          id: planShift.id,
+          resourceIds: planShift.userIds,
+          subject: '勤務予定',
+          startTime: planShift.startedAt,
+          endTime: planShift.endedAt,
+          isAllDay: planShift.allDay,
+          color: kBlueColor,
+          notes: 'planShift',
+        ));
+      }
+    }
+    return ret;
   }
 }

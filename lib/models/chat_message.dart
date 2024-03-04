@@ -6,6 +6,7 @@ class ChatMessageModel {
   String _userId = '';
   String _content = '';
   String _image = '';
+  List<String> readUserIds = [];
   DateTime _createdAt = DateTime.now();
 
   String get id => _id;
@@ -24,6 +25,15 @@ class ChatMessageModel {
     _userId = data['userId'] ?? '';
     _content = data['content'] ?? '';
     _image = data['image'] ?? '';
+    readUserIds = _convertReadUserIds(data['readUserIds']);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
+  }
+
+  List<String> _convertReadUserIds(List list) {
+    List<String> ret = [];
+    for (dynamic id in list) {
+      ret.add('$id');
+    }
+    return ret;
   }
 }

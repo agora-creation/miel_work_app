@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/notice.dart';
+import 'package:miel_work_app/models/user.dart';
+import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/services/notice.dart';
 
 class NoticeDetailScreen extends StatefulWidget {
+  final LoginProvider loginProvider;
   final NoticeModel notice;
 
   const NoticeDetailScreen({
+    required this.loginProvider,
     required this.notice,
     super.key,
   });
@@ -16,6 +21,26 @@ class NoticeDetailScreen extends StatefulWidget {
 }
 
 class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
+  NoticeService noticeService = NoticeService();
+
+  void _init() async {
+    UserModel? user = widget.loginProvider.user;
+    List<String> readUserIds = widget.notice.readUserIds;
+    if (!readUserIds.contains(user?.id)) {
+      readUserIds.add(user?.id ?? '');
+      noticeService.update({
+        'id': widget.notice.id,
+        'readUserIds': readUserIds,
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/models/organization_group.dart';
-import 'package:miel_work_app/models/plan.dart';
-import 'package:miel_work_app/models/plan_shift.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
@@ -96,67 +93,17 @@ class _PlanShiftScreenState extends State<PlanShiftScreen> {
           builder: (context, snapshot) {
             List<sfc.Appointment> source = [];
             if (snapshot.snapshot1.hasData) {
-              for (DocumentSnapshot<Map<String, dynamic>> doc
-                  in snapshot.snapshot1.data!.docs) {
-                PlanModel plan = PlanModel.fromSnapshot(doc);
-                OrganizationGroupModel? group =
-                    widget.homeProvider.currentGroup;
-                if (group == null) {
-                  source.add(sfc.Appointment(
-                    id: plan.id,
-                    resourceIds: plan.userIds,
-                    subject: '[${plan.category}]${plan.subject}',
-                    startTime: plan.startedAt,
-                    endTime: plan.endedAt,
-                    isAllDay: plan.allDay,
-                    color: plan.color.withOpacity(0.5),
-                    notes: 'plan',
-                  ));
-                } else if (plan.groupId == group.id || plan.groupId == '') {
-                  source.add(sfc.Appointment(
-                    id: plan.id,
-                    resourceIds: plan.userIds,
-                    subject: '[${plan.category}]${plan.subject}',
-                    startTime: plan.startedAt,
-                    endTime: plan.endedAt,
-                    isAllDay: plan.allDay,
-                    color: plan.color.withOpacity(0.5),
-                    notes: 'plan',
-                  ));
-                }
-              }
+              source = planService.generateList(
+                data: snapshot.snapshot1.data,
+                currentGroup: widget.homeProvider.currentGroup,
+                shift: true,
+              );
             }
             if (snapshot.snapshot2.hasData) {
-              for (DocumentSnapshot<Map<String, dynamic>> doc
-                  in snapshot.snapshot2.data!.docs) {
-                PlanShiftModel planShift = PlanShiftModel.fromSnapshot(doc);
-                OrganizationGroupModel? group =
-                    widget.homeProvider.currentGroup;
-                if (group == null) {
-                  source.add(sfc.Appointment(
-                    id: planShift.id,
-                    resourceIds: planShift.userIds,
-                    subject: '勤務予定',
-                    startTime: planShift.startedAt,
-                    endTime: planShift.endedAt,
-                    isAllDay: planShift.allDay,
-                    color: kBlueColor,
-                    notes: 'planShift',
-                  ));
-                } else if (planShift.groupId == group.id ||
-                    planShift.groupId == '') {
-                  source.add(sfc.Appointment(
-                    id: planShift.id,
-                    resourceIds: planShift.userIds,
-                    subject: '勤務予定',
-                    startTime: planShift.startedAt,
-                    endTime: planShift.endedAt,
-                    isAllDay: planShift.allDay,
-                    color: kBlueColor,
-                    notes: 'planShift',
-                  ));
-                }
-              }
+              source.addAll(planShiftService.generateList(
+                data: snapshot.snapshot2.data,
+                currentGroup: widget.homeProvider.currentGroup,
+              ));
             }
             return CustomCalendarShift(
               dataSource: _ShiftDataSource(source, resourceColl),

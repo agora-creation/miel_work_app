@@ -7,8 +7,7 @@ class ChatModel {
   List<String> userIds = [];
   String _name = '';
   String _lastMessage = '';
-  bool _personal = false;
-  int _priority = 0;
+  DateTime _updatedAt = DateTime.now();
   DateTime _createdAt = DateTime.now();
 
   String get id => _id;
@@ -16,8 +15,7 @@ class ChatModel {
   String get groupId => _groupId;
   String get name => _name;
   String get lastMessage => _lastMessage;
-  bool get personal => _personal;
-  int get priority => _priority;
+  DateTime get updatedAt => _updatedAt;
   DateTime get createdAt => _createdAt;
 
   ChatModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
@@ -29,8 +27,7 @@ class ChatModel {
     userIds = _convertUserIds(data['userIds']);
     _name = data['name'] ?? '';
     _lastMessage = data['lastMessage'] ?? '';
-    _personal = data['personal'] ?? false;
-    _priority = data['priority'] ?? 0;
+    _updatedAt = data['updatedAt'].toDate() ?? DateTime.now();
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
   }
 

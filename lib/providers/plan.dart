@@ -1,4 +1,3 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/organization_group.dart';
@@ -17,7 +16,6 @@ class PlanProvider with ChangeNotifier {
     required bool allDay,
     required String color,
     required String memo,
-    required PlatformFile? pickedFile,
   }) async {
     String? error;
     if (organization == null) return '予定の追加に失敗しました';
@@ -34,7 +32,6 @@ class PlanProvider with ChangeNotifier {
         userIds = organization.userIds;
       }
       String id = _planService.id();
-      String file = '';
       _planService.create({
         'id': id,
         'organizationId': organization.id,
@@ -47,7 +44,6 @@ class PlanProvider with ChangeNotifier {
         'allDay': allDay,
         'color': color,
         'memo': memo,
-        'file': file,
         'createdAt': DateTime.now(),
       });
     } catch (e) {
@@ -67,7 +63,6 @@ class PlanProvider with ChangeNotifier {
     required bool allDay,
     required String color,
     required String memo,
-    required PlatformFile? pickedFile,
   }) async {
     String? error;
     if (organization == null) return '予定の編集に失敗しました';
@@ -83,7 +78,6 @@ class PlanProvider with ChangeNotifier {
       } else {
         userIds = organization.userIds;
       }
-      String file = '';
       _planService.update({
         'id': planId,
         'organizationId': organization.id,
@@ -96,7 +90,6 @@ class PlanProvider with ChangeNotifier {
         'allDay': allDay,
         'color': color,
         'memo': memo,
-        'file': file,
       });
     } catch (e) {
       error = '予定の編集に失敗しました';

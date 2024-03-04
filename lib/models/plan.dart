@@ -14,7 +14,6 @@ class PlanModel {
   bool _allDay = false;
   Color _color = kPlanColors.first;
   String _memo = '';
-  String _file = '';
   DateTime _createdAt = DateTime.now();
 
   String get id => _id;
@@ -27,7 +26,6 @@ class PlanModel {
   bool get allDay => _allDay;
   Color get color => _color;
   String get memo => _memo;
-  String get file => _file;
   DateTime get createdAt => _createdAt;
 
   PlanModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
@@ -44,7 +42,6 @@ class PlanModel {
     _allDay = data['allDay'] ?? false;
     _color = Color(int.parse(data['color'], radix: 16));
     _memo = data['memo'] ?? '';
-    _file = data['file'] ?? '';
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
   }
 

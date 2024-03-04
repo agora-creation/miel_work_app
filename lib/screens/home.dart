@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
@@ -11,6 +12,8 @@ import 'package:miel_work_app/screens/plan.dart';
 import 'package:miel_work_app/screens/plan_shift.dart';
 import 'package:miel_work_app/screens/user.dart';
 import 'package:miel_work_app/screens/user_setting.dart';
+import 'package:miel_work_app/services/manual.dart';
+import 'package:miel_work_app/services/notice.dart';
 import 'package:miel_work_app/widgets/custom_appbar_title.dart';
 import 'package:miel_work_app/widgets/custom_icon_card.dart';
 import 'package:miel_work_app/widgets/custom_list_card.dart';
@@ -25,11 +28,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  ManualService manualService = ManualService();
+  NoticeService noticeService = NoticeService();
+
   @override
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context);
     final homeProvider = Provider.of<HomeProvider>(context);
-
     return Scaffold(
       backgroundColor: kHomeBackgroundColor,
       appBar: AppBar(
@@ -40,7 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             onPressed: () => showBottomUpScreen(
               context,
-              UserSettingScreen(loginProvider: loginProvider),
+              UserSettingScreen(
+                loginProvider: loginProvider,
+                homeProvider: homeProvider,
+              ),
             ),
             icon: const Icon(Icons.more_vert),
           ),
@@ -59,32 +67,63 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.zero,
             gridDelegate: kHome2Grid,
             children: [
-              CustomIconCard(
-                icon: Icons.picture_as_pdf,
-                label: '業務マニュアル',
-                color: kBlackColor,
-                backgroundColor: kWhiteColor,
-                onTap: () => pushScreen(
-                  context,
-                  ManualScreen(
-                    loginProvider: loginProvider,
-                    homeProvider: homeProvider,
-                  ),
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: manualService.streamList(
+                  organizationId: loginProvider.organization?.id,
                 ),
+                builder: (context, snapshot) {
+                  bool alert = false;
+                  if (snapshot.hasData) {
+                    alert = manualService.checkAlert(
+                      data: snapshot.data,
+                      currentGroup: homeProvider.currentGroup,
+                      user: loginProvider.user,
+                    );
+                  }
+                  return CustomIconCard(
+                    icon: Icons.picture_as_pdf,
+                    label: '業務マニュアル',
+                    color: kBlackColor,
+                    backgroundColor: kWhiteColor,
+                    alert: alert,
+                    onTap: () => pushScreen(
+                      context,
+                      ManualScreen(
+                        loginProvider: loginProvider,
+                        homeProvider: homeProvider,
+                      ),
+                    ),
+                  );
+                },
               ),
-              CustomIconCard(
-                icon: Icons.notifications,
-                label: 'お知らせ',
-                color: kBlackColor,
-                backgroundColor: kWhiteColor,
-                alert: true,
-                onTap: () => pushScreen(
-                  context,
-                  NoticeScreen(
-                    loginProvider: loginProvider,
-                    homeProvider: homeProvider,
-                  ),
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: noticeService.streamList(
+                  organizationId: loginProvider.organization?.id,
                 ),
+                builder: (context, snapshot) {
+                  bool alert = false;
+                  if (snapshot.hasData) {
+                    alert = manualService.checkAlert(
+                      data: snapshot.data,
+                      currentGroup: homeProvider.currentGroup,
+                      user: loginProvider.user,
+                    );
+                  }
+                  return CustomIconCard(
+                    icon: Icons.notifications,
+                    label: 'お知らせ',
+                    color: kBlackColor,
+                    backgroundColor: kWhiteColor,
+                    alert: alert,
+                    onTap: () => pushScreen(
+                      context,
+                      NoticeScreen(
+                        loginProvider: loginProvider,
+                        homeProvider: homeProvider,
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           ),

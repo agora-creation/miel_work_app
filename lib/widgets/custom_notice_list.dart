@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/notice.dart';
+import 'package:miel_work_app/models/user.dart';
 
 class CustomNoticeList extends StatelessWidget {
   final NoticeModel notice;
+  final UserModel? user;
   final Function()? onTap;
 
   const CustomNoticeList({
     required this.notice,
+    required this.user,
     this.onTap,
     super.key,
   });
@@ -25,6 +28,8 @@ class CustomNoticeList extends StatelessWidget {
         title: Text(notice.title),
         subtitle: Text(dateText('yyyy/MM/dd HH:mm', notice.createdAt)),
         trailing: const Icon(Icons.chevron_right),
+        tileColor:
+            !notice.readUserIds.contains(user?.id) ? kRed100Color : kWhiteColor,
         onTap: onTap,
       ),
     );
