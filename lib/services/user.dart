@@ -82,7 +82,6 @@ class UserService {
         }
       }
     });
-
     return ret;
   }
 }
