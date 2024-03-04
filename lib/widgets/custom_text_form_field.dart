@@ -10,6 +10,7 @@ class CustomTextFormField extends StatelessWidget {
   final Color? color;
   final IconData? prefix;
   final IconData? suffix;
+  final bool enabled;
   final Function()? onTap;
 
   const CustomTextFormField({
@@ -22,6 +23,7 @@ class CustomTextFormField extends StatelessWidget {
     this.prefix,
     this.suffix,
     this.onTap,
+    this.enabled = true,
     super.key,
   });
 
@@ -64,6 +66,7 @@ class CustomTextFormField extends StatelessWidget {
         labelStyle: TextStyle(color: color),
         focusColor: color,
         fillColor: kGrey200Color,
+        enabled: enabled,
       ),
     );
   }

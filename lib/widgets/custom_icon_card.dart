@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/style.dart';
 
 class CustomIconCard extends StatelessWidget {
   final IconData icon;
@@ -7,6 +8,7 @@ class CustomIconCard extends StatelessWidget {
   final double labelFontSize;
   final Color color;
   final Color backgroundColor;
+  final bool alert;
   final Function()? onTap;
 
   const CustomIconCard({
@@ -16,6 +18,7 @@ class CustomIconCard extends StatelessWidget {
     this.labelFontSize = 18,
     required this.color,
     required this.backgroundColor,
+    this.alert = false,
     this.onTap,
     super.key,
   });
@@ -26,10 +29,14 @@ class CustomIconCard extends StatelessWidget {
       onTap: onTap,
       child: Card(
         shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: alert ? kRedColor : Colors.transparent,
+            width: 4,
+          ),
           borderRadius: BorderRadius.circular(8),
         ),
-        color: backgroundColor,
-        surfaceTintColor: backgroundColor,
+        color: alert ? kRed100Color : backgroundColor,
+        surfaceTintColor: alert ? kRed100Color : backgroundColor,
         elevation: 8,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -49,6 +56,15 @@ class CustomIconCard extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            alert
+                ? const Text(
+                    '未読あり',
+                    style: TextStyle(
+                      color: kRedColor,
+                      fontSize: 12,
+                    ),
+                  )
+                : Container(),
           ],
         ),
       ),

@@ -3,6 +3,7 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/widgets/custom_group_radio.dart';
 
 class GroupSelectCard extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -24,6 +25,8 @@ class _GroupSelectCardState extends State<GroupSelectCard> {
     super.initState();
     widget.homeProvider.setGroups(
       organizationId: widget.loginProvider.organization?.id ?? 'error',
+      group:
+          !widget.loginProvider.isAdmin() ? widget.loginProvider.group : null,
     );
   }
 
@@ -82,22 +85,20 @@ class GroupSelectDialog extends StatefulWidget {
 class _GroupSelectDialogState extends State<GroupSelectDialog> {
   @override
   Widget build(BuildContext context) {
-    List<RadioListTile<OrganizationGroupModel?>> groupChildren = [];
+    List<Widget> groupChildren = [];
     if (widget.homeProvider.groups.isNotEmpty) {
-      groupChildren.add(RadioListTile<OrganizationGroupModel?>(
-        title: const Text('グループ未選択'),
-        value: null,
-        groupValue: widget.homeProvider.currentGroup,
+      groupChildren.add(CustomGroupRadio(
+        group: null,
+        value: widget.homeProvider.currentGroup,
         onChanged: (value) {
           widget.homeProvider.currentGroupChange(value);
           Navigator.pop(context);
         },
       ));
       for (OrganizationGroupModel group in widget.homeProvider.groups) {
-        groupChildren.add(RadioListTile<OrganizationGroupModel?>(
-          title: Text(group.name),
-          value: group,
-          groupValue: widget.homeProvider.currentGroup,
+        groupChildren.add(CustomGroupRadio(
+          group: group,
+          value: widget.homeProvider.currentGroup,
           onChanged: (value) {
             widget.homeProvider.currentGroupChange(value);
             Navigator.pop(context);
@@ -106,20 +107,20 @@ class _GroupSelectDialogState extends State<GroupSelectDialog> {
       }
     }
     return AlertDialog(
-      contentPadding: const EdgeInsets.symmetric(
-        vertical: 8,
-        horizontal: 4,
-      ),
+      contentPadding: EdgeInsets.zero,
       backgroundColor: kWhiteColor,
       surfaceTintColor: kWhiteColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: groupChildren,
+      content: Container(
+        decoration: BoxDecoration(border: Border.all(color: kGrey600Color)),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: groupChildren,
+          ),
         ),
       ),
     );

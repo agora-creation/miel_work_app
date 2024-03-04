@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/login.dart';
+import 'package:miel_work_app/services/user.dart';
 import 'package:miel_work_app/widgets/custom_button_sm.dart';
+import 'package:miel_work_app/widgets/custom_checkbox.dart';
 import 'package:miel_work_app/widgets/custom_setting_list.dart';
 import 'package:miel_work_app/widgets/custom_text_form_field.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
@@ -21,6 +24,31 @@ class UserSettingScreen extends StatefulWidget {
 }
 
 class _UserSettingScreenState extends State<UserSettingScreen> {
+  UserService userService = UserService();
+  List<UserModel> users = [];
+  String usersText = '';
+
+  void _init() async {
+    users = await userService.selectList(
+      userIds: widget.loginProvider.organization?.userIds ?? [],
+    );
+    for (UserModel user in users) {
+      List<String> adminUserIds =
+          widget.loginProvider.organization?.adminUserIds ?? [];
+      if (adminUserIds.contains(user.id)) {
+        if (usersText != '') usersText += ',';
+        usersText += user.name;
+      }
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,13 +69,19 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
             onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
           ),
         ],
-        shape: const Border(
-          bottom: BorderSide(color: kGrey600Color),
-        ),
+        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          widget.loginProvider.isAdmin()
+              ? const ListTile(
+                  title: Text(
+                    'あなたは管理者です',
+                    style: TextStyle(color: kWhiteColor),
+                  ),
+                  tileColor: kRedColor,
+                )
+              : Container(),
           CustomSettingList(
             label: '名前',
             value: widget.loginProvider.user?.name ?? '',
@@ -81,26 +115,24 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
           widget.loginProvider.isAdmin()
               ? CustomSettingList(
                   label: '現在の管理者',
-                  value: '',
+                  value: usersText,
                   onTap: () => showDialog(
                     context: context,
-                    builder: (context) => ModPasswordDialog(
+                    builder: (context) => ModAdminDialog(
                       loginProvider: widget.loginProvider,
+                      users: users,
                     ),
                   ),
                 )
               : Container(),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: LinkText(
-              label: 'この端末からログアウトする',
-              color: kRedColor,
-              onTap: () => showDialog(
-                context: context,
-                builder: (context) => LogoutDialog(
-                  loginProvider: widget.loginProvider,
-                ),
+          const SizedBox(height: 24),
+          LinkText(
+            label: 'この端末からログアウトする',
+            color: kRedColor,
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => LogoutDialog(
+                loginProvider: widget.loginProvider,
               ),
             ),
           ),
@@ -139,11 +171,14 @@ class _ModNameDialogState extends State<ModNameDialog> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
+      title: const Text(
+        '名前を変更する',
+        style: TextStyle(fontSize: 16),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 8),
           CustomTextFormField(
             controller: nameController,
             textInputType: TextInputType.name,
@@ -215,11 +250,14 @@ class _ModEmailDialogState extends State<ModEmailDialog> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
+      title: const Text(
+        'メールアドレスを変更する',
+        style: TextStyle(fontSize: 16),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 8),
           CustomTextFormField(
             controller: emailController,
             textInputType: TextInputType.emailAddress,
@@ -291,11 +329,14 @@ class _ModPasswordDialogState extends State<ModPasswordDialog> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
+      title: const Text(
+        'パスワードを変更する',
+        style: TextStyle(fontSize: 16),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 8),
           CustomTextFormField(
             controller: passwordController,
             obscureText: true,
@@ -332,6 +373,106 @@ class _ModPasswordDialogState extends State<ModPasswordDialog> {
             if (!mounted) return;
             showMessage(context, 'パスワードを変更しました', true);
             Navigator.pop(context);
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class ModAdminDialog extends StatefulWidget {
+  final LoginProvider loginProvider;
+  final List<UserModel> users;
+
+  const ModAdminDialog({
+    required this.loginProvider,
+    required this.users,
+    super.key,
+  });
+
+  @override
+  State<ModAdminDialog> createState() => _ModAdminDialogState();
+}
+
+class _ModAdminDialogState extends State<ModAdminDialog> {
+  List<UserModel> selectedUsers = [];
+
+  void _init() {
+    List<String> adminUserIds =
+        widget.loginProvider.organization?.adminUserIds ?? [];
+    for (UserModel user in widget.users) {
+      if (adminUserIds.contains(user.id)) {
+        selectedUsers.add(user);
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: kWhiteColor,
+      surfaceTintColor: kWhiteColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
+      title: const Text(
+        '管理者を変更する',
+        style: TextStyle(fontSize: 16),
+      ),
+      content: Container(
+        decoration: BoxDecoration(border: Border.all(color: kGrey600Color)),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: widget.users.map((user) {
+              return CustomCheckbox(
+                label: user.name,
+                value: selectedUsers.contains(user),
+                onChanged: (value) {
+                  if (selectedUsers.contains(user)) {
+                    selectedUsers.remove(user);
+                  } else {
+                    selectedUsers.add(user);
+                  }
+                  setState(() {});
+                },
+              );
+            }).toList(),
+          ),
+        ),
+      ),
+      actionsAlignment: MainAxisAlignment.spaceBetween,
+      actions: [
+        CustomButtonSm(
+          label: '閉じる',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButtonSm(
+          label: '選択内容を保存',
+          labelColor: kWhiteColor,
+          backgroundColor: kBlueColor,
+          onPressed: () async {
+            String? error = await widget.loginProvider.updateAdminUserIds(
+              selectedUsers: selectedUsers,
+            );
+            if (error != null) {
+              if (!mounted) return;
+              showMessage(context, error, false);
+              return;
+            }
+            await widget.loginProvider.logout();
+            if (!mounted) return;
+            showMessage(context, '管理者を変更しました', true);
+            pushReplacementScreen(context, const LoginScreen());
           },
         ),
       ],
@@ -384,7 +525,7 @@ class _LogoutDialogState extends State<LogoutDialog> {
           labelColor: kWhiteColor,
           backgroundColor: kRedColor,
           onPressed: () async {
-            await widget.loginProvider.signOut();
+            await widget.loginProvider.logout();
             if (!mounted) return;
             pushReplacementScreen(context, const LoginScreen());
           },

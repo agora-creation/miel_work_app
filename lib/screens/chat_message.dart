@@ -34,6 +34,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
     users = await userService.selectList(
       userIds: widget.chat.userIds,
     );
+    setState(() {});
   }
 
   @override
@@ -64,19 +65,21 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
           style: const TextStyle(color: kBlackColor),
         ),
         actions: [
-          IconButton(
-            onPressed: () => showDialog(
-              context: context,
-              builder: (context) => ChatUsersDialog(
-                chat: widget.chat,
-                users: users,
-              ),
-            ),
-            icon: const Icon(
-              Icons.groups,
-              color: kBlueColor,
-            ),
-          )
+          users.isNotEmpty
+              ? IconButton(
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (context) => ChatUsersDialog(
+                      chat: widget.chat,
+                      users: users,
+                    ),
+                  ),
+                  icon: const Icon(
+                    Icons.groups,
+                    color: kBlueColor,
+                  ),
+                )
+              : Container(),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
@@ -124,7 +127,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                     ),
                   ),
                   MessageFormField(
-                    controller: TextEditingController(),
+                    controller: messageProvider.contentController,
                     galleryPressed: () {},
                     sendPressed: () async {
                       String? error = await messageProvider.send(
@@ -162,22 +165,30 @@ class ChatUsersDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      contentPadding: const EdgeInsets.symmetric(
-        vertical: 8,
-        horizontal: 4,
-      ),
       backgroundColor: kWhiteColor,
       surfaceTintColor: kWhiteColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: users.map((user) {
-            return ListTile(title: Text(user.name));
-          }).toList(),
+      title: const Text(
+        '参加スタッフ',
+        style: TextStyle(fontSize: 16),
+      ),
+      content: Container(
+        decoration: BoxDecoration(border: Border.all(color: kGrey600Color)),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: users.map((user) {
+              return Container(
+                decoration: const BoxDecoration(
+                  border: Border(bottom: BorderSide(color: kGrey600Color)),
+                ),
+                child: ListTile(title: Text(user.name)),
+              );
+            }).toList(),
+          ),
         ),
       ),
     );

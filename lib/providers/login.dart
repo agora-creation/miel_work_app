@@ -161,7 +161,29 @@ class LoginProvider with ChangeNotifier {
     return error;
   }
 
-  Future signOut() async {
+  Future<String?> updateAdminUserIds({
+    required List<UserModel> selectedUsers,
+  }) async {
+    String? error;
+    if (selectedUsers.isEmpty) return 'スタッフを一人以上選択してください';
+    if (_organization == null) return '管理者の選択に失敗しました';
+    try {
+      List<String> adminUserIds = [];
+      for (UserModel user in selectedUsers) {
+        adminUserIds.add(user.id);
+      }
+      _organizationService.update({
+        'id': _organization?.id,
+        'adminUserIds': adminUserIds,
+      });
+    } catch (e) {
+      notifyListeners();
+      error = '管理者の選択に失敗しました';
+    }
+    return error;
+  }
+
+  Future logout() async {
     await _auth?.signOut();
     _status = AuthStatus.unauthenticated;
     await allRemovePrefs();

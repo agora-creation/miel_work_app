@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/plan.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/screens/category.dart';
 import 'package:miel_work_app/services/plan.dart';
 import 'package:miel_work_app/widgets/custom_calendar.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart' as sfc;
@@ -46,7 +48,10 @@ class _PlanScreenState extends State<PlanScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => pushReplacementScreen(
+              context,
+              CategoryScreen(organization: widget.loginProvider.organization),
+            ),
             icon: const Icon(Icons.settings),
           ),
         ],

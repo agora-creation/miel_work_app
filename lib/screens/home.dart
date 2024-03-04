@@ -9,8 +9,8 @@ import 'package:miel_work_app/screens/manual.dart';
 import 'package:miel_work_app/screens/notice.dart';
 import 'package:miel_work_app/screens/plan.dart';
 import 'package:miel_work_app/screens/plan_shift.dart';
+import 'package:miel_work_app/screens/user.dart';
 import 'package:miel_work_app/screens/user_setting.dart';
-import 'package:miel_work_app/screens/users.dart';
 import 'package:miel_work_app/widgets/custom_appbar_title.dart';
 import 'package:miel_work_app/widgets/custom_icon_card.dart';
 import 'package:miel_work_app/widgets/custom_list_card.dart';
@@ -77,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 label: 'お知らせ',
                 color: kBlackColor,
                 backgroundColor: kWhiteColor,
+                alert: true,
                 onTap: () => pushScreen(
                   context,
                   NoticeScreen(
@@ -196,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       backgroundColor: kGrey600Color,
                       onTap: () => pushScreen(
                         context,
-                        UsersScreen(
+                        UserScreen(
                           loginProvider: loginProvider,
                           homeProvider: homeProvider,
                         ),

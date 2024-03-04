@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/providers/category.dart';
 import 'package:miel_work_app/providers/chat_message.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: ChatMessageProvider()),
         ChangeNotifierProvider.value(value: PlanProvider()),
         ChangeNotifierProvider.value(value: PlanShiftProvider()),
+        ChangeNotifierProvider.value(value: CategoryProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
