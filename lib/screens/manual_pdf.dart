@@ -70,7 +70,7 @@ class _ManualPdfScreenState extends State<ManualPdfScreen> {
         actions: [
           widget.loginProvider.isAdmin()
               ? IconButton(
-                  onPressed: () => showBottomUpScreen(
+                  onPressed: () => pushScreen(
                     context,
                     ManualModScreen(
                       loginProvider: widget.loginProvider,

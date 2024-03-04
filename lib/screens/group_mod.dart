@@ -7,13 +7,13 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/widgets/custom_text_form_field.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
 
-class GroupDetailScreen extends StatefulWidget {
+class GroupModScreen extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
   final OrganizationGroupModel group;
   final Function() getGroups;
 
-  const GroupDetailScreen({
+  const GroupModScreen({
     required this.loginProvider,
     required this.homeProvider,
     required this.group,
@@ -22,10 +22,10 @@ class GroupDetailScreen extends StatefulWidget {
   });
 
   @override
-  State<GroupDetailScreen> createState() => _GroupDetailScreenState();
+  State<GroupModScreen> createState() => _GroupModScreenState();
 }
 
-class _GroupDetailScreenState extends State<GroupDetailScreen> {
+class _GroupModScreenState extends State<GroupModScreen> {
   TextEditingController nameController = TextEditingController();
 
   @override

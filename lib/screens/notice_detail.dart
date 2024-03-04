@@ -3,15 +3,19 @@ import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/notice.dart';
 import 'package:miel_work_app/models/user.dart';
+import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/screens/notice_mod.dart';
 import 'package:miel_work_app/services/notice.dart';
 
 class NoticeDetailScreen extends StatefulWidget {
   final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
   final NoticeModel notice;
 
   const NoticeDetailScreen({
     required this.loginProvider,
+    required this.homeProvider,
     required this.notice,
     super.key,
   });
@@ -59,6 +63,21 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
           widget.notice.title,
           style: const TextStyle(color: kBlackColor),
         ),
+        actions: [
+          widget.loginProvider.isAdmin()
+              ? IconButton(
+                  onPressed: () => pushScreen(
+                    context,
+                    NoticeModScreen(
+                      loginProvider: widget.loginProvider,
+                      homeProvider: widget.homeProvider,
+                      notice: widget.notice,
+                    ),
+                  ),
+                  icon: const Icon(Icons.edit, color: kBlueColor),
+                )
+              : Container(),
+        ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: ListView(

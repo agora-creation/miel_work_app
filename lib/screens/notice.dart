@@ -5,6 +5,7 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/notice.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/screens/notice_add.dart';
 import 'package:miel_work_app/screens/notice_detail.dart';
 import 'package:miel_work_app/services/notice.dart';
 import 'package:miel_work_app/widgets/custom_notice_list.dart';
@@ -69,6 +70,7 @@ class _NoticeScreenState extends State<NoticeScreen> {
                   context,
                   NoticeDetailScreen(
                     loginProvider: widget.loginProvider,
+                    homeProvider: widget.homeProvider,
                     notice: notice,
                   ),
                 ),
@@ -79,7 +81,13 @@ class _NoticeScreenState extends State<NoticeScreen> {
       ),
       floatingActionButton: widget.loginProvider.isAdmin()
           ? FloatingActionButton(
-              onPressed: () {},
+              onPressed: () => pushScreen(
+                context,
+                NoticeAddScreen(
+                  loginProvider: widget.loginProvider,
+                  homeProvider: widget.homeProvider,
+                ),
+              ),
               child: const Icon(Icons.add, color: kWhiteColor),
             )
           : Container(),

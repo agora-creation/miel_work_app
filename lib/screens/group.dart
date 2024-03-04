@@ -4,7 +4,7 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/screens/group_detail.dart';
+import 'package:miel_work_app/screens/group_mod.dart';
 import 'package:miel_work_app/widgets/custom_button_sm.dart';
 import 'package:miel_work_app/widgets/custom_text_form_field.dart';
 
@@ -74,7 +74,7 @@ class _GroupScreenState extends State<GroupScreen> {
               trailing: const Icon(Icons.chevron_right),
               onTap: () => pushScreen(
                 context,
-                GroupDetailScreen(
+                GroupModScreen(
                   loginProvider: widget.loginProvider,
                   homeProvider: widget.homeProvider,
                   group: group,
