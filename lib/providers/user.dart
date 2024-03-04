@@ -53,7 +53,6 @@ class UserProvider with ChangeNotifier {
       ChatModel? orgChat = await _chatService.selectData(
         organizationId: organization.id,
         groupId: '',
-        priority: 0,
       );
       if (orgChat != null) {
         _chatService.update({
@@ -74,7 +73,6 @@ class UserProvider with ChangeNotifier {
         ChatModel? groupChat = await _chatService.selectData(
           organizationId: organization.id,
           groupId: group.id,
-          priority: 1,
         );
         if (groupChat != null) {
           _chatService.update({
@@ -125,7 +123,6 @@ class UserProvider with ChangeNotifier {
           ChatModel? groupChat = await _chatService.selectData(
             organizationId: befGroup.organizationId,
             groupId: befGroup.id,
-            priority: 1,
           );
           if (groupChat != null) {
             _chatService.update({
@@ -147,7 +144,6 @@ class UserProvider with ChangeNotifier {
           ChatModel? groupChat = await _chatService.selectData(
             organizationId: aftGroup.organizationId,
             groupId: aftGroup.id,
-            priority: 1,
           );
           if (groupChat != null) {
             _chatService.update({
@@ -185,7 +181,6 @@ class UserProvider with ChangeNotifier {
       ChatModel? orgChat = await _chatService.selectData(
         organizationId: organization.id,
         groupId: '',
-        priority: 0,
       );
       if (orgChat != null) {
         _chatService.update({
@@ -206,7 +201,6 @@ class UserProvider with ChangeNotifier {
         ChatModel? groupChat = await _chatService.selectData(
           organizationId: group.organizationId,
           groupId: group.id,
-          priority: 1,
         );
         if (groupChat != null) {
           _chatService.update({

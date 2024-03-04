@@ -86,7 +86,6 @@ class HomeProvider with ChangeNotifier {
       ChatModel? chat = await _chatService.selectData(
         organizationId: organization.id,
         groupId: group.id,
-        priority: 1,
       );
       if (chat != null) {
         _chatService.update({
@@ -116,7 +115,6 @@ class HomeProvider with ChangeNotifier {
       ChatModel? chat = await _chatService.selectData(
         organizationId: organization.id,
         groupId: group.id,
-        priority: 1,
       );
       if (chat != null) {
         _chatService.delete({
