@@ -4,6 +4,7 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/screens/group_detail.dart';
 import 'package:miel_work_app/widgets/custom_button_sm.dart';
 import 'package:miel_work_app/widgets/custom_text_form_field.dart';
 
@@ -22,6 +23,24 @@ class GroupScreen extends StatefulWidget {
 }
 
 class _GroupScreenState extends State<GroupScreen> {
+  List<OrganizationGroupModel> groups = [];
+
+  void _getGroups() {
+    groups.clear();
+    if (widget.homeProvider.groups.isNotEmpty) {
+      for (OrganizationGroupModel group in widget.homeProvider.groups) {
+        groups.add(group);
+      }
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getGroups();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,26 +62,23 @@ class _GroupScreenState extends State<GroupScreen> {
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: ListView.builder(
-        itemCount: widget.homeProvider.groups.length,
+        itemCount: groups.length,
         itemBuilder: (context, index) {
-          OrganizationGroupModel group = widget.homeProvider.groups[index];
+          OrganizationGroupModel group = groups[index];
           return Container(
             decoration: const BoxDecoration(
               border: Border(bottom: BorderSide(color: kGrey600Color)),
             ),
             child: ListTile(
               title: Text(group.name),
-              trailing: CustomButtonSm(
-                label: '削除',
-                labelColor: kWhiteColor,
-                backgroundColor: kRedColor,
-                onPressed: () => showDialog(
-                  context: context,
-                  builder: (context) => DelGroupDialog(
-                    loginProvider: widget.loginProvider,
-                    homeProvider: widget.homeProvider,
-                    group: group,
-                  ),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => pushScreen(
+                context,
+                GroupDetailScreen(
+                  loginProvider: widget.loginProvider,
+                  homeProvider: widget.homeProvider,
+                  group: group,
+                  getGroups: _getGroups,
                 ),
               ),
             ),
@@ -75,6 +91,7 @@ class _GroupScreenState extends State<GroupScreen> {
           builder: (context) => AddGroupDialog(
             loginProvider: widget.loginProvider,
             homeProvider: widget.homeProvider,
+            getGroups: _getGroups,
           ),
         ),
         child: const Icon(Icons.add, color: kWhiteColor),
@@ -86,10 +103,12 @@ class _GroupScreenState extends State<GroupScreen> {
 class AddGroupDialog extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
+  final Function() getGroups;
 
   const AddGroupDialog({
     required this.loginProvider,
     required this.homeProvider,
+    required this.getGroups,
     super.key,
   });
 
@@ -109,7 +128,7 @@ class _AddGroupDialogState extends State<AddGroupDialog> {
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       title: const Text(
-        'グループを追加する',
+        'グループを追加',
         style: TextStyle(fontSize: 16),
       ),
       content: Column(
@@ -148,87 +167,9 @@ class _AddGroupDialogState extends State<AddGroupDialog> {
               showMessage(context, error, false);
               return;
             }
+            widget.getGroups();
             if (!mounted) return;
             showMessage(context, 'グループを追加しました', true);
-            Navigator.pop(context);
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class DelGroupDialog extends StatefulWidget {
-  final LoginProvider loginProvider;
-  final HomeProvider homeProvider;
-  final OrganizationGroupModel group;
-
-  const DelGroupDialog({
-    required this.loginProvider,
-    required this.homeProvider,
-    required this.group,
-    super.key,
-  });
-
-  @override
-  State<DelGroupDialog> createState() => _DelGroupDialogState();
-}
-
-class _DelGroupDialogState extends State<DelGroupDialog> {
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      title: const Text(
-        'グループを削除する',
-        style: TextStyle(fontSize: 16),
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Center(child: Text('本当に削除しますか？')),
-          const SizedBox(height: 8),
-          CustomTextFormField(
-            controller: TextEditingController(text: widget.group.name),
-            textInputType: TextInputType.name,
-            maxLines: 1,
-            label: 'グループ名',
-            color: kBlackColor,
-            prefix: Icons.short_text,
-            enabled: false,
-          ),
-        ],
-      ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
-      actions: [
-        CustomButtonSm(
-          label: '閉じる',
-          labelColor: kWhiteColor,
-          backgroundColor: kGreyColor,
-          onPressed: () => Navigator.pop(context),
-        ),
-        CustomButtonSm(
-          label: '削除する',
-          labelColor: kWhiteColor,
-          backgroundColor: kRedColor,
-          onPressed: () async {
-            String? error = await widget.homeProvider.groupDelete(
-              organization: widget.loginProvider.organization,
-              group: widget.group,
-            );
-            if (error != null) {
-              if (!mounted) return;
-              showMessage(context, error, false);
-              return;
-            }
-            widget.homeProvider.currentGroupClear();
-            if (!mounted) return;
-            showMessage(context, 'グループを削除しました', true);
             Navigator.pop(context);
           },
         ),

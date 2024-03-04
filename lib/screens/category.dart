@@ -124,7 +124,7 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       title: const Text(
-        'カテゴリを追加する',
+        'カテゴリを追加',
         style: TextStyle(fontSize: 16),
       ),
       content: Column(
@@ -196,7 +196,7 @@ class _DelCategoryDialogState extends State<DelCategoryDialog> {
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       title: const Text(
-        'カテゴリを削除する',
+        'カテゴリを削除',
         style: TextStyle(fontSize: 16),
       ),
       content: Column(

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/screens/user_add.dart';
+import 'package:miel_work_app/screens/user_detail.dart';
 import 'package:miel_work_app/services/user.dart';
-import 'package:miel_work_app/widgets/custom_button_sm.dart';
 
 class UserScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -67,19 +70,30 @@ class _UserScreenState extends State<UserScreen> {
         itemCount: users.length,
         itemBuilder: (context, index) {
           UserModel user = users[index];
+          OrganizationGroupModel? userInGroup;
+          if (widget.homeProvider.groups.isNotEmpty) {
+            for (OrganizationGroupModel group in widget.homeProvider.groups) {
+              if (group.userIds.contains(user.id)) {
+                userInGroup = group;
+              }
+            }
+          }
           return Container(
             decoration: const BoxDecoration(
               border: Border(bottom: BorderSide(color: kGrey600Color)),
             ),
             child: ListTile(
               title: Text(user.name),
-              trailing: CustomButtonSm(
-                label: '削除',
-                labelColor: kWhiteColor,
-                backgroundColor: kRedColor,
-                onPressed: () => showDialog(
-                  context: context,
-                  builder: (context) => Container(),
+              subtitle: Text(userInGroup?.name ?? ''),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => pushScreen(
+                context,
+                UserDetailScreen(
+                  loginProvider: widget.loginProvider,
+                  homeProvider: widget.homeProvider,
+                  user: user,
+                  userInGroup: userInGroup,
+                  getUsers: _getUsers,
                 ),
               ),
             ),
@@ -87,9 +101,13 @@ class _UserScreenState extends State<UserScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => showDialog(
-          context: context,
-          builder: (context) => Container(),
+        onPressed: () => pushScreen(
+          context,
+          UserAddScreen(
+            loginProvider: widget.loginProvider,
+            homeProvider: widget.homeProvider,
+            getUsers: _getUsers,
+          ),
         ),
         child: const Icon(Icons.add, color: kWhiteColor),
       ),

@@ -172,7 +172,7 @@ class _ModNameDialogState extends State<ModNameDialog> {
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       title: const Text(
-        '名前を変更する',
+        '名前を変更',
         style: TextStyle(fontSize: 16),
       ),
       content: Column(
@@ -185,7 +185,7 @@ class _ModNameDialogState extends State<ModNameDialog> {
             maxLines: 1,
             label: '名前',
             color: kBlackColor,
-            prefix: Icons.person,
+            prefix: Icons.short_text,
           ),
         ],
       ),
@@ -251,7 +251,7 @@ class _ModEmailDialogState extends State<ModEmailDialog> {
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       title: const Text(
-        'メールアドレスを変更する',
+        'メールアドレスを変更',
         style: TextStyle(fontSize: 16),
       ),
       content: Column(
@@ -330,7 +330,7 @@ class _ModPasswordDialogState extends State<ModPasswordDialog> {
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       title: const Text(
-        'パスワードを変更する',
+        'パスワードを変更',
         style: TextStyle(fontSize: 16),
       ),
       content: Column(
@@ -422,7 +422,7 @@ class _ModAdminDialogState extends State<ModAdminDialog> {
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       title: const Text(
-        '管理者を変更する',
+        '管理者を変更',
         style: TextStyle(fontSize: 16),
       ),
       content: Container(
