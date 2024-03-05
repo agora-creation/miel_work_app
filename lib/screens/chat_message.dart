@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/chat.dart';
@@ -14,9 +15,11 @@ import 'package:miel_work_app/widgets/message_list.dart';
 import 'package:provider/provider.dart';
 
 class ChatMessageScreen extends StatefulWidget {
+  final LoginProvider loginProvider;
   final ChatModel chat;
 
   const ChatMessageScreen({
+    required this.loginProvider,
     required this.chat,
     super.key,
   });
@@ -45,9 +48,8 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final loginProvider = Provider.of<LoginProvider>(context);
     final messageProvider = Provider.of<ChatMessageProvider>(context);
-    UserModel? loginUser = loginProvider.user;
+    UserModel? loginUser = widget.loginProvider.user;
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
@@ -116,9 +118,8 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                             ChatMessageModel message = messages[index];
                             return MessageList(
                               message: message,
-                              isMe: message.userId == loginUser?.id,
+                              isMe: message.createdUserId == loginUser?.id,
                               onTapImage: () {},
-                              users: users,
                             );
                           },
                         );
@@ -127,7 +128,22 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                   ),
                   MessageFormField(
                     controller: messageProvider.contentController,
-                    galleryPressed: () {},
+                    galleryPressed: () async {
+                      final result = await ImagePicker().pickImage(
+                        source: ImageSource.gallery,
+                      );
+                      if (result == null) return;
+                      String? error = await messageProvider.sendImage(
+                        chat: widget.chat,
+                        loginUser: loginUser,
+                        imageXFile: result,
+                      );
+                      if (error != null) {
+                        if (!mounted) return;
+                        showMessage(context, error, false);
+                        return;
+                      }
+                    },
                     sendPressed: () async {
                       String? error = await messageProvider.send(
                         chat: widget.chat,

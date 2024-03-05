@@ -27,7 +27,10 @@ class CustomNoticeList extends StatelessWidget {
       child: ListTile(
         title: Text(notice.title),
         subtitle: Text(dateText('yyyy/MM/dd HH:mm', notice.createdAt)),
-        trailing: const Icon(Icons.chevron_right),
+        trailing: const Icon(
+          Icons.chevron_right,
+          color: kGreyColor,
+        ),
         tileColor:
             !notice.readUserIds.contains(user?.id) ? kRed100Color : kWhiteColor,
         onTap: onTap,

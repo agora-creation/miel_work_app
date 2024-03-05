@@ -31,19 +31,64 @@ class _PlanShiftScreenState extends State<PlanShiftScreen> {
   UserService userService = UserService();
   List<sfc.CalendarResource> resourceColl = [];
 
+  void _calendarTap(sfc.CalendarTapDetails details) {
+    sfc.CalendarElement element = details.targetElement;
+    switch (element) {
+      case sfc.CalendarElement.appointment:
+      case sfc.CalendarElement.agenda:
+        sfc.Appointment appointmentDetails = details.appointments![0];
+        String type = appointmentDetails.notes ?? '';
+        if (type == 'plan') {
+          // showDialog(
+          //   context: context,
+          //   builder: (context) => PlanDialog(
+          //     loginProvider: widget.loginProvider,
+          //     homeProvider: widget.homeProvider,
+          //     planId: '${appointmentDetails.id}',
+          //   ),
+          // );
+        } else if (type == 'planShift') {
+          // showBottomUpScreen(
+          //   context,
+          //   PlanShiftModScreen(
+          //     loginProvider: widget.loginProvider,
+          //     homeProvider: widget.homeProvider,
+          //     planShiftId: '${appointmentDetails.id}',
+          //   ),
+          // );
+        }
+        break;
+      case sfc.CalendarElement.calendarCell:
+        final userId = details.resource?.id;
+        if (userId == null) return;
+        // showBottomUpScreen(
+        //   context,
+        //   PlanShiftAddScreen(
+        //     loginProvider: widget.loginProvider,
+        //     homeProvider: widget.homeProvider,
+        //     userId: '$userId',
+        //     date: details.date ?? DateTime.now(),
+        //   ),
+        // );
+        break;
+      default:
+        break;
+    }
+  }
+
   void _getUsers() async {
-    List<UserModel> tmpUsers = [];
+    List<UserModel> users = [];
     if (widget.homeProvider.currentGroup == null) {
-      tmpUsers = await userService.selectList(
+      users = await userService.selectList(
         userIds: widget.loginProvider.organization?.userIds ?? [],
       );
     } else {
-      tmpUsers = await userService.selectList(
+      users = await userService.selectList(
         userIds: widget.homeProvider.currentGroup?.userIds ?? [],
       );
     }
-    if (tmpUsers.isNotEmpty) {
-      for (UserModel user in tmpUsers) {
+    if (users.isNotEmpty) {
+      for (UserModel user in users) {
         resourceColl.add(sfc.CalendarResource(
           displayName: user.name,
           id: user.id,
@@ -107,7 +152,7 @@ class _PlanShiftScreenState extends State<PlanShiftScreen> {
             }
             return CustomCalendarShift(
               dataSource: _ShiftDataSource(source, resourceColl),
-              onTap: (details) {},
+              onTap: _calendarTap,
             );
           },
         ),

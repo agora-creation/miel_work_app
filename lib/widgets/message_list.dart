@@ -2,19 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/chat_message.dart';
-import 'package:miel_work_app/models/user.dart';
 
 class MessageList extends StatelessWidget {
   final ChatMessageModel message;
   final bool isMe;
   final Function()? onTapImage;
-  final List<UserModel> users;
 
   const MessageList({
     required this.message,
     required this.isMe,
     required this.onTapImage,
-    required this.users,
     super.key,
   });
 
@@ -70,19 +67,13 @@ class MessageList extends StatelessWidget {
         ),
       );
     } else {
-      String userName = '';
-      for (UserModel user in users) {
-        if (user.id == message.userId) {
-          userName = user.name;
-        }
-      }
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              userName,
+              message.createdUserName,
               style: const TextStyle(fontSize: 12),
             ),
             const SizedBox(height: 2),

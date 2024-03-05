@@ -25,7 +25,10 @@ class CustomManualList extends StatelessWidget {
       ),
       child: ListTile(
         title: Text(manual.title),
-        trailing: const Icon(Icons.chevron_right),
+        trailing: const Icon(
+          Icons.chevron_right,
+          color: kGreyColor,
+        ),
         tileColor:
             !manual.readUserIds.contains(user?.id) ? kRed100Color : kWhiteColor,
         onTap: onTap,

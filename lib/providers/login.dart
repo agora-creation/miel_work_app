@@ -166,7 +166,6 @@ class LoginProvider with ChangeNotifier {
   }) async {
     String? error;
     if (selectedUsers.isEmpty) return 'スタッフを一人以上選択してください';
-    if (_organization == null) return '管理者の選択に失敗しました';
     try {
       List<String> adminUserIds = [];
       for (UserModel user in selectedUsers) {
@@ -178,7 +177,7 @@ class LoginProvider with ChangeNotifier {
       });
     } catch (e) {
       notifyListeners();
-      error = '管理者の選択に失敗しました';
+      error = '管理者の変更に失敗しました';
     }
     return error;
   }

@@ -190,6 +190,15 @@ class _AddGroupDialogState extends State<AddManualDialog> {
               });
             },
           ),
+          const SizedBox(height: 8),
+          const Text(
+            '※追加時、公開グループに所属しているスタッフアプリに通知します。',
+            style: TextStyle(color: kRedColor),
+          ),
+          const Text(
+            '※グループ未選択の場合、全てのスタッフアプリに通知します。',
+            style: TextStyle(color: kRedColor),
+          ),
         ],
       ),
       actionsAlignment: MainAxisAlignment.spaceBetween,

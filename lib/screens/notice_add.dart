@@ -62,7 +62,7 @@ class _NoticeAddScreenState extends State<NoticeAddScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'お知らせを作成',
+          'お知らせを追加',
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
@@ -81,7 +81,7 @@ class _NoticeAddScreenState extends State<NoticeAddScreen> {
                 return;
               }
               if (!mounted) return;
-              showMessage(context, 'お知らせを作成しました', true);
+              showMessage(context, 'お知らせを追加しました', true);
               Navigator.pop(context);
             },
             child: const Text('保存'),
@@ -94,6 +94,15 @@ class _NoticeAddScreenState extends State<NoticeAddScreen> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
+              const Text(
+                '※追加時、送信先グループに所属しているスタッフアプリに通知します。',
+                style: TextStyle(color: kRedColor),
+              ),
+              const Text(
+                '※グループ未選択の場合、全てのスタッフアプリに通知します。',
+                style: TextStyle(color: kRedColor),
+              ),
+              const SizedBox(height: 8),
               CustomTextFormField(
                 controller: titleController,
                 textInputType: TextInputType.name,

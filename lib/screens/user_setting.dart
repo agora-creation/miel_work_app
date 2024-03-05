@@ -473,7 +473,7 @@ class _ModAdminDialogState extends State<ModAdminDialog> {
               showMessage(context, error, false);
               return;
             }
-            await widget.loginProvider.logout();
+            await widget.loginProvider.reload();
             if (!mounted) return;
             showMessage(context, '管理者を変更しました', true);
             pushReplacementScreen(context, const LoginScreen());

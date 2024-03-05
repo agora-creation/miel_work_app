@@ -7,7 +7,7 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/chat_message.dart';
 import 'package:miel_work_app/services/chat.dart';
-import 'package:miel_work_app/widgets/chat_room_list.dart';
+import 'package:miel_work_app/widgets/chat_list.dart';
 
 class ChatScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -62,11 +62,14 @@ class _ChatScreenState extends State<ChatScreen> {
             itemCount: chats.length,
             itemBuilder: (context, index) {
               ChatModel chat = chats[index];
-              return ChatRoomList(
+              return ChatList(
                 chat: chat,
                 onTap: () => pushScreen(
                   context,
-                  ChatMessageScreen(chat: chat),
+                  ChatMessageScreen(
+                    loginProvider: widget.loginProvider,
+                    chat: chat,
+                  ),
                 ),
               );
             },

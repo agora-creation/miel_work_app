@@ -12,10 +12,12 @@ class HomeProvider with ChangeNotifier {
   OrganizationGroupModel? currentGroup;
 
   void setGroups({
-    required String organizationId,
+    String? organizationId,
     OrganizationGroupModel? group,
   }) async {
-    groups = await _groupService.selectList(organizationId: organizationId);
+    groups = await _groupService.selectList(
+      organizationId: organizationId ?? 'error',
+    );
     if (groups.isEmpty) {
       currentGroup = null;
     } else {

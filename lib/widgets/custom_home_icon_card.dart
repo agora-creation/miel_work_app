@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/style.dart';
 
-class CustomIconCard extends StatelessWidget {
+class CustomHomeIconCard extends StatelessWidget {
   final IconData icon;
   final double iconSize;
   final String label;
@@ -11,7 +11,7 @@ class CustomIconCard extends StatelessWidget {
   final bool alert;
   final Function()? onTap;
 
-  const CustomIconCard({
+  const CustomHomeIconCard({
     required this.icon,
     this.iconSize = 60,
     required this.label,

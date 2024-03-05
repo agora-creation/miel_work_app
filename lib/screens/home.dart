@@ -15,7 +15,8 @@ import 'package:miel_work_app/screens/user_setting.dart';
 import 'package:miel_work_app/services/manual.dart';
 import 'package:miel_work_app/services/notice.dart';
 import 'package:miel_work_app/widgets/custom_appbar_title.dart';
-import 'package:miel_work_app/widgets/custom_icon_card.dart';
+import 'package:miel_work_app/widgets/custom_home_chat_card.dart';
+import 'package:miel_work_app/widgets/custom_home_icon_card.dart';
 import 'package:miel_work_app/widgets/custom_list_card.dart';
 import 'package:miel_work_app/widgets/group_select_card.dart';
 import 'package:provider/provider.dart';
@@ -80,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       user: loginProvider.user,
                     );
                   }
-                  return CustomIconCard(
+                  return CustomHomeIconCard(
                     icon: Icons.picture_as_pdf,
                     label: '業務マニュアル',
                     color: kBlackColor,
@@ -109,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       user: loginProvider.user,
                     );
                   }
-                  return CustomIconCard(
+                  return CustomHomeIconCard(
                     icon: Icons.notifications,
                     label: 'お知らせ',
                     color: kBlackColor,
@@ -127,15 +128,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          CustomListCard(
-            label: 'チャット',
-            child: const Column(
-              children: [
-                ListTile(
-                  title: Text('未読メッセージはありません'),
-                ),
-              ],
-            ),
+          CustomHomeChatCard(
+            loginProvider: loginProvider,
+            homeProvider: homeProvider,
             onTap: () => pushScreen(
               context,
               ChatScreen(
@@ -167,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.zero,
             gridDelegate: kHome3Grid,
             children: [
-              CustomIconCard(
+              CustomHomeIconCard(
                 icon: Icons.view_timeline,
                 iconSize: 40,
                 label: 'シフト表',
@@ -210,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
               //   onTap: () {},
               // ),
               loginProvider.isAdmin()
-                  ? CustomIconCard(
+                  ? CustomHomeIconCard(
                       icon: Icons.category,
                       iconSize: 40,
                       label: 'グループ管理',
@@ -227,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                   : Container(),
               loginProvider.isAdmin()
-                  ? CustomIconCard(
+                  ? CustomHomeIconCard(
                       icon: Icons.groups,
                       iconSize: 40,
                       label: 'スタッフ管理',

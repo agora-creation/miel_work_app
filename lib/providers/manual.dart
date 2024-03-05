@@ -5,12 +5,14 @@ import 'package:miel_work_app/models/manual.dart';
 import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/user.dart';
+import 'package:miel_work_app/services/fm.dart';
 import 'package:miel_work_app/services/manual.dart';
 import 'package:miel_work_app/services/user.dart';
 
 class ManualProvider with ChangeNotifier {
   final ManualService _manualService = ManualService();
   final UserService _userService = UserService();
+  final FmService _fmService = FmService();
 
   Future<String?> create({
     required OrganizationModel? organization,
@@ -44,6 +46,26 @@ class ManualProvider with ChangeNotifier {
         'readUserIds': [user?.id],
         'createdAt': DateTime.now(),
       });
+      //通知
+      List<UserModel> sendUsers = [];
+      if (group != null) {
+        sendUsers = await _userService.selectList(
+          userIds: group.userIds,
+        );
+      } else {
+        sendUsers = await _userService.selectList(
+          userIds: organization.userIds,
+        );
+      }
+      if (sendUsers.isNotEmpty) {
+        for (UserModel user in sendUsers) {
+          _fmService.send(
+            token: user.token,
+            title: title,
+            body: '業務マニュアルを追加しました',
+          );
+        }
+      }
     } catch (e) {
       error = '業務マニュアルの追加に失敗しました';
     }

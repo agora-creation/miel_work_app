@@ -5,6 +5,7 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/category.dart';
+import 'package:miel_work_app/screens/plan_timeline.dart';
 import 'package:miel_work_app/services/plan.dart';
 import 'package:miel_work_app/widgets/custom_calendar.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart' as sfc;
@@ -25,6 +26,40 @@ class PlanScreen extends StatefulWidget {
 
 class _PlanScreenState extends State<PlanScreen> {
   PlanService planService = PlanService();
+
+  void _calendarTap(sfc.CalendarTapDetails details) {
+    showBottomUpScreen(
+      context,
+      const PlanTimelineScreen(),
+    );
+    sfc.CalendarElement element = details.targetElement;
+    switch (element) {
+      case sfc.CalendarElement.appointment:
+      case sfc.CalendarElement.agenda:
+        sfc.Appointment appointmentDetails = details.appointments![0];
+        // showBottomUpScreen(
+        //   context,
+        //   PlanModScreen(
+        //     loginProvider: widget.loginProvider,
+        //     homeProvider: widget.homeProvider,
+        //     planId: '${appointmentDetails.id}',
+        //   ),
+        // );
+        break;
+      case sfc.CalendarElement.calendarCell:
+        // showBottomUpScreen(
+        //   context,
+        //   PlanAddScreen(
+        //     loginProvider: widget.loginProvider,
+        //     homeProvider: widget.homeProvider,
+        //     date: details.date ?? DateTime.now(),
+        //   ),
+        // );
+        break;
+      default:
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +105,7 @@ class _PlanScreenState extends State<PlanScreen> {
             }
             return CustomCalendar(
               dataSource: _DataSource(appointments),
-              onTap: (details) {},
+              onTap: _calendarTap,
             );
           },
         ),
