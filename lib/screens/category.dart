@@ -31,20 +31,18 @@ class _CategoryScreenState extends State<CategoryScreen> {
       backgroundColor: kWhiteColor,
       appBar: AppBar(
         backgroundColor: kWhiteColor,
-        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.chevron_left,
+            color: kBlackColor,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        centerTitle: true,
         title: const Text(
           'カテゴリ管理',
           style: TextStyle(color: kBlackColor),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.close,
-              color: kBlackColor,
-            ),
-            onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-          ),
-        ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(

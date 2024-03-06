@@ -34,7 +34,7 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
         backgroundColor: kWhiteColor,
         automaticallyImplyLeading: false,
         title: Text(
-          dateText('yyyy年MM月dd日の予定', now),
+          dateText('yyyy年MM月dd日(E)の予定', now),
           style: const TextStyle(color: kBlackColor),
         ),
         actions: [
@@ -48,8 +48,9 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
         ],
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: planService.streamListNow(
+        stream: planService.streamListDate(
           organizationId: widget.loginProvider.organization?.id,
+          date: now,
         ),
         builder: (context, snapshot) {
           List<PlanModel> plans = [];

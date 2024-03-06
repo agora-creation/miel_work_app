@@ -30,35 +30,12 @@ class _PlanScreenState extends State<PlanScreen> {
   void _calendarTap(sfc.CalendarTapDetails details) {
     showBottomUpScreen(
       context,
-      const PlanTimelineScreen(),
+      PlanTimelineScreen(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
+        date: details.date ?? DateTime.now(),
+      ),
     );
-    sfc.CalendarElement element = details.targetElement;
-    switch (element) {
-      case sfc.CalendarElement.appointment:
-      case sfc.CalendarElement.agenda:
-        sfc.Appointment appointmentDetails = details.appointments![0];
-        // showBottomUpScreen(
-        //   context,
-        //   PlanModScreen(
-        //     loginProvider: widget.loginProvider,
-        //     homeProvider: widget.homeProvider,
-        //     planId: '${appointmentDetails.id}',
-        //   ),
-        // );
-        break;
-      case sfc.CalendarElement.calendarCell:
-        // showBottomUpScreen(
-        //   context,
-        //   PlanAddScreen(
-        //     loginProvider: widget.loginProvider,
-        //     homeProvider: widget.homeProvider,
-        //     date: details.date ?? DateTime.now(),
-        //   ),
-        // );
-        break;
-      default:
-        break;
-    }
   }
 
   @override
@@ -81,11 +58,11 @@ class _PlanScreenState extends State<PlanScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () => pushReplacementScreen(
+            onPressed: () => pushScreen(
               context,
               CategoryScreen(organization: widget.loginProvider.organization),
             ),
-            icon: const Icon(Icons.settings),
+            icon: const Icon(Icons.category),
           ),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),

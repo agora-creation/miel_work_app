@@ -62,8 +62,9 @@ class _CustomHomePlanCardState extends State<CustomHomePlanCard> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                  stream: planService.streamListNow(
+                  stream: planService.streamListDate(
                     organizationId: widget.loginProvider.organization?.id,
+                    date: DateTime.now(),
                   ),
                   builder: (context, snapshot) {
                     List<PlanModel> plans = [];

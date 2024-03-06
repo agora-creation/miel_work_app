@@ -50,12 +50,12 @@ class PlanService {
         .snapshots();
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>>? streamListNow({
+  Stream<QuerySnapshot<Map<String, dynamic>>>? streamListDate({
     required String? organizationId,
+    required DateTime date,
   }) {
-    DateTime now = DateTime.now();
-    Timestamp startAt = convertTimestamp(now, false);
-    Timestamp endAt = convertTimestamp(now, true);
+    Timestamp startAt = convertTimestamp(date, false);
+    Timestamp endAt = convertTimestamp(date, true);
     return FirebaseFirestore.instance
         .collection(collection)
         .where('organizationId', isEqualTo: organizationId ?? 'error')
