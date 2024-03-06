@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/chat.dart';
+import 'package:miel_work_app/widgets/alert_chip.dart';
 
 class ChatList extends StatelessWidget {
   final ChatModel chat;
-  final bool unread;
+  final int unreadCount;
   final Function()? onTap;
 
   const ChatList({
     required this.chat,
-    required this.unread,
+    required this.unreadCount,
     this.onTap,
     super.key,
   });
@@ -30,11 +31,8 @@ class ChatList extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
         ),
-        trailing: unread
-            ? const Icon(
-                Icons.circle,
-                color: kRedColor,
-              )
+        trailing: unreadCount > 0
+            ? AlertChip(unreadCount.toString())
             : const Icon(
                 Icons.chevron_right,
                 color: kGreyColor,

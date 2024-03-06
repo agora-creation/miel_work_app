@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/chat.dart';
+import 'package:miel_work_app/models/chat_message.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/services/chat.dart';
 import 'package:miel_work_app/services/chat_message.dart';
-import 'package:miel_work_app/widgets/message_alert_list.dart';
+import 'package:miel_work_app/widgets/nonread_message_list.dart';
 
 class CustomHomeChatCard extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -22,38 +25,45 @@ class CustomHomeChatCard extends StatefulWidget {
 }
 
 class _CustomHomeChatCardState extends State<CustomHomeChatCard> {
+  ChatService chatService = ChatService();
   ChatMessageService messageService = ChatMessageService();
+  List<ChatMessageModel> messages = [];
   List<Widget> messageChildren = [];
+  bool other = false;
 
-  // void _init() async {
-  //   List<ChatModel> chats = await chatService.selectList(
-  //     organizationId: widget.loginProvider.organization?.id,
-  //     groupId: widget.homeProvider.currentGroup?.id,
-  //   );
-  //   if (chats.isNotEmpty) {
-  //     // for (ChatModel chat in chats) {
-  //     //   List<ChatMessageModel> messages = await messageService.selectList(
-  //     //     chatId: chat.id,
-  //     //     userId: widget.loginProvider.user?.id,
-  //     //   );
-  //     //   if (messages.isNotEmpty) {
-  //     //     for (ChatMessageModel message in messages) {
-  //     //       messageChildren.add(MessageAlertList(
-  //     //         label: message.content,
-  //     //         subLabel: '[${chat.name}]${message.createdUserName}',
-  //     //       ));
-  //     //     }
-  //     //   }
-  //     // }
-  //   }
-  //   setState(() {});
-  // }
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _init();
-  // }
+  void _init() async {
+    List<ChatModel> chats = await chatService.selectList(
+      organizationId: widget.loginProvider.organization?.id,
+      groupId: widget.homeProvider.currentGroup?.id,
+    );
+    if (chats.isNotEmpty) {
+      for (ChatModel chat in chats) {
+        List<ChatMessageModel> tmpMessages = await messageService.selectList(
+          chatId: chat.id,
+          loginUser: widget.loginProvider.user,
+        );
+        messages.addAll(tmpMessages);
+      }
+    }
+    if (messages.length > 3) {
+      other = true;
+      if (messages.isNotEmpty) {
+        int count = 0;
+        for (ChatMessageModel message in messages) {
+          messageChildren.add(NonReadMessageList(message: message));
+          count++;
+          if (count >= 3) break;
+        }
+      }
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,12 +101,10 @@ class _CustomHomeChatCardState extends State<CustomHomeChatCard> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    MessageAlertList(
-                      label: 'aaa',
-                      subLabel: 'aa',
-                    ),
+                    Column(children: messageChildren),
+                    other ? const Text('その他未読あり') : Container()
                   ],
                 ),
               ),

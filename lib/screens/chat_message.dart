@@ -30,27 +30,12 @@ class ChatMessageScreen extends StatefulWidget {
 
 class _ChatMessageScreenState extends State<ChatMessageScreen> {
   ChatMessageService messageService = ChatMessageService();
-  UserService userService = UserService();
-  List<UserModel> users = [];
 
   void _init() async {
-    users = await userService.selectList(
-      userIds: widget.chat.userIds,
-    );
-    List<ChatMessageModel> messages = await messageService.selectList(
+    await messageService.updateRead(
       chatId: widget.chat.id,
-      user: widget.loginProvider.user,
+      loginUser: widget.loginProvider.user,
     );
-    if (messages.isNotEmpty) {
-      for (ChatMessageModel message in messages) {
-        List<String> readUserIds = message.readUserIds;
-        readUserIds.add(widget.loginProvider.user?.id ?? '');
-        messageService.update({
-          'id': message.id,
-          'readUserIds': readUserIds,
-        });
-      }
-    }
     setState(() {});
   }
 
@@ -63,7 +48,6 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
   @override
   Widget build(BuildContext context) {
     final messageProvider = Provider.of<ChatMessageProvider>(context);
-    UserModel? loginUser = widget.loginProvider.user;
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
@@ -81,21 +65,18 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
           style: const TextStyle(color: kBlackColor),
         ),
         actions: [
-          users.isNotEmpty
-              ? IconButton(
-                  onPressed: () => showDialog(
-                    context: context,
-                    builder: (context) => ChatUsersDialog(
-                      chat: widget.chat,
-                      users: users,
-                    ),
-                  ),
-                  icon: const Icon(
-                    Icons.groups,
-                    color: kBlueColor,
-                  ),
-                )
-              : Container(),
+          IconButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => ChatUsersDialog(
+                chat: widget.chat,
+              ),
+            ),
+            icon: const Icon(
+              Icons.groups,
+              color: kBlueColor,
+            ),
+          ),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
@@ -132,7 +113,8 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                             ChatMessageModel message = messages[index];
                             return MessageList(
                               message: message,
-                              isMe: message.createdUserId == loginUser?.id,
+                              isMe: message.createdUserId ==
+                                  widget.loginProvider.user?.id,
                               onTapImage: () {},
                             );
                           },
@@ -149,7 +131,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                       if (result == null) return;
                       String? error = await messageProvider.sendImage(
                         chat: widget.chat,
-                        loginUser: loginUser,
+                        loginUser: widget.loginProvider.user,
                         imageXFile: result,
                       );
                       if (error != null) {
@@ -161,7 +143,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                     sendPressed: () async {
                       String? error = await messageProvider.send(
                         chat: widget.chat,
-                        loginUser: loginUser,
+                        loginUser: widget.loginProvider.user,
                       );
                       if (error != null) {
                         if (!mounted) return;
@@ -169,7 +151,8 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                         return;
                       }
                     },
-                    enabled: widget.chat.userIds.contains(loginUser?.id),
+                    enabled: widget.chat.userIds
+                        .contains(widget.loginProvider.user?.id),
                   ),
                 ],
               ),
@@ -181,15 +164,34 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
   }
 }
 
-class ChatUsersDialog extends StatelessWidget {
+class ChatUsersDialog extends StatefulWidget {
   final ChatModel chat;
-  final List<UserModel> users;
 
   const ChatUsersDialog({
     required this.chat,
-    required this.users,
     super.key,
   });
+
+  @override
+  State<ChatUsersDialog> createState() => _ChatUsersDialogState();
+}
+
+class _ChatUsersDialogState extends State<ChatUsersDialog> {
+  UserService userService = UserService();
+  List<UserModel> users = [];
+
+  void _init() async {
+    users = await userService.selectList(
+      userIds: widget.chat.userIds,
+    );
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
 
   @override
   Widget build(BuildContext context) {

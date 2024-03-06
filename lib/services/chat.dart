@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:miel_work_app/models/chat.dart';
-import 'package:miel_work_app/models/organization_group.dart';
 
 class ChatService {
   String collection = 'chat';
@@ -42,7 +41,7 @@ class ChatService {
 
   Future<List<ChatModel>> selectList({
     required String? organizationId,
-    required OrganizationGroupModel? currentGroup,
+    required String? groupId,
   }) async {
     List<ChatModel> ret = [];
     await firestore
@@ -53,13 +52,39 @@ class ChatService {
         .then((value) {
       for (DocumentSnapshot<Map<String, dynamic>> map in value.docs) {
         ChatModel chat = ChatModel.fromSnapshot(map);
-        if (currentGroup == null) {
+        if (groupId == null) {
           ret.add(chat);
-        } else if (chat.groupId == currentGroup.id || chat.groupId == '') {
+        } else if (chat.groupId == groupId || chat.groupId == '') {
           ret.add(chat);
         }
       }
     });
+    return ret;
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
+    required String? organizationId,
+  }) {
+    return FirebaseFirestore.instance
+        .collection(collection)
+        .where('organizationId', isEqualTo: organizationId ?? 'error')
+        .orderBy('updatedAt', descending: true)
+        .snapshots();
+  }
+
+  List<ChatModel> generateList({
+    required QuerySnapshot<Map<String, dynamic>>? data,
+    required String? groupId,
+  }) {
+    List<ChatModel> ret = [];
+    for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
+      ChatModel chat = ChatModel.fromSnapshot(doc);
+      if (groupId == null) {
+        ret.add(chat);
+      } else if (chat.groupId == groupId || chat.groupId == '') {
+        ret.add(chat);
+      }
+    }
     return ret;
   }
 }

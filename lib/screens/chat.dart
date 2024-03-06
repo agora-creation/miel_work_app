@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/chat.dart';
+import 'package:miel_work_app/models/chat_message.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/chat_message.dart';
@@ -32,7 +33,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void _init() async {
     chats = await chatService.selectList(
       organizationId: widget.loginProvider.organization?.id,
-      currentGroup: widget.homeProvider.currentGroup,
+      groupId: widget.homeProvider.currentGroup?.id,
     );
     setState(() {});
   }
@@ -72,16 +73,16 @@ class _ChatScreenState extends State<ChatScreen> {
               chatId: chat.id,
             ),
             builder: (context, snapshot) {
-              bool unread = false;
+              List<ChatMessageModel> messages = [];
               if (snapshot.hasData) {
-                unread = messageService.unreadCheck(
+                messages = messageService.generateListUnread(
                   data: snapshot.data,
-                  user: widget.loginProvider.user,
+                  loginUser: widget.loginProvider.user,
                 );
               }
               return ChatList(
                 chat: chat,
-                unread: unread,
+                unreadCount: messages.length,
                 onTap: () => pushScreen(
                   context,
                   ChatMessageScreen(
