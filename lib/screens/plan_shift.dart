@@ -138,7 +138,7 @@ class _PlanShiftScreenState extends State<PlanShiftScreen> {
           builder: (context, snapshot) {
             List<sfc.Appointment> source = [];
             if (snapshot.snapshot1.hasData) {
-              source = planService.generateList(
+              source = planService.generateListAppointment(
                 data: snapshot.snapshot1.data,
                 currentGroup: widget.homeProvider.currentGroup,
                 shift: true,

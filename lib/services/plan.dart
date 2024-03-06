@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/plan.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart' as sfc;
@@ -49,7 +50,37 @@ class PlanService {
         .snapshots();
   }
 
-  List<sfc.Appointment> generateList({
+  Stream<QuerySnapshot<Map<String, dynamic>>>? streamListNow({
+    required String? organizationId,
+  }) {
+    DateTime now = DateTime.now();
+    Timestamp startAt = convertTimestamp(now, false);
+    Timestamp endAt = convertTimestamp(now, true);
+    return FirebaseFirestore.instance
+        .collection(collection)
+        .where('organizationId', isEqualTo: organizationId ?? 'error')
+        .orderBy('startedAt', descending: false)
+        .startAt([startAt]).endAt([endAt]).snapshots();
+  }
+
+  List<PlanModel> generateList({
+    required QuerySnapshot<Map<String, dynamic>>? data,
+    required OrganizationGroupModel? currentGroup,
+    bool shift = false,
+  }) {
+    List<PlanModel> ret = [];
+    for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
+      PlanModel plan = PlanModel.fromSnapshot(doc);
+      if (currentGroup == null) {
+        ret.add(plan);
+      } else if (plan.groupId == currentGroup.id || plan.groupId == '') {
+        ret.add(plan);
+      }
+    }
+    return ret;
+  }
+
+  List<sfc.Appointment> generateListAppointment({
     required QuerySnapshot<Map<String, dynamic>>? data,
     required OrganizationGroupModel? currentGroup,
     bool shift = false,

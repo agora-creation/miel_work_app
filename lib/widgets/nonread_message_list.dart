@@ -22,15 +22,18 @@ class NonReadMessageList extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
         ),
         padding: const EdgeInsets.symmetric(
-          vertical: 8,
-          horizontal: 10,
+          vertical: 4,
+          horizontal: 8,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               message.content,
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
               softWrap: false,
               overflow: TextOverflow.ellipsis,
               maxLines: 1,

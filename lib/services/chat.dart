@@ -61,30 +61,4 @@ class ChatService {
     });
     return ret;
   }
-
-  Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
-    required String? organizationId,
-  }) {
-    return FirebaseFirestore.instance
-        .collection(collection)
-        .where('organizationId', isEqualTo: organizationId ?? 'error')
-        .orderBy('updatedAt', descending: true)
-        .snapshots();
-  }
-
-  List<ChatModel> generateList({
-    required QuerySnapshot<Map<String, dynamic>>? data,
-    required String? groupId,
-  }) {
-    List<ChatModel> ret = [];
-    for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
-      ChatModel chat = ChatModel.fromSnapshot(doc);
-      if (groupId == null) {
-        ret.add(chat);
-      } else if (chat.groupId == groupId || chat.groupId == '') {
-        ret.add(chat);
-      }
-    }
-    return ret;
-  }
 }

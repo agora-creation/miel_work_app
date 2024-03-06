@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/models/chat_message.dart';
+import 'package:miel_work_app/models/plan.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/services/chat_message.dart';
-import 'package:miel_work_app/widgets/nonread_message_list.dart';
+import 'package:miel_work_app/services/plan.dart';
+import 'package:miel_work_app/widgets/now_plan_list.dart';
 
-class CustomHomeChatCard extends StatefulWidget {
+class CustomHomePlanCard extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
   final Function()? onTap;
 
-  const CustomHomeChatCard({
+  const CustomHomePlanCard({
     required this.loginProvider,
     required this.homeProvider,
     this.onTap,
@@ -20,11 +20,11 @@ class CustomHomeChatCard extends StatefulWidget {
   });
 
   @override
-  State<CustomHomeChatCard> createState() => _CustomHomeChatCardState();
+  State<CustomHomePlanCard> createState() => _CustomHomePlanCardState();
 }
 
-class _CustomHomeChatCardState extends State<CustomHomeChatCard> {
-  ChatMessageService messageService = ChatMessageService();
+class _CustomHomePlanCardState extends State<CustomHomePlanCard> {
+  PlanService planService = PlanService();
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class _CustomHomeChatCardState extends State<CustomHomeChatCard> {
                   border: Border(bottom: BorderSide(color: kGrey600Color)),
                 ),
                 child: const Text(
-                  'チャット',
+                  'スケジュール',
                   style: TextStyle(
                     color: kBlackColor,
                     fontSize: 16,
@@ -62,24 +62,26 @@ class _CustomHomeChatCardState extends State<CustomHomeChatCard> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                  stream: messageService.streamListUnread(
+                  stream: planService.streamListNow(
                     organizationId: widget.loginProvider.organization?.id,
                   ),
                   builder: (context, snapshot) {
-                    List<ChatMessageModel> messages = [];
+                    List<PlanModel> plans = [];
                     if (snapshot.hasData) {
-                      messages = messageService.generateListUnread(
+                      plans = planService.generateList(
                         data: snapshot.data,
                         currentGroup: widget.homeProvider.currentGroup,
-                        loginUser: widget.loginProvider.user,
                       );
                     }
-                    if (messages.isEmpty) {
-                      return const Center(child: Text('未読のメッセージはありません'));
+                    if (plans.isEmpty) {
+                      return const Center(child: Text('今日の予定はありません'));
                     }
                     return Column(
-                      children: messages.map((message) {
-                        return NonReadMessageList(message: message);
+                      children: plans.map((plan) {
+                        return NowPlanList(
+                          plan: plan,
+                          groups: widget.homeProvider.groups,
+                        );
                       }).toList(),
                     );
                   },

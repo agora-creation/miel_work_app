@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:miel_work_app/models/chat_message.dart';
+import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/user.dart';
 
 class ChatMessageService {
@@ -83,6 +84,16 @@ class ChatMessageService {
         .snapshots();
   }
 
+  Stream<QuerySnapshot<Map<String, dynamic>>>? streamListUnread({
+    required String? organizationId,
+  }) {
+    return FirebaseFirestore.instance
+        .collection(collection)
+        .where('organizationId', isEqualTo: organizationId ?? 'error')
+        .orderBy('createdAt', descending: true)
+        .snapshots();
+  }
+
   List<ChatMessageModel> generateList({
     required QuerySnapshot<Map<String, dynamic>>? data,
   }) {
@@ -95,13 +106,20 @@ class ChatMessageService {
 
   List<ChatMessageModel> generateListUnread({
     required QuerySnapshot<Map<String, dynamic>>? data,
+    required OrganizationGroupModel? currentGroup,
     required UserModel? loginUser,
   }) {
     List<ChatMessageModel> ret = [];
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
       ChatMessageModel message = ChatMessageModel.fromSnapshot(doc);
-      if (!message.readUserIds.contains(loginUser?.id)) {
-        ret.add(message);
+      if (currentGroup == null) {
+        if (!message.readUserIds.contains(loginUser?.id)) {
+          ret.add(message);
+        }
+      } else if (message.groupId == currentGroup.id || message.groupId == '') {
+        if (!message.readUserIds.contains(loginUser?.id)) {
+          ret.add(message);
+        }
       }
     }
     return ret;

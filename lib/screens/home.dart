@@ -15,9 +15,10 @@ import 'package:miel_work_app/screens/user_setting.dart';
 import 'package:miel_work_app/services/manual.dart';
 import 'package:miel_work_app/services/notice.dart';
 import 'package:miel_work_app/widgets/custom_appbar_title.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_home_chat_card.dart';
 import 'package:miel_work_app/widgets/custom_home_icon_card.dart';
-import 'package:miel_work_app/widgets/custom_list_card.dart';
+import 'package:miel_work_app/widgets/custom_home_plan_card.dart';
 import 'package:miel_work_app/widgets/group_select_card.dart';
 import 'package:provider/provider.dart';
 
@@ -139,15 +140,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          CustomListCard(
-            label: 'スケジュール',
-            child: const Column(
-              children: [
-                ListTile(
-                  title: Text('今日の予定はありません'),
-                ),
-              ],
-            ),
+          CustomHomePlanCard(
+            loginProvider: loginProvider,
+            homeProvider: homeProvider,
             onTap: () => pushScreen(
               context,
               PlanScreen(
@@ -242,6 +237,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 8),
         ],
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: loginProvider,
+        homeProvider: homeProvider,
       ),
     );
   }

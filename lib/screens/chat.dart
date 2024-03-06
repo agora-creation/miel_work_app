@@ -77,6 +77,7 @@ class _ChatScreenState extends State<ChatScreen> {
               if (snapshot.hasData) {
                 messages = messageService.generateListUnread(
                   data: snapshot.data,
+                  currentGroup: widget.homeProvider.currentGroup,
                   loginUser: widget.loginProvider.user,
                 );
               }
