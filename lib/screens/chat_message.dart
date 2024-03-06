@@ -37,6 +37,20 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
     users = await userService.selectList(
       userIds: widget.chat.userIds,
     );
+    List<ChatMessageModel> messages = await messageService.selectList(
+      chatId: widget.chat.id,
+      user: widget.loginProvider.user,
+    );
+    if (messages.isNotEmpty) {
+      for (ChatMessageModel message in messages) {
+        List<String> readUserIds = message.readUserIds;
+        readUserIds.add(widget.loginProvider.user?.id ?? '');
+        messageService.update({
+          'id': message.id,
+          'readUserIds': readUserIds,
+        });
+      }
+    }
     setState(() {});
   }
 

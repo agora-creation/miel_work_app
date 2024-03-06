@@ -4,10 +4,12 @@ import 'package:miel_work_app/models/chat.dart';
 
 class ChatList extends StatelessWidget {
   final ChatModel chat;
+  final bool unread;
   final Function()? onTap;
 
   const ChatList({
     required this.chat,
+    required this.unread,
     this.onTap,
     super.key,
   });
@@ -28,10 +30,15 @@ class ChatList extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
         ),
-        trailing: const Icon(
-          Icons.chevron_right,
-          color: kGreyColor,
-        ),
+        trailing: unread
+            ? const Icon(
+                Icons.circle,
+                color: kRedColor,
+              )
+            : const Icon(
+                Icons.chevron_right,
+                color: kGreyColor,
+              ),
         onTap: onTap,
       ),
     );

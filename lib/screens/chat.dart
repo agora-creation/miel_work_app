@@ -7,6 +7,7 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/chat_message.dart';
 import 'package:miel_work_app/services/chat.dart';
+import 'package:miel_work_app/services/chat_message.dart';
 import 'package:miel_work_app/widgets/chat_list.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -25,6 +26,22 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   ChatService chatService = ChatService();
+  ChatMessageService messageService = ChatMessageService();
+  List<ChatModel> chats = [];
+
+  void _init() async {
+    chats = await chatService.selectList(
+      organizationId: widget.loginProvider.organization?.id,
+      currentGroup: widget.homeProvider.currentGroup,
+    );
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,24 +63,25 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
-      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: chatService.streamList(
-          organizationId: widget.loginProvider.organization?.id,
-        ),
-        builder: (context, snapshot) {
-          List<ChatModel> chats = [];
-          if (snapshot.hasData) {
-            chats = chatService.generateList(
-              data: snapshot.data,
-              currentGroup: widget.homeProvider.currentGroup,
-            );
-          }
-          return ListView.builder(
-            itemCount: chats.length,
-            itemBuilder: (context, index) {
-              ChatModel chat = chats[index];
+      body: ListView.builder(
+        itemCount: chats.length,
+        itemBuilder: (context, index) {
+          ChatModel chat = chats[index];
+          return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+            stream: messageService.streamList(
+              chatId: chat.id,
+            ),
+            builder: (context, snapshot) {
+              bool unread = false;
+              if (snapshot.hasData) {
+                unread = messageService.unreadCheck(
+                  data: snapshot.data,
+                  user: widget.loginProvider.user,
+                );
+              }
               return ChatList(
                 chat: chat,
+                unread: unread,
                 onTap: () => pushScreen(
                   context,
                   ChatMessageScreen(

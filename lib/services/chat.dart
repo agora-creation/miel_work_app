@@ -42,46 +42,24 @@ class ChatService {
 
   Future<List<ChatModel>> selectList({
     required String? organizationId,
-    required String? groupId,
+    required OrganizationGroupModel? currentGroup,
   }) async {
     List<ChatModel> ret = [];
     await firestore
         .collection(collection)
         .where('organizationId', isEqualTo: organizationId ?? 'error')
-        .where('groupId', isEqualTo: groupId != '' ? groupId : null)
         .orderBy('updatedAt', descending: true)
         .get()
         .then((value) {
       for (DocumentSnapshot<Map<String, dynamic>> map in value.docs) {
-        ret.add(ChatModel.fromSnapshot(map));
+        ChatModel chat = ChatModel.fromSnapshot(map);
+        if (currentGroup == null) {
+          ret.add(chat);
+        } else if (chat.groupId == currentGroup.id || chat.groupId == '') {
+          ret.add(chat);
+        }
       }
     });
-    return ret;
-  }
-
-  Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
-    required String? organizationId,
-  }) {
-    return FirebaseFirestore.instance
-        .collection(collection)
-        .where('organizationId', isEqualTo: organizationId ?? 'error')
-        .orderBy('updatedAt', descending: true)
-        .snapshots();
-  }
-
-  List<ChatModel> generateList({
-    required QuerySnapshot<Map<String, dynamic>>? data,
-    required OrganizationGroupModel? currentGroup,
-  }) {
-    List<ChatModel> ret = [];
-    for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
-      ChatModel chat = ChatModel.fromSnapshot(doc);
-      if (currentGroup == null) {
-        ret.add(chat);
-      } else if (chat.groupId == currentGroup.id || chat.groupId == '') {
-        ret.add(chat);
-      }
-    }
     return ret;
   }
 }

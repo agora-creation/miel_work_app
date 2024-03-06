@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/models/chat.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/services/chat.dart';
 import 'package:miel_work_app/services/chat_message.dart';
+import 'package:miel_work_app/widgets/message_alert_list.dart';
 
 class CustomHomeChatCard extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -23,39 +22,38 @@ class CustomHomeChatCard extends StatefulWidget {
 }
 
 class _CustomHomeChatCardState extends State<CustomHomeChatCard> {
-  ChatService chatService = ChatService();
   ChatMessageService messageService = ChatMessageService();
   List<Widget> messageChildren = [];
 
-  void _init() async {
-    List<ChatModel> chats = await chatService.selectList(
-      organizationId: widget.loginProvider.organization?.id,
-      groupId: widget.homeProvider.currentGroup?.id,
-    );
-    if (chats.isNotEmpty) {
-      // for (ChatModel chat in chats) {
-      //   List<ChatMessageModel> messages = await messageService.selectList(
-      //     chatId: chat.id,
-      //     userId: widget.loginProvider.user?.id,
-      //   );
-      //   if (messages.isNotEmpty) {
-      //     for (ChatMessageModel message in messages) {
-      //       messageChildren.add(MessageAlertList(
-      //         label: message.content,
-      //         subLabel: '[${chat.name}]${message.createdUserName}',
-      //       ));
-      //     }
-      //   }
-      // }
-    }
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _init();
-  }
+  // void _init() async {
+  //   List<ChatModel> chats = await chatService.selectList(
+  //     organizationId: widget.loginProvider.organization?.id,
+  //     groupId: widget.homeProvider.currentGroup?.id,
+  //   );
+  //   if (chats.isNotEmpty) {
+  //     // for (ChatModel chat in chats) {
+  //     //   List<ChatMessageModel> messages = await messageService.selectList(
+  //     //     chatId: chat.id,
+  //     //     userId: widget.loginProvider.user?.id,
+  //     //   );
+  //     //   if (messages.isNotEmpty) {
+  //     //     for (ChatMessageModel message in messages) {
+  //     //       messageChildren.add(MessageAlertList(
+  //     //         label: message.content,
+  //     //         subLabel: '[${chat.name}]${message.createdUserName}',
+  //     //       ));
+  //     //     }
+  //     //   }
+  //     // }
+  //   }
+  //   setState(() {});
+  // }
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _init();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +92,12 @@ class _CustomHomeChatCardState extends State<CustomHomeChatCard> {
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: messageChildren,
+                  children: [
+                    MessageAlertList(
+                      label: 'aaa',
+                      subLabel: 'aa',
+                    ),
+                  ],
                 ),
               ),
             ],
