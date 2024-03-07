@@ -37,15 +37,6 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
           dateText('yyyy年MM月dd日(E)の予定', now),
           style: const TextStyle(color: kBlackColor),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.close,
-              color: kBlackColor,
-            ),
-            onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-          ),
-        ],
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: planService.streamListDate(
@@ -75,6 +66,17 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
             },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+        icon: const Icon(
+          Icons.check,
+          color: kWhiteColor,
+        ),
+        label: const Text(
+          '確認しました',
+          style: TextStyle(color: kWhiteColor),
+        ),
       ),
     );
   }

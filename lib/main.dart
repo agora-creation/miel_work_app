@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/providers/apply_conference.dart';
+import 'package:miel_work_app/providers/apply_proposal.dart';
 import 'package:miel_work_app/providers/category.dart';
 import 'package:miel_work_app/providers/chat_message.dart';
 import 'package:miel_work_app/providers/home.dart';
@@ -56,6 +58,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: PlanShiftProvider()),
         ChangeNotifierProvider.value(value: CategoryProvider()),
         ChangeNotifierProvider.value(value: UserProvider()),
+        ChangeNotifierProvider.value(value: ApplyProposalProvider()),
+        ChangeNotifierProvider.value(value: ApplyConferenceProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

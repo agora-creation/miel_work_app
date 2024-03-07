@@ -4,6 +4,8 @@ import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/screens/apply_conference.dart';
+import 'package:miel_work_app/screens/apply_proposal.dart';
 import 'package:miel_work_app/screens/chat.dart';
 import 'package:miel_work_app/screens/group.dart';
 import 'package:miel_work_app/screens/manual.dart';
@@ -21,6 +23,7 @@ import 'package:miel_work_app/widgets/custom_home_icon_card.dart';
 import 'package:miel_work_app/widgets/custom_home_plan_card.dart';
 import 'package:miel_work_app/widgets/group_select_card.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -178,8 +181,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 label: '稟議申請',
                 labelFontSize: 14,
                 color: kBlackColor,
-                backgroundColor: kGreenColor,
-                onTap: () {},
+                backgroundColor: kOrangeColor,
+                onTap: () => pushScreen(
+                  context,
+                  ApplyProposalScreen(
+                    loginProvider: loginProvider,
+                    homeProvider: homeProvider,
+                  ),
+                ),
               ),
               CustomHomeIconCard(
                 icon: Icons.edit_note,
@@ -187,8 +196,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 label: '協議申請',
                 labelFontSize: 14,
                 color: kBlackColor,
-                backgroundColor: kGreenColor,
-                onTap: () {},
+                backgroundColor: kOrangeColor,
+                onTap: () => pushScreen(
+                  context,
+                  ApplyConferenceScreen(
+                    loginProvider: loginProvider,
+                    homeProvider: homeProvider,
+                  ),
+                ),
               ),
               CustomHomeIconCard(
                 icon: Icons.gas_meter,
@@ -197,7 +212,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 labelFontSize: 14,
                 color: kBlackColor,
                 backgroundColor: kYellowColor,
-                onTap: () {},
+                onTap: () async {
+                  Uri url = Uri.parse('https://hirome.co.jp/meter/');
+                  if (!await launchUrl(url)) {
+                    throw Exception('Could not launch $url');
+                  }
+                },
               ),
               loginProvider.isAdmin()
                   ? CustomHomeIconCard(
