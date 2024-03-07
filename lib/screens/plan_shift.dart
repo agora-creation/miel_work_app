@@ -1,12 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/organization_group.dart';
+import 'package:miel_work_app/models/plan.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/screens/plan_shift_add.dart';
+import 'package:miel_work_app/screens/plan_shift_mod.dart';
 import 'package:miel_work_app/services/plan.dart';
 import 'package:miel_work_app/services/plan_shift.dart';
 import 'package:miel_work_app/services/user.dart';
+import 'package:miel_work_app/widgets/custom_button_sm.dart';
 import 'package:miel_work_app/widgets/custom_calendar_shift.dart';
 import 'package:multiple_stream_builder/multiple_stream_builder.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart' as sfc;
@@ -39,37 +45,37 @@ class _PlanShiftScreenState extends State<PlanShiftScreen> {
         sfc.Appointment appointmentDetails = details.appointments![0];
         String type = appointmentDetails.notes ?? '';
         if (type == 'plan') {
-          // showDialog(
-          //   context: context,
-          //   builder: (context) => PlanDialog(
-          //     loginProvider: widget.loginProvider,
-          //     homeProvider: widget.homeProvider,
-          //     planId: '${appointmentDetails.id}',
-          //   ),
-          // );
+          showDialog(
+            context: context,
+            builder: (context) => PlanDialog(
+              loginProvider: widget.loginProvider,
+              homeProvider: widget.homeProvider,
+              planId: '${appointmentDetails.id}',
+            ),
+          );
         } else if (type == 'planShift') {
-          // showBottomUpScreen(
-          //   context,
-          //   PlanShiftModScreen(
-          //     loginProvider: widget.loginProvider,
-          //     homeProvider: widget.homeProvider,
-          //     planShiftId: '${appointmentDetails.id}',
-          //   ),
-          // );
+          pushScreen(
+            context,
+            PlanShiftModScreen(
+              loginProvider: widget.loginProvider,
+              homeProvider: widget.homeProvider,
+              planShiftId: '${appointmentDetails.id}',
+            ),
+          );
         }
         break;
       case sfc.CalendarElement.calendarCell:
         final userId = details.resource?.id;
         if (userId == null) return;
-        // showBottomUpScreen(
-        //   context,
-        //   PlanShiftAddScreen(
-        //     loginProvider: widget.loginProvider,
-        //     homeProvider: widget.homeProvider,
-        //     userId: '$userId',
-        //     date: details.date ?? DateTime.now(),
-        //   ),
-        // );
+        pushScreen(
+          context,
+          PlanShiftAddScreen(
+            loginProvider: widget.loginProvider,
+            homeProvider: widget.homeProvider,
+            userId: '$userId',
+            date: details.date ?? DateTime.now(),
+          ),
+        );
         break;
       default:
         break;
@@ -168,5 +174,97 @@ class _ShiftDataSource extends sfc.CalendarDataSource {
   ) {
     appointments = source;
     resources = resourceColl;
+  }
+}
+
+class PlanDialog extends StatefulWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final String planId;
+
+  const PlanDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.planId,
+    super.key,
+  });
+
+  @override
+  State<PlanDialog> createState() => _PlanDialogState();
+}
+
+class _PlanDialogState extends State<PlanDialog> {
+  PlanService planService = PlanService();
+  String titleText = '';
+  String groupText = '';
+  String dateTimeText = '';
+  Color color = Colors.transparent;
+  String memoText = '';
+
+  void _init() async {
+    PlanModel? plan = await planService.selectData(id: widget.planId);
+    if (plan == null) {
+      if (!mounted) return;
+      showMessage(context, '予定データの取得に失敗しました', false);
+      Navigator.pop(context);
+      return;
+    }
+    titleText = '[${plan.category}]${plan.subject}';
+    for (OrganizationGroupModel group in widget.homeProvider.groups) {
+      if (group.id == plan.groupId) {
+        groupText = group.name;
+      }
+    }
+    dateTimeText =
+        '${dateText('yyyy/MM/dd HH:mm', plan.startedAt)}〜${dateText('yyyy/MM/dd HH:mm', plan.endedAt)}';
+    color = plan.color;
+    memoText = plan.memo;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: kWhiteColor,
+      surfaceTintColor: kWhiteColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
+      title: Text(
+        titleText,
+        style: const TextStyle(fontSize: 16),
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(groupText),
+          const SizedBox(height: 8),
+          Text(dateTimeText),
+          const SizedBox(height: 8),
+          Container(
+            height: 20,
+            color: color,
+          ),
+          const SizedBox(height: 8),
+          Text(memoText),
+        ],
+      ),
+      actionsAlignment: MainAxisAlignment.spaceBetween,
+      actions: [
+        CustomButtonSm(
+          label: '閉じる',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+      ],
+    );
   }
 }

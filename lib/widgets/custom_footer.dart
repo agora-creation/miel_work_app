@@ -20,7 +20,19 @@ class CustomFooter extends StatefulWidget {
 
 class _CustomFooterState extends State<CustomFooter>
     with WidgetsBindingObserver {
-  void _init() async {
+  void _nowCheck() async {
+    DateTime now = DateTime.now();
+    String? prefsNow = await getPrefsString('now');
+    if (prefsNow == null) {
+      await _show();
+    } else {
+      if (dateText('yyyyMMdd', now) != prefsNow) {
+        await _show();
+      }
+    }
+  }
+
+  Future _show() async {
     await Future.delayed(const Duration(seconds: 1));
     if (!mounted) return;
     showBottomUpScreen(
@@ -29,7 +41,11 @@ class _CustomFooterState extends State<CustomFooter>
         loginProvider: widget.loginProvider,
         homeProvider: widget.homeProvider,
       ),
-    );
+    ).then((value) async {
+      DateTime now = DateTime.now();
+      String prefsNow = dateText('yyyyMMdd', now);
+      await setPrefsString('now', prefsNow);
+    });
   }
 
   @override
@@ -37,7 +53,7 @@ class _CustomFooterState extends State<CustomFooter>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {});
-    _init();
+    _nowCheck();
   }
 
   @override

@@ -4,6 +4,8 @@ import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/screens/plan_add.dart';
+import 'package:miel_work_app/screens/plan_mod.dart';
 import 'package:miel_work_app/services/plan.dart';
 import 'package:miel_work_app/widgets/custom_calendar_timeline.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart' as sfc;
@@ -26,6 +28,36 @@ class PlanTimelineScreen extends StatefulWidget {
 
 class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
   PlanService planService = PlanService();
+
+  void _calendarTap(sfc.CalendarTapDetails details) {
+    sfc.CalendarElement element = details.targetElement;
+    switch (element) {
+      case sfc.CalendarElement.appointment:
+      case sfc.CalendarElement.agenda:
+        sfc.Appointment appointmentDetails = details.appointments![0];
+        pushScreen(
+          context,
+          PlanModScreen(
+            loginProvider: widget.loginProvider,
+            homeProvider: widget.homeProvider,
+            planId: '${appointmentDetails.id}',
+          ),
+        );
+        break;
+      case sfc.CalendarElement.calendarCell:
+        pushScreen(
+          context,
+          PlanAddScreen(
+            loginProvider: widget.loginProvider,
+            homeProvider: widget.homeProvider,
+            date: details.date ?? DateTime.now(),
+          ),
+        );
+        break;
+      default:
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,15 +95,12 @@ class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
               );
             }
             return CustomCalendarTimeline(
+              initialDisplayDate: widget.date,
               dataSource: _DataSource(appointments),
-              onTap: (sfc.CalendarTapDetails details) {},
+              onTap: _calendarTap,
             );
           },
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.edit, color: kWhiteColor),
       ),
     );
   }
