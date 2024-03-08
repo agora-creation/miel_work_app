@@ -25,8 +25,7 @@ class _GroupSelectCardState extends State<GroupSelectCard> {
     super.initState();
     widget.homeProvider.setGroups(
       organizationId: widget.loginProvider.organization?.id,
-      group:
-          !widget.loginProvider.isAdmin() ? widget.loginProvider.group : null,
+      group: widget.loginProvider.isAdmin() ? null : widget.loginProvider.group,
     );
   }
 

@@ -196,14 +196,11 @@ class _ChatUsersDialogState extends State<ChatUsersDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      contentPadding: EdgeInsets.zero,
       backgroundColor: kWhiteColor,
       surfaceTintColor: kWhiteColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      title: const Text(
-        '参加スタッフ',
-        style: TextStyle(fontSize: 16),
       ),
       content: Container(
         decoration: BoxDecoration(border: Border.all(color: kGrey600Color)),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:miel_work_app/common/custom_date_time_picker.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as picker;
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/organization_group.dart';
@@ -10,7 +11,10 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/plan_shift.dart';
 import 'package:miel_work_app/services/plan_shift.dart';
 import 'package:miel_work_app/services/user.dart';
-import 'package:miel_work_app/widgets/custom_button_sm.dart';
+import 'package:miel_work_app/widgets/custom_checkbox.dart';
+import 'package:miel_work_app/widgets/datetime_range_form.dart';
+import 'package:miel_work_app/widgets/form_label.dart';
+import 'package:miel_work_app/widgets/link_text.dart';
 import 'package:provider/provider.dart';
 
 class PlanShiftModScreen extends StatefulWidget {
@@ -140,22 +144,6 @@ class _PlanShiftModScreenState extends State<PlanShiftModScreen> {
         actions: [
           TextButton(
             onPressed: () async {
-              String? error = await planShiftProvider.delete(
-                planShiftId: widget.planShiftId,
-              );
-              if (error != null) {
-                if (!mounted) return;
-                showMessage(context, error, false);
-                return;
-              }
-              if (!mounted) return;
-              showMessage(context, '勤務予定を削除しました', true);
-              Navigator.pop(context);
-            },
-            child: const Text('削除'),
-          ),
-          TextButton(
-            onPressed: () async {
               String? error = await planShiftProvider.update(
                 planShiftId: widget.planShiftId,
                 organization: widget.loginProvider.organization,
@@ -185,29 +173,45 @@ class _PlanShiftModScreenState extends State<PlanShiftModScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              DropdownButton<OrganizationGroupModel?>(
-                isExpanded: true,
-                value: selectedGroup,
-                items: groupItems,
-                onChanged: (value) {
-                  setState(() {
-                    selectedGroup = value;
-                  });
-                },
+              FormLabel(
+                label: '働くスタッフを選択',
+                child: widget.loginProvider.isAdmin()
+                    ? DropdownButton<OrganizationGroupModel?>(
+                        hint: const Text('グループ未選択'),
+                        underline: Container(),
+                        isExpanded: true,
+                        value: selectedGroup,
+                        items: groupItems,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedGroup = value;
+                          });
+                        },
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Text(
+                          selectedGroup?.name ?? '',
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
               ),
-              const SizedBox(height: 8),
               Container(
                 height: 200,
-                decoration: BoxDecoration(
-                  border: Border.all(color: kGrey300Color),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    right: BorderSide(color: kGrey600Color),
+                    left: BorderSide(color: kGrey600Color),
+                    bottom: BorderSide(color: kGrey600Color),
+                  ),
                 ),
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: users.length,
                   itemBuilder: (context, index) {
                     UserModel user = users[index];
-                    return CheckboxListTile(
-                      title: Text(user.name),
+                    return CustomCheckbox(
+                      label: user.name,
                       value: selectedUserIds.contains(user.id),
                       onChanged: (value) {
                         if (selectedUserIds.contains(user.id)) {
@@ -222,85 +226,60 @@ class _PlanShiftModScreenState extends State<PlanShiftModScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomButtonSm(
-                    label: dateText('yyyy/MM/dd', startedAt),
-                    labelColor: kWhiteColor,
-                    backgroundColor: kGrey600Color,
-                    onPressed: () async {
-                      final result =
-                          await CustomDateTimePicker().showDateChange(
-                        context: context,
-                        value: startedAt,
-                      );
-                      setState(() {
-                        startedAt = result;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  CustomButtonSm(
-                    label: dateText('HH:mm', startedAt),
-                    labelColor: kWhiteColor,
-                    backgroundColor: kGrey600Color,
-                    onPressed: () async {
-                      final result =
-                          await CustomDateTimePicker().showTimeChange(
-                        context: context,
-                        value: startedAt,
-                      );
-                      setState(() {
-                        startedAt = result;
-                      });
-                    },
-                  ),
-                ],
+              DatetimeRangeForm(
+                startedAt: startedAt,
+                startedOnTap: () => picker.DatePicker.showDateTimePicker(
+                  context,
+                  showTitleActions: true,
+                  minTime: kFirstDate,
+                  maxTime: kLastDate,
+                  theme: kDatePickerTheme,
+                  onConfirm: (value) {
+                    setState(() {
+                      startedAt = value;
+                      endedAt = startedAt.add(const Duration(hours: 1));
+                    });
+                  },
+                  currentTime: startedAt,
+                  locale: picker.LocaleType.jp,
+                ),
+                endedAt: endedAt,
+                endedOnTap: () => picker.DatePicker.showDateTimePicker(
+                  context,
+                  showTitleActions: true,
+                  minTime: kFirstDate,
+                  maxTime: kLastDate,
+                  theme: kDatePickerTheme,
+                  onConfirm: (value) {
+                    setState(() {
+                      endedAt = value;
+                    });
+                  },
+                  currentTime: endedAt,
+                  locale: picker.LocaleType.jp,
+                ),
+                allDay: allDay,
+                allDayOnChanged: _allDayChange,
               ),
-              const SizedBox(height: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomButtonSm(
-                    label: dateText('yyyy/MM/dd', endedAt),
-                    labelColor: kWhiteColor,
-                    backgroundColor: kGrey600Color,
-                    onPressed: () async {
-                      final result =
-                          await CustomDateTimePicker().showDateChange(
-                        context: context,
-                        value: endedAt,
-                      );
-                      setState(() {
-                        endedAt = result;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  CustomButtonSm(
-                    label: dateText('HH:mm', endedAt),
-                    labelColor: kWhiteColor,
-                    backgroundColor: kGrey600Color,
-                    onPressed: () async {
-                      final result =
-                          await CustomDateTimePicker().showTimeChange(
-                        context: context,
-                        value: endedAt,
-                      );
-                      setState(() {
-                        endedAt = result;
-                      });
-                    },
-                  ),
-                ],
+              const SizedBox(height: 16),
+              LinkText(
+                label: 'この勤務予定を削除',
+                color: kRedColor,
+                onTap: () async {
+                  String? error = await planShiftProvider.delete(
+                    planShiftId: widget.planShiftId,
+                  );
+                  if (error != null) {
+                    if (!mounted) return;
+                    showMessage(context, error, false);
+                    return;
+                  }
+                  if (!mounted) return;
+                  showMessage(context, '勤務予定を削除しました', true);
+                  Navigator.pop(context);
+                },
               ),
-              const SizedBox(height: 8),
-              CheckboxListTile(
-                value: allDay,
-                onChanged: _allDayChange,
-                title: const Text('終日'),
-              ),
+              const SizedBox(height: 40),
             ],
           ),
         ),

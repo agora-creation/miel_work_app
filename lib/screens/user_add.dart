@@ -6,6 +6,7 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/user.dart';
 import 'package:miel_work_app/widgets/custom_text_form_field.dart';
+import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:provider/provider.dart';
 
 class UserAddScreen extends StatefulWidget {
@@ -101,6 +102,7 @@ class _UserAddScreenState extends State<UserAddScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomTextFormField(
               controller: nameController,
@@ -129,15 +131,20 @@ class _UserAddScreenState extends State<UserAddScreen> {
               prefix: Icons.password,
             ),
             const SizedBox(height: 8),
-            DropdownButton<OrganizationGroupModel?>(
-              isExpanded: true,
-              value: selectedGroup,
-              items: groupItems,
-              onChanged: (value) {
-                setState(() {
-                  selectedGroup = value;
-                });
-              },
+            FormLabel(
+              label: '所属グループ',
+              child: DropdownButton<OrganizationGroupModel?>(
+                hint: const Text('グループ未選択'),
+                underline: Container(),
+                isExpanded: true,
+                value: selectedGroup,
+                items: groupItems,
+                onChanged: (value) {
+                  setState(() {
+                    selectedGroup = value;
+                  });
+                },
+              ),
             ),
           ],
         ),

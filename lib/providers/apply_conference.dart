@@ -41,13 +41,14 @@ class ApplyConferenceProvider with ChangeNotifier {
 
   Future<String?> update({
     required ApplyConferenceModel conference,
+    required bool approval,
     required UserModel? user,
   }) async {
     String? error;
     try {
       _conferenceService.update({
         'id': conference.id,
-        'approval': true,
+        'approval': approval,
         'approvalUserIds': [user?.id],
       });
     } catch (e) {

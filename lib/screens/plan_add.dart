@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:miel_work_app/common/custom_date_time_picker.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as picker;
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/category.dart';
@@ -8,8 +9,9 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/plan.dart';
 import 'package:miel_work_app/services/category.dart';
-import 'package:miel_work_app/widgets/custom_button_sm.dart';
 import 'package:miel_work_app/widgets/custom_text_form_field.dart';
+import 'package:miel_work_app/widgets/datetime_range_form.dart';
+import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:provider/provider.dart';
 
 class PlanAddScreen extends StatefulWidget {
@@ -145,31 +147,49 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              DropdownButton<OrganizationGroupModel?>(
-                isExpanded: true,
-                value: selectedGroup,
-                items: groupItems,
-                onChanged: (value) {
-                  setState(() {
-                    selectedGroup = value;
-                  });
-                },
+              FormLabel(
+                label: '公開グループ',
+                child: widget.loginProvider.isAdmin()
+                    ? DropdownButton<OrganizationGroupModel?>(
+                        hint: const Text('グループ未選択'),
+                        underline: Container(),
+                        isExpanded: true,
+                        value: selectedGroup,
+                        items: groupItems,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedGroup = value;
+                          });
+                        },
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Text(
+                          selectedGroup?.name ?? '',
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
               ),
               const SizedBox(height: 8),
-              DropdownButton<String?>(
-                isExpanded: true,
-                value: selectedCategory,
-                items: categories.map((category) {
-                  return DropdownMenuItem(
-                    value: category.name,
-                    child: Text(category.name),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedCategory = value;
-                  });
-                },
+              FormLabel(
+                label: 'カテゴリ',
+                child: DropdownButton<String?>(
+                  hint: const Text('カテゴリ未選択'),
+                  underline: Container(),
+                  isExpanded: true,
+                  value: selectedCategory,
+                  items: categories.map((category) {
+                    return DropdownMenuItem(
+                      value: category.name,
+                      child: Text(category.name),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedCategory = value;
+                    });
+                  },
+                ),
               ),
               const SizedBox(height: 8),
               CustomTextFormField(
@@ -181,104 +201,64 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
                 prefix: Icons.short_text,
               ),
               const SizedBox(height: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomButtonSm(
-                    label: dateText('yyyy/MM/dd', startedAt),
-                    labelColor: kWhiteColor,
-                    backgroundColor: kGrey600Color,
-                    onPressed: () async {
-                      final result =
-                          await CustomDateTimePicker().showDateChange(
-                        context: context,
-                        value: startedAt,
-                      );
-                      setState(() {
-                        startedAt = result;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  CustomButtonSm(
-                    label: dateText('HH:mm', startedAt),
-                    labelColor: kWhiteColor,
-                    backgroundColor: kGrey600Color,
-                    onPressed: () async {
-                      final result =
-                          await CustomDateTimePicker().showTimeChange(
-                        context: context,
-                        value: startedAt,
-                      );
-                      setState(() {
-                        startedAt = result;
-                      });
-                    },
-                  ),
-                ],
+              DatetimeRangeForm(
+                startedAt: startedAt,
+                startedOnTap: () => picker.DatePicker.showDateTimePicker(
+                  context,
+                  showTitleActions: true,
+                  minTime: kFirstDate,
+                  maxTime: kLastDate,
+                  theme: kDatePickerTheme,
+                  onConfirm: (value) {
+                    setState(() {
+                      startedAt = value;
+                      endedAt = startedAt.add(const Duration(hours: 1));
+                    });
+                  },
+                  currentTime: startedAt,
+                  locale: picker.LocaleType.jp,
+                ),
+                endedAt: endedAt,
+                endedOnTap: () => picker.DatePicker.showDateTimePicker(
+                  context,
+                  showTitleActions: true,
+                  minTime: kFirstDate,
+                  maxTime: kLastDate,
+                  theme: kDatePickerTheme,
+                  onConfirm: (value) {
+                    setState(() {
+                      endedAt = value;
+                    });
+                  },
+                  currentTime: endedAt,
+                  locale: picker.LocaleType.jp,
+                ),
+                allDay: allDay,
+                allDayOnChanged: _allDayChange,
               ),
               const SizedBox(height: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomButtonSm(
-                    label: dateText('yyyy/MM/dd', endedAt),
-                    labelColor: kWhiteColor,
-                    backgroundColor: kGrey600Color,
-                    onPressed: () async {
-                      final result =
-                          await CustomDateTimePicker().showDateChange(
-                        context: context,
-                        value: endedAt,
-                      );
-                      setState(() {
-                        endedAt = result;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  CustomButtonSm(
-                    label: dateText('HH:mm', endedAt),
-                    labelColor: kWhiteColor,
-                    backgroundColor: kGrey600Color,
-                    onPressed: () async {
-                      final result =
-                          await CustomDateTimePicker().showTimeChange(
-                        context: context,
-                        value: endedAt,
-                      );
-                      setState(() {
-                        endedAt = result;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              CheckboxListTile(
-                value: allDay,
-                onChanged: _allDayChange,
-                title: const Text('終日'),
-              ),
-              const SizedBox(height: 8),
-              DropdownButton<String>(
-                isExpanded: true,
-                value: color,
-                items: kPlanColors.map((Color value) {
-                  return DropdownMenuItem(
-                    value: value.value.toRadixString(16),
-                    child: Container(
-                      color: value,
-                      width: double.infinity,
-                      height: 25,
-                    ),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    color = value!;
-                  });
-                },
+              FormLabel(
+                label: '色',
+                child: DropdownButton<String>(
+                  underline: Container(),
+                  isExpanded: true,
+                  value: color,
+                  items: kPlanColors.map((Color value) {
+                    return DropdownMenuItem(
+                      value: value.value.toRadixString(16),
+                      child: Container(
+                        color: value,
+                        width: double.infinity,
+                        height: 25,
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      color = value!;
+                    });
+                  },
+                ),
               ),
               const SizedBox(height: 8),
               CustomTextFormField(
@@ -289,6 +269,7 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
                 color: kBlackColor,
                 prefix: Icons.short_text,
               ),
+              const SizedBox(height: 40),
             ],
           ),
         ),

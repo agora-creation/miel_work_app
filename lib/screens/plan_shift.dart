@@ -12,8 +12,8 @@ import 'package:miel_work_app/screens/plan_shift_mod.dart';
 import 'package:miel_work_app/services/plan.dart';
 import 'package:miel_work_app/services/plan_shift.dart';
 import 'package:miel_work_app/services/user.dart';
-import 'package:miel_work_app/widgets/custom_button_sm.dart';
 import 'package:miel_work_app/widgets/custom_calendar_shift.dart';
+import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:multiple_stream_builder/multiple_stream_builder.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart' as sfc;
 
@@ -231,40 +231,70 @@ class _PlanDialogState extends State<PlanDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
+      insetPadding: const EdgeInsets.all(8),
+      backgroundColor: color,
+      surfaceTintColor: color,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       title: Text(
         titleText,
-        style: const TextStyle(fontSize: 16),
+        style: const TextStyle(
+          color: kWhiteColor,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(groupText),
-          const SizedBox(height: 8),
-          Text(dateTimeText),
-          const SizedBox(height: 8),
-          Container(
-            height: 20,
-            color: color,
+          FormLabel(
+            label: '公開グループ',
+            color: kWhiteColor,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Text(
+                groupText,
+                style: const TextStyle(
+                  color: kWhiteColor,
+                  fontSize: 16,
+                ),
+              ),
+            ),
           ),
           const SizedBox(height: 8),
-          Text(memoText),
+          FormLabel(
+            label: '予定期間',
+            color: kWhiteColor,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Text(
+                dateTimeText,
+                style: const TextStyle(
+                  color: kWhiteColor,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          FormLabel(
+            label: 'メモ',
+            color: kWhiteColor,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Text(
+                memoText,
+                style: const TextStyle(
+                  color: kWhiteColor,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
-      actions: [
-        CustomButtonSm(
-          label: '閉じる',
-          labelColor: kWhiteColor,
-          backgroundColor: kGreyColor,
-          onPressed: () => Navigator.pop(context),
-        ),
-      ],
     );
   }
 }

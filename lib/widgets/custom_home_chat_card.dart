@@ -59,31 +59,31 @@ class _CustomHomeChatCardState extends State<CustomHomeChatCard> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                  stream: messageService.streamListUnread(
-                    organizationId: widget.loginProvider.organization?.id,
-                  ),
-                  builder: (context, snapshot) {
-                    List<ChatMessageModel> messages = [];
-                    if (snapshot.hasData) {
-                      messages = messageService.generateListUnread(
-                        data: snapshot.data,
-                        currentGroup: widget.homeProvider.currentGroup,
-                        loginUser: widget.loginProvider.user,
-                      );
-                    }
-                    if (messages.isEmpty) {
-                      return const Center(child: Text('未読のメッセージはありません'));
-                    }
-                    return Column(
-                      children: messages.map((message) {
-                        return NonReadMessageList(message: message);
-                      }).toList(),
-                    );
-                  },
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: messageService.streamListUnread(
+                  organizationId: widget.loginProvider.organization?.id,
                 ),
+                builder: (context, snapshot) {
+                  List<ChatMessageModel> messages = [];
+                  if (snapshot.hasData) {
+                    messages = messageService.generateListUnread(
+                      data: snapshot.data,
+                      currentGroup: widget.homeProvider.currentGroup,
+                      loginUser: widget.loginProvider.user,
+                    );
+                  }
+                  if (messages.isEmpty) {
+                    return const Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Center(child: Text('未読のメッセージはありません')),
+                    );
+                  }
+                  return Column(
+                    children: messages.map((message) {
+                      return NonReadMessageList(message: message);
+                    }).toList(),
+                  );
+                },
               ),
             ],
           ),

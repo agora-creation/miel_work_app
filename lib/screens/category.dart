@@ -8,6 +8,7 @@ import 'package:miel_work_app/providers/category.dart';
 import 'package:miel_work_app/services/category.dart';
 import 'package:miel_work_app/widgets/custom_button_sm.dart';
 import 'package:miel_work_app/widgets/custom_text_form_field.dart';
+import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -200,16 +201,17 @@ class _DelCategoryDialogState extends State<DelCategoryDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Center(child: Text('本当に削除しますか？')),
-          const SizedBox(height: 8),
-          CustomTextFormField(
-            controller: TextEditingController(text: widget.category.name),
-            textInputType: TextInputType.name,
-            maxLines: 1,
+          FormLabel(
             label: 'カテゴリ名',
-            color: kBlackColor,
-            prefix: Icons.short_text,
-            enabled: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Text(
+                widget.category.name,
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ),
           ),
         ],
       ),

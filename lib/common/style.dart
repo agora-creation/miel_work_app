@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as picker;
 
 const kBackgroundColor = Color(0xFFFFD54F);
 const kHomeBackgroundColor = Color(0xFFFFECB3);
@@ -89,3 +91,17 @@ List<Color> kPlanColors = const [
 
 DateTime kFirstDate = DateTime.now().subtract(const Duration(days: 1095));
 DateTime kLastDate = DateTime.now().add(const Duration(days: 1095));
+
+const kDatePickerTheme = picker.DatePickerTheme(
+  headerColor: kWhiteColor,
+  backgroundColor: kBlueColor,
+  itemStyle: TextStyle(
+    color: Colors.white,
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+  ),
+  doneStyle: TextStyle(
+    color: kBlueColor,
+    fontSize: 16,
+  ),
+);

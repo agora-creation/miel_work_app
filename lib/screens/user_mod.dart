@@ -7,17 +7,18 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/user.dart';
 import 'package:miel_work_app/widgets/custom_text_form_field.dart';
+import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
 import 'package:provider/provider.dart';
 
-class UserDetailScreen extends StatefulWidget {
+class UserModScreen extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
   final UserModel user;
   final OrganizationGroupModel? userInGroup;
   final Function() getUsers;
 
-  const UserDetailScreen({
+  const UserModScreen({
     required this.loginProvider,
     required this.homeProvider,
     required this.user,
@@ -27,10 +28,10 @@ class UserDetailScreen extends StatefulWidget {
   });
 
   @override
-  State<UserDetailScreen> createState() => _UserDetailScreenState();
+  State<UserModScreen> createState() => _UserModScreenState();
 }
 
-class _UserDetailScreenState extends State<UserDetailScreen> {
+class _UserModScreenState extends State<UserModScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -117,6 +118,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomTextFormField(
               controller: nameController,
@@ -145,17 +147,22 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
               prefix: Icons.password,
             ),
             const SizedBox(height: 8),
-            DropdownButton<OrganizationGroupModel?>(
-              isExpanded: true,
-              value: selectedGroup,
-              items: groupItems,
-              onChanged: (value) {
-                setState(() {
-                  selectedGroup = value;
-                });
-              },
+            FormLabel(
+              label: '所属グループ',
+              child: DropdownButton<OrganizationGroupModel?>(
+                hint: const Text('グループ未選択'),
+                underline: Container(),
+                isExpanded: true,
+                value: selectedGroup,
+                items: groupItems,
+                onChanged: (value) {
+                  setState(() {
+                    selectedGroup = value;
+                  });
+                },
+              ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
             !deleteDisabled
                 ? LinkText(
                     label: 'このスタッフを削除する',

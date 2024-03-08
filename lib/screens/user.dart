@@ -6,7 +6,7 @@ import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/user_add.dart';
-import 'package:miel_work_app/screens/user_detail.dart';
+import 'package:miel_work_app/screens/user_mod.dart';
 import 'package:miel_work_app/services/user.dart';
 
 class UserScreen extends StatefulWidget {
@@ -88,7 +88,7 @@ class _UserScreenState extends State<UserScreen> {
               trailing: const Icon(Icons.chevron_right),
               onTap: () => pushScreen(
                 context,
-                UserDetailScreen(
+                UserModScreen(
                   loginProvider: widget.loginProvider,
                   homeProvider: widget.homeProvider,
                   user: user,

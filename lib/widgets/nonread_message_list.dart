@@ -13,52 +13,47 @@ class NonReadMessageList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: kBlue300Color,
-          borderRadius: BorderRadius.circular(4),
-        ),
-        padding: const EdgeInsets.symmetric(
-          vertical: 4,
-          horizontal: 8,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              message.content,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: kGrey600Color))),
+      padding: const EdgeInsets.symmetric(
+        vertical: 4,
+        horizontal: 8,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            message.content,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+            softWrap: false,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                message.createdUserName,
+                style: const TextStyle(fontSize: 12),
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
-              softWrap: false,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  message.createdUserName,
-                  style: const TextStyle(fontSize: 12),
-                  softWrap: false,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-                Text(
-                  dateText('yyyy/MM/dd HH:mm', message.createdAt),
-                  style: const TextStyle(fontSize: 12),
-                  softWrap: false,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-              ],
-            ),
-          ],
-        ),
+              Text(
+                dateText('yyyy/MM/dd HH:mm', message.createdAt),
+                style: const TextStyle(fontSize: 12),
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

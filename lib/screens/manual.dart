@@ -13,6 +13,7 @@ import 'package:miel_work_app/services/manual.dart';
 import 'package:miel_work_app/widgets/custom_button_sm.dart';
 import 'package:miel_work_app/widgets/custom_manual_list.dart';
 import 'package:miel_work_app/widgets/custom_text_form_field.dart';
+import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:provider/provider.dart';
 
 class ManualScreen extends StatefulWidget {
@@ -180,15 +181,20 @@ class _AddGroupDialogState extends State<AddManualDialog> {
             },
           ),
           const SizedBox(height: 8),
-          DropdownButton<OrganizationGroupModel?>(
-            isExpanded: true,
-            value: selectedGroup,
-            items: groupItems,
-            onChanged: (value) {
-              setState(() {
-                selectedGroup = value;
-              });
-            },
+          FormLabel(
+            label: '公開グループ',
+            child: DropdownButton<OrganizationGroupModel?>(
+              hint: const Text('グループ未選択'),
+              underline: Container(),
+              isExpanded: true,
+              value: selectedGroup,
+              items: groupItems,
+              onChanged: (value) {
+                setState(() {
+                  selectedGroup = value;
+                });
+              },
+            ),
           ),
           const SizedBox(height: 8),
           const Text(

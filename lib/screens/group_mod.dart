@@ -78,6 +78,7 @@ class _GroupModScreenState extends State<GroupModScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomTextFormField(
               controller: nameController,
@@ -87,7 +88,7 @@ class _GroupModScreenState extends State<GroupModScreen> {
               color: kBlackColor,
               prefix: Icons.short_text,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
             LinkText(
               label: 'このグループを削除する',
               color: kRedColor,

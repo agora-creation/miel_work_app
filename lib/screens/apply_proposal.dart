@@ -45,6 +45,12 @@ class _ApplyProposalScreenState extends State<ApplyProposalScreen> {
           '稟議申請一覧',
           style: TextStyle(color: kBlackColor),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.search),
+          ),
+        ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(

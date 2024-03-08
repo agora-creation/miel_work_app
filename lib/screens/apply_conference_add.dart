@@ -71,7 +71,7 @@ class _ApplyConferenceAddScreenState extends State<ApplyConferenceAddScreen> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(8),
           child: Column(
             children: [
               CustomTextFormField(

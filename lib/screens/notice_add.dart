@@ -6,6 +6,7 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/notice.dart';
 import 'package:miel_work_app/widgets/custom_text_form_field.dart';
+import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:provider/provider.dart';
 
 class NoticeAddScreen extends StatefulWidget {
@@ -121,15 +122,20 @@ class _NoticeAddScreenState extends State<NoticeAddScreen> {
                 prefix: Icons.short_text,
               ),
               const SizedBox(height: 8),
-              DropdownButton<OrganizationGroupModel?>(
-                isExpanded: true,
-                value: selectedGroup,
-                items: groupItems,
-                onChanged: (value) {
-                  setState(() {
-                    selectedGroup = value;
-                  });
-                },
+              FormLabel(
+                label: '送信先グループ',
+                child: DropdownButton<OrganizationGroupModel?>(
+                  hint: const Text('グループ未選択'),
+                  underline: Container(),
+                  isExpanded: true,
+                  value: selectedGroup,
+                  items: groupItems,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedGroup = value;
+                    });
+                  },
+                ),
               ),
             ],
           ),

@@ -43,13 +43,14 @@ class ApplyProposalProvider with ChangeNotifier {
 
   Future<String?> update({
     required ApplyProposalModel proposal,
+    required bool approval,
     required UserModel? user,
   }) async {
     String? error;
     try {
       _proposalService.update({
         'id': proposal.id,
-        'approval': true,
+        'approval': approval,
         'approvalUserIds': [user?.id],
       });
     } catch (e) {
