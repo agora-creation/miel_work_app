@@ -46,23 +46,25 @@ class _ApplyConferenceDetailScreenState
           style: const TextStyle(color: kBlackColor),
         ),
         actions: [
-          TextButton(
-            onPressed: () async {
-              String? error = await conferenceProvider.update(
-                conference: widget.conference,
-                user: widget.loginProvider.user,
-              );
-              if (error != null) {
-                if (!mounted) return;
-                showMessage(context, error, false);
-                return;
-              }
-              if (!mounted) return;
-              showMessage(context, '承認しました', true);
-              Navigator.pop(context);
-            },
-            child: const Text('承認'),
-          ),
+          widget.conference.createdUserId != widget.loginProvider.user?.id
+              ? TextButton(
+                  onPressed: () async {
+                    String? error = await conferenceProvider.update(
+                      conference: widget.conference,
+                      user: widget.loginProvider.user,
+                    );
+                    if (error != null) {
+                      if (!mounted) return;
+                      showMessage(context, error, false);
+                      return;
+                    }
+                    if (!mounted) return;
+                    showMessage(context, '承認しました', true);
+                    Navigator.pop(context);
+                  },
+                  child: const Text('承認'),
+                )
+              : Container(),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
@@ -77,6 +79,13 @@ class _ApplyConferenceDetailScreenState
             alignment: Alignment.centerRight,
             child: Text(
               dateText('yyyy/MM/dd HH:mm', widget.conference.createdAt),
+              style: const TextStyle(color: kGreyColor),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              '作成者：${widget.conference.createdUserName}',
               style: const TextStyle(color: kGreyColor),
             ),
           ),

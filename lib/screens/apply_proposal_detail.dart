@@ -45,23 +45,25 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
           style: const TextStyle(color: kBlackColor),
         ),
         actions: [
-          TextButton(
-            onPressed: () async {
-              String? error = await proposalProvider.update(
-                proposal: widget.proposal,
-                user: widget.loginProvider.user,
-              );
-              if (error != null) {
-                if (!mounted) return;
-                showMessage(context, error, false);
-                return;
-              }
-              if (!mounted) return;
-              showMessage(context, '承認しました', true);
-              Navigator.pop(context);
-            },
-            child: const Text('承認'),
-          ),
+          widget.proposal.createdUserId != widget.loginProvider.user?.id
+              ? TextButton(
+                  onPressed: () async {
+                    String? error = await proposalProvider.update(
+                      proposal: widget.proposal,
+                      user: widget.loginProvider.user,
+                    );
+                    if (error != null) {
+                      if (!mounted) return;
+                      showMessage(context, error, false);
+                      return;
+                    }
+                    if (!mounted) return;
+                    showMessage(context, '承認しました', true);
+                    Navigator.pop(context);
+                  },
+                  child: const Text('承認'),
+                )
+              : Container(),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
@@ -77,6 +79,13 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
             alignment: Alignment.centerRight,
             child: Text(
               dateText('yyyy/MM/dd HH:mm', widget.proposal.createdAt),
+              style: const TextStyle(color: kGreyColor),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              '作成者：${widget.proposal.createdUserName}',
               style: const TextStyle(color: kGreyColor),
             ),
           ),
