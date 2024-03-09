@@ -24,10 +24,12 @@ class ApplyProposalService {
 
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
+    required bool approval,
   }) {
     return FirebaseFirestore.instance
         .collection(collection)
         .where('organizationId', isEqualTo: organizationId ?? 'error')
+        .where('approval', isEqualTo: approval)
         .orderBy('createdAt', descending: true)
         .snapshots();
   }
