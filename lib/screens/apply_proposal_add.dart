@@ -54,7 +54,7 @@ class _ApplyProposalAddScreenState extends State<ApplyProposalAddScreen> {
                 title: titleController.text,
                 content: contentController.text,
                 price: int.parse(priceController.text),
-                user: widget.loginProvider.user,
+                loginUser: widget.loginProvider.user,
               );
               if (error != null) {
                 if (!mounted) return;

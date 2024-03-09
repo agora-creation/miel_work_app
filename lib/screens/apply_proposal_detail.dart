@@ -165,7 +165,7 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                     String? error = await proposalProvider.update(
                       proposal: widget.proposal,
                       approval: widget.loginProvider.isAdmin(),
-                      user: widget.loginProvider.user,
+                      loginUser: widget.loginProvider.user,
                     );
                     if (error != null) {
                       if (!mounted) return;

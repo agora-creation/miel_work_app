@@ -14,12 +14,13 @@ class ApplyProposalProvider with ChangeNotifier {
     required String title,
     required String content,
     required int price,
-    required UserModel? user,
+    required UserModel? loginUser,
   }) async {
     String? error;
     if (organization == null) return '稟議申請に失敗しました';
     if (title == '') return '件名を入力してください';
     if (content == '') return '内容を入力してください';
+    if (loginUser == null) return '稟議申請に失敗しました';
     try {
       String id = _proposalService.id();
       _proposalService.create({
@@ -31,8 +32,8 @@ class ApplyProposalProvider with ChangeNotifier {
         'price': price,
         'approval': false,
         'approvalUserIds': [],
-        'createdUserId': user?.id,
-        'createdUserName': user?.name,
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
         'createdAt': DateTime.now(),
       });
     } catch (e) {
@@ -44,14 +45,15 @@ class ApplyProposalProvider with ChangeNotifier {
   Future<String?> update({
     required ApplyProposalModel proposal,
     required bool approval,
-    required UserModel? user,
+    required UserModel? loginUser,
   }) async {
     String? error;
+    if (loginUser == null) return '承認に失敗しました';
     try {
       _proposalService.update({
         'id': proposal.id,
         'approval': approval,
-        'approvalUserIds': [user?.id],
+        'approvalUserIds': [loginUser.id],
       });
     } catch (e) {
       error = '承認に失敗しました';

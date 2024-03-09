@@ -13,12 +13,13 @@ class ApplyConferenceProvider with ChangeNotifier {
     required OrganizationGroupModel? group,
     required String title,
     required String content,
-    required UserModel? user,
+    required UserModel? loginUser,
   }) async {
     String? error;
-    if (organization == null) return '協議申請の削除に失敗しました';
+    if (organization == null) return '協議申請に失敗しました';
     if (title == '') return '件名を入力してください';
     if (content == '') return '内容を入力してください';
+    if (loginUser == null) return '協議申請に失敗しました';
     try {
       String id = _conferenceService.id();
       _conferenceService.create({
@@ -29,8 +30,8 @@ class ApplyConferenceProvider with ChangeNotifier {
         'content': content,
         'approval': false,
         'approvalUserIds': [],
-        'createdUserId': user?.id,
-        'createdUserName': user?.name,
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
         'createdAt': DateTime.now(),
       });
     } catch (e) {
@@ -42,14 +43,15 @@ class ApplyConferenceProvider with ChangeNotifier {
   Future<String?> update({
     required ApplyConferenceModel conference,
     required bool approval,
-    required UserModel? user,
+    required UserModel? loginUser,
   }) async {
     String? error;
+    if (loginUser == null) return '承認に失敗しました';
     try {
       _conferenceService.update({
         'id': conference.id,
         'approval': approval,
-        'approvalUserIds': [user?.id],
+        'approvalUserIds': [loginUser.id],
       });
     } catch (e) {
       error = '承認に失敗しました';

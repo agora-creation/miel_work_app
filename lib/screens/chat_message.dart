@@ -106,8 +106,8 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                         }
                         return ListView.builder(
                           padding: const EdgeInsets.all(8),
+                          shrinkWrap: true,
                           reverse: true,
-                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: messages.length,
                           itemBuilder: (context, index) {
                             ChatMessageModel message = messages[index];

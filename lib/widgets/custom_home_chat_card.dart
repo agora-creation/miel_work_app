@@ -65,6 +65,7 @@ class _CustomHomeChatCardState extends State<CustomHomeChatCard> {
                 ),
                 builder: (context, snapshot) {
                   List<ChatMessageModel> messages = [];
+                  List<ChatMessageModel> viewMessages = [];
                   if (snapshot.hasData) {
                     messages = messageService.generateListUnread(
                       data: snapshot.data,
@@ -77,9 +78,16 @@ class _CustomHomeChatCardState extends State<CustomHomeChatCard> {
                       padding: EdgeInsets.all(8),
                       child: Center(child: Text('未読のメッセージはありません')),
                     );
+                  } else {
+                    int count = 0;
+                    for (ChatMessageModel message in messages) {
+                      viewMessages.add(message);
+                      count++;
+                      if (count == 3) break;
+                    }
                   }
                   return Column(
-                    children: messages.map((message) {
+                    children: viewMessages.map((message) {
                       return NonReadMessageList(message: message);
                     }).toList(),
                   );

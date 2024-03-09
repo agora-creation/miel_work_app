@@ -19,12 +19,13 @@ class ManualProvider with ChangeNotifier {
     required String title,
     required PlatformFile? pickedFile,
     required OrganizationGroupModel? group,
-    required UserModel? user,
+    required UserModel? loginUser,
   }) async {
     String? error;
     if (organization == null) return '業務マニュアルの追加に失敗しました';
     if (title == '') return 'タイトルを入力してください';
     if (pickedFile == null) return 'PDFファイルを選択してください';
+    if (loginUser == null) return '業務マニュアルの追加に失敗しました';
     try {
       String id = _manualService.id();
       String file = '';
@@ -43,7 +44,7 @@ class ManualProvider with ChangeNotifier {
         'groupId': group?.id ?? '',
         'title': title,
         'file': file,
-        'readUserIds': [user?.id],
+        'readUserIds': [loginUser.id],
         'createdAt': DateTime.now(),
       });
       //通知
@@ -59,10 +60,11 @@ class ManualProvider with ChangeNotifier {
       }
       if (sendUsers.isNotEmpty) {
         for (UserModel user in sendUsers) {
+          if (user.id == loginUser.id) continue;
           _fmService.send(
             token: user.token,
             title: title,
-            body: '業務マニュアルを追加しました',
+            body: '業務マニュアルを追加しました。',
           );
         }
       }
@@ -73,14 +75,17 @@ class ManualProvider with ChangeNotifier {
   }
 
   Future<String?> update({
+    required OrganizationModel? organization,
     required ManualModel manual,
     required String title,
     required PlatformFile? pickedFile,
     required OrganizationGroupModel? group,
-    required UserModel? user,
+    required UserModel? loginUser,
   }) async {
     String? error;
+    if (organization == null) return '業務マニュアルの編集に失敗しました';
     if (title == '') return 'タイトルを入力してください';
+    if (loginUser == null) return '業務マニュアルの編集に失敗しました';
     try {
       if (pickedFile != null) {
         storage.UploadTask uploadTask;
@@ -97,8 +102,29 @@ class ManualProvider with ChangeNotifier {
         'id': manual.id,
         'groupId': group?.id ?? '',
         'title': title,
-        'readUserIds': [user?.id],
+        'readUserIds': [loginUser.id],
       });
+      //通知
+      List<UserModel> sendUsers = [];
+      if (group != null) {
+        sendUsers = await _userService.selectList(
+          userIds: group.userIds,
+        );
+      } else {
+        sendUsers = await _userService.selectList(
+          userIds: organization.userIds,
+        );
+      }
+      if (sendUsers.isNotEmpty) {
+        for (UserModel user in sendUsers) {
+          if (user.id == loginUser.id) continue;
+          _fmService.send(
+            token: user.token,
+            title: title,
+            body: '業務マニュアルを編集しました。',
+          );
+        }
+      }
     } catch (e) {
       error = '業務マニュアルの編集に失敗しました';
     }

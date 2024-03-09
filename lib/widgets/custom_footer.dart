@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
@@ -65,6 +66,7 @@ class _CustomFooterState extends State<CustomFooter>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
+      FlutterAppBadger.removeBadge();
     } else if (state == AppLifecycleState.paused) {
     } else if (state == AppLifecycleState.detached) {}
   }

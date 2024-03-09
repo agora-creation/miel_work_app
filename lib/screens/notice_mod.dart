@@ -76,11 +76,12 @@ class _ManualModScreenState extends State<NoticeModScreen> {
           TextButton(
             onPressed: () async {
               String? error = await noticeProvider.update(
+                organization: widget.loginProvider.organization,
                 notice: widget.notice,
                 title: titleController.text,
                 content: contentController.text,
                 group: selectedGroup,
-                user: widget.loginProvider.user,
+                loginUser: widget.loginProvider.user,
               );
               if (error != null) {
                 if (!mounted) return;

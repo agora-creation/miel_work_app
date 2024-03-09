@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 
@@ -64,6 +65,7 @@ class FmService {
         ),
         payload: jsonEncode(message.toMap()),
       );
+      FlutterAppBadger.updateBadgeCount(1);
     });
   }
 

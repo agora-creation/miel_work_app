@@ -53,7 +53,7 @@ class _ApplyConferenceAddScreenState extends State<ApplyConferenceAddScreen> {
                 group: widget.loginProvider.group,
                 title: titleController.text,
                 content: contentController.text,
-                user: widget.loginProvider.user,
+                loginUser: widget.loginProvider.user,
               );
               if (error != null) {
                 if (!mounted) return;

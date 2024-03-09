@@ -17,12 +17,13 @@ class NoticeProvider with ChangeNotifier {
     required String title,
     required String content,
     required OrganizationGroupModel? group,
-    required UserModel? user,
+    required UserModel? loginUser,
   }) async {
     String? error;
     if (organization == null) return 'お知らせの追加に失敗しました';
     if (title == '') return 'タイトルを入力してください';
     if (content == '') return 'お知らせ内容を入力してください';
+    if (loginUser == null) return 'お知らせの追加に失敗しました';
     try {
       String id = _noticeService.id();
       _noticeService.create({
@@ -31,7 +32,7 @@ class NoticeProvider with ChangeNotifier {
         'groupId': group?.id ?? '',
         'title': title,
         'content': content,
-        'readUserIds': [user?.id],
+        'readUserIds': [loginUser.id],
         'createdAt': DateTime.now(),
       });
       //通知
@@ -47,6 +48,7 @@ class NoticeProvider with ChangeNotifier {
       }
       if (sendUsers.isNotEmpty) {
         for (UserModel user in sendUsers) {
+          if (user.id == loginUser.id) continue;
           _fmService.send(
             token: user.token,
             title: title,
@@ -61,23 +63,47 @@ class NoticeProvider with ChangeNotifier {
   }
 
   Future<String?> update({
+    required OrganizationModel? organization,
     required NoticeModel notice,
     required String title,
     required String content,
     required OrganizationGroupModel? group,
-    required UserModel? user,
+    required UserModel? loginUser,
   }) async {
     String? error;
+    if (organization == null) return 'お知らせの編集に失敗しました';
     if (title == '') return 'タイトルを入力してください';
     if (content == '') return 'お知らせ内容を入力してください';
+    if (loginUser == null) return 'お知らせの編集に失敗しました';
     try {
       _noticeService.update({
         'id': notice.id,
         'groupId': group?.id ?? '',
         'title': title,
         'content': content,
-        'readUserIds': [user?.id],
+        'readUserIds': [loginUser.id],
       });
+      //通知
+      List<UserModel> sendUsers = [];
+      if (group != null) {
+        sendUsers = await _userService.selectList(
+          userIds: group.userIds,
+        );
+      } else {
+        sendUsers = await _userService.selectList(
+          userIds: organization.userIds,
+        );
+      }
+      if (sendUsers.isNotEmpty) {
+        for (UserModel user in sendUsers) {
+          if (user.id == loginUser.id) continue;
+          _fmService.send(
+            token: user.token,
+            title: title,
+            body: content,
+          );
+        }
+      }
     } catch (e) {
       error = 'お知らせの編集に失敗しました';
     }

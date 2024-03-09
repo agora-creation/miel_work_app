@@ -157,7 +157,7 @@ class _ApplyConferenceDetailScreenState
                     String? error = await conferenceProvider.update(
                       conference: widget.conference,
                       approval: widget.loginProvider.isAdmin(),
-                      user: widget.loginProvider.user,
+                      loginUser: widget.loginProvider.user,
                     );
                     if (error != null) {
                       if (!mounted) return;
