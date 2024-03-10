@@ -8,6 +8,7 @@ class PlanShiftModel {
   DateTime _startedAt = DateTime.now();
   DateTime _endedAt = DateTime.now();
   bool _allDay = false;
+  int _alertMinute = 0;
   DateTime _createdAt = DateTime.now();
 
   String get id => _id;
@@ -16,6 +17,7 @@ class PlanShiftModel {
   DateTime get startedAt => _startedAt;
   DateTime get endedAt => _endedAt;
   bool get allDay => _allDay;
+  int get alertMinute => _alertMinute;
   DateTime get createdAt => _createdAt;
 
   PlanShiftModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
@@ -28,6 +30,7 @@ class PlanShiftModel {
     _startedAt = data['startedAt'].toDate() ?? DateTime.now();
     _endedAt = data['endedAt'].toDate() ?? DateTime.now();
     _allDay = data['allDay'] ?? false;
+    _alertMinute = data['alertMinute'] ?? 0;
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
   }
 
