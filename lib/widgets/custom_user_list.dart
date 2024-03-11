@@ -1,0 +1,32 @@
+import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/organization_group.dart';
+import 'package:miel_work_app/models/user.dart';
+
+class CustomUserList extends StatelessWidget {
+  final UserModel user;
+  final OrganizationGroupModel? userInGroup;
+  final Function()? onTap;
+
+  const CustomUserList({
+    required this.user,
+    required this.userInGroup,
+    this.onTap,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: kGrey600Color)),
+      ),
+      child: ListTile(
+        title: Text(user.name),
+        subtitle: userInGroup != null ? Text(userInGroup?.name ?? '') : null,
+        trailing: const Icon(Icons.chevron_right),
+        onTap: onTap,
+      ),
+    );
+  }
+}

@@ -25,7 +25,10 @@ class FormLabel extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(color: color),
+            style: TextStyle(
+              color: color,
+              fontSize: 12,
+            ),
           ),
           child,
         ],

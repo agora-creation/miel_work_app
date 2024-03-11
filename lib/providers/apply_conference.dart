@@ -30,6 +30,7 @@ class ApplyConferenceProvider with ChangeNotifier {
         'content': content,
         'approval': false,
         'approvalUserIds': [],
+        'approvedAt': DateTime.now(),
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
         'createdAt': DateTime.now(),
@@ -48,11 +49,24 @@ class ApplyConferenceProvider with ChangeNotifier {
     String? error;
     if (loginUser == null) return '承認に失敗しました';
     try {
-      _conferenceService.update({
-        'id': conference.id,
-        'approval': approval,
-        'approvalUserIds': [loginUser.id],
-      });
+      List<String> approvalUserIds = conference.approvalUserIds;
+      if (!approvalUserIds.contains(loginUser.id)) {
+        approvalUserIds.add(loginUser.id);
+      }
+      if (approval) {
+        _conferenceService.update({
+          'id': conference.id,
+          'approval': approval,
+          'approvedAt': DateTime.now(),
+          'approvalUserIds': approvalUserIds,
+        });
+      } else {
+        _conferenceService.update({
+          'id': conference.id,
+          'approval': approval,
+          'approvalUserIds': approvalUserIds,
+        });
+      }
     } catch (e) {
       error = '承認に失敗しました';
     }

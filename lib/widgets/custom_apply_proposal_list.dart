@@ -21,7 +21,16 @@ class CustomApplyProposalList extends StatelessWidget {
       ),
       child: ListTile(
         title: Text(proposal.title),
-        subtitle: Text(dateText('yyyy/MM/dd HH:mm', proposal.createdAt)),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('提出日: ${dateText('yyyy/MM/dd HH:mm', proposal.createdAt)}'),
+            proposal.approval
+                ? Text(
+                    '承認日: ${dateText('yyyy/MM/dd HH:mm', proposal.createdAt)}')
+                : Container(),
+          ],
+        ),
         trailing: proposal.approval
             ? const Chip(
                 backgroundColor: kGrey600Color,

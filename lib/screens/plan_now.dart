@@ -70,11 +70,11 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
         icon: const Icon(
-          Icons.check,
+          Icons.home,
           color: kWhiteColor,
         ),
         label: const Text(
-          '確認しました',
+          'ホームへ',
           style: TextStyle(color: kWhiteColor),
         ),
       ),

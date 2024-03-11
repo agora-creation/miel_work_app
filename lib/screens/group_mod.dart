@@ -4,7 +4,7 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/widgets/custom_text_form_field.dart';
+import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
 
 class GroupModScreen extends StatefulWidget {
@@ -76,17 +76,15 @@ class _GroupModScreenState extends State<GroupModScreen> {
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomTextFormField(
+            CustomTextField(
               controller: nameController,
               textInputType: TextInputType.name,
               maxLines: 1,
               label: 'グループ名',
-              color: kBlackColor,
-              prefix: Icons.short_text,
             ),
             const SizedBox(height: 16),
             LinkText(

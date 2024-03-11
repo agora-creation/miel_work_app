@@ -8,6 +8,7 @@ class ApplyConferenceModel {
   String _content = '';
   bool _approval = false;
   List<String> approvalUserIds = [];
+  DateTime _approvedAt = DateTime.now();
   String _createdUserId = '';
   String _createdUserName = '';
   DateTime _createdAt = DateTime.now();
@@ -18,6 +19,7 @@ class ApplyConferenceModel {
   String get title => _title;
   String get content => _content;
   bool get approval => _approval;
+  DateTime get approvedAt => _approvedAt;
   String get createdUserId => _createdUserId;
   String get createdUserName => _createdUserName;
   DateTime get createdAt => _createdAt;
@@ -33,6 +35,7 @@ class ApplyConferenceModel {
     _content = data['content'] ?? '';
     _approval = data['approval'] ?? false;
     approvalUserIds = _convertApprovalUserIds(data['approvalUserIds']);
+    _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
     _createdUserId = data['createdUserId'] ?? '';
     _createdUserName = data['createdUserName'] ?? '';
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();

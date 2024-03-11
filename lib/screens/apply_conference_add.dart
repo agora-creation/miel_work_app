@@ -4,7 +4,7 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/providers/apply_conference.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/widgets/custom_text_form_field.dart';
+import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
 
 class ApplyConferenceAddScreen extends StatefulWidget {
@@ -61,37 +61,37 @@ class _ApplyConferenceAddScreenState extends State<ApplyConferenceAddScreen> {
                 return;
               }
               if (!mounted) return;
-              showMessage(context, '協議申請を作成しました', true);
+              showMessage(context, '協議申請を提出しました', true);
               Navigator.pop(context);
             },
-            child: const Text('保存'),
+            child: const Text('提出する'),
           ),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            children: [
-              CustomTextFormField(
-                controller: titleController,
-                textInputType: TextInputType.name,
-                maxLines: 1,
-                label: '件名',
-                color: kBlackColor,
-                prefix: Icons.short_text,
-              ),
-              const SizedBox(height: 8),
-              CustomTextFormField(
-                controller: contentController,
-                textInputType: TextInputType.multiline,
-                maxLines: null,
-                label: '内容',
-                color: kBlackColor,
-                prefix: Icons.short_text,
-              ),
-            ],
+      body: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        behavior: HitTestBehavior.opaque,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: [
+                CustomTextField(
+                  controller: titleController,
+                  textInputType: TextInputType.text,
+                  maxLines: 1,
+                  label: '件名',
+                ),
+                const SizedBox(height: 8),
+                CustomTextField(
+                  controller: contentController,
+                  textInputType: TextInputType.multiline,
+                  maxLines: 15,
+                  label: '内容',
+                ),
+              ],
+            ),
           ),
         ),
       ),

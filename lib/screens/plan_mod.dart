@@ -11,7 +11,7 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/plan.dart';
 import 'package:miel_work_app/services/category.dart';
 import 'package:miel_work_app/services/plan.dart';
-import 'package:miel_work_app/widgets/custom_text_form_field.dart';
+import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/datetime_range_form.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
@@ -213,13 +213,11 @@ class _PlanModScreenState extends State<PlanModScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              CustomTextFormField(
+              CustomTextField(
                 controller: subjectController,
                 textInputType: TextInputType.name,
                 maxLines: 1,
                 label: '件名',
-                color: kBlackColor,
-                prefix: Icons.short_text,
               ),
               const SizedBox(height: 8),
               DatetimeRangeForm(
@@ -282,13 +280,11 @@ class _PlanModScreenState extends State<PlanModScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              CustomTextFormField(
+              CustomTextField(
                 controller: memoController,
                 textInputType: TextInputType.multiline,
                 maxLines: null,
                 label: 'メモ',
-                color: kBlackColor,
-                prefix: Icons.short_text,
               ),
               const SizedBox(height: 16),
               LinkText(

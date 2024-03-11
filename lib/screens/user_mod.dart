@@ -6,7 +6,7 @@ import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/user.dart';
-import 'package:miel_work_app/widgets/custom_text_form_field.dart';
+import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
 import 'package:provider/provider.dart';
@@ -116,35 +116,29 @@ class _UserModScreenState extends State<UserModScreen> {
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomTextFormField(
+            CustomTextField(
               controller: nameController,
               textInputType: TextInputType.name,
               maxLines: 1,
               label: 'スタッフ名',
-              color: kBlackColor,
-              prefix: Icons.short_text,
             ),
             const SizedBox(height: 8),
-            CustomTextFormField(
+            CustomTextField(
               controller: emailController,
               textInputType: TextInputType.emailAddress,
               maxLines: 1,
               label: 'メールアドレス',
-              color: kBlackColor,
-              prefix: Icons.email,
             ),
             const SizedBox(height: 8),
-            CustomTextFormField(
+            CustomTextField(
               controller: passwordController,
               textInputType: TextInputType.visiblePassword,
               maxLines: 1,
               label: 'パスワード',
-              color: kBlackColor,
-              prefix: Icons.password,
             ),
             const SizedBox(height: 8),
             FormLabel(

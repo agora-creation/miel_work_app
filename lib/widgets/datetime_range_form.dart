@@ -26,7 +26,7 @@ class DatetimeRangeForm extends StatelessWidget {
       children: [
         Container(
           decoration: const BoxDecoration(
-            border: Border(bottom: BorderSide(color: kGrey600Color)),
+            border: Border(bottom: BorderSide(color: kGreyColor)),
           ),
           padding: const EdgeInsets.all(8),
           child: Row(

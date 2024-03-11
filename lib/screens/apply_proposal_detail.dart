@@ -8,7 +8,6 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/services/user.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
-import 'package:miel_work_app/widgets/link_text.dart';
 import 'package:provider/provider.dart';
 
 class ApplyProposalDetailScreen extends StatefulWidget {
@@ -60,10 +59,34 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         centerTitle: true,
-        title: Text(
-          widget.proposal.title,
-          style: const TextStyle(color: kBlackColor),
+        title: const Text(
+          '稟議申請詳細',
+          style: TextStyle(color: kBlackColor),
         ),
+        actions: [
+          widget.proposal.createdUserId == widget.loginProvider.user?.id &&
+                  !widget.proposal.approval
+              ? TextButton(
+                  onPressed: () async {
+                    String? error = await proposalProvider.delete(
+                      proposal: widget.proposal,
+                    );
+                    if (error != null) {
+                      if (!mounted) return;
+                      showMessage(context, error, false);
+                      return;
+                    }
+                    if (!mounted) return;
+                    showMessage(context, '稟議申請を削除しました', true);
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    '削除する',
+                    style: TextStyle(color: kRedColor),
+                  ),
+                )
+              : Container(),
+        ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: SingleChildScrollView(
@@ -78,22 +101,25 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      '作成日：${dateText('yyyy/MM/dd HH:mm', widget.proposal.createdAt)}',
+                      '提出日: ${dateText('yyyy/MM/dd HH:mm', widget.proposal.createdAt)}',
                       style: const TextStyle(color: kGreyColor),
                     ),
                     Text(
-                      '作成者：${widget.proposal.createdUserName}',
+                      '作成者: ${widget.proposal.createdUserName}',
                       style: const TextStyle(color: kGreyColor),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               FormLabel(
-                label: '内容',
+                label: '件名',
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(widget.proposal.content),
+                  child: Text(
+                    widget.proposal.title,
+                    style: const TextStyle(fontSize: 18),
+                  ),
                 ),
               ),
               const SizedBox(height: 8),
@@ -111,7 +137,7 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
               FormLabel(
                 label: '承認者一覧',
                 child: Container(
-                  height: 200,
+                  height: 150,
                   decoration: BoxDecoration(
                     border: Border.all(color: kGrey600Color),
                   ),
@@ -126,40 +152,33 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                             bottom: BorderSide(color: kGrey600Color),
                           ),
                         ),
-                        child: ListTile(title: Text(user.name)),
+                        child: ListTile(
+                          title: Text(user.name),
+                          trailing: const Text('0000/00/00 00:00'),
+                        ),
                       );
                     },
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
-              widget.proposal.createdUserId == widget.loginProvider.user?.id &&
-                      !widget.proposal.approval
-                  ? LinkText(
-                      label: 'この稟議申請を削除',
-                      color: kRedColor,
-                      onTap: () async {
-                        String? error = await proposalProvider.delete(
-                          proposal: widget.proposal,
-                        );
-                        if (error != null) {
-                          if (!mounted) return;
-                          showMessage(context, error, false);
-                          return;
-                        }
-                        if (!mounted) return;
-                        showMessage(context, '稟議申請を削除しました', true);
-                        Navigator.pop(context);
-                      },
-                    )
-                  : Container(),
+              const SizedBox(height: 8),
+              FormLabel(
+                label: '内容',
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Text(widget.proposal.content),
+                ),
+              ),
               const SizedBox(height: 40),
             ],
           ),
         ),
       ),
       floatingActionButton:
-          widget.proposal.createdUserId != widget.loginProvider.user?.id
+          widget.proposal.createdUserId != widget.loginProvider.user?.id &&
+                  !widget.proposal.approval &&
+                  !widget.proposal.approvalUserIds
+                      .contains(widget.loginProvider.user?.id)
               ? FloatingActionButton.extended(
                   onPressed: () async {
                     String? error = await proposalProvider.update(

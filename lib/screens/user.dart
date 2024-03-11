@@ -8,6 +8,7 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/user_add.dart';
 import 'package:miel_work_app/screens/user_mod.dart';
 import 'package:miel_work_app/services/user.dart';
+import 'package:miel_work_app/widgets/custom_user_list.dart';
 
 class UserScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -78,23 +79,17 @@ class _UserScreenState extends State<UserScreen> {
               }
             }
           }
-          return Container(
-            decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(color: kGrey600Color)),
-            ),
-            child: ListTile(
-              title: Text(user.name),
-              subtitle: Text(userInGroup?.name ?? ''),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => pushScreen(
-                context,
-                UserModScreen(
-                  loginProvider: widget.loginProvider,
-                  homeProvider: widget.homeProvider,
-                  user: user,
-                  userInGroup: userInGroup,
-                  getUsers: _getUsers,
-                ),
+          return CustomUserList(
+            user: user,
+            userInGroup: userInGroup,
+            onTap: () => pushScreen(
+              context,
+              UserModScreen(
+                loginProvider: widget.loginProvider,
+                homeProvider: widget.homeProvider,
+                user: user,
+                userInGroup: userInGroup,
+                getUsers: _getUsers,
               ),
             ),
           );

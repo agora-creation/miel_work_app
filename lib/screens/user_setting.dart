@@ -9,7 +9,7 @@ import 'package:miel_work_app/services/user.dart';
 import 'package:miel_work_app/widgets/custom_button_sm.dart';
 import 'package:miel_work_app/widgets/custom_checkbox.dart';
 import 'package:miel_work_app/widgets/custom_setting_list.dart';
-import 'package:miel_work_app/widgets/custom_text_form_field.dart';
+import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
 
 class UserSettingScreen extends StatefulWidget {
@@ -183,13 +183,11 @@ class _ModNameDialogState extends State<ModNameDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomTextFormField(
+          CustomTextField(
             controller: nameController,
             textInputType: TextInputType.name,
             maxLines: 1,
             label: '名前',
-            color: kBlackColor,
-            prefix: Icons.short_text,
           ),
         ],
       ),
@@ -262,13 +260,11 @@ class _ModEmailDialogState extends State<ModEmailDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomTextFormField(
+          CustomTextField(
             controller: emailController,
             textInputType: TextInputType.emailAddress,
             maxLines: 1,
             label: 'メールアドレス',
-            color: kBlackColor,
-            prefix: Icons.email,
           ),
         ],
       ),
@@ -320,12 +316,6 @@ class _ModPasswordDialogState extends State<ModPasswordDialog> {
   TextEditingController passwordController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    passwordController.text = widget.loginProvider.user?.password ?? '';
-  }
-
-  @override
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: kWhiteColor,
@@ -341,14 +331,11 @@ class _ModPasswordDialogState extends State<ModPasswordDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomTextFormField(
+          CustomTextField(
             controller: passwordController,
-            obscureText: true,
             textInputType: TextInputType.visiblePassword,
             maxLines: 1,
             label: 'パスワード',
-            color: kBlackColor,
-            prefix: Icons.password,
           ),
         ],
       ),

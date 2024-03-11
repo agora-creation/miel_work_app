@@ -81,12 +81,8 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(8),
         children: [
-          Text(widget.notice.content),
-          const SizedBox(height: 8),
-          const Divider(height: 1, color: kGrey300Color),
-          const SizedBox(height: 4),
           Align(
             alignment: Alignment.centerRight,
             child: Text(
@@ -94,6 +90,8 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
               style: const TextStyle(color: kGreyColor),
             ),
           ),
+          const SizedBox(height: 4),
+          Text(widget.notice.content),
         ],
       ),
     );

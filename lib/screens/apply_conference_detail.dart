@@ -8,7 +8,6 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/services/user.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
-import 'package:miel_work_app/widgets/link_text.dart';
 import 'package:provider/provider.dart';
 
 class ApplyConferenceDetailScreen extends StatefulWidget {
@@ -61,10 +60,34 @@ class _ApplyConferenceDetailScreenState
           onPressed: () => Navigator.pop(context),
         ),
         centerTitle: true,
-        title: Text(
-          widget.conference.title,
-          style: const TextStyle(color: kBlackColor),
+        title: const Text(
+          '協議申請詳細',
+          style: TextStyle(color: kBlackColor),
         ),
+        actions: [
+          widget.conference.createdUserId == widget.loginProvider.user?.id &&
+                  !widget.conference.approval
+              ? TextButton(
+                  onPressed: () async {
+                    String? error = await conferenceProvider.delete(
+                      conference: widget.conference,
+                    );
+                    if (error != null) {
+                      if (!mounted) return;
+                      showMessage(context, error, false);
+                      return;
+                    }
+                    if (!mounted) return;
+                    showMessage(context, '協議申請を削除しました', true);
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    '削除する',
+                    style: TextStyle(color: kRedColor),
+                  ),
+                )
+              : Container(),
+        ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: SingleChildScrollView(
@@ -79,29 +102,32 @@ class _ApplyConferenceDetailScreenState
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      '作成日：${dateText('yyyy/MM/dd HH:mm', widget.conference.createdAt)}',
+                      '提出日: ${dateText('yyyy/MM/dd HH:mm', widget.conference.createdAt)}',
                       style: const TextStyle(color: kGreyColor),
                     ),
                     Text(
-                      '作成者：${widget.conference.createdUserName}',
+                      '作成者: ${widget.conference.createdUserName}',
                       style: const TextStyle(color: kGreyColor),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               FormLabel(
-                label: '内容',
+                label: '件名',
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(widget.conference.content),
+                  child: Text(
+                    widget.conference.title,
+                    style: const TextStyle(fontSize: 18),
+                  ),
                 ),
               ),
               const SizedBox(height: 8),
               FormLabel(
                 label: '承認者一覧',
                 child: Container(
-                  height: 200,
+                  height: 150,
                   decoration: BoxDecoration(
                     border: Border.all(color: kGrey600Color),
                   ),
@@ -116,34 +142,23 @@ class _ApplyConferenceDetailScreenState
                             bottom: BorderSide(color: kGrey600Color),
                           ),
                         ),
-                        child: ListTile(title: Text(user.name)),
+                        child: ListTile(
+                          title: Text(user.name),
+                          trailing: const Text('0000/00/00 00:00'),
+                        ),
                       );
                     },
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
-              widget.conference.createdUserId ==
-                          widget.loginProvider.user?.id &&
-                      !widget.conference.approval
-                  ? LinkText(
-                      label: 'この協議申請を削除',
-                      color: kRedColor,
-                      onTap: () async {
-                        String? error = await conferenceProvider.delete(
-                          conference: widget.conference,
-                        );
-                        if (error != null) {
-                          if (!mounted) return;
-                          showMessage(context, error, false);
-                          return;
-                        }
-                        if (!mounted) return;
-                        showMessage(context, '協議申請を削除しました', true);
-                        Navigator.pop(context);
-                      },
-                    )
-                  : Container(),
+              const SizedBox(height: 8),
+              FormLabel(
+                label: '内容',
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Text(widget.conference.content),
+                ),
+              ),
               const SizedBox(height: 40),
             ],
           ),
@@ -151,7 +166,9 @@ class _ApplyConferenceDetailScreenState
       ),
       floatingActionButton:
           widget.conference.createdUserId != widget.loginProvider.user?.id &&
-                  !widget.conference.approval
+                  !widget.conference.approval &&
+                  !widget.conference.approvalUserIds
+                      .contains(widget.loginProvider.user?.id)
               ? FloatingActionButton.extended(
                   onPressed: () async {
                     String? error = await conferenceProvider.update(

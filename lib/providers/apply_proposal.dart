@@ -32,6 +32,7 @@ class ApplyProposalProvider with ChangeNotifier {
         'price': price,
         'approval': false,
         'approvalUserIds': [],
+        'approvedAt': DateTime.now(),
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
         'createdAt': DateTime.now(),
@@ -50,11 +51,24 @@ class ApplyProposalProvider with ChangeNotifier {
     String? error;
     if (loginUser == null) return '承認に失敗しました';
     try {
-      _proposalService.update({
-        'id': proposal.id,
-        'approval': approval,
-        'approvalUserIds': [loginUser.id],
-      });
+      List<String> approvalUserIds = proposal.approvalUserIds;
+      if (!approvalUserIds.contains(loginUser.id)) {
+        approvalUserIds.add(loginUser.id);
+      }
+      if (approval) {
+        _proposalService.update({
+          'id': proposal.id,
+          'approval': approval,
+          'approvedAt': DateTime.now(),
+          'approvalUserIds': approvalUserIds,
+        });
+      } else {
+        _proposalService.update({
+          'id': proposal.id,
+          'approval': approval,
+          'approvalUserIds': approvalUserIds,
+        });
+      }
     } catch (e) {
       error = '承認に失敗しました';
     }

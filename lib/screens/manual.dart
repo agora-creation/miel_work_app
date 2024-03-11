@@ -12,7 +12,7 @@ import 'package:miel_work_app/screens/manual_pdf.dart';
 import 'package:miel_work_app/services/manual.dart';
 import 'package:miel_work_app/widgets/custom_button_sm.dart';
 import 'package:miel_work_app/widgets/custom_manual_list.dart';
-import 'package:miel_work_app/widgets/custom_text_form_field.dart';
+import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:provider/provider.dart';
 
@@ -156,13 +156,11 @@ class _AddGroupDialogState extends State<AddManualDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomTextFormField(
+          CustomTextField(
             controller: titleController,
             textInputType: TextInputType.name,
             maxLines: 1,
             label: 'タイトル',
-            color: kBlackColor,
-            prefix: Icons.short_text,
           ),
           const SizedBox(height: 8),
           CustomButtonSm(

@@ -6,7 +6,7 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/group_mod.dart';
 import 'package:miel_work_app/widgets/custom_button_sm.dart';
-import 'package:miel_work_app/widgets/custom_text_form_field.dart';
+import 'package:miel_work_app/widgets/custom_text_field.dart';
 
 class GroupScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -135,13 +135,11 @@ class _AddGroupDialogState extends State<AddGroupDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomTextFormField(
+          CustomTextField(
             controller: nameController,
             textInputType: TextInputType.name,
             maxLines: 1,
             label: 'グループ名',
-            color: kBlackColor,
-            prefix: Icons.short_text,
           ),
         ],
       ),

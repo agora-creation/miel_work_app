@@ -21,7 +21,16 @@ class CustomApplyConferenceList extends StatelessWidget {
       ),
       child: ListTile(
         title: Text(conference.title),
-        subtitle: Text(dateText('yyyy/MM/dd HH:mm', conference.createdAt)),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('提出日: ${dateText('yyyy/MM/dd HH:mm', conference.createdAt)}'),
+            conference.approval
+                ? Text(
+                    '承認日: ${dateText('yyyy/MM/dd HH:mm', conference.createdAt)}')
+                : Container(),
+          ],
+        ),
         trailing: conference.approval
             ? const Chip(
                 backgroundColor: kGrey600Color,

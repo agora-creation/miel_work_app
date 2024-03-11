@@ -5,7 +5,7 @@ import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/notice.dart';
-import 'package:miel_work_app/widgets/custom_text_form_field.dart';
+import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:provider/provider.dart';
 
@@ -92,25 +92,21 @@ class _NoticeAddScreenState extends State<NoticeAddScreen> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(8),
           child: Column(
             children: [
-              CustomTextFormField(
+              CustomTextField(
                 controller: titleController,
                 textInputType: TextInputType.name,
                 maxLines: 1,
                 label: 'タイトル',
-                color: kBlackColor,
-                prefix: Icons.short_text,
               ),
               const SizedBox(height: 8),
-              CustomTextFormField(
+              CustomTextField(
                 controller: contentController,
                 textInputType: TextInputType.multiline,
-                maxLines: null,
+                maxLines: 15,
                 label: 'お知らせ内容',
-                color: kBlackColor,
-                prefix: Icons.short_text,
               ),
               const SizedBox(height: 8),
               FormLabel(

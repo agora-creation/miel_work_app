@@ -7,8 +7,8 @@ import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/providers/category.dart';
 import 'package:miel_work_app/services/category.dart';
 import 'package:miel_work_app/widgets/custom_button_sm.dart';
-import 'package:miel_work_app/widgets/custom_text_form_field.dart';
-import 'package:miel_work_app/widgets/form_label.dart';
+import 'package:miel_work_app/widgets/custom_category_list.dart';
+import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -61,23 +61,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
             itemCount: categories.length,
             itemBuilder: (context, index) {
               CategoryModel category = categories[index];
-              return Container(
-                decoration: const BoxDecoration(
-                  border: Border(bottom: BorderSide(color: kGrey600Color)),
-                ),
-                child: ListTile(
-                  title: Text(category.name),
-                  trailing: CustomButtonSm(
-                    label: '削除',
-                    labelColor: kWhiteColor,
-                    backgroundColor: kRedColor,
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (context) => DelCategoryDialog(
-                        category: category,
-                      ),
-                    ),
-                  ),
+              return CustomCategoryList(
+                category: category,
+                onTap: () => showDialog(
+                  context: context,
+                  builder: (context) => DelCategoryDialog(category: category),
                 ),
               );
             },
@@ -129,13 +117,11 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomTextFormField(
+          CustomTextField(
             controller: nameController,
             textInputType: TextInputType.name,
             maxLines: 1,
             label: 'カテゴリ名',
-            color: kBlackColor,
-            prefix: Icons.short_text,
           ),
         ],
       ),
@@ -201,17 +187,12 @@ class _DelCategoryDialogState extends State<DelCategoryDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FormLabel(
+          CustomTextField(
+            controller: TextEditingController(text: widget.category.name),
+            textInputType: TextInputType.name,
+            maxLines: 1,
             label: 'カテゴリ名',
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Text(
-                widget.category.name,
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
+            enabled: false,
           ),
         ],
       ),
