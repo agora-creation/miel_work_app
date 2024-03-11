@@ -65,6 +65,9 @@ class _ManualScreenState extends State<ManualScreen> {
               currentGroup: widget.homeProvider.currentGroup,
             );
           }
+          if (manuals.isEmpty) {
+            return const Center(child: Text('業務マニュアルはありません'));
+          }
           return ListView.builder(
             itemCount: manuals.length,
             itemBuilder: (context, index) {

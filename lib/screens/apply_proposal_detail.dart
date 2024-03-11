@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/apply_proposal.dart';
-import 'package:miel_work_app/models/user.dart';
+import 'package:miel_work_app/models/approval_user.dart';
 import 'package:miel_work_app/providers/apply_proposal.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/services/user.dart';
+import 'package:miel_work_app/widgets/custom_approval_user_list.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:provider/provider.dart';
 
@@ -28,25 +28,27 @@ class ApplyProposalDetailScreen extends StatefulWidget {
 }
 
 class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
-  UserService userService = UserService();
-  List<UserModel> approvalUsers = [];
-
-  void _init() async {
-    approvalUsers = await userService.selectList(
-      userIds: widget.proposal.approvalUserIds,
-    );
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _init();
-  }
-
   @override
   Widget build(BuildContext context) {
     final proposalProvider = Provider.of<ApplyProposalProvider>(context);
+    bool isApproval = true;
+    bool isDelete = true;
+    if (widget.proposal.createdUserId == widget.loginProvider.user?.id) {
+      isApproval = false;
+    } else {
+      isDelete = false;
+    }
+    if (widget.proposal.approvalUsers.isNotEmpty) {
+      for (ApprovalUserModel user in widget.proposal.approvalUsers) {
+        if (user.userId == widget.loginProvider.user?.id) {
+          isApproval = false;
+        }
+      }
+    }
+    if (widget.proposal.approval) {
+      isApproval = false;
+      isDelete = false;
+    }
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
@@ -64,8 +66,7 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
-          widget.proposal.createdUserId == widget.loginProvider.user?.id &&
-                  !widget.proposal.approval
+          isDelete
               ? TextButton(
                   onPressed: () async {
                     String? error = await proposalProvider.delete(
@@ -113,6 +114,25 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
               ),
               const SizedBox(height: 4),
               FormLabel(
+                label: '承認者一覧',
+                child: Container(
+                  height: 150,
+                  decoration: const BoxDecoration(
+                    border: Border(top: BorderSide(color: kGrey600Color)),
+                  ),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: widget.proposal.approvalUsers.length,
+                    itemBuilder: (context, index) {
+                      ApprovalUserModel approvalUser =
+                          widget.proposal.approvalUsers[index];
+                      return CustomApprovalUserList(approvalUser: approvalUser);
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              FormLabel(
                 label: '件名',
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
@@ -135,34 +155,6 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
               ),
               const SizedBox(height: 8),
               FormLabel(
-                label: '承認者一覧',
-                child: Container(
-                  height: 150,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: kGrey600Color),
-                  ),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: approvalUsers.length,
-                    itemBuilder: (context, index) {
-                      UserModel user = approvalUsers[index];
-                      return Container(
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: kGrey600Color),
-                          ),
-                        ),
-                        child: ListTile(
-                          title: Text(user.name),
-                          trailing: const Text('0000/00/00 00:00'),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8),
-              FormLabel(
                 label: '内容',
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
@@ -174,38 +166,34 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
           ),
         ),
       ),
-      floatingActionButton:
-          widget.proposal.createdUserId != widget.loginProvider.user?.id &&
-                  !widget.proposal.approval &&
-                  !widget.proposal.approvalUserIds
-                      .contains(widget.loginProvider.user?.id)
-              ? FloatingActionButton.extended(
-                  onPressed: () async {
-                    String? error = await proposalProvider.update(
-                      proposal: widget.proposal,
-                      approval: widget.loginProvider.isAdmin(),
-                      loginUser: widget.loginProvider.user,
-                    );
-                    if (error != null) {
-                      if (!mounted) return;
-                      showMessage(context, error, false);
-                      return;
-                    }
-                    if (!mounted) return;
-                    showMessage(context, '承認しました', true);
-                    Navigator.pop(context);
-                  },
-                  backgroundColor: kRedColor,
-                  icon: const Icon(
-                    Icons.check,
-                    color: kWhiteColor,
-                  ),
-                  label: const Text(
-                    '承認する',
-                    style: TextStyle(color: kWhiteColor),
-                  ),
-                )
-              : Container(),
+      floatingActionButton: isApproval
+          ? FloatingActionButton.extended(
+              onPressed: () async {
+                String? error = await proposalProvider.update(
+                  proposal: widget.proposal,
+                  approval: widget.loginProvider.isAdmin(),
+                  loginUser: widget.loginProvider.user,
+                );
+                if (error != null) {
+                  if (!mounted) return;
+                  showMessage(context, error, false);
+                  return;
+                }
+                if (!mounted) return;
+                showMessage(context, '承認しました', true);
+                Navigator.pop(context);
+              },
+              backgroundColor: kRedColor,
+              icon: const Icon(
+                Icons.check,
+                color: kWhiteColor,
+              ),
+              label: const Text(
+                '承認する',
+                style: TextStyle(color: kWhiteColor),
+              ),
+            )
+          : Container(),
     );
   }
 }

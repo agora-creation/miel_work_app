@@ -67,34 +67,37 @@ class _UserScreenState extends State<UserScreen> {
         ),
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
-      body: ListView.builder(
-        itemCount: users.length,
-        itemBuilder: (context, index) {
-          UserModel user = users[index];
-          OrganizationGroupModel? userInGroup;
-          if (widget.homeProvider.groups.isNotEmpty) {
-            for (OrganizationGroupModel group in widget.homeProvider.groups) {
-              if (group.userIds.contains(user.id)) {
-                userInGroup = group;
-              }
-            }
-          }
-          return CustomUserList(
-            user: user,
-            userInGroup: userInGroup,
-            onTap: () => pushScreen(
-              context,
-              UserModScreen(
-                loginProvider: widget.loginProvider,
-                homeProvider: widget.homeProvider,
-                user: user,
-                userInGroup: userInGroup,
-                getUsers: _getUsers,
-              ),
-            ),
-          );
-        },
-      ),
+      body: users.isNotEmpty
+          ? ListView.builder(
+              itemCount: users.length,
+              itemBuilder: (context, index) {
+                UserModel user = users[index];
+                OrganizationGroupModel? userInGroup;
+                if (widget.homeProvider.groups.isNotEmpty) {
+                  for (OrganizationGroupModel group
+                      in widget.homeProvider.groups) {
+                    if (group.userIds.contains(user.id)) {
+                      userInGroup = group;
+                    }
+                  }
+                }
+                return CustomUserList(
+                  user: user,
+                  userInGroup: userInGroup,
+                  onTap: () => pushScreen(
+                    context,
+                    UserModScreen(
+                      loginProvider: widget.loginProvider,
+                      homeProvider: widget.homeProvider,
+                      user: user,
+                      userInGroup: userInGroup,
+                      getUsers: _getUsers,
+                    ),
+                  ),
+                );
+              },
+            )
+          : const Center(child: Text('スタッフはいません')),
       floatingActionButton: FloatingActionButton(
         onPressed: () => pushScreen(
           context,

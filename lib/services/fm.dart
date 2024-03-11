@@ -26,7 +26,7 @@ class FmService {
 
   Future initLocalNotifications() async {
     const iOS = DarwinInitializationSettings();
-    const android = AndroidInitializationSettings('@drawable/ic_launcher');
+    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     const settings = InitializationSettings(android: android, iOS: iOS);
     await _localNotifications.initialize(
       settings,
@@ -61,7 +61,7 @@ class FmService {
             _androidChannel.id,
             _androidChannel.name,
             channelDescription: _androidChannel.description,
-            icon: '@drawable/ic_launcher',
+            icon: '@mipmap/ic_launcher',
           ),
         ),
         payload: jsonEncode(message.toMap()),

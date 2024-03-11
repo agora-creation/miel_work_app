@@ -36,7 +36,7 @@ class MessageList extends StatelessWidget {
                       child: Text(
                         message.content,
                         style: const TextStyle(color: kWhiteColor),
-                      ),
+                      ).urlToLink(context),
                     ),
                   )
                 : GestureDetector(
@@ -87,7 +87,7 @@ class MessageList extends StatelessWidget {
                         vertical: 8,
                         horizontal: 12,
                       ),
-                      child: Text(message.content),
+                      child: Text(message.content).urlToLink(context),
                     ),
                   )
                 : GestureDetector(

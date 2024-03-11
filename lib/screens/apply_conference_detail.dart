@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/apply_conference.dart';
-import 'package:miel_work_app/models/user.dart';
+import 'package:miel_work_app/models/approval_user.dart';
 import 'package:miel_work_app/providers/apply_conference.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/services/user.dart';
+import 'package:miel_work_app/widgets/custom_approval_user_list.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:provider/provider.dart';
 
@@ -29,25 +29,27 @@ class ApplyConferenceDetailScreen extends StatefulWidget {
 
 class _ApplyConferenceDetailScreenState
     extends State<ApplyConferenceDetailScreen> {
-  UserService userService = UserService();
-  List<UserModel> approvalUsers = [];
-
-  void _init() async {
-    approvalUsers = await userService.selectList(
-      userIds: widget.conference.approvalUserIds,
-    );
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _init();
-  }
-
   @override
   Widget build(BuildContext context) {
     final conferenceProvider = Provider.of<ApplyConferenceProvider>(context);
+    bool isApproval = true;
+    bool isDelete = true;
+    if (widget.conference.createdUserId == widget.loginProvider.user?.id) {
+      isApproval = false;
+    } else {
+      isDelete = false;
+    }
+    if (widget.conference.approvalUsers.isNotEmpty) {
+      for (ApprovalUserModel user in widget.conference.approvalUsers) {
+        if (user.userId == widget.loginProvider.user?.id) {
+          isApproval = false;
+        }
+      }
+    }
+    if (widget.conference.approval) {
+      isApproval = false;
+      isDelete = false;
+    }
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
@@ -65,8 +67,7 @@ class _ApplyConferenceDetailScreenState
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
-          widget.conference.createdUserId == widget.loginProvider.user?.id &&
-                  !widget.conference.approval
+          isDelete
               ? TextButton(
                   onPressed: () async {
                     String? error = await conferenceProvider.delete(
@@ -114,40 +115,31 @@ class _ApplyConferenceDetailScreenState
               ),
               const SizedBox(height: 4),
               FormLabel(
+                label: '承認者一覧',
+                child: Container(
+                  height: 150,
+                  decoration: const BoxDecoration(
+                    border: Border(top: BorderSide(color: kGrey600Color)),
+                  ),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: widget.conference.approvalUsers.length,
+                    itemBuilder: (context, index) {
+                      ApprovalUserModel approvalUser =
+                          widget.conference.approvalUsers[index];
+                      return CustomApprovalUserList(approvalUser: approvalUser);
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              FormLabel(
                 label: '件名',
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
                     widget.conference.title,
                     style: const TextStyle(fontSize: 18),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8),
-              FormLabel(
-                label: '承認者一覧',
-                child: Container(
-                  height: 150,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: kGrey600Color),
-                  ),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: approvalUsers.length,
-                    itemBuilder: (context, index) {
-                      UserModel user = approvalUsers[index];
-                      return Container(
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: kGrey600Color),
-                          ),
-                        ),
-                        child: ListTile(
-                          title: Text(user.name),
-                          trailing: const Text('0000/00/00 00:00'),
-                        ),
-                      );
-                    },
                   ),
                 ),
               ),
@@ -164,38 +156,34 @@ class _ApplyConferenceDetailScreenState
           ),
         ),
       ),
-      floatingActionButton:
-          widget.conference.createdUserId != widget.loginProvider.user?.id &&
-                  !widget.conference.approval &&
-                  !widget.conference.approvalUserIds
-                      .contains(widget.loginProvider.user?.id)
-              ? FloatingActionButton.extended(
-                  onPressed: () async {
-                    String? error = await conferenceProvider.update(
-                      conference: widget.conference,
-                      approval: widget.loginProvider.isAdmin(),
-                      loginUser: widget.loginProvider.user,
-                    );
-                    if (error != null) {
-                      if (!mounted) return;
-                      showMessage(context, error, false);
-                      return;
-                    }
-                    if (!mounted) return;
-                    showMessage(context, '承認しました', true);
-                    Navigator.pop(context);
-                  },
-                  backgroundColor: kRedColor,
-                  icon: const Icon(
-                    Icons.check,
-                    color: kWhiteColor,
-                  ),
-                  label: const Text(
-                    '承認する',
-                    style: TextStyle(color: kWhiteColor),
-                  ),
-                )
-              : Container(),
+      floatingActionButton: isApproval
+          ? FloatingActionButton.extended(
+              onPressed: () async {
+                String? error = await conferenceProvider.update(
+                  conference: widget.conference,
+                  approval: widget.loginProvider.isAdmin(),
+                  loginUser: widget.loginProvider.user,
+                );
+                if (error != null) {
+                  if (!mounted) return;
+                  showMessage(context, error, false);
+                  return;
+                }
+                if (!mounted) return;
+                showMessage(context, '承認しました', true);
+                Navigator.pop(context);
+              },
+              backgroundColor: kRedColor,
+              icon: const Icon(
+                Icons.check,
+                color: kWhiteColor,
+              ),
+              label: const Text(
+                '承認する',
+                style: TextStyle(color: kWhiteColor),
+              ),
+            )
+          : Container(),
     );
   }
 }

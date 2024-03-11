@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/models/apply_conference.dart';
+import 'package:miel_work_app/models/approval_user.dart';
 import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/user.dart';
@@ -29,8 +30,8 @@ class ApplyConferenceProvider with ChangeNotifier {
         'title': title,
         'content': content,
         'approval': false,
-        'approvalUserIds': [],
         'approvedAt': DateTime.now(),
+        'approvalUsers': [],
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
         'createdAt': DateTime.now(),
@@ -49,22 +50,29 @@ class ApplyConferenceProvider with ChangeNotifier {
     String? error;
     if (loginUser == null) return '承認に失敗しました';
     try {
-      List<String> approvalUserIds = conference.approvalUserIds;
-      if (!approvalUserIds.contains(loginUser.id)) {
-        approvalUserIds.add(loginUser.id);
+      List<Map> approvalUsers = [];
+      if (conference.approvalUsers.isNotEmpty) {
+        for (ApprovalUserModel approvalUser in conference.approvalUsers) {
+          approvalUsers.add(approvalUser.toMap());
+        }
       }
+      approvalUsers.add({
+        'userId': loginUser.id,
+        'userName': loginUser.name,
+        'approvedAt': DateTime.now(),
+      });
       if (approval) {
         _conferenceService.update({
           'id': conference.id,
           'approval': approval,
           'approvedAt': DateTime.now(),
-          'approvalUserIds': approvalUserIds,
+          'approvalUsers': approvalUsers,
         });
       } else {
         _conferenceService.update({
           'id': conference.id,
           'approval': approval,
-          'approvalUserIds': approvalUserIds,
+          'approvalUsers': approvalUsers,
         });
       }
     } catch (e) {

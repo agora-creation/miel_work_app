@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:miel_work_app/models/approval_user.dart';
 
 class ApplyConferenceModel {
   String _id = '';
@@ -7,8 +8,8 @@ class ApplyConferenceModel {
   String _title = '';
   String _content = '';
   bool _approval = false;
-  List<String> approvalUserIds = [];
   DateTime _approvedAt = DateTime.now();
+  List<ApprovalUserModel> approvalUsers = [];
   String _createdUserId = '';
   String _createdUserName = '';
   DateTime _createdAt = DateTime.now();
@@ -34,18 +35,18 @@ class ApplyConferenceModel {
     _title = data['title'] ?? '';
     _content = data['content'] ?? '';
     _approval = data['approval'] ?? false;
-    approvalUserIds = _convertApprovalUserIds(data['approvalUserIds']);
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
+    approvalUsers = _convertApprovalUsers(data['approvalUsers']);
     _createdUserId = data['createdUserId'] ?? '';
     _createdUserName = data['createdUserName'] ?? '';
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
   }
 
-  List<String> _convertApprovalUserIds(List list) {
-    List<String> ret = [];
-    for (dynamic id in list) {
-      ret.add('$id');
+  List<ApprovalUserModel> _convertApprovalUsers(List list) {
+    List<ApprovalUserModel> converted = [];
+    for (Map data in list) {
+      converted.add(ApprovalUserModel.fromMap(data));
     }
-    return ret;
+    return converted;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/models/apply_proposal.dart';
+import 'package:miel_work_app/models/approval_user.dart';
 import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/user.dart';
@@ -31,8 +32,8 @@ class ApplyProposalProvider with ChangeNotifier {
         'content': content,
         'price': price,
         'approval': false,
-        'approvalUserIds': [],
         'approvedAt': DateTime.now(),
+        'approvalUsers': [],
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
         'createdAt': DateTime.now(),
@@ -51,22 +52,29 @@ class ApplyProposalProvider with ChangeNotifier {
     String? error;
     if (loginUser == null) return '承認に失敗しました';
     try {
-      List<String> approvalUserIds = proposal.approvalUserIds;
-      if (!approvalUserIds.contains(loginUser.id)) {
-        approvalUserIds.add(loginUser.id);
+      List<Map> approvalUsers = [];
+      if (proposal.approvalUsers.isNotEmpty) {
+        for (ApprovalUserModel approvalUser in proposal.approvalUsers) {
+          approvalUsers.add(approvalUser.toMap());
+        }
       }
+      approvalUsers.add({
+        'userId': loginUser.id,
+        'userName': loginUser.name,
+        'approvedAt': DateTime.now(),
+      });
       if (approval) {
         _proposalService.update({
           'id': proposal.id,
           'approval': approval,
           'approvedAt': DateTime.now(),
-          'approvalUserIds': approvalUserIds,
+          'approvalUsers': approvalUsers,
         });
       } else {
         _proposalService.update({
           'id': proposal.id,
           'approval': approval,
-          'approvalUserIds': approvalUserIds,
+          'approvalUsers': approvalUsers,
         });
       }
     } catch (e) {

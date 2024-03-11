@@ -57,6 +57,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
               data: snapshot.data,
             );
           }
+          if (categories.isEmpty) {
+            return const Center(child: Text('カテゴリはありません'));
+          }
           return ListView.builder(
             itemCount: categories.length,
             itemBuilder: (context, index) {

@@ -79,6 +79,9 @@ class _ApplyProposalScreenState extends State<ApplyProposalScreen> {
               currentGroup: widget.homeProvider.currentGroup,
             );
           }
+          if (proposals.isEmpty) {
+            return const Center(child: Text('稟議申請はありません'));
+          }
           return ListView.builder(
             itemCount: proposals.length,
             itemBuilder: (context, index) {

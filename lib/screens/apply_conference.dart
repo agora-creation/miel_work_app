@@ -79,6 +79,9 @@ class _ApplyConferenceScreenState extends State<ApplyConferenceScreen> {
               currentGroup: widget.homeProvider.currentGroup,
             );
           }
+          if (conferences.isEmpty) {
+            return const Center(child: Text('協議申請はありません'));
+          }
           return ListView.builder(
             itemCount: conferences.length,
             itemBuilder: (context, index) {
