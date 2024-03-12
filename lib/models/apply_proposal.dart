@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:miel_work_app/models/approval_user.dart';
 
 class ApplyProposalModel {
@@ -51,5 +52,9 @@ class ApplyProposalModel {
       converted.add(ApprovalUserModel.fromMap(data));
     }
     return converted;
+  }
+
+  String formatPrice() {
+    return NumberFormat("#,###").format(_price);
   }
 }

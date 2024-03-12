@@ -16,6 +16,7 @@ class PlanProvider with ChangeNotifier {
     required bool allDay,
     required String color,
     required String memo,
+    required int alertMinute,
   }) async {
     String? error;
     if (organization == null) return '予定の追加に失敗しました';
@@ -44,6 +45,7 @@ class PlanProvider with ChangeNotifier {
         'allDay': allDay,
         'color': color,
         'memo': memo,
+        'alertMinute': alertMinute,
         'createdAt': DateTime.now(),
       });
     } catch (e) {
@@ -63,6 +65,7 @@ class PlanProvider with ChangeNotifier {
     required bool allDay,
     required String color,
     required String memo,
+    required int alertMinute,
   }) async {
     String? error;
     if (organization == null) return '予定の編集に失敗しました';
@@ -90,6 +93,7 @@ class PlanProvider with ChangeNotifier {
         'allDay': allDay,
         'color': color,
         'memo': memo,
+        'alertMinute': alertMinute,
       });
     } catch (e) {
       error = '予定の編集に失敗しました';

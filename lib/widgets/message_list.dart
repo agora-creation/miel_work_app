@@ -40,7 +40,7 @@ class MessageList extends StatelessWidget {
                     ),
                   )
                 : GestureDetector(
-                    onTap: onTapImage,
+                    onLongPress: onTapImage,
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
@@ -91,7 +91,7 @@ class MessageList extends StatelessWidget {
                     ),
                   )
                 : GestureDetector(
-                    onTap: onTapImage,
+                    onLongPress: onTapImage,
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),

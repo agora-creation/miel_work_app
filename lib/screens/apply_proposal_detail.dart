@@ -120,15 +120,18 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                   decoration: const BoxDecoration(
                     border: Border(top: BorderSide(color: kGrey600Color)),
                   ),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: widget.proposal.approvalUsers.length,
-                    itemBuilder: (context, index) {
-                      ApprovalUserModel approvalUser =
-                          widget.proposal.approvalUsers[index];
-                      return CustomApprovalUserList(approvalUser: approvalUser);
-                    },
-                  ),
+                  child: widget.proposal.approvalUsers.isNotEmpty
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: widget.proposal.approvalUsers.length,
+                          itemBuilder: (context, index) {
+                            ApprovalUserModel approvalUser =
+                                widget.proposal.approvalUsers[index];
+                            return CustomApprovalUserList(
+                                approvalUser: approvalUser);
+                          },
+                        )
+                      : const Center(child: Text('承認者はいません')),
                 ),
               ),
               const SizedBox(height: 8),
@@ -148,7 +151,7 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
-                    '¥${widget.proposal.price}',
+                    '¥ ${widget.proposal.formatPrice()}',
                     style: const TextStyle(fontSize: 18),
                   ),
                 ),

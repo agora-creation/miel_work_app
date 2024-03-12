@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
+import 'package:miel_work_app/common/style.dart';
 
 const key =
     'AAAAD2qO6Iw:APA91bGMk2EtIfwIy79DRUrjlF2fbQnzTg8pEahFRVc_xkoy13Kgd41QekQ6LJZq3-sizIzcpvtSC7QWvBsIy8sE3Jn3wZ3wObAaZ0YzI-mjAeLGercM3EMHn-TxVEjtMe37TDrLHh6Y';
@@ -21,12 +22,12 @@ class FmService {
 
   void _handleMessage(RemoteMessage? message) {
     if (message == null) return;
-    FlutterAppBadger.updateBadgeCount(1);
   }
 
   Future initLocalNotifications() async {
     const iOS = DarwinInitializationSettings();
-    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const android =
+        AndroidInitializationSettings('@drawable/notification_icon');
     const settings = InitializationSettings(android: android, iOS: iOS);
     await _localNotifications.initialize(
       settings,
@@ -61,11 +62,13 @@ class FmService {
             _androidChannel.id,
             _androidChannel.name,
             channelDescription: _androidChannel.description,
-            icon: '@mipmap/ic_launcher',
+            icon: '@drawable/notification_icon',
+            color: kBackgroundColor,
           ),
         ),
         payload: jsonEncode(message.toMap()),
       );
+      FlutterAppBadger.updateBadgeCount(1);
     });
   }
 

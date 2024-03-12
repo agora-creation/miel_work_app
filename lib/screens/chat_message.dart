@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
@@ -115,7 +117,14 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                               message: message,
                               isMe: message.createdUserId ==
                                   widget.loginProvider.user?.id,
-                              onTapImage: () {},
+                              onTapImage: () => showDialog(
+                                barrierDismissible: true,
+                                barrierLabel: '閉じる',
+                                context: context,
+                                builder: (context) => ImageDialog(
+                                  image: message.image,
+                                ),
+                              ),
                             );
                           },
                         );
@@ -160,6 +169,75 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ImageDialog extends StatefulWidget {
+  final String image;
+
+  const ImageDialog({
+    required this.image,
+    super.key,
+  });
+
+  @override
+  State<ImageDialog> createState() => _ImageDialogState();
+}
+
+class _ImageDialogState extends State<ImageDialog> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: InteractiveViewer(
+                minScale: 0.1,
+                maxScale: 5,
+                child: Image.network(widget.image),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Material(
+              color: Colors.transparent,
+              child: IconButton(
+                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(
+                  Icons.close,
+                  color: kWhiteColor,
+                  size: 30,
+                ),
+              ),
+            ),
+            Material(
+              color: Colors.transparent,
+              child: IconButton(
+                onPressed: () async {
+                  Uint8List imageBytes =
+                      (await NetworkAssetBundle(Uri.parse(widget.image))
+                              .load(widget.image))
+                          .buffer
+                          .asUint8List();
+                  await ImageGallerySaver.saveImage(imageBytes);
+                },
+                icon: const Icon(
+                  Icons.download,
+                  color: kWhiteColor,
+                  size: 30,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

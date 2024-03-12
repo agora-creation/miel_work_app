@@ -121,15 +121,18 @@ class _ApplyConferenceDetailScreenState
                   decoration: const BoxDecoration(
                     border: Border(top: BorderSide(color: kGrey600Color)),
                   ),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: widget.conference.approvalUsers.length,
-                    itemBuilder: (context, index) {
-                      ApprovalUserModel approvalUser =
-                          widget.conference.approvalUsers[index];
-                      return CustomApprovalUserList(approvalUser: approvalUser);
-                    },
-                  ),
+                  child: widget.conference.approvalUsers.isNotEmpty
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: widget.conference.approvalUsers.length,
+                          itemBuilder: (context, index) {
+                            ApprovalUserModel approvalUser =
+                                widget.conference.approvalUsers[index];
+                            return CustomApprovalUserList(
+                                approvalUser: approvalUser);
+                          },
+                        )
+                      : const Center(child: Text('承認者はいません')),
                 ),
               ),
               const SizedBox(height: 8),

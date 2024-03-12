@@ -42,6 +42,7 @@ class _PlanShiftModScreenState extends State<PlanShiftModScreen> {
   DateTime startedAt = DateTime.now();
   DateTime endedAt = DateTime.now();
   bool allDay = false;
+  int alertMinute = 0;
 
   void _init() async {
     PlanShiftModel? planShift = await planShiftService.selectData(
@@ -152,6 +153,7 @@ class _PlanShiftModScreenState extends State<PlanShiftModScreen> {
                 startedAt: startedAt,
                 endedAt: endedAt,
                 allDay: allDay,
+                alertMinute: alertMinute,
               );
               if (error != null) {
                 if (!mounted) return;
@@ -260,6 +262,26 @@ class _PlanShiftModScreenState extends State<PlanShiftModScreen> {
                 ),
                 allDay: allDay,
                 allDayOnChanged: _allDayChange,
+              ),
+              const SizedBox(height: 8),
+              FormLabel(
+                label: '事前アラート通知',
+                child: DropdownButton<int>(
+                  underline: Container(),
+                  isExpanded: true,
+                  value: alertMinute,
+                  items: kAlertMinutes.map((value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: value == 0 ? const Text('無効') : Text('$value分前'),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      alertMinute = value!;
+                    });
+                  },
+                ),
               ),
               const SizedBox(height: 16),
               LinkText(

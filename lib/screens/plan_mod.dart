@@ -45,6 +45,7 @@ class _PlanModScreenState extends State<PlanModScreen> {
   bool allDay = false;
   String color = kPlanColors.first.value.toRadixString(16);
   TextEditingController memoController = TextEditingController();
+  int alertMinute = 0;
 
   void _init() async {
     PlanModel? plan = await planService.selectData(id: widget.planId);
@@ -147,6 +148,7 @@ class _PlanModScreenState extends State<PlanModScreen> {
                 allDay: allDay,
                 color: color,
                 memo: memoController.text,
+                alertMinute: alertMinute,
               );
               if (error != null) {
                 if (!mounted) return;
@@ -285,6 +287,26 @@ class _PlanModScreenState extends State<PlanModScreen> {
                 textInputType: TextInputType.multiline,
                 maxLines: null,
                 label: 'メモ',
+              ),
+              const SizedBox(height: 8),
+              FormLabel(
+                label: '事前アラート通知',
+                child: DropdownButton<int>(
+                  underline: Container(),
+                  isExpanded: true,
+                  value: alertMinute,
+                  items: kAlertMinutes.map((value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: value == 0 ? const Text('無効') : Text('$value分前'),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      alertMinute = value!;
+                    });
+                  },
+                ),
               ),
               const SizedBox(height: 16),
               LinkText(

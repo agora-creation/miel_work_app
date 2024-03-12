@@ -89,6 +89,8 @@ List<Color> kPlanColors = const [
   Color(0xFF607D8B),
 ];
 
+List<int> kAlertMinutes = [0, 10, 30, 60];
+
 DateTime kFirstDate = DateTime.now().subtract(const Duration(days: 1095));
 DateTime kLastDate = DateTime.now().add(const Duration(days: 1095));
 

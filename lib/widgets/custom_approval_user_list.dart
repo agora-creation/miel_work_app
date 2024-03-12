@@ -21,6 +21,11 @@ class CustomApprovalUserList extends StatelessWidget {
         title: Text(approvalUser.userName),
         trailing: Text(
           dateText('yyyy/MM/dd HH:mm', approvalUser.approvedAt),
+          style: const TextStyle(
+            color: kRedColor,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

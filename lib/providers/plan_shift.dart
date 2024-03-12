@@ -13,6 +13,7 @@ class PlanShiftProvider with ChangeNotifier {
     required DateTime startedAt,
     required DateTime endedAt,
     required bool allDay,
+    required int alertMinute,
   }) async {
     String? error;
     if (organization == null) return '勤務予定の追加に失敗しました';
@@ -30,6 +31,7 @@ class PlanShiftProvider with ChangeNotifier {
         'startedAt': startedAt,
         'endedAt': endedAt,
         'allDay': allDay,
+        'alertMinute': alertMinute,
         'createdAt': DateTime.now(),
       });
     } catch (e) {
@@ -46,6 +48,7 @@ class PlanShiftProvider with ChangeNotifier {
     required DateTime startedAt,
     required DateTime endedAt,
     required bool allDay,
+    required int alertMinute,
   }) async {
     String? error;
     if (organization == null) return '勤務予定の編集に失敗しました';
@@ -62,6 +65,7 @@ class PlanShiftProvider with ChangeNotifier {
         'startedAt': startedAt,
         'endedAt': endedAt,
         'allDay': allDay,
+        'alertMinute': alertMinute,
       });
     } catch (e) {
       error = '勤務予定の編集に失敗しました';

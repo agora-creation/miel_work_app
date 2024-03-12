@@ -1,3 +1,4 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
@@ -24,7 +25,7 @@ class ApplyProposalAddScreen extends StatefulWidget {
 class _ApplyProposalAddScreenState extends State<ApplyProposalAddScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
-  TextEditingController priceController = TextEditingController(text: '0');
+  TextEditingController priceController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +49,14 @@ class _ApplyProposalAddScreenState extends State<ApplyProposalAddScreen> {
         actions: [
           TextButton(
             onPressed: () async {
+              String priceText = priceController.text.replaceAll(',', '');
+              int price = int.parse(priceText);
               String? error = await proposalProvider.create(
                 organization: widget.loginProvider.organization,
                 group: widget.loginProvider.group,
                 title: titleController.text,
                 content: contentController.text,
-                price: int.parse(priceController.text),
+                price: price,
                 loginUser: widget.loginProvider.user,
               );
               if (error != null) {
@@ -88,8 +91,16 @@ class _ApplyProposalAddScreenState extends State<ApplyProposalAddScreen> {
                 CustomTextField(
                   controller: priceController,
                   textInputType: TextInputType.number,
+                  inputFormatters: [
+                    CurrencyTextInputFormatter(
+                      locale: 'ja',
+                      decimalDigits: 0,
+                      symbol: '',
+                    ),
+                  ],
                   maxLines: 1,
                   label: '金額',
+                  prefix: const Text('¥ '),
                 ),
                 const SizedBox(height: 8),
                 CustomTextField(
