@@ -31,21 +31,7 @@ class CustomApplyProposalList extends StatelessWidget {
                 : Container(),
           ],
         ),
-        trailing: proposal.approval
-            ? const Chip(
-                backgroundColor: kGrey600Color,
-                label: Text(
-                  '承認済み',
-                  style: TextStyle(color: kWhiteColor),
-                ),
-              )
-            : const Chip(
-                backgroundColor: kRedColor,
-                label: Text(
-                  '承認待ち',
-                  style: TextStyle(color: kWhiteColor),
-                ),
-              ),
+        trailing: const Icon(Icons.chevron_right),
         onTap: onTap,
       ),
     );
