@@ -24,10 +24,15 @@ class CustomApplyConferenceList extends StatelessWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('提出日: ${dateText('yyyy/MM/dd HH:mm', conference.createdAt)}'),
+            Text('提出日時: ${dateText('yyyy/MM/dd HH:mm', conference.createdAt)}'),
             conference.approval
                 ? Text(
-                    '承認日: ${dateText('yyyy/MM/dd HH:mm', conference.createdAt)}')
+                    '承認日時: ${dateText('yyyy/MM/dd HH:mm', conference.approvedAt)}',
+                    style: const TextStyle(
+                      color: kRedColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
                 : Container(),
           ],
         ),

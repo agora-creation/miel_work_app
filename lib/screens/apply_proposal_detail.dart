@@ -102,9 +102,18 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      '提出日: ${dateText('yyyy/MM/dd HH:mm', widget.proposal.createdAt)}',
+                      '提出日時: ${dateText('yyyy/MM/dd HH:mm', widget.proposal.createdAt)}',
                       style: const TextStyle(color: kGreyColor),
                     ),
+                    widget.proposal.approval
+                        ? Text(
+                            '承認日時: ${dateText('yyyy/MM/dd HH:mm', widget.proposal.approvedAt)}',
+                            style: const TextStyle(
+                              color: kRedColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : Container(),
                     Text(
                       '作成者: ${widget.proposal.createdUserName}',
                       style: const TextStyle(color: kGreyColor),
