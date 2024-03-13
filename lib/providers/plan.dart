@@ -46,6 +46,7 @@ class PlanProvider with ChangeNotifier {
         'color': color,
         'memo': memo,
         'alertMinute': alertMinute,
+        'alertedAt': startedAt.subtract(Duration(minutes: alertMinute)),
         'createdAt': DateTime.now(),
       });
     } catch (e) {
@@ -94,6 +95,7 @@ class PlanProvider with ChangeNotifier {
         'color': color,
         'memo': memo,
         'alertMinute': alertMinute,
+        'alertedAt': startedAt.subtract(Duration(minutes: alertMinute)),
       });
     } catch (e) {
       error = '予定の編集に失敗しました';

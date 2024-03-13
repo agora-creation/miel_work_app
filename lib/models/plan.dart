@@ -15,6 +15,7 @@ class PlanModel {
   Color _color = kPlanColors.first;
   String _memo = '';
   int _alertMinute = 0;
+  DateTime _alertedAt = DateTime.now();
   DateTime _createdAt = DateTime.now();
 
   String get id => _id;
@@ -28,6 +29,7 @@ class PlanModel {
   Color get color => _color;
   String get memo => _memo;
   int get alertMinute => _alertMinute;
+  DateTime get alertedAt => _alertedAt;
   DateTime get createdAt => _createdAt;
 
   PlanModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
@@ -45,6 +47,7 @@ class PlanModel {
     _color = Color(int.parse(data['color'], radix: 16));
     _memo = data['memo'] ?? '';
     _alertMinute = data['alertMinute'] ?? 0;
+    _alertedAt = data['alertedAt'].toDate() ?? DateTime.now();
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
   }
 
