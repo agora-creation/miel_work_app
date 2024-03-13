@@ -4,7 +4,6 @@ import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/services/chat.dart';
-import 'package:miel_work_app/services/fm.dart';
 import 'package:miel_work_app/services/organization.dart';
 import 'package:miel_work_app/services/organization_group.dart';
 import 'package:miel_work_app/services/user.dart';
@@ -14,7 +13,6 @@ class UserProvider with ChangeNotifier {
   final OrganizationGroupService _groupService = OrganizationGroupService();
   final UserService _userService = UserService();
   final ChatService _chatService = ChatService();
-  final FmService _fmService = FmService();
 
   Future<String?> create({
     required OrganizationModel? organization,
@@ -99,8 +97,10 @@ class UserProvider with ChangeNotifier {
     if (name == '') return 'スタッフ名を入力してください';
     if (email == '') return 'メールアドレスを入力してください';
     if (password == '') return 'パスワードを入力してください';
-    if (await _userService.emailCheck(email: email)) {
-      return '他のメールアドレスを入力してください';
+    if (user.email != email) {
+      if (await _userService.emailCheck(email: email)) {
+        return '他のメールアドレスを入力してください';
+      }
     }
     try {
       _userService.update({
@@ -208,13 +208,6 @@ class UserProvider with ChangeNotifier {
             'userIds': groupUserIds,
           });
         }
-      }
-      if (user.token != '') {
-        _fmService.send(
-          token: user.token,
-          title: 'あなたの情報が削除されました',
-          body: 'あなたの情報が管理者によって削除されました。アプリをアンインストールしてください。',
-        );
       }
     } catch (e) {
       error = 'スタッフの削除に失敗しました';
