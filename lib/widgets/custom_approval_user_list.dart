@@ -18,6 +18,7 @@ class CustomApprovalUserList extends StatelessWidget {
         border: Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       child: ListTile(
+        tileColor: kRed100Color,
         title: Text(approvalUser.userName),
         trailing: Text(
           dateText('yyyy/MM/dd HH:mm', approvalUser.approvedAt),

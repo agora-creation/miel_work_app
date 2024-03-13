@@ -123,27 +123,19 @@ class _ApplyConferenceDetailScreenState
                 ),
               ),
               const SizedBox(height: 4),
-              FormLabel(
-                label: '承認者一覧',
-                child: Container(
-                  height: 150,
-                  decoration: const BoxDecoration(
-                    border: Border(top: BorderSide(color: kGrey600Color)),
-                  ),
-                  child: widget.conference.approvalUsers.isNotEmpty
-                      ? ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: widget.conference.approvalUsers.length,
-                          itemBuilder: (context, index) {
-                            ApprovalUserModel approvalUser =
-                                widget.conference.approvalUsers[index];
-                            return CustomApprovalUserList(
-                                approvalUser: approvalUser);
-                          },
-                        )
-                      : const Center(child: Text('承認者はいません')),
-                ),
-              ),
+              widget.conference.approvalUsers.isNotEmpty
+                  ? FormLabel(
+                      label: '承認者一覧',
+                      child: Column(
+                        children:
+                            widget.conference.approvalUsers.map((approvalUser) {
+                          return CustomApprovalUserList(
+                            approvalUser: approvalUser,
+                          );
+                        }).toList(),
+                      ),
+                    )
+                  : Container(),
               const SizedBox(height: 8),
               FormLabel(
                 label: '件名',

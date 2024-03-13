@@ -122,27 +122,19 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                 ),
               ),
               const SizedBox(height: 4),
-              FormLabel(
-                label: '承認者一覧',
-                child: Container(
-                  height: 150,
-                  decoration: const BoxDecoration(
-                    border: Border(top: BorderSide(color: kGrey600Color)),
-                  ),
-                  child: widget.proposal.approvalUsers.isNotEmpty
-                      ? ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: widget.proposal.approvalUsers.length,
-                          itemBuilder: (context, index) {
-                            ApprovalUserModel approvalUser =
-                                widget.proposal.approvalUsers[index];
-                            return CustomApprovalUserList(
-                                approvalUser: approvalUser);
-                          },
-                        )
-                      : const Center(child: Text('承認者はいません')),
-                ),
-              ),
+              widget.proposal.approvalUsers.isNotEmpty
+                  ? FormLabel(
+                      label: '承認者一覧',
+                      child: Column(
+                        children:
+                            widget.proposal.approvalUsers.map((approvalUser) {
+                          return CustomApprovalUserList(
+                            approvalUser: approvalUser,
+                          );
+                        }).toList(),
+                      ),
+                    )
+                  : Container(),
               const SizedBox(height: 8),
               FormLabel(
                 label: '件名',

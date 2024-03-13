@@ -22,73 +22,73 @@ class DatetimeRangeForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          decoration: const BoxDecoration(
-            border: Border(bottom: BorderSide(color: kGreyColor)),
-          ),
-          padding: const EdgeInsets.all(8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: startedOnTap,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      dateText('yyyy年MM月dd日(E)', startedAt),
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                    Text(
-                      dateText('HH:mm', startedAt),
-                      style: const TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
+    return Container(
+      decoration: BoxDecoration(border: Border.all(color: kGrey600Color)),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: startedOnTap,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        dateText('yyyy年MM月dd日(E)', startedAt),
+                        style: const TextStyle(fontSize: 14),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(
-                Icons.arrow_forward_ios,
-                color: kGrey600Color,
-                size: 18,
-              ),
-              GestureDetector(
-                onTap: endedOnTap,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      dateText('yyyy年MM月dd日(E)', endedAt),
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                    Text(
-                      dateText('HH:mm', endedAt),
-                      style: const TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
+                      Text(
+                        dateText('HH:mm', startedAt),
+                        style: const TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                const Icon(
+                  Icons.arrow_forward_ios,
+                  color: kGrey600Color,
+                  size: 16,
+                ),
+                GestureDetector(
+                  onTap: endedOnTap,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        dateText('yyyy年MM月dd日(E)', endedAt),
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                      Text(
+                        dateText('HH:mm', endedAt),
+                        style: const TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        Container(
-          decoration: const BoxDecoration(
-            border: Border(bottom: BorderSide(color: kGrey600Color)),
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(top: BorderSide(color: kGrey600Color)),
+            ),
+            child: CheckboxListTile(
+              value: allDay,
+              onChanged: allDayOnChanged,
+              title: const Text('終日'),
+            ),
           ),
-          child: CheckboxListTile(
-            value: allDay,
-            onChanged: allDayOnChanged,
-            title: const Text('終日'),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

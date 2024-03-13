@@ -41,7 +41,7 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
   bool allDay = false;
   String color = kPlanColors.first.value.toRadixString(16);
   TextEditingController memoController = TextEditingController();
-  int alertMinute = 0;
+  int alertMinute = kAlertMinutes[1];
 
   void _init() async {
     selectedGroup = widget.homeProvider.currentGroup;

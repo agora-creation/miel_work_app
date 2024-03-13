@@ -40,7 +40,7 @@ class _PlanShiftAddScreenState extends State<PlanShiftAddScreen> {
   DateTime startedAt = DateTime.now();
   DateTime endedAt = DateTime.now();
   bool allDay = false;
-  int alertMinute = 0;
+  int alertMinute = kAlertMinutes[1];
 
   void _init() async {
     _groupChange(widget.homeProvider.currentGroup);
