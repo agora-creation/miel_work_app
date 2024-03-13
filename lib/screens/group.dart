@@ -87,7 +87,7 @@ class _GroupScreenState extends State<GroupScreen> {
               },
             )
           : const Center(child: Text('グループはありません')),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () => showDialog(
           context: context,
           builder: (context) => AddGroupDialog(
@@ -96,7 +96,14 @@ class _GroupScreenState extends State<GroupScreen> {
             getGroups: _getGroups,
           ),
         ),
-        child: const Icon(Icons.add, color: kWhiteColor),
+        icon: const Icon(
+          Icons.add,
+          color: kWhiteColor,
+        ),
+        label: const Text(
+          '新規追加',
+          style: TextStyle(color: kWhiteColor),
+        ),
       ),
     );
   }

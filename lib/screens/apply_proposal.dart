@@ -139,7 +139,7 @@ class _ApplyProposalScreenState extends State<ApplyProposalScreen> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: FloatingActionButton.extended(
           onPressed: () => pushScreen(
             context,
             ApplyProposalAddScreen(
@@ -147,7 +147,14 @@ class _ApplyProposalScreenState extends State<ApplyProposalScreen> {
               homeProvider: widget.homeProvider,
             ),
           ),
-          child: const Icon(Icons.add, color: kWhiteColor),
+          icon: const Icon(
+            Icons.add,
+            color: kWhiteColor,
+          ),
+          label: const Text(
+            '新規申請',
+            style: TextStyle(color: kWhiteColor),
+          ),
         ),
       ),
     );

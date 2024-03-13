@@ -83,7 +83,7 @@ class _NoticeScreenState extends State<NoticeScreen> {
         },
       ),
       floatingActionButton: widget.loginProvider.isAdmin()
-          ? FloatingActionButton(
+          ? FloatingActionButton.extended(
               onPressed: () => pushScreen(
                 context,
                 NoticeAddScreen(
@@ -91,7 +91,14 @@ class _NoticeScreenState extends State<NoticeScreen> {
                   homeProvider: widget.homeProvider,
                 ),
               ),
-              child: const Icon(Icons.add, color: kWhiteColor),
+              icon: const Icon(
+                Icons.add,
+                color: kWhiteColor,
+              ),
+              label: const Text(
+                '新規追加',
+                style: TextStyle(color: kWhiteColor),
+              ),
             )
           : Container(),
     );

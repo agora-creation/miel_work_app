@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
@@ -212,24 +210,6 @@ class _ImageDialogState extends State<ImageDialog> {
                 onPressed: () => Navigator.of(context).pop(),
                 icon: const Icon(
                   Icons.close,
-                  color: kWhiteColor,
-                  size: 30,
-                ),
-              ),
-            ),
-            Material(
-              color: Colors.transparent,
-              child: IconButton(
-                onPressed: () async {
-                  Uint8List imageBytes =
-                      (await NetworkAssetBundle(Uri.parse(widget.image))
-                              .load(widget.image))
-                          .buffer
-                          .asUint8List();
-                  await ImageGallerySaver.saveImage(imageBytes);
-                },
-                icon: const Icon(
-                  Icons.download,
                   color: kWhiteColor,
                   size: 30,
                 ),

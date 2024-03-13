@@ -98,7 +98,7 @@ class _UserScreenState extends State<UserScreen> {
               },
             )
           : const Center(child: Text('スタッフはいません')),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () => pushScreen(
           context,
           UserAddScreen(
@@ -107,7 +107,14 @@ class _UserScreenState extends State<UserScreen> {
             getUsers: _getUsers,
           ),
         ),
-        child: const Icon(Icons.add, color: kWhiteColor),
+        icon: const Icon(
+          Icons.add,
+          color: kWhiteColor,
+        ),
+        label: const Text(
+          '新規追加',
+          style: TextStyle(color: kWhiteColor),
+        ),
       ),
     );
   }

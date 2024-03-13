@@ -89,7 +89,7 @@ class _ManualScreenState extends State<ManualScreen> {
         },
       ),
       floatingActionButton: widget.loginProvider.isAdmin()
-          ? FloatingActionButton(
+          ? FloatingActionButton.extended(
               onPressed: () => showDialog(
                 context: context,
                 builder: (context) => AddManualDialog(
@@ -97,7 +97,14 @@ class _ManualScreenState extends State<ManualScreen> {
                   homeProvider: widget.homeProvider,
                 ),
               ),
-              child: const Icon(Icons.add, color: kWhiteColor),
+              icon: const Icon(
+                Icons.add,
+                color: kWhiteColor,
+              ),
+              label: const Text(
+                '新規追加',
+                style: TextStyle(color: kWhiteColor),
+              ),
             )
           : Container(),
     );

@@ -75,14 +75,21 @@ class _CategoryScreenState extends State<CategoryScreen> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () => showDialog(
           context: context,
           builder: (context) => AddCategoryDialog(
             organization: widget.organization,
           ),
         ),
-        child: const Icon(Icons.add, color: kWhiteColor),
+        icon: const Icon(
+          Icons.add,
+          color: kWhiteColor,
+        ),
+        label: const Text(
+          '新規追加',
+          style: TextStyle(color: kWhiteColor),
+        ),
       ),
     );
   }

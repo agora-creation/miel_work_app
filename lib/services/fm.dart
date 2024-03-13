@@ -22,6 +22,7 @@ class FmService {
 
   void _handleMessage(RemoteMessage? message) {
     if (message == null) return;
+    FlutterAppBadger.updateBadgeCount(1);
   }
 
   Future initLocalNotifications() async {
@@ -68,7 +69,6 @@ class FmService {
         ),
         payload: jsonEncode(message.toMap()),
       );
-      FlutterAppBadger.updateBadgeCount(1);
     });
   }
 
