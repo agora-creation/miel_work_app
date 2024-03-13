@@ -64,6 +64,7 @@ class _PlanShiftModScreenState extends State<PlanShiftModScreen> {
     startedAt = planShift.startedAt;
     endedAt = planShift.endedAt;
     allDay = planShift.allDay;
+    alertMinute = planShift.alertMinute;
     setState(() {});
   }
 

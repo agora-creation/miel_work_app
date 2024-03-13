@@ -70,6 +70,7 @@ class _PlanModScreenState extends State<PlanModScreen> {
     allDay = plan.allDay;
     color = plan.color.value.toRadixString(16);
     memoController.text = plan.memo;
+    alertMinute = plan.alertMinute;
     setState(() {});
   }
 
