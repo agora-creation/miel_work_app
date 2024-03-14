@@ -36,6 +36,12 @@ class _PlanShiftScreenState extends State<PlanShiftScreen> {
   PlanShiftService planShiftService = PlanShiftService();
   UserService userService = UserService();
   List<sfc.CalendarResource> resourceColl = [];
+  List<String> searchCategories = [];
+
+  void _searchCategoriesChange() async {
+    searchCategories = await getPrefsList('categories') ?? [];
+    setState(() {});
+  }
 
   void _calendarTap(sfc.CalendarTapDetails details) {
     sfc.CalendarElement element = details.targetElement;
@@ -109,12 +115,14 @@ class _PlanShiftScreenState extends State<PlanShiftScreen> {
   void initState() {
     super.initState();
     _getUsers();
+    _searchCategoriesChange();
   }
 
   @override
   Widget build(BuildContext context) {
     var stream1 = planService.streamList(
       organizationId: widget.loginProvider.organization?.id,
+      categories: searchCategories,
     );
     var stream2 = planShiftService.streamList(
       organizationId: widget.loginProvider.organization?.id,
@@ -135,6 +143,12 @@ class _PlanShiftScreenState extends State<PlanShiftScreen> {
           'シフト表',
           style: TextStyle(color: kBlackColor),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.search),
+          )
+        ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: SafeArea(

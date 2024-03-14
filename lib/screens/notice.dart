@@ -29,6 +29,12 @@ class _NoticeScreenState extends State<NoticeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String appBarTitle = '';
+    if (widget.homeProvider.currentGroup != null) {
+      appBarTitle = '${widget.homeProvider.currentGroup?.name}のお知らせ';
+    } else {
+      appBarTitle = '全てのお知らせ';
+    }
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
@@ -41,9 +47,9 @@ class _NoticeScreenState extends State<NoticeScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         centerTitle: true,
-        title: const Text(
-          'お知らせ一覧',
-          style: TextStyle(color: kBlackColor),
+        title: Text(
+          appBarTitle,
+          style: const TextStyle(color: kBlackColor),
         ),
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),

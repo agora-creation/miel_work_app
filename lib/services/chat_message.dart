@@ -104,6 +104,24 @@ class ChatMessageService {
     return ret;
   }
 
+  List<ChatMessageModel> generateListKeyword({
+    required QuerySnapshot<Map<String, dynamic>>? data,
+    required String keyword,
+  }) {
+    List<ChatMessageModel> ret = [];
+    for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
+      ChatMessageModel message = ChatMessageModel.fromSnapshot(doc);
+      if (keyword != '') {
+        if (message.content.contains(keyword)) {
+          ret.add(message);
+        }
+      } else {
+        ret.add(message);
+      }
+    }
+    return ret;
+  }
+
   List<ChatMessageModel> generateListUnread({
     required QuerySnapshot<Map<String, dynamic>>? data,
     required OrganizationGroupModel? currentGroup,

@@ -21,7 +21,7 @@ class CustomFileField extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        color: kGrey600Color,
+        color: kCyanColor,
         width: double.infinity,
         height: 200,
         child: Padding(

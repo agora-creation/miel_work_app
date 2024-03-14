@@ -13,6 +13,8 @@ import 'package:miel_work_app/providers/chat_message.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/services/chat_message.dart';
 import 'package:miel_work_app/services/user.dart';
+import 'package:miel_work_app/widgets/custom_button_sm.dart';
+import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/message_form_field.dart';
 import 'package:miel_work_app/widgets/message_list.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +35,12 @@ class ChatMessageScreen extends StatefulWidget {
 
 class _ChatMessageScreenState extends State<ChatMessageScreen> {
   ChatMessageService messageService = ChatMessageService();
+  String searchKeyword = '';
+
+  void _getKeyword() async {
+    searchKeyword = await getPrefsString('keyword') ?? '';
+    setState(() {});
+  }
 
   void _init() async {
     await messageService.updateRead(
@@ -46,6 +54,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
   void initState() {
     super.initState();
     _init();
+    _getKeyword();
   }
 
   @override
@@ -71,14 +80,20 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
           IconButton(
             onPressed: () => showDialog(
               context: context,
+              builder: (context) => SearchKeywordDialog(
+                getKeyword: _getKeyword,
+              ),
+            ),
+            icon: const Icon(Icons.search),
+          ),
+          IconButton(
+            onPressed: () => showDialog(
+              context: context,
               builder: (context) => ChatUsersDialog(
                 chat: widget.chat,
               ),
             ),
-            icon: const Icon(
-              Icons.groups,
-              color: kBlueColor,
-            ),
+            icon: const Icon(Icons.groups),
           ),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
@@ -100,8 +115,9 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                       builder: (context, snapshot) {
                         List<ChatMessageModel> messages = [];
                         if (snapshot.hasData) {
-                          messages = messageService.generateList(
+                          messages = messageService.generateListKeyword(
                             data: snapshot.data,
+                            keyword: searchKeyword,
                           );
                         }
                         if (messages.isEmpty) {
@@ -255,6 +271,81 @@ class _ImageDialogState extends State<ImageDialog> {
               ),
             ),
           ],
+        ),
+      ],
+    );
+  }
+}
+
+class SearchKeywordDialog extends StatefulWidget {
+  final Function() getKeyword;
+
+  const SearchKeywordDialog({
+    required this.getKeyword,
+    super.key,
+  });
+
+  @override
+  State<SearchKeywordDialog> createState() => _SearchKeywordDialogState();
+}
+
+class _SearchKeywordDialogState extends State<SearchKeywordDialog> {
+  TextEditingController keywordController = TextEditingController();
+
+  void _getKeyword() async {
+    keywordController = TextEditingController(
+      text: await getPrefsString('keyword') ?? '',
+    );
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getKeyword();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: kWhiteColor,
+      surfaceTintColor: kWhiteColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
+      title: const Text(
+        'キーワード検索',
+        style: TextStyle(fontSize: 16),
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomTextField(
+            controller: keywordController,
+            textInputType: TextInputType.text,
+            maxLines: 1,
+          ),
+        ],
+      ),
+      actionsAlignment: MainAxisAlignment.spaceBetween,
+      actions: [
+        CustomButtonSm(
+          label: '閉じる',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButtonSm(
+          label: '検索する',
+          labelColor: kWhiteColor,
+          backgroundColor: kLightBlueColor,
+          onPressed: () async {
+            await setPrefsString('keyword', keywordController.text);
+            widget.getKeyword();
+            if (!mounted) return;
+            Navigator.pop(context);
+          },
         ),
       ],
     );

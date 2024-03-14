@@ -65,6 +65,7 @@ class _CustomHomePlanCardState extends State<CustomHomePlanCard> {
                   stream: planService.streamListDate(
                     organizationId: widget.loginProvider.organization?.id,
                     date: DateTime.now(),
+                    categories: [],
                   ),
                   builder: (context, snapshot) {
                     List<PlanModel> plans = [];

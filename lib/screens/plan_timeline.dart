@@ -28,6 +28,12 @@ class PlanTimelineScreen extends StatefulWidget {
 
 class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
   PlanService planService = PlanService();
+  List<String> searchCategories = [];
+
+  void _searchCategoriesChange() async {
+    searchCategories = await getPrefsList('categories') ?? [];
+    setState(() {});
+  }
 
   void _calendarTap(sfc.CalendarTapDetails details) {
     sfc.CalendarElement element = details.targetElement;
@@ -60,6 +66,12 @@ class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _searchCategoriesChange();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kWhiteColor,
@@ -85,6 +97,7 @@ class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
           stream: planService.streamListDate(
             organizationId: widget.loginProvider.organization?.id,
             date: widget.date,
+            categories: searchCategories,
           ),
           builder: (context, snapshot) {
             List<sfc.Appointment> appointments = [];

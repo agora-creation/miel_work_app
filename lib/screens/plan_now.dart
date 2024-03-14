@@ -42,6 +42,7 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
         stream: planService.streamListDate(
           organizationId: widget.loginProvider.organization?.id,
           date: now,
+          categories: [],
         ),
         builder: (context, snapshot) {
           List<PlanModel> plans = [];
