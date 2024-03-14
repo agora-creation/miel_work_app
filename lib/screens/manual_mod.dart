@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
@@ -7,7 +9,7 @@ import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/manual.dart';
-import 'package:miel_work_app/widgets/custom_button_sm.dart';
+import 'package:miel_work_app/widgets/custom_pdf_field.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
@@ -31,7 +33,7 @@ class ManualModScreen extends StatefulWidget {
 
 class _ManualModScreenState extends State<ManualModScreen> {
   TextEditingController titleController = TextEditingController();
-  PlatformFile? pickedFile;
+  File? pickedFile;
   OrganizationGroupModel? selectedGroup;
 
   @override
@@ -98,68 +100,72 @@ class _ManualModScreenState extends State<ManualModScreen> {
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomTextField(
-              controller: titleController,
-              textInputType: TextInputType.name,
-              maxLines: 1,
-              label: 'タイトル',
+      body: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomTextField(
+                  controller: titleController,
+                  textInputType: TextInputType.name,
+                  maxLines: 1,
+                  label: 'タイトル',
+                ),
+                const SizedBox(height: 8),
+                CustomPdfField(
+                  value: pickedFile,
+                  defaultValue: widget.manual.file,
+                  onTap: () async {
+                    final result = await FilePicker.platform.pickFiles(
+                      type: FileType.custom,
+                      allowedExtensions: ['pdf'],
+                    );
+                    if (result == null) return;
+                    setState(() {
+                      pickedFile = File(result.files.single.path!);
+                    });
+                  },
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  label: '公開グループ',
+                  child: DropdownButton<OrganizationGroupModel?>(
+                    hint: const Text('グループ未選択'),
+                    underline: Container(),
+                    isExpanded: true,
+                    value: selectedGroup,
+                    items: groupItems,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedGroup = value;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 24),
+                LinkText(
+                  label: 'この業務マニュアルを削除する',
+                  color: kRedColor,
+                  onTap: () async {
+                    String? error = await manualProvider.delete(
+                      manual: widget.manual,
+                    );
+                    if (error != null) {
+                      if (!mounted) return;
+                      showMessage(context, error, false);
+                      return;
+                    }
+                    if (!mounted) return;
+                    showMessage(context, '業務マニュアルを削除しました', true);
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
             ),
-            const SizedBox(height: 8),
-            CustomButtonSm(
-              label: 'PDFファイル選択',
-              labelColor: kWhiteColor,
-              backgroundColor: kGreyColor,
-              onPressed: () async {
-                final result = await FilePicker.platform.pickFiles(
-                  type: FileType.custom,
-                  allowedExtensions: ['pdf'],
-                );
-                if (result == null) return;
-                setState(() {
-                  pickedFile = result.files.first;
-                });
-              },
-            ),
-            const SizedBox(height: 8),
-            FormLabel(
-              label: '公開グループ',
-              child: DropdownButton<OrganizationGroupModel?>(
-                hint: const Text('グループ未選択'),
-                underline: Container(),
-                isExpanded: true,
-                value: selectedGroup,
-                items: groupItems,
-                onChanged: (value) {
-                  setState(() {
-                    selectedGroup = value;
-                  });
-                },
-              ),
-            ),
-            const SizedBox(height: 24),
-            LinkText(
-              label: 'この業務マニュアルを削除する',
-              color: kRedColor,
-              onTap: () async {
-                String? error = await manualProvider.delete(
-                  manual: widget.manual,
-                );
-                if (error != null) {
-                  if (!mounted) return;
-                  showMessage(context, error, false);
-                  return;
-                }
-                if (!mounted) return;
-                showMessage(context, '業務マニュアルを削除しました', true);
-                Navigator.pop(context);
-              },
-            ),
-          ],
+          ),
         ),
       ),
     );

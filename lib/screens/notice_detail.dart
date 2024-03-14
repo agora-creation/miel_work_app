@@ -7,6 +7,7 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/notice_mod.dart';
 import 'package:miel_work_app/services/notice.dart';
+import 'package:miel_work_app/widgets/link_text.dart';
 
 class NoticeDetailScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -80,19 +81,51 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(8),
-        children: [
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              dateText('yyyy/MM/dd HH:mm', widget.notice.createdAt),
-              style: const TextStyle(color: kGreyColor),
-            ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  dateText('yyyy/MM/dd HH:mm', widget.notice.createdAt),
+                  style: const TextStyle(color: kGreyColor),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(widget.notice.content),
+              const SizedBox(height: 16),
+              widget.notice.file != ''
+                  ? LinkText(
+                      label: '添付ファイル',
+                      color: kBlueColor,
+                      onTap: () async {
+                        if (await saveFile(
+                          widget.notice.file,
+                          '${widget.notice.id}${widget.notice.fileExt}',
+                        )) {
+                          if (!mounted) return;
+                          showMessage(
+                            context,
+                            'ファイルのダウンロードが完了しました',
+                            true,
+                          );
+                        } else {
+                          if (!mounted) return;
+                          showMessage(
+                            context,
+                            'ファイルのダウンロードに失敗しました',
+                            false,
+                          );
+                        }
+                      },
+                    )
+                  : Container(),
+            ],
           ),
-          const SizedBox(height: 4),
-          Text(widget.notice.content),
-        ],
+        ),
       ),
     );
   }

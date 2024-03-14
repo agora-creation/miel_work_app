@@ -1,4 +1,5 @@
-import 'package:file_picker/file_picker.dart';
+import 'dart:io';
+
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/models/manual.dart';
@@ -17,7 +18,7 @@ class ManualProvider with ChangeNotifier {
   Future<String?> create({
     required OrganizationModel? organization,
     required String title,
-    required PlatformFile? pickedFile,
+    required File? pickedFile,
     required OrganizationGroupModel? group,
     required UserModel? loginUser,
   }) async {
@@ -35,7 +36,7 @@ class ManualProvider with ChangeNotifier {
           .child('manual')
           .child('/$id.pdf');
       final metadata = storage.SettableMetadata(contentType: 'application/pdf');
-      uploadTask = ref.putData(pickedFile.bytes!, metadata);
+      uploadTask = ref.putData(pickedFile.readAsBytesSync(), metadata);
       await uploadTask.whenComplete(() => null);
       file = await ref.getDownloadURL();
       _manualService.create({
@@ -64,7 +65,7 @@ class ManualProvider with ChangeNotifier {
           _fmService.send(
             token: user.token,
             title: title,
-            body: '業務マニュアルを追加しました。',
+            body: '業務マニュアルが追加されました。',
           );
         }
       }
@@ -78,7 +79,7 @@ class ManualProvider with ChangeNotifier {
     required OrganizationModel? organization,
     required ManualModel manual,
     required String title,
-    required PlatformFile? pickedFile,
+    required File? pickedFile,
     required OrganizationGroupModel? group,
     required UserModel? loginUser,
   }) async {
@@ -95,7 +96,7 @@ class ManualProvider with ChangeNotifier {
             .child('/${manual.id}.pdf');
         final metadata =
             storage.SettableMetadata(contentType: 'application/pdf');
-        uploadTask = ref.putData(pickedFile.bytes!, metadata);
+        uploadTask = ref.putData(pickedFile.readAsBytesSync(), metadata);
         await uploadTask.whenComplete(() => null);
       }
       _manualService.update({
@@ -121,7 +122,7 @@ class ManualProvider with ChangeNotifier {
           _fmService.send(
             token: user.token,
             title: title,
-            body: '業務マニュアルを編集しました。',
+            body: '業務マニュアルが編集されました。',
           );
         }
       }

@@ -7,6 +7,8 @@ class ChatMessageModel {
   String _chatId = '';
   String _content = '';
   String _image = '';
+  String _file = '';
+  String _fileExt = '';
   List<String> readUserIds = [];
   String _createdUserId = '';
   String _createdUserName = '';
@@ -18,6 +20,8 @@ class ChatMessageModel {
   String get chatId => _chatId;
   String get content => _content;
   String get image => _image;
+  String get file => _file;
+  String get fileExt => _fileExt;
   String get createdUserId => _createdUserId;
   String get createdUserName => _createdUserName;
   DateTime get createdAt => _createdAt;
@@ -32,6 +36,8 @@ class ChatMessageModel {
     _chatId = data['chatId'] ?? '';
     _content = data['content'] ?? '';
     _image = data['image'] ?? '';
+    _file = data['file'] ?? '';
+    _fileExt = data['fileExt'] ?? '';
     readUserIds = _convertReadUserIds(data['readUserIds']);
     _createdUserId = data['createdUserId'] ?? '';
     _createdUserName = data['createdUserName'] ?? '';

@@ -115,76 +115,82 @@ class _UserModScreenState extends State<UserModScreen> {
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomTextField(
-              controller: nameController,
-              textInputType: TextInputType.name,
-              maxLines: 1,
-              label: 'スタッフ名',
-            ),
-            const SizedBox(height: 8),
-            CustomTextField(
-              controller: emailController,
-              textInputType: TextInputType.emailAddress,
-              maxLines: 1,
-              label: 'メールアドレス',
-            ),
-            const SizedBox(height: 8),
-            CustomTextField(
-              controller: passwordController,
-              textInputType: TextInputType.visiblePassword,
-              maxLines: 1,
-              label: 'パスワード',
-            ),
-            const SizedBox(height: 8),
-            FormLabel(
-              label: '所属グループ',
-              child: DropdownButton<OrganizationGroupModel?>(
-                hint: const Text('グループ未選択'),
-                underline: Container(),
-                isExpanded: true,
-                value: selectedGroup,
-                items: groupItems,
-                onChanged: (value) {
-                  setState(() {
-                    selectedGroup = value;
-                  });
-                },
-              ),
-            ),
-            const SizedBox(height: 16),
-            !deleteDisabled
-                ? LinkText(
-                    label: 'このスタッフを削除する',
-                    color: kRedColor,
-                    onTap: () async {
-                      String? error = await userProvider.delete(
-                        organization: widget.loginProvider.organization,
-                        user: widget.user,
-                        group: widget.userInGroup,
-                      );
-                      if (error != null) {
-                        if (!mounted) return;
-                        showMessage(context, error, false);
-                        return;
-                      }
-                      await widget.loginProvider.reload();
-                      widget.homeProvider.setGroups(
-                        organizationId:
-                            widget.loginProvider.organization?.id ?? 'error',
-                      );
-                      widget.getUsers();
-                      if (!mounted) return;
-                      showMessage(context, 'スタッフを削除しました', true);
-                      Navigator.pop(context);
+      body: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomTextField(
+                  controller: nameController,
+                  textInputType: TextInputType.name,
+                  maxLines: 1,
+                  label: 'スタッフ名',
+                ),
+                const SizedBox(height: 8),
+                CustomTextField(
+                  controller: emailController,
+                  textInputType: TextInputType.emailAddress,
+                  maxLines: 1,
+                  label: 'メールアドレス',
+                ),
+                const SizedBox(height: 8),
+                CustomTextField(
+                  controller: passwordController,
+                  textInputType: TextInputType.visiblePassword,
+                  maxLines: 1,
+                  label: 'パスワード',
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  label: '所属グループ',
+                  child: DropdownButton<OrganizationGroupModel?>(
+                    hint: const Text('グループ未選択'),
+                    underline: Container(),
+                    isExpanded: true,
+                    value: selectedGroup,
+                    items: groupItems,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedGroup = value;
+                      });
                     },
-                  )
-                : Container(),
-          ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                !deleteDisabled
+                    ? LinkText(
+                        label: 'このスタッフを削除する',
+                        color: kRedColor,
+                        onTap: () async {
+                          String? error = await userProvider.delete(
+                            organization: widget.loginProvider.organization,
+                            user: widget.user,
+                            group: widget.userInGroup,
+                          );
+                          if (error != null) {
+                            if (!mounted) return;
+                            showMessage(context, error, false);
+                            return;
+                          }
+                          await widget.loginProvider.reload();
+                          widget.homeProvider.setGroups(
+                            organizationId:
+                                widget.loginProvider.organization?.id ??
+                                    'error',
+                          );
+                          widget.getUsers();
+                          if (!mounted) return;
+                          showMessage(context, 'スタッフを削除しました', true);
+                          Navigator.pop(context);
+                        },
+                      )
+                    : Container(),
+              ],
+            ),
+          ),
         ),
       ),
     );

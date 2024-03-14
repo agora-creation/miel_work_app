@@ -3,12 +3,14 @@ import 'package:miel_work_app/common/style.dart';
 
 class MessageFormField extends StatelessWidget {
   final TextEditingController controller;
+  final Function()? filePressed;
   final Function()? galleryPressed;
   final Function()? sendPressed;
   final bool enabled;
 
   const MessageFormField({
     required this.controller,
+    required this.filePressed,
     required this.galleryPressed,
     required this.sendPressed,
     this.enabled = false,
@@ -27,9 +29,23 @@ class MessageFormField extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
-            child: IconButton(
-              onPressed: enabled ? galleryPressed : null,
-              icon: Icon(Icons.photo, color: enabled ? kBlueColor : kGreyColor),
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: enabled ? filePressed : null,
+                  icon: Icon(
+                    Icons.upload_file_sharp,
+                    color: enabled ? kBlueColor : kGreyColor,
+                  ),
+                ),
+                IconButton(
+                  onPressed: enabled ? galleryPressed : null,
+                  icon: Icon(
+                    Icons.add_photo_alternate,
+                    color: enabled ? kBlueColor : kGreyColor,
+                  ),
+                ),
+              ],
             ),
           ),
           Expanded(

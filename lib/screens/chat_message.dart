@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:miel_work_app/common/functions.dart';
@@ -123,6 +126,26 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                   image: message.image,
                                 ),
                               ),
+                              onTapFile: () async {
+                                if (await saveFile(
+                                  message.file,
+                                  '${message.id}${message.fileExt}',
+                                )) {
+                                  if (!mounted) return;
+                                  showMessage(
+                                    context,
+                                    'ファイルのダウンロードが完了しました',
+                                    true,
+                                  );
+                                } else {
+                                  if (!mounted) return;
+                                  showMessage(
+                                    context,
+                                    'ファイルのダウンロードに失敗しました',
+                                    false,
+                                  );
+                                }
+                              },
                             );
                           },
                         );
@@ -131,6 +154,22 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                   ),
                   MessageFormField(
                     controller: messageProvider.contentController,
+                    filePressed: () async {
+                      final result = await FilePicker.platform.pickFiles(
+                        type: FileType.any,
+                      );
+                      if (result == null) return;
+                      String? error = await messageProvider.sendFile(
+                        chat: widget.chat,
+                        loginUser: widget.loginProvider.user,
+                        pickedFile: File(result.files.single.path!),
+                      );
+                      if (error != null) {
+                        if (!mounted) return;
+                        showMessage(context, error, false);
+                        return;
+                      }
+                    },
                     galleryPressed: () async {
                       final result = await ImagePicker().pickImage(
                         source: ImageSource.gallery,

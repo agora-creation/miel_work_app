@@ -5,9 +5,13 @@ import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/services/apply_conference.dart';
+import 'package:miel_work_app/services/fm.dart';
+import 'package:miel_work_app/services/user.dart';
 
 class ApplyConferenceProvider with ChangeNotifier {
   final ApplyConferenceService _conferenceService = ApplyConferenceService();
+  final UserService _userService = UserService();
+  final FmService _fmService = FmService();
 
   Future<String?> create({
     required OrganizationModel? organization,
@@ -36,6 +40,21 @@ class ApplyConferenceProvider with ChangeNotifier {
         'createdUserName': loginUser.name,
         'createdAt': DateTime.now(),
       });
+      //通知
+      List<UserModel> sendUsers = [];
+      sendUsers = await _userService.selectList(
+        userIds: organization.userIds,
+      );
+      if (sendUsers.isNotEmpty) {
+        for (UserModel user in sendUsers) {
+          if (user.id == loginUser.id) continue;
+          _fmService.send(
+            token: user.token,
+            title: title,
+            body: '協議申請が提出されました。',
+          );
+        }
+      }
     } catch (e) {
       error = '協議申請に失敗しました';
     }
@@ -74,6 +93,21 @@ class ApplyConferenceProvider with ChangeNotifier {
           'approval': approval,
           'approvalUsers': approvalUsers,
         });
+      }
+      //通知
+      List<UserModel> sendUsers = [];
+      sendUsers = await _userService.selectList(
+        userIds: [conference.createdUserId],
+      );
+      if (sendUsers.isNotEmpty) {
+        for (UserModel user in sendUsers) {
+          if (user.id == loginUser.id) continue;
+          _fmService.send(
+            token: user.token,
+            title: conference.title,
+            body: '協議申請が承認されました。',
+          );
+        }
       }
     } catch (e) {
       error = '承認に失敗しました';

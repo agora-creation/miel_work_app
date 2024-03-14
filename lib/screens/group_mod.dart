@@ -75,39 +75,44 @@ class _GroupModScreenState extends State<GroupModScreen> {
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomTextField(
-              controller: nameController,
-              textInputType: TextInputType.name,
-              maxLines: 1,
-              label: 'グループ名',
+      body: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomTextField(
+                  controller: nameController,
+                  textInputType: TextInputType.name,
+                  maxLines: 1,
+                  label: 'グループ名',
+                ),
+                const SizedBox(height: 16),
+                LinkText(
+                  label: 'このグループを削除する',
+                  color: kRedColor,
+                  onTap: () async {
+                    String? error = await widget.homeProvider.groupDelete(
+                      organization: widget.loginProvider.organization,
+                      group: widget.group,
+                    );
+                    if (error != null) {
+                      if (!mounted) return;
+                      showMessage(context, error, false);
+                      return;
+                    }
+                    widget.homeProvider.currentGroupClear();
+                    widget.getGroups();
+                    if (!mounted) return;
+                    showMessage(context, 'グループを削除しました', true);
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            LinkText(
-              label: 'このグループを削除する',
-              color: kRedColor,
-              onTap: () async {
-                String? error = await widget.homeProvider.groupDelete(
-                  organization: widget.loginProvider.organization,
-                  group: widget.group,
-                );
-                if (error != null) {
-                  if (!mounted) return;
-                  showMessage(context, error, false);
-                  return;
-                }
-                widget.homeProvider.currentGroupClear();
-                widget.getGroups();
-                if (!mounted) return;
-                showMessage(context, 'グループを削除しました', true);
-                Navigator.pop(context);
-              },
-            ),
-          ],
+          ),
         ),
       ),
     );

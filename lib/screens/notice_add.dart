@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
@@ -5,6 +8,7 @@ import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/notice.dart';
+import 'package:miel_work_app/widgets/custom_file_field.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +31,7 @@ class _NoticeAddScreenState extends State<NoticeAddScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
   OrganizationGroupModel? selectedGroup;
+  File? pickedFile;
 
   @override
   void initState() {
@@ -74,6 +79,7 @@ class _NoticeAddScreenState extends State<NoticeAddScreen> {
                 title: titleController.text,
                 content: contentController.text,
                 group: selectedGroup,
+                pickedFile: pickedFile,
                 loginUser: widget.loginProvider.user,
               );
               if (error != null) {
@@ -90,41 +96,58 @@ class _NoticeAddScreenState extends State<NoticeAddScreen> {
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            children: [
-              CustomTextField(
-                controller: titleController,
-                textInputType: TextInputType.name,
-                maxLines: 1,
-                label: 'タイトル',
-              ),
-              const SizedBox(height: 8),
-              CustomTextField(
-                controller: contentController,
-                textInputType: TextInputType.multiline,
-                maxLines: 15,
-                label: 'お知らせ内容',
-              ),
-              const SizedBox(height: 8),
-              FormLabel(
-                label: '送信先グループ',
-                child: DropdownButton<OrganizationGroupModel?>(
-                  hint: const Text('グループ未選択'),
-                  underline: Container(),
-                  isExpanded: true,
-                  value: selectedGroup,
-                  items: groupItems,
-                  onChanged: (value) {
+      body: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: [
+                CustomTextField(
+                  controller: titleController,
+                  textInputType: TextInputType.name,
+                  maxLines: 1,
+                  label: 'タイトル',
+                ),
+                const SizedBox(height: 8),
+                CustomTextField(
+                  controller: contentController,
+                  textInputType: TextInputType.multiline,
+                  maxLines: 15,
+                  label: 'お知らせ内容',
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  label: '送信先グループ',
+                  child: DropdownButton<OrganizationGroupModel?>(
+                    hint: const Text('グループ未選択'),
+                    underline: Container(),
+                    isExpanded: true,
+                    value: selectedGroup,
+                    items: groupItems,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedGroup = value;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 8),
+                CustomFileField(
+                  value: pickedFile,
+                  defaultValue: '',
+                  onTap: () async {
+                    final result = await FilePicker.platform.pickFiles(
+                      type: FileType.any,
+                    );
+                    if (result == null) return;
                     setState(() {
-                      selectedGroup = value;
+                      pickedFile = File(result.files.single.path!);
                     });
                   },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

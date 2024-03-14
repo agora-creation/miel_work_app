@@ -7,11 +7,13 @@ class MessageList extends StatelessWidget {
   final ChatMessageModel message;
   final bool isMe;
   final Function()? onTapImage;
+  final Function()? onTapFile;
 
   const MessageList({
     required this.message,
     required this.isMe,
     required this.onTapImage,
+    required this.onTapFile,
     super.key,
   });
 
@@ -23,7 +25,7 @@ class MessageList extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            message.image == ''
+            message.image == '' && message.file == ''
                 ? Material(
                     elevation: 4,
                     borderRadius: BorderRadius.circular(8),
@@ -39,7 +41,9 @@ class MessageList extends StatelessWidget {
                       ).urlToLink(context),
                     ),
                   )
-                : GestureDetector(
+                : Container(),
+            message.image != ''
+                ? GestureDetector(
                     onLongPress: onTapImage,
                     child: Material(
                       elevation: 4,
@@ -55,7 +59,26 @@ class MessageList extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
+                  )
+                : Container(),
+            message.file != ''
+                ? GestureDetector(
+                    onLongPress: onTapFile,
+                    child: Material(
+                      elevation: 4,
+                      borderRadius: BorderRadius.circular(8),
+                      color: kWhiteColor,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: const SizedBox(
+                          width: 200,
+                          height: 200,
+                          child: Icon(Icons.file_open),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Text(
               dateText('MM/dd HH:mm', message.createdAt),
               style: const TextStyle(
@@ -77,7 +100,7 @@ class MessageList extends StatelessWidget {
               style: const TextStyle(fontSize: 12),
             ),
             const SizedBox(height: 2),
-            message.image == ''
+            message.image == '' && message.file == ''
                 ? Material(
                     elevation: 4,
                     borderRadius: BorderRadius.circular(8),
@@ -90,7 +113,9 @@ class MessageList extends StatelessWidget {
                       child: Text(message.content).urlToLink(context),
                     ),
                   )
-                : GestureDetector(
+                : Container(),
+            message.image != ''
+                ? GestureDetector(
                     onLongPress: onTapImage,
                     child: Material(
                       elevation: 4,
@@ -106,7 +131,26 @@ class MessageList extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
+                  )
+                : Container(),
+            message.file != ''
+                ? GestureDetector(
+                    onLongPress: onTapFile,
+                    child: Material(
+                      elevation: 4,
+                      borderRadius: BorderRadius.circular(8),
+                      color: kWhiteColor,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: const SizedBox(
+                          width: 150,
+                          height: 200,
+                          child: Icon(Icons.file_open),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
             Text(
               dateText('MM/dd HH:mm', message.createdAt),
               style: const TextStyle(

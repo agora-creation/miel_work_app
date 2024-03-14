@@ -1,7 +1,10 @@
 import 'package:alert_banner/exports.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_file_dialog/flutter_file_dialog.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:miel_work_app/common/date_machine_util.dart';
 import 'package:miel_work_app/widgets/custom_alert_banner.dart';
@@ -176,6 +179,30 @@ DateTime rebuildTime(BuildContext context, DateTime? date, String? time) {
     ret = DateTime.parse('$tmpDate $tmpTime');
   }
   return ret;
+}
+
+Future<bool> saveFile(String url, String fileName) async {
+  final data = await http.get(Uri.parse(url));
+  try {
+    if (data.statusCode == 200) {
+      final params = SaveFileDialogParams(
+        data: data.bodyBytes,
+        fileName: fileName,
+      );
+      final savedFiledPath = await FlutterFileDialog.saveFile(params: params);
+      if (savedFiledPath == null) {
+        throw Exception('Failed to download pdf');
+      }
+    } else {
+      throw Exception("Error while downloading file");
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      print(e);
+    }
+    return false;
+  }
+  return true;
 }
 
 RegExp _urlReg = RegExp(
