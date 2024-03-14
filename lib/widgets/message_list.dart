@@ -145,7 +145,7 @@ class MessageList extends StatelessWidget {
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
-                      color: kBlueColor,
+                      color: kWhiteColor,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Padding(
