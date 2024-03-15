@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:miel_work_app/models/approval_user.dart';
 
-class ApplyConferenceModel {
+class ApplyProjectModel {
   String _id = '';
   String _organizationId = '';
   String _groupId = '';
@@ -29,7 +29,7 @@ class ApplyConferenceModel {
   String get createdUserName => _createdUserName;
   DateTime get createdAt => _createdAt;
 
-  ApplyConferenceModel.fromSnapshot(
+  ApplyProjectModel.fromSnapshot(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
     Map<String, dynamic>? data = snapshot.data();
     if (data == null) return;

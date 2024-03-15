@@ -48,6 +48,10 @@ class _HomeScreenState extends State<HomeScreen> {
         title: CustomAppbarTitle(loginProvider: loginProvider),
         actions: [
           IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.help_outline),
+          ),
+          IconButton(
             onPressed: () => showBottomUpScreen(
               context,
               UserSettingScreen(
@@ -193,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
               CustomHomeIconCard(
                 icon: Icons.edit_note,
                 iconSize: 40,
-                label: '協議申請',
+                label: '協議・報告申請',
                 labelFontSize: 14,
                 color: kBlackColor,
                 backgroundColor: kOrangeColor,
@@ -204,6 +208,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     homeProvider: homeProvider,
                   ),
                 ),
+              ),
+              CustomHomeIconCard(
+                icon: Icons.edit_note,
+                iconSize: 40,
+                label: '企画申請',
+                labelFontSize: 14,
+                color: kBlackColor,
+                backgroundColor: kOrangeColor,
+                onTap: () {},
               ),
               CustomHomeIconCard(
                 icon: Icons.gas_meter,

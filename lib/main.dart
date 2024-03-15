@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/providers/apply_conference.dart';
+import 'package:miel_work_app/providers/apply_project.dart';
 import 'package:miel_work_app/providers/apply_proposal.dart';
 import 'package:miel_work_app/providers/category.dart';
 import 'package:miel_work_app/providers/chat_message.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: UserProvider()),
         ChangeNotifierProvider.value(value: ApplyProposalProvider()),
         ChangeNotifierProvider.value(value: ApplyConferenceProvider()),
+        ChangeNotifierProvider.value(value: ApplyProjectProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
