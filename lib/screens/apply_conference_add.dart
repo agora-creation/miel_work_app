@@ -1,9 +1,13 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/providers/apply_conference.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/widgets/custom_file_field.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +29,7 @@ class ApplyConferenceAddScreen extends StatefulWidget {
 class _ApplyConferenceAddScreenState extends State<ApplyConferenceAddScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
+  File? pickedFile;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +47,7 @@ class _ApplyConferenceAddScreenState extends State<ApplyConferenceAddScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          '協議申請を作成',
+          '協議・報告申請を作成',
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
@@ -53,6 +58,7 @@ class _ApplyConferenceAddScreenState extends State<ApplyConferenceAddScreen> {
                 group: widget.loginProvider.group,
                 title: titleController.text,
                 content: contentController.text,
+                pickedFile: pickedFile,
                 loginUser: widget.loginProvider.user,
               );
               if (error != null) {
@@ -61,7 +67,7 @@ class _ApplyConferenceAddScreenState extends State<ApplyConferenceAddScreen> {
                 return;
               }
               if (!mounted) return;
-              showMessage(context, '協議申請を提出しました', true);
+              showMessage(context, '協議・報告申請を提出しました', true);
               Navigator.pop(context);
             },
             child: const Text('提出する'),
@@ -89,6 +95,20 @@ class _ApplyConferenceAddScreenState extends State<ApplyConferenceAddScreen> {
                   textInputType: TextInputType.multiline,
                   maxLines: 15,
                   label: '内容',
+                ),
+                const SizedBox(height: 8),
+                CustomFileField(
+                  value: pickedFile,
+                  defaultValue: '',
+                  onTap: () async {
+                    final result = await FilePicker.platform.pickFiles(
+                      type: FileType.any,
+                    );
+                    if (result == null) return;
+                    setState(() {
+                      pickedFile = File(result.files.single.path!);
+                    });
+                  },
                 ),
               ],
             ),

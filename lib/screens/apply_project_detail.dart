@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/models/apply_conference.dart';
+import 'package:miel_work_app/models/apply_project.dart';
 import 'package:miel_work_app/models/approval_user.dart';
-import 'package:miel_work_app/providers/apply_conference.dart';
+import 'package:miel_work_app/providers/apply_project.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/widgets/custom_approval_user_list.dart';
@@ -11,43 +11,42 @@ import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
 import 'package:provider/provider.dart';
 
-class ApplyConferenceDetailScreen extends StatefulWidget {
+class ApplyProjectDetailScreen extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
-  final ApplyConferenceModel conference;
+  final ApplyProjectModel project;
 
-  const ApplyConferenceDetailScreen({
+  const ApplyProjectDetailScreen({
     required this.loginProvider,
     required this.homeProvider,
-    required this.conference,
+    required this.project,
     super.key,
   });
 
   @override
-  State<ApplyConferenceDetailScreen> createState() =>
-      _ApplyConferenceDetailScreenState();
+  State<ApplyProjectDetailScreen> createState() =>
+      _ApplyProjectDetailScreenState();
 }
 
-class _ApplyConferenceDetailScreenState
-    extends State<ApplyConferenceDetailScreen> {
+class _ApplyProjectDetailScreenState extends State<ApplyProjectDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    final conferenceProvider = Provider.of<ApplyConferenceProvider>(context);
+    final projectProvider = Provider.of<ApplyProjectProvider>(context);
     bool isApproval = true;
     bool isDelete = true;
-    if (widget.conference.createdUserId == widget.loginProvider.user?.id) {
+    if (widget.project.createdUserId == widget.loginProvider.user?.id) {
       isApproval = false;
     } else {
       isDelete = false;
     }
-    if (widget.conference.approvalUsers.isNotEmpty) {
-      for (ApprovalUserModel user in widget.conference.approvalUsers) {
+    if (widget.project.approvalUsers.isNotEmpty) {
+      for (ApprovalUserModel user in widget.project.approvalUsers) {
         if (user.userId == widget.loginProvider.user?.id) {
           isApproval = false;
         }
       }
     }
-    if (widget.conference.approval) {
+    if (widget.project.approval) {
       isApproval = false;
       isDelete = false;
     }
@@ -64,15 +63,15 @@ class _ApplyConferenceDetailScreenState
         ),
         centerTitle: true,
         title: const Text(
-          '協議・報告申請詳細',
+          '企画申請詳細',
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
           isDelete
               ? TextButton(
                   onPressed: () async {
-                    String? error = await conferenceProvider.delete(
-                      conference: widget.conference,
+                    String? error = await projectProvider.delete(
+                      project: widget.project,
                     );
                     if (error != null) {
                       if (!mounted) return;
@@ -80,7 +79,7 @@ class _ApplyConferenceDetailScreenState
                       return;
                     }
                     if (!mounted) return;
-                    showMessage(context, '協議・報告申請を削除しました', true);
+                    showMessage(context, '企画申請を削除しました', true);
                     Navigator.pop(context);
                   },
                   child: const Text(
@@ -104,12 +103,12 @@ class _ApplyConferenceDetailScreenState
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      '提出日時: ${dateText('yyyy/MM/dd HH:mm', widget.conference.createdAt)}',
+                      '提出日時: ${dateText('yyyy/MM/dd HH:mm', widget.project.createdAt)}',
                       style: const TextStyle(color: kGreyColor),
                     ),
-                    widget.conference.approval
+                    widget.project.approval
                         ? Text(
-                            '承認日時: ${dateText('yyyy/MM/dd HH:mm', widget.conference.approvedAt)}',
+                            '承認日時: ${dateText('yyyy/MM/dd HH:mm', widget.project.approvedAt)}',
                             style: const TextStyle(
                               color: kRedColor,
                               fontWeight: FontWeight.bold,
@@ -117,19 +116,19 @@ class _ApplyConferenceDetailScreenState
                           )
                         : Container(),
                     Text(
-                      '作成者: ${widget.conference.createdUserName}',
+                      '作成者: ${widget.project.createdUserName}',
                       style: const TextStyle(color: kGreyColor),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 4),
-              widget.conference.approvalUsers.isNotEmpty
+              widget.project.approvalUsers.isNotEmpty
                   ? FormLabel(
                       label: '承認者一覧',
                       child: Column(
                         children:
-                            widget.conference.approvalUsers.map((approvalUser) {
+                            widget.project.approvalUsers.map((approvalUser) {
                           return CustomApprovalUserList(
                             approvalUser: approvalUser,
                           );
@@ -143,7 +142,7 @@ class _ApplyConferenceDetailScreenState
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
-                    widget.conference.title,
+                    widget.project.title,
                     style: const TextStyle(fontSize: 18),
                   ),
                 ),
@@ -153,18 +152,18 @@ class _ApplyConferenceDetailScreenState
                 label: '内容',
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(widget.conference.content),
+                  child: Text(widget.project.content),
                 ),
               ),
               const SizedBox(height: 16),
-              widget.conference.file != ''
+              widget.project.file != ''
                   ? LinkText(
                       label: '添付ファイル',
                       color: kBlueColor,
                       onTap: () async {
                         if (await saveFile(
-                          widget.conference.file,
-                          '${widget.conference.id}${widget.conference.fileExt}',
+                          widget.project.file,
+                          '${widget.project.id}${widget.project.fileExt}',
                         )) {
                           if (!mounted) return;
                           showMessage(
@@ -191,8 +190,8 @@ class _ApplyConferenceDetailScreenState
       floatingActionButton: isApproval
           ? FloatingActionButton.extended(
               onPressed: () async {
-                String? error = await conferenceProvider.update(
-                  conference: widget.conference,
+                String? error = await projectProvider.update(
+                  project: widget.project,
                   approval: widget.loginProvider.isAdmin(),
                   loginUser: widget.loginProvider.user,
                 );

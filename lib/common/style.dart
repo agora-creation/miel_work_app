@@ -21,6 +21,7 @@ const kCyanColor = Color(0xFF00BCD4);
 const kTealColor = Color(0xFF009688);
 const kTeal300Color = Color(0xFF4DD0E1);
 const kOrangeColor = Color(0xFFFF9800);
+const kOrange300Color = Color(0xFFFFB74D);
 const kYellowColor = Color(0xFFFFEB3B);
 const kGreenColor = Color(0xFF4CAF50);
 
@@ -89,7 +90,6 @@ List<Color> kPlanColors = const [
   Color(0xFFBDBDBD),
   Color(0xFF78909C),
 ];
-
 
 List<int> kAlertMinutes = [0, 10, 30, 60];
 

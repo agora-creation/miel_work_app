@@ -7,6 +7,7 @@ import 'package:miel_work_app/models/plan.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/screens/plan.dart';
 import 'package:miel_work_app/screens/plan_shift_add.dart';
 import 'package:miel_work_app/screens/plan_shift_mod.dart';
 import 'package:miel_work_app/services/plan.dart';
@@ -145,7 +146,13 @@ class _PlanShiftScreenState extends State<PlanShiftScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => SearchCategoryDialog(
+                loginProvider: widget.loginProvider,
+                searchCategoriesChange: _searchCategoriesChange,
+              ),
+            ),
             icon: const Icon(Icons.search),
           )
         ],

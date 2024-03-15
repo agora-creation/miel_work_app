@@ -2,30 +2,30 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/models/apply_conference.dart';
+import 'package:miel_work_app/models/apply_project.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/screens/apply_conference_add.dart';
-import 'package:miel_work_app/screens/apply_conference_detail.dart';
-import 'package:miel_work_app/services/apply_conference.dart';
-import 'package:miel_work_app/widgets/custom_apply_conference_list.dart';
+import 'package:miel_work_app/screens/apply_project_add.dart';
+import 'package:miel_work_app/screens/apply_project_detail.dart';
+import 'package:miel_work_app/services/apply_project.dart';
+import 'package:miel_work_app/widgets/custom_apply_project_list.dart';
 
-class ApplyConferenceScreen extends StatefulWidget {
+class ApplyProjectScreen extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
 
-  const ApplyConferenceScreen({
+  const ApplyProjectScreen({
     required this.loginProvider,
     required this.homeProvider,
     super.key,
   });
 
   @override
-  State<ApplyConferenceScreen> createState() => _ApplyConferenceScreenState();
+  State<ApplyProjectScreen> createState() => _ApplyProjectScreenState();
 }
 
-class _ApplyConferenceScreenState extends State<ApplyConferenceScreen> {
-  ApplyConferenceService conferenceService = ApplyConferenceService();
+class _ApplyProjectScreenState extends State<ApplyProjectScreen> {
+  ApplyProjectService projectService = ApplyProjectService();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class _ApplyConferenceScreenState extends State<ApplyConferenceScreen> {
           ),
           centerTitle: true,
           title: const Text(
-            '協議・報告申請一覧',
+            '企画申請一覧',
             style: TextStyle(color: kBlackColor),
           ),
           bottom: const TabBar(
@@ -68,33 +68,33 @@ class _ApplyConferenceScreenState extends State<ApplyConferenceScreen> {
         body: TabBarView(
           children: [
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: conferenceService.streamList(
+              stream: projectService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
                 approval: false,
               ),
               builder: (context, snapshot) {
-                List<ApplyConferenceModel> conferences = [];
+                List<ApplyProjectModel> projects = [];
                 if (snapshot.hasData) {
-                  conferences = conferenceService.generateList(
+                  projects = projectService.generateList(
                     data: snapshot.data,
                     currentGroup: widget.homeProvider.currentGroup,
                   );
                 }
-                if (conferences.isEmpty) {
-                  return const Center(child: Text('協議・報告申請はありません'));
+                if (projects.isEmpty) {
+                  return const Center(child: Text('企画申請はありません'));
                 }
                 return ListView.builder(
-                  itemCount: conferences.length,
+                  itemCount: projects.length,
                   itemBuilder: (context, index) {
-                    ApplyConferenceModel conference = conferences[index];
-                    return CustomApplyConferenceList(
-                      conference: conference,
+                    ApplyProjectModel project = projects[index];
+                    return CustomApplyProjectList(
+                      project: project,
                       onTap: () => pushScreen(
                         context,
-                        ApplyConferenceDetailScreen(
+                        ApplyProjectDetailScreen(
                           loginProvider: widget.loginProvider,
                           homeProvider: widget.homeProvider,
-                          conference: conference,
+                          project: project,
                         ),
                       ),
                     );
@@ -103,33 +103,33 @@ class _ApplyConferenceScreenState extends State<ApplyConferenceScreen> {
               },
             ),
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: conferenceService.streamList(
+              stream: projectService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
                 approval: true,
               ),
               builder: (context, snapshot) {
-                List<ApplyConferenceModel> conferences = [];
+                List<ApplyProjectModel> projects = [];
                 if (snapshot.hasData) {
-                  conferences = conferenceService.generateList(
+                  projects = projectService.generateList(
                     data: snapshot.data,
                     currentGroup: widget.homeProvider.currentGroup,
                   );
                 }
-                if (conferences.isEmpty) {
-                  return const Center(child: Text('協議・報告申請はありません'));
+                if (projects.isEmpty) {
+                  return const Center(child: Text('企画申請はありません'));
                 }
                 return ListView.builder(
-                  itemCount: conferences.length,
+                  itemCount: projects.length,
                   itemBuilder: (context, index) {
-                    ApplyConferenceModel conference = conferences[index];
-                    return CustomApplyConferenceList(
-                      conference: conference,
+                    ApplyProjectModel project = projects[index];
+                    return CustomApplyProjectList(
+                      project: project,
                       onTap: () => pushScreen(
                         context,
-                        ApplyConferenceDetailScreen(
+                        ApplyProjectDetailScreen(
                           loginProvider: widget.loginProvider,
                           homeProvider: widget.homeProvider,
-                          conference: conference,
+                          project: project,
                         ),
                       ),
                     );
@@ -142,7 +142,7 @@ class _ApplyConferenceScreenState extends State<ApplyConferenceScreen> {
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => pushScreen(
             context,
-            ApplyConferenceAddScreen(
+            ApplyProjectAddScreen(
               loginProvider: widget.loginProvider,
               homeProvider: widget.homeProvider,
             ),

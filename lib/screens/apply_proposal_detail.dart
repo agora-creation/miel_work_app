@@ -8,6 +8,7 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/widgets/custom_approval_user_list.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
+import 'package:miel_work_app/widgets/link_text.dart';
 import 'package:provider/provider.dart';
 
 class ApplyProposalDetailScreen extends StatefulWidget {
@@ -165,6 +166,33 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                   child: Text(widget.proposal.content),
                 ),
               ),
+              const SizedBox(height: 16),
+              widget.proposal.file != ''
+                  ? LinkText(
+                      label: '添付ファイル',
+                      color: kBlueColor,
+                      onTap: () async {
+                        if (await saveFile(
+                          widget.proposal.file,
+                          '${widget.proposal.id}${widget.proposal.fileExt}',
+                        )) {
+                          if (!mounted) return;
+                          showMessage(
+                            context,
+                            'ファイルのダウンロードが完了しました',
+                            true,
+                          );
+                        } else {
+                          if (!mounted) return;
+                          showMessage(
+                            context,
+                            'ファイルのダウンロードに失敗しました',
+                            false,
+                          );
+                        }
+                      },
+                    )
+                  : Container(),
               const SizedBox(height: 40),
             ],
           ),

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/models/apply_conference.dart';
 import 'package:miel_work_app/models/approval_user.dart';
@@ -7,6 +10,7 @@ import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/services/apply_conference.dart';
 import 'package:miel_work_app/services/fm.dart';
 import 'package:miel_work_app/services/user.dart';
+import 'package:path/path.dart' as p;
 
 class ApplyConferenceProvider with ChangeNotifier {
   final ApplyConferenceService _conferenceService = ApplyConferenceService();
@@ -18,21 +22,38 @@ class ApplyConferenceProvider with ChangeNotifier {
     required OrganizationGroupModel? group,
     required String title,
     required String content,
+    required File? pickedFile,
     required UserModel? loginUser,
   }) async {
     String? error;
-    if (organization == null) return '協議申請に失敗しました';
+    if (organization == null) return '協議・報告申請に失敗しました';
     if (title == '') return '件名を入力してください';
     if (content == '') return '内容を入力してください';
-    if (loginUser == null) return '協議申請に失敗しました';
+    if (loginUser == null) return '協議・報告申請に失敗しました';
     try {
       String id = _conferenceService.id();
+      String file = '';
+      String fileExt = '';
+      if (pickedFile != null) {
+        String ext = p.extension(pickedFile.path);
+        storage.UploadTask uploadTask;
+        storage.Reference ref = storage.FirebaseStorage.instance
+            .ref()
+            .child('applyConference')
+            .child('/$id$ext');
+        uploadTask = ref.putData(pickedFile.readAsBytesSync());
+        await uploadTask.whenComplete(() => null);
+        file = await ref.getDownloadURL();
+        fileExt = ext;
+      }
       _conferenceService.create({
         'id': id,
         'organizationId': organization.id,
         'groupId': group?.id ?? '',
         'title': title,
         'content': content,
+        'file': file,
+        'fileExt': fileExt,
         'approval': false,
         'approvedAt': DateTime.now(),
         'approvalUsers': [],
@@ -51,12 +72,12 @@ class ApplyConferenceProvider with ChangeNotifier {
           _fmService.send(
             token: user.token,
             title: title,
-            body: '協議申請が提出されました。',
+            body: '協議・報告申請が提出されました。',
           );
         }
       }
     } catch (e) {
-      error = '協議申請に失敗しました';
+      error = '協議・報告申請に失敗しました';
     }
     return error;
   }
@@ -105,7 +126,7 @@ class ApplyConferenceProvider with ChangeNotifier {
           _fmService.send(
             token: user.token,
             title: conference.title,
-            body: '協議申請が承認されました。',
+            body: '協議・報告申請が承認されました。',
           );
         }
       }
@@ -123,8 +144,15 @@ class ApplyConferenceProvider with ChangeNotifier {
       _conferenceService.delete({
         'id': conference.id,
       });
+      if (conference.file != '') {
+        await storage.FirebaseStorage.instance
+            .ref()
+            .child('applyConference')
+            .child('/${conference.id}${conference.fileExt}')
+            .delete();
+      }
     } catch (e) {
-      error = '協議申請の削除に失敗しました';
+      error = '協議・報告申請の削除に失敗しました';
     }
     return error;
   }

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/models/apply_proposal.dart';
 import 'package:miel_work_app/models/approval_user.dart';
@@ -7,6 +10,7 @@ import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/services/apply_proposal.dart';
 import 'package:miel_work_app/services/fm.dart';
 import 'package:miel_work_app/services/user.dart';
+import 'package:path/path.dart' as p;
 
 class ApplyProposalProvider with ChangeNotifier {
   final ApplyProposalService _proposalService = ApplyProposalService();
@@ -19,6 +23,7 @@ class ApplyProposalProvider with ChangeNotifier {
     required String title,
     required String content,
     required int price,
+    required File? pickedFile,
     required UserModel? loginUser,
   }) async {
     String? error;
@@ -28,6 +33,20 @@ class ApplyProposalProvider with ChangeNotifier {
     if (loginUser == null) return '稟議申請に失敗しました';
     try {
       String id = _proposalService.id();
+      String file = '';
+      String fileExt = '';
+      if (pickedFile != null) {
+        String ext = p.extension(pickedFile.path);
+        storage.UploadTask uploadTask;
+        storage.Reference ref = storage.FirebaseStorage.instance
+            .ref()
+            .child('applyProposal')
+            .child('/$id$ext');
+        uploadTask = ref.putData(pickedFile.readAsBytesSync());
+        await uploadTask.whenComplete(() => null);
+        file = await ref.getDownloadURL();
+        fileExt = ext;
+      }
       _proposalService.create({
         'id': id,
         'organizationId': organization.id,
@@ -35,6 +54,8 @@ class ApplyProposalProvider with ChangeNotifier {
         'title': title,
         'content': content,
         'price': price,
+        'file': file,
+        'fileExt': fileExt,
         'approval': false,
         'approvedAt': DateTime.now(),
         'approvalUsers': [],
@@ -125,6 +146,13 @@ class ApplyProposalProvider with ChangeNotifier {
       _proposalService.delete({
         'id': proposal.id,
       });
+      if (proposal.file != '') {
+        await storage.FirebaseStorage.instance
+            .ref()
+            .child('applyProposal')
+            .child('/${proposal.id}${proposal.fileExt}')
+            .delete();
+      }
     } catch (e) {
       error = '稟議申請の削除に失敗しました';
     }
