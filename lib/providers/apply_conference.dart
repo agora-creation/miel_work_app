@@ -54,7 +54,7 @@ class ApplyConferenceProvider with ChangeNotifier {
         'content': content,
         'file': file,
         'fileExt': fileExt,
-        'approval': false,
+        'approval': 0,
         'approvedAt': DateTime.now(),
         'approvalUsers': [],
         'createdUserId': loginUser.id,
@@ -82,10 +82,10 @@ class ApplyConferenceProvider with ChangeNotifier {
     return error;
   }
 
-  Future<String?> update({
+  Future<String?> approval({
     required ApplyConferenceModel conference,
-    required bool approval,
     required UserModel? loginUser,
+    required bool isAdmin,
   }) async {
     String? error;
     if (loginUser == null) return '承認に失敗しました';
@@ -99,9 +99,10 @@ class ApplyConferenceProvider with ChangeNotifier {
       approvalUsers.add({
         'userId': loginUser.id,
         'userName': loginUser.name,
+        'userAdmin': isAdmin,
         'approvedAt': DateTime.now(),
       });
-      if (approval) {
+      if (isAdmin) {
         _conferenceService.update({
           'id': conference.id,
           'approval': approval,

@@ -24,7 +24,7 @@ class ApplyProjectService {
 
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
-    required bool approval,
+    required int approval,
   }) {
     return FirebaseFirestore.instance
         .collection(collection)
