@@ -9,7 +9,7 @@ class ApplyProjectModel {
   String _content = '';
   String _file = '';
   String _fileExt = '';
-  bool _approval = false;
+  int _approval = 0;
   DateTime _approvedAt = DateTime.now();
   List<ApprovalUserModel> approvalUsers = [];
   String _createdUserId = '';
@@ -23,7 +23,7 @@ class ApplyProjectModel {
   String get content => _content;
   String get file => _file;
   String get fileExt => _fileExt;
-  bool get approval => _approval;
+  int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
   String get createdUserId => _createdUserId;
   String get createdUserName => _createdUserName;
@@ -40,7 +40,7 @@ class ApplyProjectModel {
     _content = data['content'] ?? '';
     _file = data['file'] ?? '';
     _fileExt = data['fileExt'] ?? '';
-    _approval = data['approval'] ?? false;
+    _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
     approvalUsers = _convertApprovalUsers(data['approvalUsers']);
     _createdUserId = data['createdUserId'] ?? '';
@@ -54,5 +54,18 @@ class ApplyProjectModel {
       converted.add(ApprovalUserModel.fromMap(data));
     }
     return converted;
+  }
+
+  String approvalText() {
+    switch (_approval) {
+      case 0:
+        return '承認待ち';
+      case 1:
+        return '承認済み';
+      case 9:
+        return '否決';
+      default:
+        return '承認待ち';
+    }
   }
 }
