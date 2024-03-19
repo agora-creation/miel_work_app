@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           homeProvider: homeProvider,
                         ),
                       ),
-                      icon: const Icon(Icons.more_vert),
+                      icon: const Icon(Icons.settings),
                     ),
                   ],
                 ),

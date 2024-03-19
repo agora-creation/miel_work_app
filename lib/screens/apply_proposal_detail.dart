@@ -78,9 +78,9 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
-          isDelete
-              ? TextButton(
-                  onPressed: () async {
+          TextButton(
+            onPressed: isDelete
+                ? () async {
                     String? error = await proposalProvider.delete(
                       proposal: widget.proposal,
                     );
@@ -92,13 +92,18 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                     if (!mounted) return;
                     showMessage(context, '稟議申請を削除しました', true);
                     Navigator.pop(context);
-                  },
-                  child: const Text(
-                    '削除する',
-                    style: TextStyle(color: kRedColor),
-                  ),
-                )
-              : Container(),
+                  }
+                : null,
+            child: Text(
+              '削除する',
+              style: isDelete
+                  ? const TextStyle(color: kRedColor)
+                  : const TextStyle(
+                      color: kGreyColor,
+                      decoration: TextDecoration.lineThrough,
+                    ),
+            ),
+          ),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
@@ -203,6 +208,42 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                       },
                     )
                   : Container(),
+              const SizedBox(height: 16),
+              const Text(
+                '※『承認』は、承認状況が「承認待ち」で、作成者・既承認者以外のスタッフが実行できます。',
+                style: TextStyle(
+                  color: kRedColor,
+                  fontSize: 12,
+                ),
+              ),
+              const Text(
+                '※『否決』は、承認状況が「承認待ち」で、管理者権限のスタッフのみ実行できます。',
+                style: TextStyle(
+                  color: kRedColor,
+                  fontSize: 12,
+                ),
+              ),
+              const Text(
+                '※『再申請』は、承認状況が「否決」で、作成者のスタッフのみ実行できます。',
+                style: TextStyle(
+                  color: kRedColor,
+                  fontSize: 12,
+                ),
+              ),
+              const Text(
+                '※『削除』は、承認状況が「承認待ち」で、作成者のスタッフのみ実行できます。',
+                style: TextStyle(
+                  color: kRedColor,
+                  fontSize: 12,
+                ),
+              ),
+              const Text(
+                '※管理者権限のスタッフが承認した場合のみ、承認状況が『承認済み』になります。',
+                style: TextStyle(
+                  color: kRedColor,
+                  fontSize: 12,
+                ),
+              ),
               const SizedBox(height: 40),
             ],
           ),

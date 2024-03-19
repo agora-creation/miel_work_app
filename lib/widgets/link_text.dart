@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/style.dart';
 
 class LinkText extends StatelessWidget {
   final String label;
   final Color color;
   final Function()? onTap;
+  final bool enabled;
 
   const LinkText({
     required this.label,
     required this.color,
     this.onTap,
+    this.enabled = true,
     super.key,
   });
 
@@ -17,14 +20,19 @@ class LinkText extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(color: color),
-          ),
-        ),
+        decoration: enabled
+            ? BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: color),
+                ),
+              )
+            : null,
         child: Text(
           label,
-          style: TextStyle(color: color),
+          style: TextStyle(
+            color: enabled ? color : kGreyColor,
+            decoration: enabled ? null : TextDecoration.lineThrough,
+          ),
         ),
       ),
     );
