@@ -30,7 +30,7 @@ class _ApplyProposalScreenState extends State<ApplyProposalScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         backgroundColor: kWhiteColor,
         appBar: AppBar(
@@ -57,6 +57,10 @@ class _ApplyProposalScreenState extends State<ApplyProposalScreen> {
                 padding: EdgeInsets.symmetric(vertical: 16),
                 child: Text('承認済み'),
               ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text('否決'),
+              ),
             ],
             indicator: UnderlineTabIndicator(
               borderSide: BorderSide(width: 5, color: kBlueColor),
@@ -70,7 +74,7 @@ class _ApplyProposalScreenState extends State<ApplyProposalScreen> {
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: proposalService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
-                approval: false,
+                approval: 0,
               ),
               builder: (context, snapshot) {
                 List<ApplyProposalModel> proposals = [];
@@ -105,7 +109,42 @@ class _ApplyProposalScreenState extends State<ApplyProposalScreen> {
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: proposalService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
-                approval: true,
+                approval: 1,
+              ),
+              builder: (context, snapshot) {
+                List<ApplyProposalModel> proposals = [];
+                if (snapshot.hasData) {
+                  proposals = proposalService.generateList(
+                    data: snapshot.data,
+                    currentGroup: widget.homeProvider.currentGroup,
+                  );
+                }
+                if (proposals.isEmpty) {
+                  return const Center(child: Text('稟議申請はありません'));
+                }
+                return ListView.builder(
+                  itemCount: proposals.length,
+                  itemBuilder: (context, index) {
+                    ApplyProposalModel proposal = proposals[index];
+                    return CustomApplyProposalList(
+                      proposal: proposal,
+                      onTap: () => pushScreen(
+                        context,
+                        ApplyProposalDetailScreen(
+                          loginProvider: widget.loginProvider,
+                          homeProvider: widget.homeProvider,
+                          proposal: proposal,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream: proposalService.streamList(
+                organizationId: widget.loginProvider.organization?.id,
+                approval: 9,
               ),
               builder: (context, snapshot) {
                 List<ApplyProposalModel> proposals = [];

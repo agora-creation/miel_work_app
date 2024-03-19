@@ -30,7 +30,7 @@ class _ApplyProjectScreenState extends State<ApplyProjectScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         backgroundColor: kWhiteColor,
         appBar: AppBar(
@@ -57,6 +57,10 @@ class _ApplyProjectScreenState extends State<ApplyProjectScreen> {
                 padding: EdgeInsets.symmetric(vertical: 16),
                 child: Text('承認済み'),
               ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text('否決'),
+              ),
             ],
             indicator: UnderlineTabIndicator(
               borderSide: BorderSide(width: 5, color: kBlueColor),
@@ -70,7 +74,7 @@ class _ApplyProjectScreenState extends State<ApplyProjectScreen> {
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: projectService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
-                approval: false,
+                approval: 0,
               ),
               builder: (context, snapshot) {
                 List<ApplyProjectModel> projects = [];
@@ -105,7 +109,42 @@ class _ApplyProjectScreenState extends State<ApplyProjectScreen> {
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: projectService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
-                approval: true,
+                approval: 1,
+              ),
+              builder: (context, snapshot) {
+                List<ApplyProjectModel> projects = [];
+                if (snapshot.hasData) {
+                  projects = projectService.generateList(
+                    data: snapshot.data,
+                    currentGroup: widget.homeProvider.currentGroup,
+                  );
+                }
+                if (projects.isEmpty) {
+                  return const Center(child: Text('企画申請はありません'));
+                }
+                return ListView.builder(
+                  itemCount: projects.length,
+                  itemBuilder: (context, index) {
+                    ApplyProjectModel project = projects[index];
+                    return CustomApplyProjectList(
+                      project: project,
+                      onTap: () => pushScreen(
+                        context,
+                        ApplyProjectDetailScreen(
+                          loginProvider: widget.loginProvider,
+                          homeProvider: widget.homeProvider,
+                          project: project,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream: projectService.streamList(
+                organizationId: widget.loginProvider.organization?.id,
+                approval: 9,
               ),
               builder: (context, snapshot) {
                 List<ApplyProjectModel> projects = [];

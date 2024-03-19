@@ -30,7 +30,7 @@ class _ApplyConferenceScreenState extends State<ApplyConferenceScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         backgroundColor: kWhiteColor,
         appBar: AppBar(
@@ -57,6 +57,10 @@ class _ApplyConferenceScreenState extends State<ApplyConferenceScreen> {
                 padding: EdgeInsets.symmetric(vertical: 16),
                 child: Text('承認済み'),
               ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text('否決'),
+              ),
             ],
             indicator: UnderlineTabIndicator(
               borderSide: BorderSide(width: 5, color: kBlueColor),
@@ -70,7 +74,7 @@ class _ApplyConferenceScreenState extends State<ApplyConferenceScreen> {
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: conferenceService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
-                approval: false,
+                approval: 0,
               ),
               builder: (context, snapshot) {
                 List<ApplyConferenceModel> conferences = [];
@@ -105,7 +109,42 @@ class _ApplyConferenceScreenState extends State<ApplyConferenceScreen> {
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: conferenceService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
-                approval: true,
+                approval: 1,
+              ),
+              builder: (context, snapshot) {
+                List<ApplyConferenceModel> conferences = [];
+                if (snapshot.hasData) {
+                  conferences = conferenceService.generateList(
+                    data: snapshot.data,
+                    currentGroup: widget.homeProvider.currentGroup,
+                  );
+                }
+                if (conferences.isEmpty) {
+                  return const Center(child: Text('協議・報告申請はありません'));
+                }
+                return ListView.builder(
+                  itemCount: conferences.length,
+                  itemBuilder: (context, index) {
+                    ApplyConferenceModel conference = conferences[index];
+                    return CustomApplyConferenceList(
+                      conference: conference,
+                      onTap: () => pushScreen(
+                        context,
+                        ApplyConferenceDetailScreen(
+                          loginProvider: widget.loginProvider,
+                          homeProvider: widget.homeProvider,
+                          conference: conference,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream: conferenceService.streamList(
+                organizationId: widget.loginProvider.organization?.id,
+                approval: 9,
               ),
               builder: (context, snapshot) {
                 List<ApplyConferenceModel> conferences = [];

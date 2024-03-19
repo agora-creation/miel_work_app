@@ -105,14 +105,14 @@ class ApplyConferenceProvider with ChangeNotifier {
       if (isAdmin) {
         _conferenceService.update({
           'id': conference.id,
-          'approval': approval,
+          'approval': 1,
           'approvedAt': DateTime.now(),
           'approvalUsers': approvalUsers,
         });
       } else {
         _conferenceService.update({
           'id': conference.id,
-          'approval': approval,
+          'approval': 1,
           'approvalUsers': approvalUsers,
         });
       }
@@ -133,6 +133,38 @@ class ApplyConferenceProvider with ChangeNotifier {
       }
     } catch (e) {
       error = '承認に失敗しました';
+    }
+    return error;
+  }
+
+  Future<String?> reject({
+    required ApplyConferenceModel conference,
+    required UserModel? loginUser,
+  }) async {
+    String? error;
+    if (loginUser == null) return '否決に失敗しました';
+    try {
+      _conferenceService.update({
+        'id': conference.id,
+        'approval': 9,
+      });
+      //通知
+      List<UserModel> sendUsers = [];
+      sendUsers = await _userService.selectList(
+        userIds: [conference.createdUserId],
+      );
+      if (sendUsers.isNotEmpty) {
+        for (UserModel user in sendUsers) {
+          if (user.id == loginUser.id) continue;
+          _fmService.send(
+            token: user.token,
+            title: conference.title,
+            body: '協議・報告申請が否決されました。',
+          );
+        }
+      }
+    } catch (e) {
+      error = '否決に失敗しました';
     }
     return error;
   }

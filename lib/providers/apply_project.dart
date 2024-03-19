@@ -54,7 +54,7 @@ class ApplyProjectProvider with ChangeNotifier {
         'content': content,
         'file': file,
         'fileExt': fileExt,
-        'approval': false,
+        'approval': 0,
         'approvedAt': DateTime.now(),
         'approvalUsers': [],
         'createdUserId': loginUser.id,
@@ -82,10 +82,10 @@ class ApplyProjectProvider with ChangeNotifier {
     return error;
   }
 
-  Future<String?> update({
+  Future<String?> approval({
     required ApplyProjectModel project,
-    required bool approval,
     required UserModel? loginUser,
+    required bool isAdmin,
   }) async {
     String? error;
     if (loginUser == null) return '承認に失敗しました';
@@ -99,19 +99,20 @@ class ApplyProjectProvider with ChangeNotifier {
       approvalUsers.add({
         'userId': loginUser.id,
         'userName': loginUser.name,
+        'userAdmin': isAdmin,
         'approvedAt': DateTime.now(),
       });
-      if (approval) {
+      if (isAdmin) {
         _projectService.update({
           'id': project.id,
-          'approval': approval,
+          'approval': 1,
           'approvedAt': DateTime.now(),
           'approvalUsers': approvalUsers,
         });
       } else {
         _projectService.update({
           'id': project.id,
-          'approval': approval,
+          'approval': 1,
           'approvalUsers': approvalUsers,
         });
       }
@@ -132,6 +133,38 @@ class ApplyProjectProvider with ChangeNotifier {
       }
     } catch (e) {
       error = '承認に失敗しました';
+    }
+    return error;
+  }
+
+  Future<String?> reject({
+    required ApplyProjectModel project,
+    required UserModel? loginUser,
+  }) async {
+    String? error;
+    if (loginUser == null) return '否決に失敗しました';
+    try {
+      _projectService.update({
+        'id': project.id,
+        'approval': 9,
+      });
+      //通知
+      List<UserModel> sendUsers = [];
+      sendUsers = await _userService.selectList(
+        userIds: [project.createdUserId],
+      );
+      if (sendUsers.isNotEmpty) {
+        for (UserModel user in sendUsers) {
+          if (user.id == loginUser.id) continue;
+          _fmService.send(
+            token: user.token,
+            title: project.title,
+            body: '企画申請が否決されました。',
+          );
+        }
+      }
+    } catch (e) {
+      error = '否決に失敗しました';
     }
     return error;
   }

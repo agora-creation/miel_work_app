@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/apply_project.dart';
 import 'package:miel_work_app/providers/apply_project.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
@@ -14,10 +15,12 @@ import 'package:provider/provider.dart';
 class ApplyProjectAddScreen extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
+  final ApplyProjectModel? project;
 
   const ApplyProjectAddScreen({
     required this.loginProvider,
     required this.homeProvider,
+    this.project,
     super.key,
   });
 
@@ -29,6 +32,19 @@ class _ApplyProjectAddScreenState extends State<ApplyProjectAddScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
   File? pickedFile;
+
+  void _init() async {
+    if (widget.project == null) return;
+    titleController.text = widget.project?.title ?? '';
+    contentController.text = widget.project?.content ?? '';
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
 
   @override
   Widget build(BuildContext context) {

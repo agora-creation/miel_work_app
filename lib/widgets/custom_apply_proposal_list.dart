@@ -25,7 +25,7 @@ class CustomApplyProposalList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('提出日時: ${dateText('yyyy/MM/dd HH:mm', proposal.createdAt)}'),
-            proposal.approval
+            proposal.approval == 1
                 ? Text(
                     '承認日時: ${dateText('yyyy/MM/dd HH:mm', proposal.approvedAt)}',
                     style: const TextStyle(

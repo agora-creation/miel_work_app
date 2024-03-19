@@ -9,6 +9,7 @@ import 'package:miel_work_app/screens/apply_project.dart';
 import 'package:miel_work_app/screens/apply_proposal.dart';
 import 'package:miel_work_app/screens/chat.dart';
 import 'package:miel_work_app/screens/group.dart';
+import 'package:miel_work_app/screens/how_to.dart';
 import 'package:miel_work_app/screens/manual.dart';
 import 'package:miel_work_app/screens/notice.dart';
 import 'package:miel_work_app/screens/plan.dart';
@@ -54,26 +55,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 CustomAppbar(
                   loginProvider: loginProvider,
                   actions: [
-                    GestureDetector(
-                      onTap: () {},
-                      child: const Icon(
-                        Icons.help_outline,
-                        color: kBlackColor,
+                    IconButton(
+                      onPressed: () => showBottomUpScreen(
+                        context,
+                        const HowToScreen(),
                       ),
+                      icon: const Icon(Icons.help_outline),
                     ),
-                    const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () => showBottomUpScreen(
+                    IconButton(
+                      onPressed: () => showBottomUpScreen(
                         context,
                         UserSettingScreen(
                           loginProvider: loginProvider,
                           homeProvider: homeProvider,
                         ),
                       ),
-                      child: const Icon(
-                        Icons.more_vert,
-                        color: kBlackColor,
-                      ),
+                      icon: const Icon(Icons.more_vert),
                     ),
                   ],
                 ),

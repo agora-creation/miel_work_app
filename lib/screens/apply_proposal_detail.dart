@@ -6,6 +6,7 @@ import 'package:miel_work_app/models/approval_user.dart';
 import 'package:miel_work_app/providers/apply_proposal.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/screens/apply_proposal_add.dart';
 import 'package:miel_work_app/widgets/custom_approval_user_list.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
@@ -33,9 +34,15 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
   Widget build(BuildContext context) {
     final proposalProvider = Provider.of<ApplyProposalProvider>(context);
     bool isApproval = true;
+    bool isReject = true;
+    bool isApply = false;
     bool isDelete = true;
     if (widget.proposal.createdUserId == widget.loginProvider.user?.id) {
       isApproval = false;
+      isReject = false;
+      if (widget.proposal.approval == 9) {
+        isApply = true;
+      }
     } else {
       isDelete = false;
     }
@@ -43,13 +50,17 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
       for (ApprovalUserModel user in widget.proposal.approvalUsers) {
         if (user.userId == widget.loginProvider.user?.id) {
           isApproval = false;
+          isReject = false;
         }
       }
     }
-    if (widget.proposal.approval) {
+    if (widget.proposal.approval == 1 || widget.proposal.approval == 9) {
       isApproval = false;
+      isReject = false;
       isDelete = false;
     }
+    List<ApprovalUserModel> approvalUsers = widget.proposal.approvalUsers;
+    List<ApprovalUserModel> reApprovalUsers = approvalUsers.reversed.toList();
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
@@ -106,7 +117,7 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                       '提出日時: ${dateText('yyyy/MM/dd HH:mm', widget.proposal.createdAt)}',
                       style: const TextStyle(color: kGreyColor),
                     ),
-                    widget.proposal.approval
+                    widget.proposal.approval == 1
                         ? Text(
                             '承認日時: ${dateText('yyyy/MM/dd HH:mm', widget.proposal.approvedAt)}',
                             style: const TextStyle(
@@ -123,12 +134,11 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                 ),
               ),
               const SizedBox(height: 4),
-              widget.proposal.approvalUsers.isNotEmpty
+              reApprovalUsers.isNotEmpty
                   ? FormLabel(
                       label: '承認者一覧',
                       child: Column(
-                        children:
-                            widget.proposal.approvalUsers.map((approvalUser) {
+                        children: reApprovalUsers.map((approvalUser) {
                           return CustomApprovalUserList(
                             approvalUser: approvalUser,
                           );
@@ -198,34 +208,93 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
           ),
         ),
       ),
-      floatingActionButton: isApproval
-          ? FloatingActionButton.extended(
-              onPressed: () async {
-                String? error = await proposalProvider.update(
-                  proposal: widget.proposal,
-                  approval: widget.loginProvider.isAdmin(),
-                  loginUser: widget.loginProvider.user,
-                );
-                if (error != null) {
-                  if (!mounted) return;
-                  showMessage(context, error, false);
-                  return;
-                }
-                if (!mounted) return;
-                showMessage(context, '承認しました', true);
-                Navigator.pop(context);
-              },
-              backgroundColor: kRedColor,
-              icon: const Icon(
-                Icons.check,
-                color: kWhiteColor,
-              ),
-              label: const Text(
-                '承認する',
-                style: TextStyle(color: kWhiteColor),
-              ),
-            )
-          : Container(),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          isReject && widget.loginProvider.isAdmin()
+              ? FloatingActionButton.extended(
+                  heroTag: 'reject',
+                  onPressed: () async {
+                    String? error = await proposalProvider.reject(
+                      proposal: widget.proposal,
+                      loginUser: widget.loginProvider.user,
+                    );
+                    if (error != null) {
+                      if (!mounted) return;
+                      showMessage(context, error, false);
+                      return;
+                    }
+                    if (!mounted) return;
+                    showMessage(context, '否決しました', true);
+                    Navigator.pop(context);
+                  },
+                  backgroundColor: kRed100Color,
+                  icon: const Icon(
+                    Icons.error_outline,
+                    color: kRedColor,
+                  ),
+                  label: const Text(
+                    '否決する',
+                    style: TextStyle(color: kRedColor),
+                  ),
+                )
+              : Container(),
+          const SizedBox(height: 8),
+          isApproval
+              ? FloatingActionButton.extended(
+                  heroTag: 'approval',
+                  onPressed: () async {
+                    String? error = await proposalProvider.approval(
+                      proposal: widget.proposal,
+                      loginUser: widget.loginProvider.user,
+                      isAdmin: widget.loginProvider.isAdmin(),
+                    );
+                    if (error != null) {
+                      if (!mounted) return;
+                      showMessage(context, error, false);
+                      return;
+                    }
+                    if (!mounted) return;
+                    showMessage(context, '承認しました', true);
+                    Navigator.pop(context);
+                  },
+                  backgroundColor: kRedColor,
+                  icon: const Icon(
+                    Icons.check,
+                    color: kWhiteColor,
+                  ),
+                  label: const Text(
+                    '承認する',
+                    style: TextStyle(color: kWhiteColor),
+                  ),
+                )
+              : Container(),
+          const SizedBox(height: 8),
+          isApply
+              ? FloatingActionButton.extended(
+                  heroTag: 'add',
+                  onPressed: () => pushScreen(
+                    context,
+                    ApplyProposalAddScreen(
+                      loginProvider: widget.loginProvider,
+                      homeProvider: widget.homeProvider,
+                      proposal: widget.proposal,
+                    ),
+                  ),
+                  backgroundColor: kBlueColor,
+                  icon: const Icon(
+                    Icons.add,
+                    color: kWhiteColor,
+                  ),
+                  label: const Text(
+                    '再申請する',
+                    style: TextStyle(color: kWhiteColor),
+                  ),
+                )
+              : Container(),
+        ],
+      ),
     );
   }
 }
