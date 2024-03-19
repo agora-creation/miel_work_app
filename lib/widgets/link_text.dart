@@ -18,7 +18,7 @@ class LinkText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: enabled ? onTap : null,
       child: Container(
         decoration: enabled
             ? BoxDecoration(
