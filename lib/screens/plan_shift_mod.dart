@@ -240,7 +240,7 @@ class _PlanShiftModScreenState extends State<PlanShiftModScreen> {
                   onConfirm: (value) {
                     setState(() {
                       startedAt = value;
-                      endedAt = startedAt.add(const Duration(hours: 1));
+                      endedAt = startedAt.add(const Duration(hours: 8));
                     });
                   },
                   currentTime: startedAt,
