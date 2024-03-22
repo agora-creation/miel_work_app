@@ -114,7 +114,6 @@ class ApplyProposalProvider with ChangeNotifier {
       } else {
         _proposalService.update({
           'id': proposal.id,
-          'approval': 1,
           'approvalUsers': approvalUsers,
         });
       }

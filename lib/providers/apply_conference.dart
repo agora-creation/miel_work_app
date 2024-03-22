@@ -112,7 +112,6 @@ class ApplyConferenceProvider with ChangeNotifier {
       } else {
         _conferenceService.update({
           'id': conference.id,
-          'approval': 1,
           'approvalUsers': approvalUsers,
         });
       }

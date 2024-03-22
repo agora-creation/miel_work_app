@@ -112,7 +112,6 @@ class ApplyProjectProvider with ChangeNotifier {
       } else {
         _projectService.update({
           'id': project.id,
-          'approval': 1,
           'approvalUsers': approvalUsers,
         });
       }
