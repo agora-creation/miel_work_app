@@ -249,6 +249,7 @@ class _ApplyConferenceDetailScreenState
                   onPressed: () async {
                     String? error = await conferenceProvider.reject(
                       conference: widget.conference,
+                      reason: '',
                       loginUser: widget.loginProvider.user,
                     );
                     if (error != null) {

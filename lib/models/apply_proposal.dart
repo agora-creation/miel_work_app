@@ -11,6 +11,7 @@ class ApplyProposalModel {
   int _price = 0;
   String _file = '';
   String _fileExt = '';
+  String _reason = '';
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
   List<ApprovalUserModel> approvalUsers = [];
@@ -26,6 +27,7 @@ class ApplyProposalModel {
   int get price => _price;
   String get file => _file;
   String get fileExt => _fileExt;
+  String get reason => _reason;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
   String get createdUserId => _createdUserId;
@@ -44,6 +46,7 @@ class ApplyProposalModel {
     _price = data['price'] ?? 0;
     _file = data['file'] ?? '';
     _fileExt = data['fileExt'] ?? '';
+    _reason = data['reason'] ?? '';
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
     approvalUsers = _convertApprovalUsers(data['approvalUsers']);

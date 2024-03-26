@@ -38,12 +38,11 @@ class _PlanModScreenState extends State<PlanModScreen> {
   CategoryService categoryService = CategoryService();
   OrganizationGroupModel? selectedGroup;
   List<CategoryModel> categories = [];
-  String? selectedCategory;
+  CategoryModel? selectedCategory;
   TextEditingController subjectController = TextEditingController();
   DateTime startedAt = DateTime.now();
   DateTime endedAt = DateTime.now();
   bool allDay = false;
-  String color = kPlanColors.first.value.toRadixString(16);
   TextEditingController memoController = TextEditingController();
   int alertMinute = 0;
 
@@ -63,12 +62,11 @@ class _PlanModScreenState extends State<PlanModScreen> {
     categories = await categoryService.selectList(
       organizationId: widget.loginProvider.organization?.id,
     );
-    selectedCategory = plan.category;
+    selectedCategory = categories.firstWhere((e) => e.name == plan.category);
     subjectController.text = plan.subject;
     startedAt = plan.startedAt;
     endedAt = plan.endedAt;
     allDay = plan.allDay;
-    color = plan.color.value.toRadixString(16);
     memoController.text = plan.memo;
     alertMinute = plan.alertMinute;
     setState(() {});
@@ -147,7 +145,6 @@ class _PlanModScreenState extends State<PlanModScreen> {
                 startedAt: startedAt,
                 endedAt: endedAt,
                 allDay: allDay,
-                color: color,
                 memo: memoController.text,
                 alertMinute: alertMinute,
               );
@@ -197,14 +194,14 @@ class _PlanModScreenState extends State<PlanModScreen> {
               const SizedBox(height: 8),
               FormLabel(
                 label: 'カテゴリ',
-                child: DropdownButton<String?>(
+                child: DropdownButton<CategoryModel?>(
                   hint: const Text('カテゴリ未選択'),
                   underline: Container(),
                   isExpanded: true,
                   value: selectedCategory,
                   items: categories.map((category) {
                     return DropdownMenuItem(
-                      value: category.name,
+                      value: category,
                       child: Text(category.name),
                     );
                   }).toList(),
@@ -257,30 +254,6 @@ class _PlanModScreenState extends State<PlanModScreen> {
                 ),
                 allDay: allDay,
                 allDayOnChanged: _allDayChange,
-              ),
-              const SizedBox(height: 8),
-              FormLabel(
-                label: '色',
-                child: DropdownButton<String>(
-                  underline: Container(),
-                  isExpanded: true,
-                  value: color,
-                  items: kPlanColors.map((Color value) {
-                    return DropdownMenuItem(
-                      value: value.value.toRadixString(16),
-                      child: Container(
-                        color: value,
-                        width: double.infinity,
-                        height: 25,
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      color = value!;
-                    });
-                  },
-                ),
               ),
               const SizedBox(height: 8),
               CustomTextField(

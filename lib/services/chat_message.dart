@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:miel_work_app/models/chat_message.dart';
 import 'package:miel_work_app/models/organization_group.dart';
+import 'package:miel_work_app/models/read_user.dart';
 import 'package:miel_work_app/models/user.dart';
 
 class ChatMessageService {
@@ -36,18 +37,33 @@ class ChatMessageService {
         .then((value) {
       for (DocumentSnapshot<Map<String, dynamic>> map in value.docs) {
         ChatMessageModel message = ChatMessageModel.fromSnapshot(map);
-        if (!message.readUserIds.contains(loginUser?.id)) {
+        bool isRead = false;
+        for (ReadUserModel readUser in message.readUsers) {
+          if (readUser.userId == loginUser?.id) {
+            isRead = true;
+          }
+        }
+        if (!isRead) {
           messages.add(message);
         }
       }
     });
     if (messages.isNotEmpty) {
       for (ChatMessageModel message in messages) {
-        List<String> readUserIds = message.readUserIds;
-        readUserIds.add(loginUser?.id ?? '');
+        List<Map> readUsers = [];
+        if (message.readUsers.isNotEmpty) {
+          for (ReadUserModel readUser in message.readUsers) {
+            readUsers.add(readUser.toMap());
+          }
+        }
+        readUsers.add({
+          'userId': loginUser?.id,
+          'userName': loginUser?.name,
+          'createdAt': DateTime.now(),
+        });
         update({
           'id': message.id,
-          'readUserIds': readUserIds,
+          'readUsers': readUsers,
         });
       }
     }
@@ -66,7 +82,13 @@ class ChatMessageService {
         .then((value) {
       for (DocumentSnapshot<Map<String, dynamic>> map in value.docs) {
         ChatMessageModel message = ChatMessageModel.fromSnapshot(map);
-        if (!message.readUserIds.contains(loginUser?.id)) {
+        bool isRead = false;
+        for (ReadUserModel readUser in message.readUsers) {
+          if (readUser.userId == loginUser?.id) {
+            isRead = true;
+          }
+        }
+        if (!isRead) {
           ret.add(message);
         }
       }
@@ -131,11 +153,23 @@ class ChatMessageService {
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
       ChatMessageModel message = ChatMessageModel.fromSnapshot(doc);
       if (currentGroup == null) {
-        if (!message.readUserIds.contains(loginUser?.id)) {
+        bool isRead = false;
+        for (ReadUserModel readUser in message.readUsers) {
+          if (readUser.userId == loginUser?.id) {
+            isRead = true;
+          }
+        }
+        if (!isRead) {
           ret.add(message);
         }
       } else if (message.groupId == currentGroup.id || message.groupId == '') {
-        if (!message.readUserIds.contains(loginUser?.id)) {
+        bool isRead = false;
+        for (ReadUserModel readUser in message.readUsers) {
+          if (readUser.userId == loginUser?.id) {
+            isRead = true;
+          }
+        }
+        if (!isRead) {
           ret.add(message);
         }
       }

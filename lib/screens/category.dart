@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/category.dart';
@@ -109,6 +110,7 @@ class AddCategoryDialog extends StatefulWidget {
 
 class _AddCategoryDialogState extends State<AddCategoryDialog> {
   TextEditingController nameController = TextEditingController();
+  Color color = kBlueColor;
 
   @override
   Widget build(BuildContext context) {
@@ -133,6 +135,15 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
             maxLines: 1,
             label: 'カテゴリ名',
           ),
+          const SizedBox(height: 8),
+          BlockPicker(
+            pickerColor: color,
+            onColorChanged: (value) {
+              setState(() {
+                color = value;
+              });
+            },
+          ),
         ],
       ),
       actionsAlignment: MainAxisAlignment.spaceBetween,
@@ -151,6 +162,7 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
             String? error = await categoryProvider.create(
               organization: widget.organization,
               name: nameController.text,
+              color: color,
             );
             if (error != null) {
               if (!mounted) return;

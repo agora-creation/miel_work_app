@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:miel_work_app/models/read_user.dart';
 
 class ChatMessageModel {
   String _id = '';
@@ -9,7 +10,7 @@ class ChatMessageModel {
   String _image = '';
   String _file = '';
   String _fileExt = '';
-  List<String> readUserIds = [];
+  List<ReadUserModel> readUsers = [];
   String _createdUserId = '';
   String _createdUserName = '';
   DateTime _createdAt = DateTime.now();
@@ -38,17 +39,17 @@ class ChatMessageModel {
     _image = data['image'] ?? '';
     _file = data['file'] ?? '';
     _fileExt = data['fileExt'] ?? '';
-    readUserIds = _convertReadUserIds(data['readUserIds']);
+    readUsers = _convertReadUsers(data['readUsers']);
     _createdUserId = data['createdUserId'] ?? '';
     _createdUserName = data['createdUserName'] ?? '';
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
   }
 
-  List<String> _convertReadUserIds(List list) {
-    List<String> ret = [];
-    for (dynamic id in list) {
-      ret.add('$id');
+  List<ReadUserModel> _convertReadUsers(List list) {
+    List<ReadUserModel> converted = [];
+    for (Map data in list) {
+      converted.add(ReadUserModel.fromMap(data));
     }
-    return ret;
+    return converted;
   }
 }

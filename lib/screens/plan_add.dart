@@ -34,12 +34,11 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
   CategoryService categoryService = CategoryService();
   OrganizationGroupModel? selectedGroup;
   List<CategoryModel> categories = [];
-  String? selectedCategory;
+  CategoryModel? selectedCategory;
   TextEditingController subjectController = TextEditingController();
   DateTime startedAt = DateTime.now();
   DateTime endedAt = DateTime.now();
   bool allDay = false;
-  String color = kPlanColors.first.value.toRadixString(16);
   TextEditingController memoController = TextEditingController();
   int alertMinute = kAlertMinutes[1];
 
@@ -125,7 +124,6 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
                 startedAt: startedAt,
                 endedAt: endedAt,
                 allDay: allDay,
-                color: color,
                 memo: memoController.text,
                 alertMinute: alertMinute,
               );
@@ -175,14 +173,14 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
               const SizedBox(height: 8),
               FormLabel(
                 label: 'カテゴリ',
-                child: DropdownButton<String?>(
+                child: DropdownButton<CategoryModel?>(
                   hint: const Text('カテゴリ未選択'),
                   underline: Container(),
                   isExpanded: true,
                   value: selectedCategory,
                   items: categories.map((category) {
                     return DropdownMenuItem(
-                      value: category.name,
+                      value: category,
                       child: Text(category.name),
                     );
                   }).toList(),
@@ -235,30 +233,6 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
                 ),
                 allDay: allDay,
                 allDayOnChanged: _allDayChange,
-              ),
-              const SizedBox(height: 8),
-              FormLabel(
-                label: '色',
-                child: DropdownButton<String>(
-                  underline: Container(),
-                  isExpanded: true,
-                  value: color,
-                  items: kPlanColors.map((Color value) {
-                    return DropdownMenuItem(
-                      value: value.value.toRadixString(16),
-                      child: Container(
-                        color: value,
-                        width: double.infinity,
-                        height: 25,
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      color = value!;
-                    });
-                  },
-                ),
               ),
               const SizedBox(height: 8),
               CustomTextField(

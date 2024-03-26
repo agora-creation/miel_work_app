@@ -248,6 +248,7 @@ class _ApplyProjectDetailScreenState extends State<ApplyProjectDetailScreen> {
                   onPressed: () async {
                     String? error = await projectProvider.reject(
                       project: widget.project,
+                      reason: '',
                       loginUser: widget.loginProvider.user,
                     );
                     if (error != null) {

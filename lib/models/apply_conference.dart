@@ -9,6 +9,7 @@ class ApplyConferenceModel {
   String _content = '';
   String _file = '';
   String _fileExt = '';
+  String _reason = '';
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
   List<ApprovalUserModel> approvalUsers = [];
@@ -23,6 +24,7 @@ class ApplyConferenceModel {
   String get content => _content;
   String get file => _file;
   String get fileExt => _fileExt;
+  String get reason => _reason;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
   String get createdUserId => _createdUserId;
@@ -40,6 +42,7 @@ class ApplyConferenceModel {
     _content = data['content'] ?? '';
     _file = data['file'] ?? '';
     _fileExt = data['fileExt'] ?? '';
+    _reason = data['reason'] ?? '';
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
     approvalUsers = _convertApprovalUsers(data['approvalUsers']);

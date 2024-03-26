@@ -9,6 +9,7 @@ class CategoryProvider with ChangeNotifier {
   Future<String?> create({
     required OrganizationModel? organization,
     required String name,
+    required Color color,
   }) async {
     String? error;
     if (organization == null) return 'カテゴリの追加に失敗しました';
@@ -19,6 +20,7 @@ class CategoryProvider with ChangeNotifier {
         'id': id,
         'organizationId': organization.id,
         'name': name,
+        'color': color.value.toRadixString(16),
         'createdAt': DateTime.now(),
       });
     } catch (e) {

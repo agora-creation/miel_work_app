@@ -259,6 +259,7 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                   onPressed: () async {
                     String? error = await proposalProvider.reject(
                       proposal: widget.proposal,
+                      reason: '',
                       loginUser: widget.loginProvider.user,
                     );
                     if (error != null) {

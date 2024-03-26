@@ -238,7 +238,7 @@ class _PlanDialogState extends State<PlanDialog> {
     }
     dateTimeText =
         '${dateText('yyyy/MM/dd HH:mm', plan.startedAt)}〜${dateText('yyyy/MM/dd HH:mm', plan.endedAt)}';
-    color = plan.color;
+    color = plan.categoryColor;
     memoText = plan.memo;
     setState(() {});
   }

@@ -27,7 +27,7 @@ class NowPlanList extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: plan.color,
+          color: plan.categoryColor,
           borderRadius: BorderRadius.circular(4),
         ),
         padding: const EdgeInsets.symmetric(

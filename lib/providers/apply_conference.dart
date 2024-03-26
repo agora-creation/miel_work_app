@@ -54,6 +54,7 @@ class ApplyConferenceProvider with ChangeNotifier {
         'content': content,
         'file': file,
         'fileExt': fileExt,
+        'reason': '',
         'approval': 0,
         'approvedAt': DateTime.now(),
         'approvalUsers': [],
@@ -138,6 +139,7 @@ class ApplyConferenceProvider with ChangeNotifier {
 
   Future<String?> reject({
     required ApplyConferenceModel conference,
+    required String reason,
     required UserModel? loginUser,
   }) async {
     String? error;
@@ -145,6 +147,7 @@ class ApplyConferenceProvider with ChangeNotifier {
     try {
       _conferenceService.update({
         'id': conference.id,
+        'reason': reason,
         'approval': 9,
       });
       //通知
