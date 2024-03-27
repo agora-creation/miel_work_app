@@ -181,7 +181,18 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
                   items: categories.map((category) {
                     return DropdownMenuItem(
                       value: category,
-                      child: Text(category.name),
+                      child: Container(
+                        color: category.color,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 4,
+                          horizontal: 8,
+                        ),
+                        width: double.infinity,
+                        child: Text(
+                          category.name,
+                          style: const TextStyle(color: kWhiteColor),
+                        ),
+                      ),
                     );
                   }).toList(),
                   onChanged: (value) {

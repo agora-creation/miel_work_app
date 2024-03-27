@@ -209,12 +209,12 @@ class _DelCategoryDialogState extends State<DelCategoryDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomTextField(
-            controller: TextEditingController(text: widget.category.name),
-            textInputType: TextInputType.name,
-            maxLines: 1,
-            label: 'カテゴリ名',
-            enabled: false,
+          ListTile(
+            tileColor: widget.category.color,
+            title: Text(
+              widget.category.name,
+              style: const TextStyle(color: kWhiteColor),
+            ),
           ),
         ],
       ),

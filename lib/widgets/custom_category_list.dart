@@ -15,11 +15,15 @@ class CustomCategoryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: kGrey600Color)),
+      decoration: BoxDecoration(
+        color: category.color,
+        border: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       child: ListTile(
-        title: Text(category.name),
+        title: Text(
+          category.name,
+          style: const TextStyle(color: kWhiteColor),
+        ),
         trailing: const Icon(Icons.chevron_right),
         onTap: onTap,
       ),

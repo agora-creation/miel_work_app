@@ -57,7 +57,7 @@ ThemeData customTheme() {
       ),
     ),
     visualDensity: VisualDensity.adaptivePlatformDensity,
-    unselectedWidgetColor: kGreyColor,
+    unselectedWidgetColor: kWhiteColor,
   );
 }
 

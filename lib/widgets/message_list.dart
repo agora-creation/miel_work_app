@@ -6,12 +6,14 @@ import 'package:miel_work_app/models/chat_message.dart';
 class MessageList extends StatelessWidget {
   final ChatMessageModel message;
   final bool isMe;
+  final Function()? onTapReadUsers;
   final Function()? onTapImage;
   final Function()? onTapFile;
 
   const MessageList({
     required this.message,
     required this.isMe,
+    required this.onTapReadUsers,
     required this.onTapImage,
     required this.onTapFile,
     super.key,
@@ -92,6 +94,18 @@ class MessageList extends StatelessWidget {
                 fontSize: 12,
               ),
             ),
+            message.readUsers.isNotEmpty
+                ? GestureDetector(
+                    onTap: onTapReadUsers,
+                    child: Text(
+                      '既読 ${message.readUsers.length}',
+                      style: const TextStyle(
+                        color: kGrey600Color,
+                        fontSize: 12,
+                      ),
+                    ),
+                  )
+                : Container(),
           ],
         ),
       );
@@ -173,6 +187,18 @@ class MessageList extends StatelessWidget {
                 fontSize: 12,
               ),
             ),
+            message.readUsers.isNotEmpty
+                ? GestureDetector(
+                    onTap: onTapReadUsers,
+                    child: Text(
+                      '既読 ${message.readUsers.length}',
+                      style: const TextStyle(
+                        color: kGrey600Color,
+                        fontSize: 12,
+                      ),
+                    ),
+                  )
+                : Container(),
           ],
         ),
       );

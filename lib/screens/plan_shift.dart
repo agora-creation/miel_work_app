@@ -252,65 +252,50 @@ class _PlanDialogState extends State<PlanDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      insetPadding: const EdgeInsets.all(8),
-      backgroundColor: color,
-      surfaceTintColor: color,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      title: Text(
-        titleText,
-        style: const TextStyle(
-          color: kWhiteColor,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          ListTile(
+            tileColor: color,
+            title: Text(
+              titleText,
+              style: const TextStyle(color: kWhiteColor),
+            ),
+          ),
+          const SizedBox(height: 8),
           FormLabel(
             label: '公開グループ',
-            color: kWhiteColor,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Text(
                 groupText,
-                style: const TextStyle(
-                  color: kWhiteColor,
-                  fontSize: 16,
-                ),
+                style: const TextStyle(fontSize: 16),
               ),
             ),
           ),
           const SizedBox(height: 8),
           FormLabel(
             label: '予定期間',
-            color: kWhiteColor,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Text(
                 dateTimeText,
-                style: const TextStyle(
-                  color: kWhiteColor,
-                  fontSize: 16,
-                ),
+                style: const TextStyle(fontSize: 16),
               ),
             ),
           ),
           const SizedBox(height: 8),
           FormLabel(
             label: 'メモ',
-            color: kWhiteColor,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Text(
                 memoText,
-                style: const TextStyle(
-                  color: kWhiteColor,
-                  fontSize: 16,
-                ),
+                style: const TextStyle(fontSize: 16),
               ),
             ),
           ),

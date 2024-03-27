@@ -8,6 +8,7 @@ import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/chat.dart';
 import 'package:miel_work_app/models/chat_message.dart';
+import 'package:miel_work_app/models/read_user.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/chat_message.dart';
 import 'package:miel_work_app/providers/login.dart';
@@ -134,6 +135,12 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                               message: message,
                               isMe: message.createdUserId ==
                                   widget.loginProvider.user?.id,
+                              onTapReadUsers: () => showDialog(
+                                context: context,
+                                builder: (context) => ReadUsersDialog(
+                                  readUsers: message.readUsers,
+                                ),
+                              ),
                               onTapImage: () => showDialog(
                                 barrierDismissible: true,
                                 barrierLabel: '閉じる',
@@ -390,8 +397,17 @@ class _ChatUsersDialogState extends State<ChatUsersDialog> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
+      titlePadding: const EdgeInsets.all(8),
+      title: const Text(
+        '参加スタッフ',
+        style: TextStyle(fontSize: 14),
+      ),
       content: Container(
-        decoration: BoxDecoration(border: Border.all(color: kGrey600Color)),
+        decoration: const BoxDecoration(
+          border: Border.symmetric(
+            horizontal: BorderSide(color: kGrey600Color),
+          ),
+        ),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -402,6 +418,64 @@ class _ChatUsersDialogState extends State<ChatUsersDialog> {
                   border: Border(bottom: BorderSide(color: kGrey600Color)),
                 ),
                 child: ListTile(title: Text(user.name)),
+              );
+            }).toList(),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ReadUsersDialog extends StatefulWidget {
+  final List<ReadUserModel> readUsers;
+
+  const ReadUsersDialog({
+    required this.readUsers,
+    super.key,
+  });
+
+  @override
+  State<ReadUsersDialog> createState() => _ReadUsersDialogState();
+}
+
+class _ReadUsersDialogState extends State<ReadUsersDialog> {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      contentPadding: EdgeInsets.zero,
+      backgroundColor: kWhiteColor,
+      surfaceTintColor: kWhiteColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
+      titlePadding: const EdgeInsets.all(8),
+      title: const Text(
+        '既読スタッフ',
+        style: TextStyle(fontSize: 14),
+      ),
+      content: Container(
+        decoration: const BoxDecoration(
+          border: Border.symmetric(
+            horizontal: BorderSide(color: kGrey600Color),
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: widget.readUsers.map((readUser) {
+              return Container(
+                decoration: const BoxDecoration(
+                  border: Border(bottom: BorderSide(color: kGrey600Color)),
+                ),
+                child: ListTile(
+                  title: Text(readUser.userName),
+                  trailing: Text(
+                    dateText('yyyy/MM/dd HH:mm', readUser.createdAt),
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ),
               );
             }).toList(),
           ),
