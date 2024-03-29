@@ -68,19 +68,17 @@ class _ManualPdfScreenState extends State<ManualPdfScreen> {
           style: const TextStyle(color: kBlackColor),
         ),
         actions: [
-          widget.loginProvider.isAdmin()
-              ? IconButton(
-                  onPressed: () => pushScreen(
-                    context,
-                    ManualModScreen(
-                      loginProvider: widget.loginProvider,
-                      homeProvider: widget.homeProvider,
-                      manual: widget.manual,
-                    ),
-                  ),
-                  icon: const Icon(Icons.edit, color: kBlueColor),
-                )
-              : Container(),
+          IconButton(
+            onPressed: () => pushScreen(
+              context,
+              ManualModScreen(
+                loginProvider: widget.loginProvider,
+                homeProvider: widget.homeProvider,
+                manual: widget.manual,
+              ),
+            ),
+            icon: const Icon(Icons.edit, color: kBlueColor),
+          ),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),

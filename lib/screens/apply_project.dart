@@ -26,6 +26,8 @@ class ApplyProjectScreen extends StatefulWidget {
 
 class _ApplyProjectScreenState extends State<ApplyProjectScreen> {
   ApplyProjectService projectService = ApplyProjectService();
+  DateTime? searchStart;
+  DateTime? searchEnd;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +77,8 @@ class _ApplyProjectScreenState extends State<ApplyProjectScreen> {
               stream: projectService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
                 approval: 0,
+                searchStart: searchStart,
+                searchEnd: searchEnd,
               ),
               builder: (context, snapshot) {
                 List<ApplyProjectModel> projects = [];
@@ -110,6 +114,8 @@ class _ApplyProjectScreenState extends State<ApplyProjectScreen> {
               stream: projectService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
                 approval: 1,
+                searchStart: searchStart,
+                searchEnd: searchEnd,
               ),
               builder: (context, snapshot) {
                 List<ApplyProjectModel> projects = [];
@@ -145,6 +151,8 @@ class _ApplyProjectScreenState extends State<ApplyProjectScreen> {
               stream: projectService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
                 approval: 9,
+                searchStart: searchStart,
+                searchEnd: searchEnd,
               ),
               builder: (context, snapshot) {
                 List<ApplyProjectModel> projects = [];

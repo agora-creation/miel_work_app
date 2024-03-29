@@ -63,8 +63,7 @@ class _UserModScreenState extends State<UserModScreen> {
       }
     }
     bool deleteDisabled = false;
-    List<String> adminUserIds =
-        widget.loginProvider.organization?.adminUserIds ?? [];
+    List<String> adminUserIds = [];
     if (adminUserIds.contains(widget.user.id)) {
       deleteDisabled = true;
     }
@@ -94,6 +93,7 @@ class _UserModScreenState extends State<UserModScreen> {
                 password: passwordController.text,
                 befGroup: widget.userInGroup,
                 aftGroup: selectedGroup,
+                admin: false,
               );
               if (error != null) {
                 if (!mounted) return;

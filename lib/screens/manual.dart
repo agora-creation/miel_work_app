@@ -56,6 +56,8 @@ class _ManualScreenState extends State<ManualScreen> {
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: manualService.streamList(
           organizationId: widget.loginProvider.organization?.id,
+          searchStart: null,
+          searchEnd: null,
         ),
         builder: (context, snapshot) {
           List<ManualModel> manuals = [];
@@ -88,25 +90,23 @@ class _ManualScreenState extends State<ManualScreen> {
           );
         },
       ),
-      floatingActionButton: widget.loginProvider.isAdmin()
-          ? FloatingActionButton.extended(
-              onPressed: () => pushScreen(
-                context,
-                ManualAddScreen(
-                  loginProvider: widget.loginProvider,
-                  homeProvider: widget.homeProvider,
-                ),
-              ),
-              icon: const Icon(
-                Icons.add,
-                color: kWhiteColor,
-              ),
-              label: const Text(
-                '新規追加',
-                style: TextStyle(color: kWhiteColor),
-              ),
-            )
-          : Container(),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => pushScreen(
+          context,
+          ManualAddScreen(
+            loginProvider: widget.loginProvider,
+            homeProvider: widget.homeProvider,
+          ),
+        ),
+        icon: const Icon(
+          Icons.add,
+          color: kWhiteColor,
+        ),
+        label: const Text(
+          '新規追加',
+          style: TextStyle(color: kWhiteColor),
+        ),
+      ),
     );
   }
 }

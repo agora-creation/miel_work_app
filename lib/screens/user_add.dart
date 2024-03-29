@@ -78,6 +78,7 @@ class _UserAddScreenState extends State<UserAddScreen> {
                 email: emailController.text,
                 password: passwordController.text,
                 group: selectedGroup,
+                admin: false,
               );
               if (error != null) {
                 if (!mounted) return;

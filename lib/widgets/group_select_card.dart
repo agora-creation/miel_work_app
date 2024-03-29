@@ -25,13 +25,14 @@ class _GroupSelectCardState extends State<GroupSelectCard> {
     super.initState();
     widget.homeProvider.setGroups(
       organizationId: widget.loginProvider.organization?.id,
-      group: widget.loginProvider.isAdmin() ? null : widget.loginProvider.group,
+      group: widget.loginProvider.group,
+      isAllGroup: widget.loginProvider.isAllGroup(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.loginProvider.isAdmin()) return Container();
+    if (!widget.loginProvider.isAllGroup()) return Container();
     return Padding(
       padding: const EdgeInsets.only(
         left: 4,

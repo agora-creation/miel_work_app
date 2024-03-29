@@ -20,6 +20,7 @@ class UserProvider with ChangeNotifier {
     required String email,
     required String password,
     required OrganizationGroupModel? group,
+    required bool admin,
   }) async {
     String? error;
     if (organization == null) return 'スタッフの追加に失敗しました';
@@ -38,6 +39,7 @@ class UserProvider with ChangeNotifier {
         'password': password,
         'uid': '',
         'token': '',
+        'admin': admin,
         'createdAt': DateTime.now(),
       });
       List<String> orgUserIds = organization.userIds;
@@ -92,6 +94,7 @@ class UserProvider with ChangeNotifier {
     required String password,
     required OrganizationGroupModel? befGroup,
     required OrganizationGroupModel? aftGroup,
+    required bool admin,
   }) async {
     String? error;
     if (name == '') return 'スタッフ名を入力してください';
@@ -108,6 +111,7 @@ class UserProvider with ChangeNotifier {
         'name': name,
         'email': email,
         'password': password,
+        'admin': admin,
       });
       if (befGroup != aftGroup) {
         if (befGroup != null) {

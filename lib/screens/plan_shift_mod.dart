@@ -178,7 +178,7 @@ class _PlanShiftModScreenState extends State<PlanShiftModScreen> {
             children: [
               FormLabel(
                 label: '働くスタッフを選択',
-                child: widget.loginProvider.isAdmin()
+                child: widget.loginProvider.isAllGroup()
                     ? DropdownButton<OrganizationGroupModel?>(
                         hint: const Text('グループ未選択'),
                         underline: Container(),
@@ -194,7 +194,7 @@ class _PlanShiftModScreenState extends State<PlanShiftModScreen> {
                     : Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Text(
-                          selectedGroup?.name ?? '',
+                          '${selectedGroup?.name}',
                           style: const TextStyle(fontSize: 18),
                         ),
                       ),

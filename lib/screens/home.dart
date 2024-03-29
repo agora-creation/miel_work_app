@@ -91,6 +91,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                             stream: manualService.streamList(
                               organizationId: loginProvider.organization?.id,
+                              searchStart: null,
+                              searchEnd: null,
                             ),
                             builder: (context, snapshot) {
                               bool alert = false;
@@ -120,6 +122,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                             stream: noticeService.streamList(
                               organizationId: loginProvider.organization?.id,
+                              searchStart: null,
+                              searchEnd: null,
                             ),
                             builder: (context, snapshot) {
                               bool alert = false;
@@ -251,40 +255,36 @@ class _HomeScreenState extends State<HomeScreen> {
                               }
                             },
                           ),
-                          loginProvider.isAdmin()
-                              ? CustomHomeIconCard(
-                                  icon: Icons.category,
-                                  iconSize: 40,
-                                  label: 'グループ管理',
-                                  labelFontSize: 14,
-                                  color: kWhiteColor,
-                                  backgroundColor: kGrey600Color,
-                                  onTap: () => pushScreen(
-                                    context,
-                                    GroupScreen(
-                                      loginProvider: loginProvider,
-                                      homeProvider: homeProvider,
-                                    ),
-                                  ),
-                                )
-                              : Container(),
-                          loginProvider.isAdmin()
-                              ? CustomHomeIconCard(
-                                  icon: Icons.groups,
-                                  iconSize: 40,
-                                  label: 'スタッフ管理',
-                                  labelFontSize: 14,
-                                  color: kWhiteColor,
-                                  backgroundColor: kGrey600Color,
-                                  onTap: () => pushScreen(
-                                    context,
-                                    UserScreen(
-                                      loginProvider: loginProvider,
-                                      homeProvider: homeProvider,
-                                    ),
-                                  ),
-                                )
-                              : Container(),
+                          CustomHomeIconCard(
+                            icon: Icons.category,
+                            iconSize: 40,
+                            label: 'グループ管理',
+                            labelFontSize: 14,
+                            color: kWhiteColor,
+                            backgroundColor: kGrey600Color,
+                            onTap: () => pushScreen(
+                              context,
+                              GroupScreen(
+                                loginProvider: loginProvider,
+                                homeProvider: homeProvider,
+                              ),
+                            ),
+                          ),
+                          CustomHomeIconCard(
+                            icon: Icons.groups,
+                            iconSize: 40,
+                            label: 'スタッフ管理',
+                            labelFontSize: 14,
+                            color: kWhiteColor,
+                            backgroundColor: kGrey600Color,
+                            onTap: () => pushScreen(
+                              context,
+                              UserScreen(
+                                loginProvider: loginProvider,
+                                homeProvider: homeProvider,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 8),

@@ -243,7 +243,7 @@ class _ApplyProjectDetailScreenState extends State<ApplyProjectDetailScreen> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          isReject && widget.loginProvider.isAdmin()
+          isReject && widget.loginProvider.user?.admin == true
               ? FloatingActionButton.extended(
                   heroTag: 'reject',
                   onPressed: () => showDialog(
@@ -443,7 +443,6 @@ class _ApprovalApplyProjectDialogState
             String? error = await projectProvider.approval(
               project: widget.project,
               loginUser: widget.loginProvider.user,
-              isAdmin: widget.loginProvider.isAdmin(),
             );
             if (error != null) {
               if (!mounted) return;

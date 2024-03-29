@@ -7,7 +7,6 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/login.dart';
 import 'package:miel_work_app/services/user.dart';
 import 'package:miel_work_app/widgets/custom_button_sm.dart';
-import 'package:miel_work_app/widgets/custom_checkbox.dart';
 import 'package:miel_work_app/widgets/custom_setting_list.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
@@ -36,8 +35,7 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
       userIds: widget.loginProvider.organization?.userIds ?? [],
       removeGroups: widget.homeProvider.groups,
     );
-    List<String> adminUserIds =
-        widget.loginProvider.organization?.adminUserIds ?? [];
+    List<String> adminUserIds = [];
     for (UserModel user in users) {
       if (adminUserIds.contains(user.id)) {
         if (usersText != '') usersText += ',';
@@ -77,7 +75,7 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
       ),
       body: Column(
         children: [
-          widget.loginProvider.isAdmin()
+          widget.loginProvider.user?.admin == true
               ? const ListTile(
                   title: Text(
                     'あなたは管理者です',
@@ -116,19 +114,6 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
               ),
             ),
           ),
-          widget.loginProvider.isAdmin()
-              ? CustomSettingList(
-                  label: '現在の管理者',
-                  value: usersText,
-                  onTap: () => showDialog(
-                    context: context,
-                    builder: (context) => ModAdminDialog(
-                      loginProvider: widget.loginProvider,
-                      users: users,
-                    ),
-                  ),
-                )
-              : Container(),
           const SizedBox(height: 24),
           LinkText(
             label: 'この端末からログアウトする',
@@ -364,106 +349,6 @@ class _ModPasswordDialogState extends State<ModPasswordDialog> {
             if (!mounted) return;
             showMessage(context, 'パスワードを変更しました', true);
             Navigator.pop(context);
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class ModAdminDialog extends StatefulWidget {
-  final LoginProvider loginProvider;
-  final List<UserModel> users;
-
-  const ModAdminDialog({
-    required this.loginProvider,
-    required this.users,
-    super.key,
-  });
-
-  @override
-  State<ModAdminDialog> createState() => _ModAdminDialogState();
-}
-
-class _ModAdminDialogState extends State<ModAdminDialog> {
-  List<UserModel> selectedUsers = [];
-
-  void _init() {
-    List<String> adminUserIds =
-        widget.loginProvider.organization?.adminUserIds ?? [];
-    for (UserModel user in widget.users) {
-      if (adminUserIds.contains(user.id)) {
-        selectedUsers.add(user);
-      }
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _init();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      title: const Text(
-        '管理者を変更',
-        style: TextStyle(fontSize: 16),
-      ),
-      content: Container(
-        decoration: BoxDecoration(border: Border.all(color: kGrey600Color)),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: widget.users.map((user) {
-              return CustomCheckbox(
-                label: user.name,
-                value: selectedUsers.contains(user),
-                onChanged: (value) {
-                  if (selectedUsers.contains(user)) {
-                    selectedUsers.remove(user);
-                  } else {
-                    selectedUsers.add(user);
-                  }
-                  setState(() {});
-                },
-              );
-            }).toList(),
-          ),
-        ),
-      ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
-      actions: [
-        CustomButtonSm(
-          label: '閉じる',
-          labelColor: kWhiteColor,
-          backgroundColor: kGreyColor,
-          onPressed: () => Navigator.pop(context),
-        ),
-        CustomButtonSm(
-          label: '選択内容を保存',
-          labelColor: kWhiteColor,
-          backgroundColor: kBlueColor,
-          onPressed: () async {
-            String? error = await widget.loginProvider.updateAdminUserIds(
-              selectedUsers: selectedUsers,
-            );
-            if (error != null) {
-              if (!mounted) return;
-              showMessage(context, error, false);
-              return;
-            }
-            await widget.loginProvider.reload();
-            if (!mounted) return;
-            showMessage(context, '管理者を変更しました', true);
-            pushReplacementScreen(context, const LoginScreen());
           },
         ),
       ],

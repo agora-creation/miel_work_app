@@ -42,7 +42,7 @@ class CustomAppbar extends StatelessWidget {
                     style: const TextStyle(fontSize: 14),
                   ),
                   const SizedBox(width: 4),
-                  loginProvider.isAdmin()
+                  loginProvider.user?.admin == true
                       ? const Text(
                           '管理者',
                           style: TextStyle(

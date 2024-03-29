@@ -65,19 +65,17 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
           style: const TextStyle(color: kBlackColor),
         ),
         actions: [
-          widget.loginProvider.isAdmin()
-              ? IconButton(
-                  onPressed: () => pushScreen(
-                    context,
-                    NoticeModScreen(
-                      loginProvider: widget.loginProvider,
-                      homeProvider: widget.homeProvider,
-                      notice: widget.notice,
-                    ),
-                  ),
-                  icon: const Icon(Icons.edit, color: kBlueColor),
-                )
-              : Container(),
+          IconButton(
+            onPressed: () => pushScreen(
+              context,
+              NoticeModScreen(
+                loginProvider: widget.loginProvider,
+                homeProvider: widget.homeProvider,
+                notice: widget.notice,
+              ),
+            ),
+            icon: const Icon(Icons.edit, color: kBlueColor),
+          ),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),

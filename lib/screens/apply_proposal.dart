@@ -26,6 +26,8 @@ class ApplyProposalScreen extends StatefulWidget {
 
 class _ApplyProposalScreenState extends State<ApplyProposalScreen> {
   ApplyProposalService proposalService = ApplyProposalService();
+  DateTime? searchStart;
+  DateTime? searchEnd;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +77,8 @@ class _ApplyProposalScreenState extends State<ApplyProposalScreen> {
               stream: proposalService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
                 approval: 0,
+                searchStart: searchStart,
+                searchEnd: searchEnd,
               ),
               builder: (context, snapshot) {
                 List<ApplyProposalModel> proposals = [];
@@ -110,6 +114,8 @@ class _ApplyProposalScreenState extends State<ApplyProposalScreen> {
               stream: proposalService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
                 approval: 1,
+                searchStart: searchStart,
+                searchEnd: searchEnd,
               ),
               builder: (context, snapshot) {
                 List<ApplyProposalModel> proposals = [];
@@ -145,6 +151,8 @@ class _ApplyProposalScreenState extends State<ApplyProposalScreen> {
               stream: proposalService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
                 approval: 9,
+                searchStart: searchStart,
+                searchEnd: searchEnd,
               ),
               builder: (context, snapshot) {
                 List<ApplyProposalModel> proposals = [];

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/apply_proposal.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 
@@ -25,13 +26,26 @@ class ApplyProposalService {
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
     required int approval,
+    required DateTime? searchStart,
+    required DateTime? searchEnd,
   }) {
-    return FirebaseFirestore.instance
-        .collection(collection)
-        .where('organizationId', isEqualTo: organizationId ?? 'error')
-        .where('approval', isEqualTo: approval)
-        .orderBy('createdAt', descending: true)
-        .snapshots();
+    if (searchStart != null && searchEnd != null) {
+      Timestamp startAt = convertTimestamp(searchStart, false);
+      Timestamp endAt = convertTimestamp(searchEnd, true);
+      return FirebaseFirestore.instance
+          .collection(collection)
+          .where('organizationId', isEqualTo: organizationId ?? 'error')
+          .where('approval', isEqualTo: approval)
+          .orderBy('createdAt', descending: true)
+          .startAt([endAt]).endAt([startAt]).snapshots();
+    } else {
+      return FirebaseFirestore.instance
+          .collection(collection)
+          .where('organizationId', isEqualTo: organizationId ?? 'error')
+          .where('approval', isEqualTo: approval)
+          .orderBy('createdAt', descending: true)
+          .snapshots();
+    }
   }
 
   List<ApplyProposalModel> generateList({

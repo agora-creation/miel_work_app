@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/chat_message.dart';
+import 'package:miel_work_app/models/read_user.dart';
+import 'package:miel_work_app/models/user.dart';
 
 class MessageList extends StatelessWidget {
   final ChatMessageModel message;
-  final bool isMe;
+  final UserModel? loginUser;
   final Function()? onTapReadUsers;
   final Function()? onTapImage;
   final Function()? onTapFile;
 
   const MessageList({
     required this.message,
-    required this.isMe,
+    required this.loginUser,
     required this.onTapReadUsers,
     required this.onTapImage,
     required this.onTapFile,
@@ -21,7 +23,13 @@ class MessageList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isMe) {
+    List<ReadUserModel> readUsers = [];
+    for (ReadUserModel readUser in message.readUsers) {
+      if (readUser.userId != loginUser?.id) {
+        readUsers.add(readUser);
+      }
+    }
+    if (message.createdUserId == loginUser?.id) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Column(
@@ -94,11 +102,11 @@ class MessageList extends StatelessWidget {
                 fontSize: 12,
               ),
             ),
-            message.readUsers.isNotEmpty
+            readUsers.isNotEmpty
                 ? GestureDetector(
                     onTap: onTapReadUsers,
                     child: Text(
-                      '既読 ${message.readUsers.length}',
+                      '既読 ${readUsers.length}',
                       style: const TextStyle(
                         color: kGrey600Color,
                         fontSize: 12,
@@ -187,11 +195,11 @@ class MessageList extends StatelessWidget {
                 fontSize: 12,
               ),
             ),
-            message.readUsers.isNotEmpty
+            readUsers.isNotEmpty
                 ? GestureDetector(
                     onTap: onTapReadUsers,
                     child: Text(
-                      '既読 ${message.readUsers.length}',
+                      '既読 ${readUsers.length}',
                       style: const TextStyle(
                         color: kGrey600Color,
                         fontSize: 12,

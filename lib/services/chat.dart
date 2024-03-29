@@ -52,9 +52,11 @@ class ChatService {
         .then((value) {
       for (DocumentSnapshot<Map<String, dynamic>> map in value.docs) {
         ChatModel chat = ChatModel.fromSnapshot(map);
-        if (groupId == null) {
-          ret.add(chat);
-        } else if (chat.groupId == groupId || chat.groupId == '') {
+        if (groupId != null) {
+          if (chat.groupId == '' || chat.groupId == groupId) {
+            ret.add(chat);
+          }
+        } else {
           ret.add(chat);
         }
       }

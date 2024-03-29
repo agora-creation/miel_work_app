@@ -56,6 +56,8 @@ class _NoticeScreenState extends State<NoticeScreen> {
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: noticeService.streamList(
           organizationId: widget.loginProvider.organization?.id,
+          searchStart: null,
+          searchEnd: null,
         ),
         builder: (context, snapshot) {
           List<NoticeModel> notices = [];
@@ -88,25 +90,23 @@ class _NoticeScreenState extends State<NoticeScreen> {
           );
         },
       ),
-      floatingActionButton: widget.loginProvider.isAdmin()
-          ? FloatingActionButton.extended(
-              onPressed: () => pushScreen(
-                context,
-                NoticeAddScreen(
-                  loginProvider: widget.loginProvider,
-                  homeProvider: widget.homeProvider,
-                ),
-              ),
-              icon: const Icon(
-                Icons.add,
-                color: kWhiteColor,
-              ),
-              label: const Text(
-                '新規追加',
-                style: TextStyle(color: kWhiteColor),
-              ),
-            )
-          : Container(),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => pushScreen(
+          context,
+          NoticeAddScreen(
+            loginProvider: widget.loginProvider,
+            homeProvider: widget.homeProvider,
+          ),
+        ),
+        icon: const Icon(
+          Icons.add,
+          color: kWhiteColor,
+        ),
+        label: const Text(
+          '新規追加',
+          style: TextStyle(color: kWhiteColor),
+        ),
+      ),
     );
   }
 }

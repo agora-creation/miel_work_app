@@ -26,6 +26,8 @@ class ApplyConferenceScreen extends StatefulWidget {
 
 class _ApplyConferenceScreenState extends State<ApplyConferenceScreen> {
   ApplyConferenceService conferenceService = ApplyConferenceService();
+  DateTime? searchStart;
+  DateTime? searchEnd;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +77,8 @@ class _ApplyConferenceScreenState extends State<ApplyConferenceScreen> {
               stream: conferenceService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
                 approval: 0,
+                searchStart: searchStart,
+                searchEnd: searchEnd,
               ),
               builder: (context, snapshot) {
                 List<ApplyConferenceModel> conferences = [];
@@ -110,6 +114,8 @@ class _ApplyConferenceScreenState extends State<ApplyConferenceScreen> {
               stream: conferenceService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
                 approval: 1,
+                searchStart: searchStart,
+                searchEnd: searchEnd,
               ),
               builder: (context, snapshot) {
                 List<ApplyConferenceModel> conferences = [];
@@ -145,6 +151,8 @@ class _ApplyConferenceScreenState extends State<ApplyConferenceScreen> {
               stream: conferenceService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
                 approval: 9,
+                searchStart: searchStart,
+                searchEnd: searchEnd,
               ),
               builder: (context, snapshot) {
                 List<ApplyConferenceModel> conferences = [];

@@ -86,7 +86,6 @@ class ApplyConferenceProvider with ChangeNotifier {
   Future<String?> approval({
     required ApplyConferenceModel conference,
     required UserModel? loginUser,
-    required bool isAdmin,
   }) async {
     String? error;
     if (loginUser == null) return '承認に失敗しました';
@@ -100,36 +99,37 @@ class ApplyConferenceProvider with ChangeNotifier {
       approvalUsers.add({
         'userId': loginUser.id,
         'userName': loginUser.name,
-        'userAdmin': isAdmin,
+        'userAdmin': loginUser.admin,
         'approvedAt': DateTime.now(),
       });
-      if (isAdmin) {
+      if (loginUser.admin) {
         _conferenceService.update({
           'id': conference.id,
           'approval': 1,
           'approvedAt': DateTime.now(),
           'approvalUsers': approvalUsers,
         });
+        //通知
+        List<UserModel> sendUsers = [];
+        sendUsers = await _userService.selectList(
+          userIds: [conference.createdUserId],
+        );
+        if (sendUsers.isNotEmpty) {
+          for (UserModel user in sendUsers) {
+            if (user.id == loginUser.id) continue;
+            _fmService.send(
+              token: user.token,
+              title: conference.title,
+              body: '協議・報告申請が承認されました。',
+            );
+          }
+        }
       } else {
         _conferenceService.update({
           'id': conference.id,
+          'approval': 0,
           'approvalUsers': approvalUsers,
         });
-      }
-      //通知
-      List<UserModel> sendUsers = [];
-      sendUsers = await _userService.selectList(
-        userIds: [conference.createdUserId],
-      );
-      if (sendUsers.isNotEmpty) {
-        for (UserModel user in sendUsers) {
-          if (user.id == loginUser.id) continue;
-          _fmService.send(
-            token: user.token,
-            title: conference.title,
-            body: '協議・報告申請が承認されました。',
-          );
-        }
       }
     } catch (e) {
       error = '承認に失敗しました';

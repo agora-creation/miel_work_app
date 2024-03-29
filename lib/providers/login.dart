@@ -34,14 +34,16 @@ class LoginProvider with ChangeNotifier {
   OrganizationGroupModel? _group;
   OrganizationGroupModel? get group => _group;
 
-  bool isAdmin() {
-    List<String> orgAdminUserIds = _organization?.adminUserIds ?? [];
-    String userId = _user?.id ?? '';
-    return orgAdminUserIds.contains(userId);
-  }
-
   LoginProvider.initialize() : _auth = FirebaseAuth.instance {
     _auth?.authStateChanges().listen(_onStateChanged);
+  }
+
+  bool isAllGroup() {
+    if (_group == null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<String?> login({
@@ -66,31 +68,24 @@ class LoginProvider with ChangeNotifier {
           userId: tmpUser.id,
         );
         if (tmpOrganization != null) {
-          if (tmpUser.uid == '') {
-            _user = tmpUser;
-            _organization = tmpOrganization;
-            OrganizationGroupModel? tmpGroup = await _groupService.selectData(
-              organizationId: tmpOrganization.id,
-              userId: tmpUser.id,
-            );
-            if (tmpGroup != null) {
-              _group = tmpGroup;
-            }
-            String uid = result?.user?.uid ?? '';
-            String token = await _fmService.getToken() ?? '';
-            _userService.update({
-              'id': _user?.id,
-              'uid': uid,
-              'token': token,
-            });
-            await setPrefsString('email', email);
-            await setPrefsString('password', password);
-          } else {
-            await _auth?.signOut();
-            _status = AuthStatus.unauthenticated;
-            notifyListeners();
-            error = '既に他の端末でログインしてます';
+          _user = tmpUser;
+          _organization = tmpOrganization;
+          OrganizationGroupModel? tmpGroup = await _groupService.selectData(
+            organizationId: tmpOrganization.id,
+            userId: tmpUser.id,
+          );
+          if (tmpGroup != null) {
+            _group = tmpGroup;
           }
+          String uid = result?.user?.uid ?? '';
+          String token = await _fmService.getToken() ?? '';
+          _userService.update({
+            'id': _user?.id,
+            'uid': uid,
+            'token': token,
+          });
+          await setPrefsString('email', email);
+          await setPrefsString('password', password);
         } else {
           await _auth?.signOut();
           _status = AuthStatus.unauthenticated;
@@ -161,27 +156,6 @@ class LoginProvider with ChangeNotifier {
     return error;
   }
 
-  Future<String?> updateAdminUserIds({
-    required List<UserModel> selectedUsers,
-  }) async {
-    String? error;
-    if (selectedUsers.isEmpty) return 'スタッフを一人以上選択してください';
-    try {
-      List<String> adminUserIds = [];
-      for (UserModel user in selectedUsers) {
-        adminUserIds.add(user.id);
-      }
-      _organizationService.update({
-        'id': _organization?.id,
-        'adminUserIds': adminUserIds,
-      });
-    } catch (e) {
-      notifyListeners();
-      error = '管理者の変更に失敗しました';
-    }
-    return error;
-  }
-
   Future logout() async {
     _userService.update({
       'id': _user?.id,
@@ -207,19 +181,21 @@ class LoginProvider with ChangeNotifier {
         password: password,
       );
       if (tmpUser != null) {
-        OrganizationModel? tmpOrganization =
-            await _organizationService.selectData(
-          userId: tmpUser.id,
-        );
-        if (tmpOrganization != null) {
-          _user = tmpUser;
-          _organization = tmpOrganization;
-          OrganizationGroupModel? tmpGroup = await _groupService.selectData(
-            organizationId: tmpOrganization.id,
+        if (tmpUser.uid != '') {
+          OrganizationModel? tmpOrganization =
+              await _organizationService.selectData(
             userId: tmpUser.id,
           );
-          if (tmpGroup != null) {
-            _group = tmpGroup;
+          if (tmpOrganization != null) {
+            _user = tmpUser;
+            _organization = tmpOrganization;
+            OrganizationGroupModel? tmpGroup = await _groupService.selectData(
+              organizationId: tmpOrganization.id,
+              userId: tmpUser.id,
+            );
+            if (tmpGroup != null) {
+              _group = tmpGroup;
+            }
           }
         }
       }
@@ -241,19 +217,24 @@ class LoginProvider with ChangeNotifier {
           password: password,
         );
         if (tmpUser != null) {
-          OrganizationModel? tmpOrganization =
-              await _organizationService.selectData(
-            userId: tmpUser.id,
-          );
-          if (tmpOrganization != null) {
-            _user = tmpUser;
-            _organization = tmpOrganization;
-            OrganizationGroupModel? tmpGroup = await _groupService.selectData(
-              organizationId: tmpOrganization.id,
+          if (tmpUser.uid != '') {
+            OrganizationModel? tmpOrganization =
+                await _organizationService.selectData(
               userId: tmpUser.id,
             );
-            if (tmpGroup != null) {
-              _group = tmpGroup;
+            if (tmpOrganization != null) {
+              _user = tmpUser;
+              _organization = tmpOrganization;
+              OrganizationGroupModel? tmpGroup = await _groupService.selectData(
+                organizationId: tmpOrganization.id,
+                userId: tmpUser.id,
+              );
+              if (tmpGroup != null) {
+                _group = tmpGroup;
+              }
+            } else {
+              _authUser = null;
+              _status = AuthStatus.unauthenticated;
             }
           } else {
             _authUser = null;

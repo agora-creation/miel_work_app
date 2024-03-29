@@ -170,7 +170,7 @@ class _PlanModScreenState extends State<PlanModScreen> {
             children: [
               FormLabel(
                 label: '公開グループ',
-                child: widget.loginProvider.isAdmin()
+                child: widget.loginProvider.isAllGroup()
                     ? DropdownButton<OrganizationGroupModel?>(
                         hint: const Text('グループ未選択'),
                         underline: Container(),
@@ -186,7 +186,7 @@ class _PlanModScreenState extends State<PlanModScreen> {
                     : Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Text(
-                          selectedGroup?.name ?? '',
+                          '${selectedGroup?.name}',
                           style: const TextStyle(fontSize: 18),
                         ),
                       ),
