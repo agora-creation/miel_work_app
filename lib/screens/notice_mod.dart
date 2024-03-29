@@ -127,18 +127,26 @@ class _ManualModScreenState extends State<NoticeModScreen> {
                 const SizedBox(height: 8),
                 FormLabel(
                   label: '送信先グループ',
-                  child: DropdownButton<OrganizationGroupModel?>(
-                    hint: const Text('グループ未選択'),
-                    underline: Container(),
-                    isExpanded: true,
-                    value: selectedGroup,
-                    items: groupItems,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedGroup = value;
-                      });
-                    },
-                  ),
+                  child: widget.loginProvider.isAllGroup()
+                      ? DropdownButton<OrganizationGroupModel?>(
+                          hint: const Text('グループ未選択'),
+                          underline: Container(),
+                          isExpanded: true,
+                          value: selectedGroup,
+                          items: groupItems,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedGroup = value;
+                            });
+                          },
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: Text(
+                            '${selectedGroup?.name}',
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                        ),
                 ),
                 const SizedBox(height: 8),
                 CustomFileField(

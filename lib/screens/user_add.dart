@@ -146,13 +146,8 @@ class _UserAddScreenState extends State<UserAddScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Container(
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      top: BorderSide(color: kGrey600Color),
-                      bottom: BorderSide(color: kGrey600Color),
-                    ),
-                  ),
+                FormLabel(
+                  label: '権限',
                   child: CheckboxListTile(
                     value: admin,
                     onChanged: (value) {

@@ -179,13 +179,7 @@ class _PlanShiftAddScreenState extends State<PlanShiftAddScreen> {
                           });
                         },
                       )
-                    : Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Text(
-                          '${selectedGroup?.name}',
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                      ),
+                    : Container(),
               ),
               Container(
                 height: 200,

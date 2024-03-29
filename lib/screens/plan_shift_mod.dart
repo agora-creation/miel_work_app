@@ -191,13 +191,7 @@ class _PlanShiftModScreenState extends State<PlanShiftModScreen> {
                           });
                         },
                       )
-                    : Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Text(
-                          '${selectedGroup?.name}',
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                      ),
+                    : Container(),
               ),
               Container(
                 height: 200,
