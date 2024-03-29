@@ -36,6 +36,7 @@ class _UserModScreenState extends State<UserModScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   OrganizationGroupModel? selectedGroup;
+  bool admin = false;
 
   @override
   void initState() {
@@ -44,6 +45,7 @@ class _UserModScreenState extends State<UserModScreen> {
     emailController.text = widget.user.email;
     passwordController.text = widget.user.password;
     selectedGroup = widget.userInGroup;
+    admin = widget.user.admin;
   }
 
   @override
@@ -61,11 +63,6 @@ class _UserModScreenState extends State<UserModScreen> {
           child: Text(group.name),
         ));
       }
-    }
-    bool deleteDisabled = false;
-    List<String> adminUserIds = [];
-    if (adminUserIds.contains(widget.user.id)) {
-      deleteDisabled = true;
     }
     return Scaffold(
       backgroundColor: kWhiteColor,
@@ -93,7 +90,7 @@ class _UserModScreenState extends State<UserModScreen> {
                 password: passwordController.text,
                 befGroup: widget.userInGroup,
                 aftGroup: selectedGroup,
-                admin: false,
+                admin: admin,
               );
               if (error != null) {
                 if (!mounted) return;
@@ -159,35 +156,50 @@ class _UserModScreenState extends State<UserModScreen> {
                     },
                   ),
                 ),
+                const SizedBox(height: 8),
+                Container(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      top: BorderSide(color: kGrey600Color),
+                      bottom: BorderSide(color: kGrey600Color),
+                    ),
+                  ),
+                  child: CheckboxListTile(
+                    value: admin,
+                    onChanged: (value) {
+                      setState(() {
+                        admin = value ?? false;
+                      });
+                    },
+                    title: const Text('このスタッフを管理者とする'),
+                  ),
+                ),
                 const SizedBox(height: 16),
-                !deleteDisabled
-                    ? LinkText(
-                        label: 'このスタッフを削除する',
-                        color: kRedColor,
-                        onTap: () async {
-                          String? error = await userProvider.delete(
-                            organization: widget.loginProvider.organization,
-                            user: widget.user,
-                            group: widget.userInGroup,
-                          );
-                          if (error != null) {
-                            if (!mounted) return;
-                            showMessage(context, error, false);
-                            return;
-                          }
-                          await widget.loginProvider.reload();
-                          widget.homeProvider.setGroups(
-                            organizationId:
-                                widget.loginProvider.organization?.id ??
-                                    'error',
-                          );
-                          widget.getUsers();
-                          if (!mounted) return;
-                          showMessage(context, 'スタッフを削除しました', true);
-                          Navigator.pop(context);
-                        },
-                      )
-                    : Container(),
+                LinkText(
+                  label: 'このスタッフを削除する',
+                  color: kRedColor,
+                  onTap: () async {
+                    String? error = await userProvider.delete(
+                      organization: widget.loginProvider.organization,
+                      user: widget.user,
+                      group: widget.userInGroup,
+                    );
+                    if (error != null) {
+                      if (!mounted) return;
+                      showMessage(context, error, false);
+                      return;
+                    }
+                    await widget.loginProvider.reload();
+                    widget.homeProvider.setGroups(
+                      organizationId:
+                          widget.loginProvider.organization?.id ?? 'error',
+                    );
+                    widget.getUsers();
+                    if (!mounted) return;
+                    showMessage(context, 'スタッフを削除しました', true);
+                    Navigator.pop(context);
+                  },
+                ),
               ],
             ),
           ),

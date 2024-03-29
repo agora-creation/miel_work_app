@@ -49,6 +49,32 @@ class _ApplyProposalScreenState extends State<ApplyProposalScreen> {
             '稟議申請一覧',
             style: TextStyle(color: kBlackColor),
           ),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                var selected = await showDataRangePickerDialog(
+                  context: context,
+                  startValue: searchStart,
+                  endValue: searchEnd,
+                );
+                if (selected != null &&
+                    selected.first != null &&
+                    selected.last != null) {
+                  var diff = selected.last!.difference(selected.first!);
+                  int diffDays = diff.inDays;
+                  if (diffDays > 31) {
+                    if (!mounted) return;
+                    showMessage(context, '1ヵ月以上の範囲が選択されています', false);
+                    return;
+                  }
+                  searchStart = selected.first;
+                  searchEnd = selected.last;
+                  setState(() {});
+                }
+              },
+              icon: const Icon(Icons.date_range, color: kBlueColor),
+            ),
+          ],
           bottom: const TabBar(
             tabs: [
               Padding(

@@ -1,4 +1,5 @@
 import 'package:alert_banner/exports.dart';
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:miel_work_app/common/date_machine_util.dart';
+import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/widgets/custom_alert_banner.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -107,6 +109,26 @@ String dateText(String format, DateTime? date) {
     ret = DateFormat(format, 'ja').format(date);
   }
   return ret;
+}
+
+Future<List<DateTime?>?> showDataRangePickerDialog({
+  required BuildContext context,
+  DateTime? startValue,
+  DateTime? endValue,
+}) async {
+  List<DateTime?>? results = await showCalendarDatePicker2Dialog(
+    context: context,
+    config: CalendarDatePicker2WithActionButtonsConfig(
+      calendarType: CalendarDatePicker2Type.range,
+      firstDate: kFirstDate,
+      lastDate: kLastDate,
+    ),
+    dialogSize: const Size(325, 400),
+    value: [startValue, endValue],
+    borderRadius: BorderRadius.circular(8),
+    dialogBackgroundColor: kWhiteColor,
+  );
+  return results;
 }
 
 Timestamp convertTimestamp(DateTime date, bool end) {

@@ -30,6 +30,7 @@ class _UserAddScreenState extends State<UserAddScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   OrganizationGroupModel? selectedGroup;
+  bool admin = false;
 
   @override
   void initState() {
@@ -78,7 +79,7 @@ class _UserAddScreenState extends State<UserAddScreen> {
                 email: emailController.text,
                 password: passwordController.text,
                 group: selectedGroup,
-                admin: false,
+                admin: admin,
               );
               if (error != null) {
                 if (!mounted) return;
@@ -142,6 +143,24 @@ class _UserAddScreenState extends State<UserAddScreen> {
                         selectedGroup = value;
                       });
                     },
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      top: BorderSide(color: kGrey600Color),
+                      bottom: BorderSide(color: kGrey600Color),
+                    ),
+                  ),
+                  child: CheckboxListTile(
+                    value: admin,
+                    onChanged: (value) {
+                      setState(() {
+                        admin = value ?? false;
+                      });
+                    },
+                    title: const Text('このスタッフを管理者とする'),
                   ),
                 ),
               ],

@@ -255,36 +255,40 @@ class _HomeScreenState extends State<HomeScreen> {
                               }
                             },
                           ),
-                          CustomHomeIconCard(
-                            icon: Icons.category,
-                            iconSize: 40,
-                            label: 'グループ管理',
-                            labelFontSize: 14,
-                            color: kWhiteColor,
-                            backgroundColor: kGrey600Color,
-                            onTap: () => pushScreen(
-                              context,
-                              GroupScreen(
-                                loginProvider: loginProvider,
-                                homeProvider: homeProvider,
-                              ),
-                            ),
-                          ),
-                          CustomHomeIconCard(
-                            icon: Icons.groups,
-                            iconSize: 40,
-                            label: 'スタッフ管理',
-                            labelFontSize: 14,
-                            color: kWhiteColor,
-                            backgroundColor: kGrey600Color,
-                            onTap: () => pushScreen(
-                              context,
-                              UserScreen(
-                                loginProvider: loginProvider,
-                                homeProvider: homeProvider,
-                              ),
-                            ),
-                          ),
+                          loginProvider.isAllGroup()
+                              ? CustomHomeIconCard(
+                                  icon: Icons.category,
+                                  iconSize: 40,
+                                  label: 'グループ管理',
+                                  labelFontSize: 14,
+                                  color: kWhiteColor,
+                                  backgroundColor: kGrey600Color,
+                                  onTap: () => pushScreen(
+                                    context,
+                                    GroupScreen(
+                                      loginProvider: loginProvider,
+                                      homeProvider: homeProvider,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                          loginProvider.isAllGroup()
+                              ? CustomHomeIconCard(
+                                  icon: Icons.groups,
+                                  iconSize: 40,
+                                  label: 'スタッフ管理',
+                                  labelFontSize: 14,
+                                  color: kWhiteColor,
+                                  backgroundColor: kGrey600Color,
+                                  onTap: () => pushScreen(
+                                    context,
+                                    UserScreen(
+                                      loginProvider: loginProvider,
+                                      homeProvider: homeProvider,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
                         ],
                       ),
                       const SizedBox(height: 8),

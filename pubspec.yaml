@@ -39,6 +39,7 @@ dependencies:
   currency_text_input_formatter: ^2.1.9
   flutter_file_dialog: ^3.0.2
   flutter_colorpicker: ^1.0.3
+  calendar_date_picker2: ^0.5.5
 
   firebase_core: ^2.25.4
   firebase_auth: ^4.17.4

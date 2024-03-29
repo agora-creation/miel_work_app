@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/login.dart';
-import 'package:miel_work_app/services/user.dart';
 import 'package:miel_work_app/widgets/custom_button_sm.dart';
 import 'package:miel_work_app/widgets/custom_setting_list.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
@@ -26,31 +24,6 @@ class UserSettingScreen extends StatefulWidget {
 }
 
 class _UserSettingScreenState extends State<UserSettingScreen> {
-  UserService userService = UserService();
-  List<UserModel> users = [];
-  String usersText = '';
-
-  void _init() async {
-    users = await userService.selectList(
-      userIds: widget.loginProvider.organization?.userIds ?? [],
-      removeGroups: widget.homeProvider.groups,
-    );
-    List<String> adminUserIds = [];
-    for (UserModel user in users) {
-      if (adminUserIds.contains(user.id)) {
-        if (usersText != '') usersText += ',';
-        usersText += user.name;
-      }
-    }
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _init();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -26,6 +26,8 @@ class NoticeScreen extends StatefulWidget {
 
 class _NoticeScreenState extends State<NoticeScreen> {
   NoticeService noticeService = NoticeService();
+  DateTime? searchStart;
+  DateTime? searchEnd;
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +53,39 @@ class _NoticeScreenState extends State<NoticeScreen> {
           appBarTitle,
           style: const TextStyle(color: kBlackColor),
         ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              var selected = await showDataRangePickerDialog(
+                context: context,
+                startValue: searchStart,
+                endValue: searchEnd,
+              );
+              if (selected != null &&
+                  selected.first != null &&
+                  selected.last != null) {
+                var diff = selected.last!.difference(selected.first!);
+                int diffDays = diff.inDays;
+                if (diffDays > 31) {
+                  if (!mounted) return;
+                  showMessage(context, '1ヵ月以上の範囲が選択されています', false);
+                  return;
+                }
+                searchStart = selected.first;
+                searchEnd = selected.last;
+                setState(() {});
+              }
+            },
+            icon: const Icon(Icons.date_range, color: kBlueColor),
+          ),
+        ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: noticeService.streamList(
           organizationId: widget.loginProvider.organization?.id,
-          searchStart: null,
-          searchEnd: null,
+          searchStart: searchStart,
+          searchEnd: searchEnd,
         ),
         builder: (context, snapshot) {
           List<NoticeModel> notices = [];
