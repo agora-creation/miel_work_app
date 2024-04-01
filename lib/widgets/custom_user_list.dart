@@ -23,7 +23,23 @@ class CustomUserList extends StatelessWidget {
       ),
       child: ListTile(
         title: Text(user.name),
-        subtitle: userInGroup != null ? Text(userInGroup?.name ?? '') : null,
+        subtitle: Row(
+          children: [
+            userInGroup != null
+                ? Text(userInGroup?.name ?? '')
+                : const Text('未所属'),
+            const SizedBox(width: 4),
+            user.admin
+                ? const Text(
+                    '管理者',
+                    style: TextStyle(
+                      color: kRedColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                : Container(),
+          ],
+        ),
         trailing: const Icon(Icons.chevron_right),
         onTap: onTap,
       ),

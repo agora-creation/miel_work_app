@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/models/apply_proposal.dart';
+import 'package:miel_work_app/models/apply.dart';
 import 'package:miel_work_app/models/approval_user.dart';
-import 'package:miel_work_app/providers/apply_proposal.dart';
+import 'package:miel_work_app/providers/apply.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/screens/apply_proposal_add.dart';
+import 'package:miel_work_app/screens/apply_add.dart';
 import 'package:miel_work_app/widgets/custom_approval_user_list.dart';
 import 'package:miel_work_app/widgets/custom_button_sm.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
@@ -14,53 +14,52 @@ import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
 import 'package:provider/provider.dart';
 
-class ApplyProposalDetailScreen extends StatefulWidget {
+class ApplyDetailScreen extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
-  final ApplyProposalModel proposal;
+  final ApplyModel apply;
 
-  const ApplyProposalDetailScreen({
+  const ApplyDetailScreen({
     required this.loginProvider,
     required this.homeProvider,
-    required this.proposal,
+    required this.apply,
     super.key,
   });
 
   @override
-  State<ApplyProposalDetailScreen> createState() =>
-      _ApplyProposalDetailScreenState();
+  State<ApplyDetailScreen> createState() => _ApplyDetailScreenState();
 }
 
-class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
+class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
   @override
   Widget build(BuildContext context) {
     bool isApproval = true;
     bool isReject = true;
     bool isApply = false;
     bool isDelete = true;
-    if (widget.proposal.createdUserId == widget.loginProvider.user?.id) {
+    if (widget.apply.createdUserId == widget.loginProvider.user?.id) {
       isApproval = false;
       isReject = false;
-      if (widget.proposal.approval == 9) {
+      if (widget.apply.approval == 9) {
         isApply = true;
       }
     } else {
       isDelete = false;
     }
-    if (widget.proposal.approvalUsers.isNotEmpty) {
-      for (ApprovalUserModel user in widget.proposal.approvalUsers) {
+    if (widget.apply.approvalUsers.isNotEmpty) {
+      for (ApprovalUserModel user in widget.apply.approvalUsers) {
         if (user.userId == widget.loginProvider.user?.id) {
           isApproval = false;
           isReject = false;
         }
       }
     }
-    if (widget.proposal.approval == 1 || widget.proposal.approval == 9) {
+    if (widget.apply.approval == 1 || widget.apply.approval == 9) {
       isApproval = false;
       isReject = false;
       isDelete = false;
     }
-    List<ApprovalUserModel> approvalUsers = widget.proposal.approvalUsers;
+    List<ApprovalUserModel> approvalUsers = widget.apply.approvalUsers;
     List<ApprovalUserModel> reApprovalUsers = approvalUsers.reversed.toList();
     return Scaffold(
       backgroundColor: kWhiteColor,
@@ -74,19 +73,19 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         centerTitle: true,
-        title: const Text(
-          '稟議申請詳細',
-          style: TextStyle(color: kBlackColor),
+        title: Text(
+          '${widget.apply.type}申請詳細',
+          style: const TextStyle(color: kBlackColor),
         ),
         actions: [
           isDelete
               ? TextButton(
                   onPressed: () => showDialog(
                     context: context,
-                    builder: (context) => DelApplyProposalDialog(
+                    builder: (context) => DelApplyDialog(
                       loginProvider: widget.loginProvider,
                       homeProvider: widget.homeProvider,
-                      proposal: widget.proposal,
+                      apply: widget.apply,
                     ),
                   ),
                   child: const Text(
@@ -110,12 +109,12 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      '提出日時: ${dateText('yyyy/MM/dd HH:mm', widget.proposal.createdAt)}',
+                      '申請日時: ${dateText('yyyy/MM/dd HH:mm', widget.apply.createdAt)}',
                       style: const TextStyle(color: kGreyColor),
                     ),
-                    widget.proposal.approval == 1
+                    widget.apply.approval == 1
                         ? Text(
-                            '承認日時: ${dateText('yyyy/MM/dd HH:mm', widget.proposal.approvedAt)}',
+                            '承認日時: ${dateText('yyyy/MM/dd HH:mm', widget.apply.approvedAt)}',
                             style: const TextStyle(
                               color: kRedColor,
                               fontWeight: FontWeight.bold,
@@ -123,7 +122,7 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                           )
                         : Container(),
                     Text(
-                      '作成者: ${widget.proposal.createdUserName}',
+                      '申請者: ${widget.apply.createdUserName}',
                       style: const TextStyle(color: kGreyColor),
                     ),
                   ],
@@ -148,49 +147,51 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
-                    widget.proposal.title,
+                    widget.apply.title,
                     style: const TextStyle(fontSize: 18),
                   ),
                 ),
               ),
               const SizedBox(height: 8),
-              FormLabel(
-                label: '金額',
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(
-                    '¥ ${widget.proposal.formatPrice()}',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                ),
-              ),
+              widget.apply.type == '稟議'
+                  ? FormLabel(
+                      label: '金額',
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Text(
+                          '¥ ${widget.apply.formatPrice()}',
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    )
+                  : Container(),
               const SizedBox(height: 8),
               FormLabel(
                 label: '内容',
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(widget.proposal.content),
+                  child: Text(widget.apply.content),
                 ),
               ),
               const SizedBox(height: 8),
-              widget.proposal.reason != ''
+              widget.apply.reason != ''
                   ? FormLabel(
                       label: '否決理由',
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Text(widget.proposal.reason),
+                        child: Text(widget.apply.reason),
                       ),
                     )
                   : Container(),
               const SizedBox(height: 16),
-              widget.proposal.file != ''
+              widget.apply.file != ''
                   ? LinkText(
                       label: '添付ファイル',
                       color: kBlueColor,
                       onTap: () async {
                         if (await saveFile(
-                          widget.proposal.file,
-                          '${widget.proposal.id}${widget.proposal.fileExt}',
+                          widget.apply.file,
+                          '${widget.apply.id}${widget.apply.fileExt}',
                         )) {
                           if (!mounted) return;
                           showMessage(
@@ -259,10 +260,10 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                   heroTag: 'reject',
                   onPressed: () => showDialog(
                     context: context,
-                    builder: (context) => RejectApplyProposalDialog(
+                    builder: (context) => RejectApplyDialog(
                       loginProvider: widget.loginProvider,
                       homeProvider: widget.homeProvider,
-                      proposal: widget.proposal,
+                      apply: widget.apply,
                     ),
                   ),
                   backgroundColor: kRed100Color,
@@ -282,10 +283,10 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                   heroTag: 'approval',
                   onPressed: () => showDialog(
                     context: context,
-                    builder: (context) => ApprovalApplyProposalDialog(
+                    builder: (context) => ApprovalApplyDialog(
                       loginProvider: widget.loginProvider,
                       homeProvider: widget.homeProvider,
-                      proposal: widget.proposal,
+                      apply: widget.apply,
                     ),
                   ),
                   backgroundColor: kRedColor,
@@ -305,10 +306,10 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
                   heroTag: 'add',
                   onPressed: () => pushScreen(
                     context,
-                    ApplyProposalAddScreen(
+                    ApplyAddScreen(
                       loginProvider: widget.loginProvider,
                       homeProvider: widget.homeProvider,
-                      proposal: widget.proposal,
+                      apply: widget.apply,
                     ),
                   ),
                   backgroundColor: kBlueColor,
@@ -328,27 +329,26 @@ class _ApplyProposalDetailScreenState extends State<ApplyProposalDetailScreen> {
   }
 }
 
-class DelApplyProposalDialog extends StatefulWidget {
+class DelApplyDialog extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
-  final ApplyProposalModel proposal;
+  final ApplyModel apply;
 
-  const DelApplyProposalDialog({
+  const DelApplyDialog({
     required this.loginProvider,
     required this.homeProvider,
-    required this.proposal,
+    required this.apply,
     super.key,
   });
 
   @override
-  State<DelApplyProposalDialog> createState() => _DelApplyProposalDialogState();
+  State<DelApplyDialog> createState() => _DelApplyDialogState();
 }
 
-class _DelApplyProposalDialogState extends State<DelApplyProposalDialog> {
+class _DelApplyDialogState extends State<DelApplyDialog> {
   @override
   Widget build(BuildContext context) {
-    final proposalProvider = Provider.of<ApplyProposalProvider>(context);
-
+    final applyProvider = Provider.of<ApplyProvider>(context);
     return AlertDialog(
       backgroundColor: kWhiteColor,
       surfaceTintColor: kWhiteColor,
@@ -379,8 +379,8 @@ class _DelApplyProposalDialogState extends State<DelApplyProposalDialog> {
           labelColor: kWhiteColor,
           backgroundColor: kRedColor,
           onPressed: () async {
-            String? error = await proposalProvider.delete(
-              proposal: widget.proposal,
+            String? error = await applyProvider.delete(
+              apply: widget.apply,
             );
             if (error != null) {
               if (!mounted) return;
@@ -388,7 +388,7 @@ class _DelApplyProposalDialogState extends State<DelApplyProposalDialog> {
               return;
             }
             if (!mounted) return;
-            showMessage(context, '稟議申請を削除しました', true);
+            showMessage(context, '申請を削除しました', true);
             Navigator.pop(context);
             Navigator.pop(context);
           },
@@ -398,29 +398,26 @@ class _DelApplyProposalDialogState extends State<DelApplyProposalDialog> {
   }
 }
 
-class ApprovalApplyProposalDialog extends StatefulWidget {
+class ApprovalApplyDialog extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
-  final ApplyProposalModel proposal;
+  final ApplyModel apply;
 
-  const ApprovalApplyProposalDialog({
+  const ApprovalApplyDialog({
     required this.loginProvider,
     required this.homeProvider,
-    required this.proposal,
+    required this.apply,
     super.key,
   });
 
   @override
-  State<ApprovalApplyProposalDialog> createState() =>
-      _ApprovalApplyProposalDialogState();
+  State<ApprovalApplyDialog> createState() => _ApprovalApplyDialogState();
 }
 
-class _ApprovalApplyProposalDialogState
-    extends State<ApprovalApplyProposalDialog> {
+class _ApprovalApplyDialogState extends State<ApprovalApplyDialog> {
   @override
   Widget build(BuildContext context) {
-    final proposalProvider = Provider.of<ApplyProposalProvider>(context);
-
+    final applyProvider = Provider.of<ApplyProvider>(context);
     return AlertDialog(
       backgroundColor: kWhiteColor,
       surfaceTintColor: kWhiteColor,
@@ -451,8 +448,8 @@ class _ApprovalApplyProposalDialogState
           labelColor: kWhiteColor,
           backgroundColor: kRedColor,
           onPressed: () async {
-            String? error = await proposalProvider.approval(
-              proposal: widget.proposal,
+            String? error = await applyProvider.approval(
+              apply: widget.apply,
               loginUser: widget.loginProvider.user,
             );
             if (error != null) {
@@ -471,30 +468,28 @@ class _ApprovalApplyProposalDialogState
   }
 }
 
-class RejectApplyProposalDialog extends StatefulWidget {
+class RejectApplyDialog extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
-  final ApplyProposalModel proposal;
+  final ApplyModel apply;
 
-  const RejectApplyProposalDialog({
+  const RejectApplyDialog({
     required this.loginProvider,
     required this.homeProvider,
-    required this.proposal,
+    required this.apply,
     super.key,
   });
 
   @override
-  State<RejectApplyProposalDialog> createState() =>
-      _RejectApplyProposalDialogState();
+  State<RejectApplyDialog> createState() => _RejectApplyDialogState();
 }
 
-class _RejectApplyProposalDialogState extends State<RejectApplyProposalDialog> {
+class _RejectApplyDialogState extends State<RejectApplyDialog> {
   TextEditingController reasonController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final proposalProvider = Provider.of<ApplyProposalProvider>(context);
-
+    final applyProvider = Provider.of<ApplyProvider>(context);
     return AlertDialog(
       backgroundColor: kWhiteColor,
       surfaceTintColor: kWhiteColor,
@@ -532,8 +527,8 @@ class _RejectApplyProposalDialogState extends State<RejectApplyProposalDialog> {
           labelColor: kRedColor,
           backgroundColor: kRed100Color,
           onPressed: () async {
-            String? error = await proposalProvider.reject(
-              proposal: widget.proposal,
+            String? error = await applyProvider.reject(
+              apply: widget.apply,
               reason: reasonController.text,
               loginUser: widget.loginProvider.user,
             );

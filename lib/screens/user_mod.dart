@@ -55,7 +55,10 @@ class _UserModScreenState extends State<UserModScreen> {
     if (widget.homeProvider.groups.isNotEmpty) {
       groupItems.add(const DropdownMenuItem(
         value: null,
-        child: Text('グループ未選択'),
+        child: Text(
+          '未所属',
+          style: TextStyle(color: kGreyColor),
+        ),
       ));
       for (OrganizationGroupModel group in widget.homeProvider.groups) {
         groupItems.add(DropdownMenuItem(
@@ -144,7 +147,10 @@ class _UserModScreenState extends State<UserModScreen> {
                 FormLabel(
                   label: '所属グループ',
                   child: DropdownButton<OrganizationGroupModel?>(
-                    hint: const Text('グループ未選択'),
+                    hint: const Text(
+                      '未所属',
+                      style: TextStyle(color: kGreyColor),
+                    ),
                     underline: Container(),
                     isExpanded: true,
                     value: selectedGroup,
@@ -170,31 +176,34 @@ class _UserModScreenState extends State<UserModScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                LinkText(
-                  label: 'このスタッフを削除する',
-                  color: kRedColor,
-                  onTap: () async {
-                    String? error = await userProvider.delete(
-                      organization: widget.loginProvider.organization,
-                      user: widget.user,
-                      group: widget.userInGroup,
-                    );
-                    if (error != null) {
-                      if (!mounted) return;
-                      showMessage(context, error, false);
-                      return;
-                    }
-                    await widget.loginProvider.reload();
-                    widget.homeProvider.setGroups(
-                      organizationId:
-                          widget.loginProvider.organization?.id ?? 'error',
-                    );
-                    widget.getUsers();
-                    if (!mounted) return;
-                    showMessage(context, 'スタッフを削除しました', true);
-                    Navigator.pop(context);
-                  },
-                ),
+                !widget.user.admin
+                    ? LinkText(
+                        label: 'このスタッフを削除する',
+                        color: kRedColor,
+                        onTap: () async {
+                          String? error = await userProvider.delete(
+                            organization: widget.loginProvider.organization,
+                            user: widget.user,
+                            group: widget.userInGroup,
+                          );
+                          if (error != null) {
+                            if (!mounted) return;
+                            showMessage(context, error, false);
+                            return;
+                          }
+                          await widget.loginProvider.reload();
+                          widget.homeProvider.setGroups(
+                            organizationId:
+                                widget.loginProvider.organization?.id ??
+                                    'error',
+                          );
+                          widget.getUsers();
+                          if (!mounted) return;
+                          showMessage(context, 'スタッフを削除しました', true);
+                          Navigator.pop(context);
+                        },
+                      )
+                    : Container(),
               ],
             ),
           ),

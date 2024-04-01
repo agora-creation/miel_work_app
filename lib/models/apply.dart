@@ -2,10 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:miel_work_app/models/approval_user.dart';
 
-class ApplyProposalModel {
+const List<String> kApplyTypes = ['稟議', '協議・報告', '企画'];
+
+class ApplyModel {
   String _id = '';
   String _organizationId = '';
   String _groupId = '';
+  String _type = '';
   String _title = '';
   String _content = '';
   int _price = 0;
@@ -22,6 +25,7 @@ class ApplyProposalModel {
   String get id => _id;
   String get organizationId => _organizationId;
   String get groupId => _groupId;
+  String get type => _type;
   String get title => _title;
   String get content => _content;
   int get price => _price;
@@ -34,13 +38,13 @@ class ApplyProposalModel {
   String get createdUserName => _createdUserName;
   DateTime get createdAt => _createdAt;
 
-  ApplyProposalModel.fromSnapshot(
-      DocumentSnapshot<Map<String, dynamic>> snapshot) {
+  ApplyModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     Map<String, dynamic>? data = snapshot.data();
     if (data == null) return;
     _id = data['id'] ?? '';
     _organizationId = data['organizationId'] ?? '';
     _groupId = data['groupId'] ?? '';
+    _type = data['type'] ?? '';
     _title = data['title'] ?? '';
     _content = data['content'] ?? '';
     _price = data['price'] ?? 0;

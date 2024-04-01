@@ -4,9 +4,7 @@ import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/screens/apply_conference.dart';
-import 'package:miel_work_app/screens/apply_project.dart';
-import 'package:miel_work_app/screens/apply_proposal.dart';
+import 'package:miel_work_app/screens/apply.dart';
 import 'package:miel_work_app/screens/chat.dart';
 import 'package:miel_work_app/screens/group.dart';
 import 'package:miel_work_app/screens/how_to.dart';
@@ -198,48 +196,63 @@ class _HomeScreenState extends State<HomeScreen> {
                           CustomHomeIconCard(
                             icon: Icons.edit_note,
                             iconSize: 40,
-                            label: '稟議申請',
+                            label: '各種申請',
                             labelFontSize: 14,
                             color: kBlackColor,
                             backgroundColor: kOrange300Color,
                             onTap: () => pushScreen(
                               context,
-                              ApplyProposalScreen(
+                              ApplyScreen(
                                 loginProvider: loginProvider,
                                 homeProvider: homeProvider,
                               ),
                             ),
                           ),
-                          CustomHomeIconCard(
-                            icon: Icons.edit_note,
-                            iconSize: 40,
-                            label: '協議・報告申請',
-                            labelFontSize: 14,
-                            color: kBlackColor,
-                            backgroundColor: kOrange300Color,
-                            onTap: () => pushScreen(
-                              context,
-                              ApplyConferenceScreen(
-                                loginProvider: loginProvider,
-                                homeProvider: homeProvider,
-                              ),
-                            ),
-                          ),
-                          CustomHomeIconCard(
-                            icon: Icons.edit_note,
-                            iconSize: 40,
-                            label: '企画申請',
-                            labelFontSize: 14,
-                            color: kBlackColor,
-                            backgroundColor: kOrange300Color,
-                            onTap: () => pushScreen(
-                              context,
-                              ApplyProjectScreen(
-                                loginProvider: loginProvider,
-                                homeProvider: homeProvider,
-                              ),
-                            ),
-                          ),
+                          // CustomHomeIconCard(
+                          //   icon: Icons.edit_note,
+                          //   iconSize: 40,
+                          //   label: '稟議申請',
+                          //   labelFontSize: 14,
+                          //   color: kBlackColor,
+                          //   backgroundColor: kOrange300Color,
+                          //   // onTap: () => pushScreen(
+                          //   //   context,
+                          //   //   ApplyProposalScreen(
+                          //   //     loginProvider: loginProvider,
+                          //   //     homeProvider: homeProvider,
+                          //   //   ),
+                          //   // ),
+                          // ),
+                          // CustomHomeIconCard(
+                          //   icon: Icons.edit_note,
+                          //   iconSize: 40,
+                          //   label: '協議・報告申請',
+                          //   labelFontSize: 14,
+                          //   color: kBlackColor,
+                          //   backgroundColor: kOrange300Color,
+                          //   // onTap: () => pushScreen(
+                          //   //   context,
+                          //   //   ApplyConferenceScreen(
+                          //   //     loginProvider: loginProvider,
+                          //   //     homeProvider: homeProvider,
+                          //   //   ),
+                          //   // ),
+                          // ),
+                          // CustomHomeIconCard(
+                          //   icon: Icons.edit_note,
+                          //   iconSize: 40,
+                          //   label: '企画申請',
+                          //   labelFontSize: 14,
+                          //   color: kBlackColor,
+                          //   backgroundColor: kOrange300Color,
+                          //   // onTap: () => pushScreen(
+                          //   //   context,
+                          //   //   ApplyProjectScreen(
+                          //   //     loginProvider: loginProvider,
+                          //   //     homeProvider: homeProvider,
+                          //   //   ),
+                          //   // ),
+                          // ),
                           CustomHomeIconCard(
                             icon: Icons.gas_meter,
                             iconSize: 40,

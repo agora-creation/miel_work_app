@@ -2,24 +2,25 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:flutter/material.dart';
-import 'package:miel_work_app/models/apply_proposal.dart';
+import 'package:miel_work_app/models/apply.dart';
 import 'package:miel_work_app/models/approval_user.dart';
 import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/user.dart';
-import 'package:miel_work_app/services/apply_proposal.dart';
+import 'package:miel_work_app/services/apply.dart';
 import 'package:miel_work_app/services/fm.dart';
 import 'package:miel_work_app/services/user.dart';
 import 'package:path/path.dart' as p;
 
-class ApplyProposalProvider with ChangeNotifier {
-  final ApplyProposalService _proposalService = ApplyProposalService();
+class ApplyProvider with ChangeNotifier {
+  final ApplyService _applyService = ApplyService();
   final UserService _userService = UserService();
   final FmService _fmService = FmService();
 
   Future<String?> create({
     required OrganizationModel? organization,
     required OrganizationGroupModel? group,
+    required String type,
     required String title,
     required String content,
     required int price,
@@ -27,12 +28,12 @@ class ApplyProposalProvider with ChangeNotifier {
     required UserModel? loginUser,
   }) async {
     String? error;
-    if (organization == null) return '稟議申請に失敗しました';
+    if (organization == null) return '申請に失敗しました';
     if (title == '') return '件名を入力してください';
     if (content == '') return '内容を入力してください';
-    if (loginUser == null) return '稟議申請に失敗しました';
+    if (loginUser == null) return '申請に失敗しました';
     try {
-      String id = _proposalService.id();
+      String id = _applyService.id();
       String file = '';
       String fileExt = '';
       if (pickedFile != null) {
@@ -40,17 +41,18 @@ class ApplyProposalProvider with ChangeNotifier {
         storage.UploadTask uploadTask;
         storage.Reference ref = storage.FirebaseStorage.instance
             .ref()
-            .child('applyProposal')
+            .child('apply')
             .child('/$id$ext');
         uploadTask = ref.putData(pickedFile.readAsBytesSync());
         await uploadTask.whenComplete(() => null);
         file = await ref.getDownloadURL();
         fileExt = ext;
       }
-      _proposalService.create({
+      _applyService.create({
         'id': id,
         'organizationId': organization.id,
         'groupId': group?.id ?? '',
+        'type': type,
         'title': title,
         'content': content,
         'price': price,
@@ -75,26 +77,26 @@ class ApplyProposalProvider with ChangeNotifier {
           _fmService.send(
             token: user.token,
             title: title,
-            body: '稟議申請が提出されました。',
+            body: '申請が提出されました。',
           );
         }
       }
     } catch (e) {
-      error = '稟議申請に失敗しました';
+      error = '申請に失敗しました';
     }
     return error;
   }
 
   Future<String?> approval({
-    required ApplyProposalModel proposal,
+    required ApplyModel apply,
     required UserModel? loginUser,
   }) async {
     String? error;
     if (loginUser == null) return '承認に失敗しました';
     try {
       List<Map> approvalUsers = [];
-      if (proposal.approvalUsers.isNotEmpty) {
-        for (ApprovalUserModel approvalUser in proposal.approvalUsers) {
+      if (apply.approvalUsers.isNotEmpty) {
+        for (ApprovalUserModel approvalUser in apply.approvalUsers) {
           approvalUsers.add(approvalUser.toMap());
         }
       }
@@ -105,8 +107,8 @@ class ApplyProposalProvider with ChangeNotifier {
         'approvedAt': DateTime.now(),
       });
       if (loginUser.admin) {
-        _proposalService.update({
-          'id': proposal.id,
+        _applyService.update({
+          'id': apply.id,
           'approval': 1,
           'approvedAt': DateTime.now(),
           'approvalUsers': approvalUsers,
@@ -114,22 +116,21 @@ class ApplyProposalProvider with ChangeNotifier {
         //通知
         List<UserModel> sendUsers = [];
         sendUsers = await _userService.selectList(
-          userIds: [proposal.createdUserId],
+          userIds: [apply.createdUserId],
         );
         if (sendUsers.isNotEmpty) {
           for (UserModel user in sendUsers) {
             if (user.id == loginUser.id) continue;
             _fmService.send(
               token: user.token,
-              title: proposal.title,
-              body: '稟議申請が承認されました。',
+              title: apply.title,
+              body: '申請が承認されました。',
             );
           }
         }
       } else {
-        _proposalService.update({
-          'id': proposal.id,
-          'approval': 0,
+        _applyService.update({
+          'id': apply.id,
           'approvalUsers': approvalUsers,
         });
       }
@@ -140,30 +141,30 @@ class ApplyProposalProvider with ChangeNotifier {
   }
 
   Future<String?> reject({
-    required ApplyProposalModel proposal,
+    required ApplyModel apply,
     required String reason,
     required UserModel? loginUser,
   }) async {
     String? error;
     if (loginUser == null) return '否決に失敗しました';
     try {
-      _proposalService.update({
-        'id': proposal.id,
+      _applyService.update({
+        'id': apply.id,
         'reason': reason,
         'approval': 9,
       });
       //通知
       List<UserModel> sendUsers = [];
       sendUsers = await _userService.selectList(
-        userIds: [proposal.createdUserId],
+        userIds: [apply.createdUserId],
       );
       if (sendUsers.isNotEmpty) {
         for (UserModel user in sendUsers) {
           if (user.id == loginUser.id) continue;
           _fmService.send(
             token: user.token,
-            title: proposal.title,
-            body: '稟議申請が否決されました。',
+            title: apply.title,
+            body: '申請が否決されました。',
           );
         }
       }
@@ -174,22 +175,22 @@ class ApplyProposalProvider with ChangeNotifier {
   }
 
   Future<String?> delete({
-    required ApplyProposalModel proposal,
+    required ApplyModel apply,
   }) async {
     String? error;
     try {
-      _proposalService.delete({
-        'id': proposal.id,
+      _applyService.delete({
+        'id': apply.id,
       });
-      if (proposal.file != '') {
+      if (apply.file != '') {
         await storage.FirebaseStorage.instance
             .ref()
-            .child('applyProposal')
-            .child('/${proposal.id}${proposal.fileExt}')
+            .child('apply')
+            .child('/${apply.id}${apply.fileExt}')
             .delete();
       }
     } catch (e) {
-      error = '稟議申請の削除に失敗しました';
+      error = '申請の削除に失敗しました';
     }
     return error;
   }

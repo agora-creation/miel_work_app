@@ -21,7 +21,12 @@ class CustomGroupRadio extends StatelessWidget {
         border: Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       child: RadioListTile<OrganizationGroupModel?>(
-        title: group != null ? Text(group?.name ?? '') : const Text('グループ未選択'),
+        title: group != null
+            ? Text(group?.name ?? '')
+            : const Text(
+                '全グループ表示',
+                style: TextStyle(color: kGreyColor),
+              ),
         value: group,
         groupValue: value,
         onChanged: onChanged,

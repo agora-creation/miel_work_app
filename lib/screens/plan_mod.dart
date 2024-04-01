@@ -108,7 +108,10 @@ class _PlanModScreenState extends State<PlanModScreen> {
     if (widget.homeProvider.groups.isNotEmpty) {
       groupItems.add(const DropdownMenuItem(
         value: null,
-        child: Text('グループ未選択'),
+        child: Text(
+          '全てのグループ',
+          style: TextStyle(color: kGreyColor),
+        ),
       ));
       for (OrganizationGroupModel group in widget.homeProvider.groups) {
         groupItems.add(DropdownMenuItem(
@@ -172,7 +175,10 @@ class _PlanModScreenState extends State<PlanModScreen> {
                 label: '公開グループ',
                 child: widget.loginProvider.isAllGroup()
                     ? DropdownButton<OrganizationGroupModel?>(
-                        hint: const Text('グループ未選択'),
+                        hint: const Text(
+                          '全てのグループ',
+                          style: TextStyle(color: kGreyColor),
+                        ),
                         underline: Container(),
                         isExpanded: true,
                         value: selectedGroup,
@@ -195,7 +201,10 @@ class _PlanModScreenState extends State<PlanModScreen> {
               FormLabel(
                 label: 'カテゴリ',
                 child: DropdownButton<CategoryModel?>(
-                  hint: const Text('カテゴリ未選択'),
+                  hint: const Text(
+                    'カテゴリ未選択',
+                    style: TextStyle(color: kGreyColor),
+                  ),
                   underline: Container(),
                   isExpanded: true,
                   value: selectedCategory,

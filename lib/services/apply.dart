@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:miel_work_app/common/functions.dart';
-import 'package:miel_work_app/models/apply_proposal.dart';
+import 'package:miel_work_app/models/apply.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 
-class ApplyProposalService {
-  String collection = 'applyProposal';
+class ApplyService {
+  String collection = 'apply';
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   String id() {
@@ -25,7 +25,8 @@ class ApplyProposalService {
 
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
-    required int approval,
+    required String? searchType,
+    required int searchApproval,
     required DateTime? searchStart,
     required DateTime? searchEnd,
   }) {
@@ -35,31 +36,32 @@ class ApplyProposalService {
       return FirebaseFirestore.instance
           .collection(collection)
           .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .where('approval', isEqualTo: approval)
+          .where('type', isEqualTo: searchType)
+          .where('approval', isEqualTo: searchApproval)
           .orderBy('createdAt', descending: true)
           .startAt([endAt]).endAt([startAt]).snapshots();
     } else {
       return FirebaseFirestore.instance
           .collection(collection)
           .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .where('approval', isEqualTo: approval)
+          .where('type', isEqualTo: searchType)
+          .where('approval', isEqualTo: searchApproval)
           .orderBy('createdAt', descending: true)
           .snapshots();
     }
   }
 
-  List<ApplyProposalModel> generateList({
+  List<ApplyModel> generateList({
     required QuerySnapshot<Map<String, dynamic>>? data,
     required OrganizationGroupModel? currentGroup,
   }) {
-    List<ApplyProposalModel> ret = [];
+    List<ApplyModel> ret = [];
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
-      ApplyProposalModel proposal = ApplyProposalModel.fromSnapshot(doc);
+      ApplyModel apply = ApplyModel.fromSnapshot(doc);
       if (currentGroup == null) {
-        ret.add(proposal);
-      } else if (proposal.groupId == currentGroup.id ||
-          proposal.groupId == '') {
-        ret.add(proposal);
+        ret.add(apply);
+      } else if (apply.groupId == currentGroup.id || apply.groupId == '') {
+        ret.add(apply);
       }
     }
     return ret;

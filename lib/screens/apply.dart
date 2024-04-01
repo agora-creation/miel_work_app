@@ -2,32 +2,33 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/models/apply_project.dart';
+import 'package:miel_work_app/models/apply.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/screens/apply_project_add.dart';
-import 'package:miel_work_app/screens/apply_project_detail.dart';
-import 'package:miel_work_app/services/apply_project.dart';
-import 'package:miel_work_app/widgets/custom_apply_project_list.dart';
+import 'package:miel_work_app/screens/apply_add.dart';
+import 'package:miel_work_app/screens/apply_detail.dart';
+import 'package:miel_work_app/services/apply.dart';
+import 'package:miel_work_app/widgets/custom_apply_list.dart';
 
-class ApplyProjectScreen extends StatefulWidget {
+class ApplyScreen extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
 
-  const ApplyProjectScreen({
+  const ApplyScreen({
     required this.loginProvider,
     required this.homeProvider,
     super.key,
   });
 
   @override
-  State<ApplyProjectScreen> createState() => _ApplyProjectScreenState();
+  State<ApplyScreen> createState() => _ApplyScreenState();
 }
 
-class _ApplyProjectScreenState extends State<ApplyProjectScreen> {
-  ApplyProjectService projectService = ApplyProjectService();
+class _ApplyScreenState extends State<ApplyScreen> {
+  ApplyService applyService = ApplyService();
   DateTime? searchStart;
   DateTime? searchEnd;
+  String? searchType;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,7 @@ class _ApplyProjectScreenState extends State<ApplyProjectScreen> {
           ),
           centerTitle: true,
           title: const Text(
-            '企画申請一覧',
+            '申請一覧',
             style: TextStyle(color: kBlackColor),
           ),
           actions: [
@@ -100,35 +101,36 @@ class _ApplyProjectScreenState extends State<ApplyProjectScreen> {
         body: TabBarView(
           children: [
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: projectService.streamList(
+              stream: applyService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
-                approval: 0,
+                searchType: searchType,
+                searchApproval: 0,
                 searchStart: searchStart,
                 searchEnd: searchEnd,
               ),
               builder: (context, snapshot) {
-                List<ApplyProjectModel> projects = [];
+                List<ApplyModel> applies = [];
                 if (snapshot.hasData) {
-                  projects = projectService.generateList(
+                  applies = applyService.generateList(
                     data: snapshot.data,
                     currentGroup: widget.homeProvider.currentGroup,
                   );
                 }
-                if (projects.isEmpty) {
-                  return const Center(child: Text('企画申請はありません'));
+                if (applies.isEmpty) {
+                  return const Center(child: Text('申請はありません'));
                 }
                 return ListView.builder(
-                  itemCount: projects.length,
+                  itemCount: applies.length,
                   itemBuilder: (context, index) {
-                    ApplyProjectModel project = projects[index];
-                    return CustomApplyProjectList(
-                      project: project,
+                    ApplyModel apply = applies[index];
+                    return CustomApplyList(
+                      apply: apply,
                       onTap: () => pushScreen(
                         context,
-                        ApplyProjectDetailScreen(
+                        ApplyDetailScreen(
                           loginProvider: widget.loginProvider,
                           homeProvider: widget.homeProvider,
-                          project: project,
+                          apply: apply,
                         ),
                       ),
                     );
@@ -137,35 +139,36 @@ class _ApplyProjectScreenState extends State<ApplyProjectScreen> {
               },
             ),
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: projectService.streamList(
+              stream: applyService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
-                approval: 1,
+                searchType: searchType,
+                searchApproval: 1,
                 searchStart: searchStart,
                 searchEnd: searchEnd,
               ),
               builder: (context, snapshot) {
-                List<ApplyProjectModel> projects = [];
+                List<ApplyModel> applies = [];
                 if (snapshot.hasData) {
-                  projects = projectService.generateList(
+                  applies = applyService.generateList(
                     data: snapshot.data,
                     currentGroup: widget.homeProvider.currentGroup,
                   );
                 }
-                if (projects.isEmpty) {
-                  return const Center(child: Text('企画申請はありません'));
+                if (applies.isEmpty) {
+                  return const Center(child: Text('申請はありません'));
                 }
                 return ListView.builder(
-                  itemCount: projects.length,
+                  itemCount: applies.length,
                   itemBuilder: (context, index) {
-                    ApplyProjectModel project = projects[index];
-                    return CustomApplyProjectList(
-                      project: project,
+                    ApplyModel apply = applies[index];
+                    return CustomApplyList(
+                      apply: apply,
                       onTap: () => pushScreen(
                         context,
-                        ApplyProjectDetailScreen(
+                        ApplyDetailScreen(
                           loginProvider: widget.loginProvider,
                           homeProvider: widget.homeProvider,
-                          project: project,
+                          apply: apply,
                         ),
                       ),
                     );
@@ -174,35 +177,36 @@ class _ApplyProjectScreenState extends State<ApplyProjectScreen> {
               },
             ),
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: projectService.streamList(
+              stream: applyService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
-                approval: 9,
+                searchType: searchType,
+                searchApproval: 9,
                 searchStart: searchStart,
                 searchEnd: searchEnd,
               ),
               builder: (context, snapshot) {
-                List<ApplyProjectModel> projects = [];
+                List<ApplyModel> applies = [];
                 if (snapshot.hasData) {
-                  projects = projectService.generateList(
+                  applies = applyService.generateList(
                     data: snapshot.data,
                     currentGroup: widget.homeProvider.currentGroup,
                   );
                 }
-                if (projects.isEmpty) {
-                  return const Center(child: Text('企画申請はありません'));
+                if (applies.isEmpty) {
+                  return const Center(child: Text('申請はありません'));
                 }
                 return ListView.builder(
-                  itemCount: projects.length,
+                  itemCount: applies.length,
                   itemBuilder: (context, index) {
-                    ApplyProjectModel project = projects[index];
-                    return CustomApplyProjectList(
-                      project: project,
+                    ApplyModel apply = applies[index];
+                    return CustomApplyList(
+                      apply: apply,
                       onTap: () => pushScreen(
                         context,
-                        ApplyProjectDetailScreen(
+                        ApplyDetailScreen(
                           loginProvider: widget.loginProvider,
                           homeProvider: widget.homeProvider,
-                          project: project,
+                          apply: apply,
                         ),
                       ),
                     );
@@ -215,7 +219,7 @@ class _ApplyProjectScreenState extends State<ApplyProjectScreen> {
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => pushScreen(
             context,
-            ApplyProjectAddScreen(
+            ApplyAddScreen(
               loginProvider: widget.loginProvider,
               homeProvider: widget.homeProvider,
             ),

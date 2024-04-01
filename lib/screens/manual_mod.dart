@@ -50,7 +50,10 @@ class _ManualModScreenState extends State<ManualModScreen> {
     if (widget.homeProvider.groups.isNotEmpty) {
       groupItems.add(const DropdownMenuItem(
         value: null,
-        child: Text('グループ未選択'),
+        child: Text(
+          '全てのグループ',
+          style: TextStyle(color: kGreyColor),
+        ),
       ));
       for (OrganizationGroupModel group in widget.homeProvider.groups) {
         groupItems.add(DropdownMenuItem(
@@ -134,7 +137,10 @@ class _ManualModScreenState extends State<ManualModScreen> {
                   label: '公開グループ',
                   child: widget.loginProvider.isAllGroup()
                       ? DropdownButton<OrganizationGroupModel?>(
-                          hint: const Text('グループ未選択'),
+                          hint: const Text(
+                            '全てのグループ',
+                            style: TextStyle(color: kGreyColor),
+                          ),
                           underline: Container(),
                           isExpanded: true,
                           value: selectedGroup,
