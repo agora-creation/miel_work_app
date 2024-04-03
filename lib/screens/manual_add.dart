@@ -46,7 +46,7 @@ class _ManualAddScreenState extends State<ManualAddScreen> {
       groupItems.add(const DropdownMenuItem(
         value: null,
         child: Text(
-          '全てのグループ',
+          'グループの指定なし',
           style: TextStyle(color: kGreyColor),
         ),
       ));
@@ -132,7 +132,7 @@ class _ManualAddScreenState extends State<ManualAddScreen> {
                   child: widget.loginProvider.isAllGroup()
                       ? DropdownButton<OrganizationGroupModel?>(
                           hint: const Text(
-                            '全てのグループ',
+                            'グループの指定なし',
                             style: TextStyle(color: kGreyColor),
                           ),
                           underline: Container(),

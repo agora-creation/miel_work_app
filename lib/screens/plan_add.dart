@@ -47,6 +47,7 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
     categories = await categoryService.selectList(
       organizationId: widget.loginProvider.organization?.id,
     );
+    selectedCategory = categories.first;
     startedAt = widget.date;
     endedAt = startedAt.add(const Duration(hours: 1));
     setState(() {});
@@ -89,7 +90,7 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
       groupItems.add(const DropdownMenuItem(
         value: null,
         child: Text(
-          '全てのグループ',
+          'グループの指定なし',
           style: TextStyle(color: kGreyColor),
         ),
       ));
@@ -155,7 +156,7 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
                 child: widget.loginProvider.isAllGroup()
                     ? DropdownButton<OrganizationGroupModel?>(
                         hint: const Text(
-                          '全てのグループ',
+                          'グループの指定なし',
                           style: TextStyle(color: kGreyColor),
                         ),
                         underline: Container(),

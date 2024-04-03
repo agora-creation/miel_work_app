@@ -56,7 +56,7 @@ class _GroupSelectCardState extends State<GroupSelectCard> {
             title: widget.homeProvider.currentGroup != null
                 ? Text(widget.homeProvider.currentGroup?.name ?? '')
                 : const Text(
-                    '全グループ表示',
+                    'グループの指定なし',
                     style: TextStyle(color: kGreyColor),
                   ),
             shape: RoundedRectangleBorder(

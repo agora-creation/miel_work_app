@@ -24,7 +24,7 @@ class CustomGroupRadio extends StatelessWidget {
         title: group != null
             ? Text(group?.name ?? '')
             : const Text(
-                '全グループ表示',
+                'グループの指定なし',
                 style: TextStyle(color: kGreyColor),
               ),
         value: group,
