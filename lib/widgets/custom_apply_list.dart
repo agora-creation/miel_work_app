@@ -62,7 +62,7 @@ class CustomApplyList extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  apply.approval == 0
+                  apply.approval == 1
                       ? Text(
                           '承認日時: ${dateText('yyyy/MM/dd HH:mm', apply.approvedAt)}',
                           style: const TextStyle(
