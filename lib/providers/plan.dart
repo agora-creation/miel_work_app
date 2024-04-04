@@ -48,6 +48,7 @@ class PlanProvider with ChangeNotifier {
         'alertMinute': alertMinute,
         'alertedAt': startedAt.subtract(Duration(minutes: alertMinute)),
         'createdAt': DateTime.now(),
+        'expirationAt': startedAt.add(const Duration(days: 365)),
       });
     } catch (e) {
       error = '予定の追加に失敗しました';
@@ -95,6 +96,7 @@ class PlanProvider with ChangeNotifier {
         'memo': memo,
         'alertMinute': alertMinute,
         'alertedAt': startedAt.subtract(Duration(minutes: alertMinute)),
+        'expirationAt': startedAt.add(const Duration(days: 365)),
       });
     } catch (e) {
       error = '予定の編集に失敗しました';

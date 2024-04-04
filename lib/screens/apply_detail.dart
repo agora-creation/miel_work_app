@@ -255,7 +255,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          isReject && widget.loginProvider.user?.admin == true
+          isReject && widget.loginProvider.user?.president == true
               ? FloatingActionButton.extended(
                   heroTag: 'reject',
                   onPressed: () => showDialog(
@@ -309,6 +309,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                     ApplyAddScreen(
                       loginProvider: widget.loginProvider,
                       homeProvider: widget.homeProvider,
+                      type: widget.apply.type,
                       apply: widget.apply,
                     ),
                   ),

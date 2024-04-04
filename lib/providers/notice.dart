@@ -55,6 +55,7 @@ class NoticeProvider with ChangeNotifier {
         'fileExt': fileExt,
         'readUserIds': [loginUser.id],
         'createdAt': DateTime.now(),
+        'expirationAt': DateTime.now().add(const Duration(days: 365)),
       });
       //通知
       List<UserModel> sendUsers = [];
@@ -119,6 +120,7 @@ class NoticeProvider with ChangeNotifier {
           'title': title,
           'content': content,
           'readUserIds': [loginUser.id],
+          'expirationAt': DateTime.now().add(const Duration(days: 365)),
         });
       } else {
         _noticeService.update({
@@ -129,6 +131,7 @@ class NoticeProvider with ChangeNotifier {
           'file': file,
           'fileExt': fileExt,
           'readUserIds': [loginUser.id],
+          'expirationAt': DateTime.now().add(const Duration(days: 365)),
         });
       }
       //通知

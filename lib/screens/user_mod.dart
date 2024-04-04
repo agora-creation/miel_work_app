@@ -37,6 +37,7 @@ class _UserModScreenState extends State<UserModScreen> {
   TextEditingController passwordController = TextEditingController();
   OrganizationGroupModel? selectedGroup;
   bool admin = false;
+  bool president = false;
 
   @override
   void initState() {
@@ -46,6 +47,7 @@ class _UserModScreenState extends State<UserModScreen> {
     passwordController.text = widget.user.password;
     selectedGroup = widget.userInGroup;
     admin = widget.user.admin;
+    president = widget.user.president;
   }
 
   @override
@@ -94,6 +96,7 @@ class _UserModScreenState extends State<UserModScreen> {
                 befGroup: widget.userInGroup,
                 aftGroup: selectedGroup,
                 admin: admin,
+                president: president,
               );
               if (error != null) {
                 if (!mounted) return;
@@ -164,7 +167,7 @@ class _UserModScreenState extends State<UserModScreen> {
                 ),
                 const SizedBox(height: 8),
                 FormLabel(
-                  label: '権限',
+                  label: '管理者権限',
                   child: CheckboxListTile(
                     value: admin,
                     onChanged: (value) {
@@ -172,7 +175,20 @@ class _UserModScreenState extends State<UserModScreen> {
                         admin = value ?? false;
                       });
                     },
-                    title: const Text('このスタッフを管理者とする'),
+                    title: const Text('このスタッフを管理者にする'),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  label: '社長権限',
+                  child: CheckboxListTile(
+                    value: president,
+                    onChanged: (value) {
+                      setState(() {
+                        president = value ?? false;
+                      });
+                    },
+                    title: const Text('このスタッフを社長にする'),
                   ),
                 ),
                 const SizedBox(height: 16),

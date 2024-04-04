@@ -118,23 +118,25 @@ class _ManualScreenState extends State<ManualScreen> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => pushScreen(
-          context,
-          ManualAddScreen(
-            loginProvider: widget.loginProvider,
-            homeProvider: widget.homeProvider,
-          ),
-        ),
-        icon: const Icon(
-          Icons.add,
-          color: kWhiteColor,
-        ),
-        label: const Text(
-          '新規追加',
-          style: TextStyle(color: kWhiteColor),
-        ),
-      ),
+      floatingActionButton: widget.loginProvider.user?.admin == true
+          ? FloatingActionButton.extended(
+              onPressed: () => pushScreen(
+                context,
+                ManualAddScreen(
+                  loginProvider: widget.loginProvider,
+                  homeProvider: widget.homeProvider,
+                ),
+              ),
+              icon: const Icon(
+                Icons.add,
+                color: kWhiteColor,
+              ),
+              label: const Text(
+                '新規追加',
+                style: TextStyle(color: kWhiteColor),
+              ),
+            )
+          : null,
     );
   }
 }

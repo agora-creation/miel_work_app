@@ -17,11 +17,13 @@ import 'package:provider/provider.dart';
 class ApplyAddScreen extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
+  final String type;
   final ApplyModel? apply;
 
   const ApplyAddScreen({
     required this.loginProvider,
     required this.homeProvider,
+    required this.type,
     this.apply,
     super.key,
   });
@@ -38,8 +40,8 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
   File? pickedFile;
 
   void _init() async {
+    type = widget.type;
     if (widget.apply == null) return;
-    type = widget.apply?.type ?? kApplyTypes.first;
     titleController.text = widget.apply?.title ?? '';
     contentController.text = widget.apply?.content ?? '';
     priceController.text = widget.apply?.price.toString() ?? '';
@@ -111,17 +113,6 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
             padding: const EdgeInsets.all(8),
             child: Column(
               children: [
-                FormLabel(
-                  label: '申請者名',
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Text(
-                      widget.loginProvider.user?.name ?? '',
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
                 FormLabel(
                   label: '申請種別',
                   child: DropdownButton<String>(

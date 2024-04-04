@@ -103,10 +103,10 @@ class ApplyProvider with ChangeNotifier {
       approvalUsers.add({
         'userId': loginUser.id,
         'userName': loginUser.name,
-        'userAdmin': loginUser.admin,
+        'userPresident': loginUser.president,
         'approvedAt': DateTime.now(),
       });
-      if (loginUser.admin) {
+      if (loginUser.president) {
         _applyService.update({
           'id': apply.id,
           'approval': 1,

@@ -34,6 +34,7 @@ class PlanShiftProvider with ChangeNotifier {
         'alertMinute': alertMinute,
         'alertedAt': startedAt.subtract(Duration(minutes: alertMinute)),
         'createdAt': DateTime.now(),
+        'expirationAt': startedAt.add(const Duration(days: 365)),
       });
     } catch (e) {
       error = '勤務予定の追加に失敗しました';
@@ -68,6 +69,7 @@ class PlanShiftProvider with ChangeNotifier {
         'allDay': allDay,
         'alertMinute': alertMinute,
         'alertedAt': startedAt.subtract(Duration(minutes: alertMinute)),
+        'expirationAt': startedAt.add(const Duration(days: 365)),
       });
     } catch (e) {
       error = '勤務予定の編集に失敗しました';

@@ -19,6 +19,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -80,12 +81,20 @@ class _LoginScreenState extends State<LoginScreen> {
                               const SizedBox(height: 8),
                               CustomTextFormField(
                                 controller: passwordController,
-                                obscureText: true,
+                                obscureText: obscureText,
                                 textInputType: TextInputType.visiblePassword,
                                 maxLines: 1,
                                 label: 'パスワード',
                                 color: kBlackColor,
                                 prefix: Icons.password,
+                                suffix: obscureText
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                onTap: () {
+                                  setState(() {
+                                    obscureText = !obscureText;
+                                  });
+                                },
                               ),
                               const SizedBox(height: 16),
                               SizedBox(

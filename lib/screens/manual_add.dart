@@ -129,29 +129,21 @@ class _ManualAddScreenState extends State<ManualAddScreen> {
                 const SizedBox(height: 8),
                 FormLabel(
                   label: '公開グループ',
-                  child: widget.loginProvider.isAllGroup()
-                      ? DropdownButton<OrganizationGroupModel?>(
-                          hint: const Text(
-                            'グループの指定なし',
-                            style: TextStyle(color: kGreyColor),
-                          ),
-                          underline: Container(),
-                          isExpanded: true,
-                          value: selectedGroup,
-                          items: groupItems,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedGroup = value;
-                            });
-                          },
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: Text(
-                            '${selectedGroup?.name}',
-                            style: const TextStyle(fontSize: 18),
-                          ),
-                        ),
+                  child: DropdownButton<OrganizationGroupModel?>(
+                    hint: const Text(
+                      'グループの指定なし',
+                      style: TextStyle(color: kGreyColor),
+                    ),
+                    underline: Container(),
+                    isExpanded: true,
+                    value: selectedGroup,
+                    items: groupItems,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedGroup = value;
+                      });
+                    },
+                  ),
                 ),
               ],
             ),

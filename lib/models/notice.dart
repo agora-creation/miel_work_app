@@ -10,6 +10,7 @@ class NoticeModel {
   String _fileExt = '';
   List<String> readUserIds = [];
   DateTime _createdAt = DateTime.now();
+  DateTime _expirationAt = DateTime.now();
 
   String get id => _id;
   String get organizationId => _organizationId;
@@ -19,6 +20,7 @@ class NoticeModel {
   String get file => _file;
   String get fileExt => _fileExt;
   DateTime get createdAt => _createdAt;
+  DateTime get expirationAt => _expirationAt;
 
   NoticeModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     Map<String, dynamic>? data = snapshot.data();
@@ -32,6 +34,7 @@ class NoticeModel {
     _fileExt = data['fileExt'] ?? '';
     readUserIds = _convertReadUserIds(data['readUserIds']);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
+    _expirationAt = data['expirationAt'].toDate() ?? DateTime.now();
   }
 
   List<String> _convertReadUserIds(List list) {

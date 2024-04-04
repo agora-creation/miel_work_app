@@ -48,15 +48,6 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
       ),
       body: Column(
         children: [
-          widget.loginProvider.user?.admin == true
-              ? const ListTile(
-                  title: Text(
-                    'あなたは管理者です',
-                    style: TextStyle(color: kWhiteColor),
-                  ),
-                  tileColor: kRedColor,
-                )
-              : Container(),
           CustomSettingList(
             label: '名前',
             value: widget.loginProvider.user?.name ?? '',

@@ -13,10 +13,12 @@ import 'package:miel_work_app/widgets/custom_apply_list.dart';
 class ApplyScreen extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
+  final String type;
 
   const ApplyScreen({
     required this.loginProvider,
     required this.homeProvider,
+    required this.type,
     super.key,
   });
 
@@ -28,7 +30,6 @@ class _ApplyScreenState extends State<ApplyScreen> {
   ApplyService applyService = ApplyService();
   DateTime? searchStart;
   DateTime? searchEnd;
-  String? searchType;
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +47,9 @@ class _ApplyScreenState extends State<ApplyScreen> {
             onPressed: () => Navigator.pop(context),
           ),
           centerTitle: true,
-          title: const Text(
-            '申請一覧',
-            style: TextStyle(color: kBlackColor),
+          title: Text(
+            '${widget.type}申請一覧',
+            style: const TextStyle(color: kBlackColor),
           ),
           actions: [
             IconButton(
@@ -103,7 +104,7 @@ class _ApplyScreenState extends State<ApplyScreen> {
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: applyService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
-                searchType: searchType,
+                searchType: widget.type,
                 searchApproval: 0,
                 searchStart: searchStart,
                 searchEnd: searchEnd,
@@ -141,7 +142,7 @@ class _ApplyScreenState extends State<ApplyScreen> {
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: applyService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
-                searchType: searchType,
+                searchType: widget.type,
                 searchApproval: 1,
                 searchStart: searchStart,
                 searchEnd: searchEnd,
@@ -179,7 +180,7 @@ class _ApplyScreenState extends State<ApplyScreen> {
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: applyService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
-                searchType: searchType,
+                searchType: widget.type,
                 searchApproval: 9,
                 searchStart: searchStart,
                 searchEnd: searchEnd,
@@ -222,6 +223,7 @@ class _ApplyScreenState extends State<ApplyScreen> {
             ApplyAddScreen(
               loginProvider: widget.loginProvider,
               homeProvider: widget.homeProvider,
+              type: widget.type,
             ),
           ),
           icon: const Icon(

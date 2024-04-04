@@ -21,7 +21,7 @@ class CustomApprovalUserList extends StatelessWidget {
         tileColor: kRed100Color,
         title: Text(
           approvalUser.userName,
-          style: approvalUser.userAdmin
+          style: approvalUser.userPresident
               ? const TextStyle(
                   color: kRedColor,
                   fontWeight: FontWeight.bold,

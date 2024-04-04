@@ -17,6 +17,7 @@ class PlanModel {
   int _alertMinute = 0;
   DateTime _alertedAt = DateTime.now();
   DateTime _createdAt = DateTime.now();
+  DateTime _expirationAt = DateTime.now();
 
   String get id => _id;
   String get organizationId => _organizationId;
@@ -31,6 +32,7 @@ class PlanModel {
   int get alertMinute => _alertMinute;
   DateTime get alertedAt => _alertedAt;
   DateTime get createdAt => _createdAt;
+  DateTime get expirationAt => _expirationAt;
 
   PlanModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     Map<String, dynamic>? data = snapshot.data();
@@ -49,6 +51,7 @@ class PlanModel {
     _alertMinute = data['alertMinute'] ?? 0;
     _alertedAt = data['alertedAt'].toDate() ?? DateTime.now();
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
+    _expirationAt = data['expirationAt'].toDate() ?? DateTime.now();
   }
 
   List<String> _convertUserIds(List list) {
