@@ -65,6 +65,7 @@ class ApplyProvider with ChangeNotifier {
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
         'createdAt': DateTime.now(),
+        'expirationAt': DateTime.now().add(const Duration(days: 365)),
       });
       //通知
       List<UserModel> sendUsers = [];
