@@ -51,6 +51,8 @@ class HomeProvider with ChangeNotifier {
         'organizationId': organization.id,
         'name': name,
         'userIds': [],
+        'loginId': '',
+        'password': '',
         'createdAt': DateTime.now(),
       });
       String chatId = _chatService.id();
