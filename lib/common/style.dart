@@ -17,6 +17,7 @@ const kRed100Color = Color(0xFFFFCDD2);
 const kBlueColor = Color(0xFF2196F3);
 const kBlue300Color = Color(0xFF64B5F6);
 const kLightBlueColor = Color(0xFF03A9F4);
+const kLightBlue800Color = Color(0xFF0277BD);
 const kCyanColor = Color(0xFF00BCD4);
 const kTealColor = Color(0xFF009688);
 const kTeal300Color = Color(0xFF4DD0E1);
@@ -69,6 +70,8 @@ const SliverGridDelegate kHome3Grid = SliverGridDelegateWithFixedCrossAxisCount(
   crossAxisCount: 3,
 );
 
+List<String> kWeeks = ['月', '火', '水', '木', '金', '土', '日'];
+List<String> kRepeatIntervals = ['毎日', '毎週', '毎月', '毎年'];
 List<int> kAlertMinutes = [0, 10, 30, 60];
 
 DateTime kFirstDate = DateTime.now().subtract(const Duration(days: 1095));

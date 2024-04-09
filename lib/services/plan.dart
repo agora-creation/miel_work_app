@@ -103,6 +103,7 @@ class PlanService {
           color:
               shift ? plan.categoryColor.withOpacity(0.3) : plan.categoryColor,
           notes: 'plan',
+          recurrenceRule: plan.getRepeatRule(),
         ));
       } else if (plan.groupId == currentGroup.id || plan.groupId == '') {
         ret.add(sfc.Appointment(
@@ -115,6 +116,7 @@ class PlanService {
           color:
               shift ? plan.categoryColor.withOpacity(0.3) : plan.categoryColor,
           notes: 'plan',
+          recurrenceRule: plan.getRepeatRule(),
         ));
       }
     }

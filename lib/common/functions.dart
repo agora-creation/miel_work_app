@@ -203,6 +203,27 @@ DateTime rebuildTime(BuildContext context, DateTime? date, String? time) {
   return ret;
 }
 
+String ruleConvertWeek(String week) {
+  switch (week) {
+    case '月':
+      return 'MO';
+    case '火':
+      return 'TU';
+    case '水':
+      return 'WE';
+    case '木':
+      return 'TH';
+    case '金':
+      return 'FR';
+    case '土':
+      return 'SA';
+    case '日':
+      return 'SU';
+    default:
+      return '';
+  }
+}
+
 Future<bool> saveFile(String url, String fileName) async {
   final data = await http.get(Uri.parse(url));
   try {

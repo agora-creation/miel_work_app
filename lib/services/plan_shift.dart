@@ -65,8 +65,9 @@ class PlanShiftService {
           startTime: planShift.startedAt,
           endTime: planShift.endedAt,
           isAllDay: planShift.allDay,
-          color: kBlueColor,
+          color: kLightBlue800Color,
           notes: 'planShift',
+          recurrenceRule: planShift.getRepeatRule(),
         ));
       } else if (planShift.groupId == currentGroup.id ||
           planShift.groupId == '') {
@@ -77,8 +78,9 @@ class PlanShiftService {
           startTime: planShift.startedAt,
           endTime: planShift.endedAt,
           isAllDay: planShift.allDay,
-          color: kBlueColor,
+          color: kLightBlue800Color,
           notes: 'planShift',
+          recurrenceRule: planShift.getRepeatRule(),
         ));
       }
     }

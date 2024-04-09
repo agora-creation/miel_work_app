@@ -13,6 +13,10 @@ class PlanShiftProvider with ChangeNotifier {
     required DateTime startedAt,
     required DateTime endedAt,
     required bool allDay,
+    required bool repeat,
+    required String repeatInterval,
+    required int repeatEvery,
+    required List<String> repeatWeeks,
     required int alertMinute,
   }) async {
     String? error;
@@ -31,6 +35,10 @@ class PlanShiftProvider with ChangeNotifier {
         'startedAt': startedAt,
         'endedAt': endedAt,
         'allDay': allDay,
+        'repeat': repeat,
+        'repeatInterval': repeatInterval,
+        'repeatEvery': repeatEvery,
+        'repeatWeeks': repeatWeeks,
         'alertMinute': alertMinute,
         'alertedAt': startedAt.subtract(Duration(minutes: alertMinute)),
         'createdAt': DateTime.now(),
@@ -50,6 +58,10 @@ class PlanShiftProvider with ChangeNotifier {
     required DateTime startedAt,
     required DateTime endedAt,
     required bool allDay,
+    required bool repeat,
+    required String repeatInterval,
+    required int repeatEvery,
+    required List<String> repeatWeeks,
     required int alertMinute,
   }) async {
     String? error;
@@ -67,6 +79,10 @@ class PlanShiftProvider with ChangeNotifier {
         'startedAt': startedAt,
         'endedAt': endedAt,
         'allDay': allDay,
+        'repeat': repeat,
+        'repeatInterval': repeatInterval,
+        'repeatEvery': repeatEvery,
+        'repeatWeeks': repeatWeeks,
         'alertMinute': alertMinute,
         'alertedAt': startedAt.subtract(Duration(minutes: alertMinute)),
         'expirationAt': startedAt.add(const Duration(days: 365)),

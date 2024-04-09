@@ -148,6 +148,10 @@ class _PlanModScreenState extends State<PlanModScreen> {
                 startedAt: startedAt,
                 endedAt: endedAt,
                 allDay: allDay,
+                repeat: false,
+                repeatInterval: '',
+                repeatEvery: 0,
+                repeatWeeks: [],
                 memo: memoController.text,
                 alertMinute: alertMinute,
               );
