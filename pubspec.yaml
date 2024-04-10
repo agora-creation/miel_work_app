@@ -42,6 +42,7 @@ dependencies:
   calendar_date_picker2: ^0.5.5
   package_info_plus: ^5.0.1
   version: ^3.0.2
+  in_app_review: ^2.0.9
 
   firebase_core: ^2.25.4
   firebase_auth: ^4.17.4
