@@ -104,4 +104,37 @@ class PlanShiftModel {
     }
     return ret;
   }
+
+  String getRepeatText() {
+    String ret = '';
+    if (_repeat) {
+      if (_repeatInterval == kRepeatIntervals[0]) {
+        ret = '毎日';
+        if (_repeatEvery > 0) {
+          ret += '$_repeatEvery日ごと';
+        }
+      } else if (_repeatInterval == kRepeatIntervals[1]) {
+        ret = '毎週';
+        if (_repeatEvery > 0) {
+          ret += '$_repeatEvery週間ごと';
+        }
+        if (repeatWeeks.isNotEmpty) {
+          String weeksText = '';
+          for (String week in repeatWeeks) {
+            if (weeksText != '') weeksText += ',';
+            weeksText += week;
+          }
+          ret += '($weeksText)';
+        }
+      } else if (_repeatInterval == kRepeatIntervals[2]) {
+        ret = '毎月';
+        if (_repeatEvery > 0) {
+          ret += '$_repeatEveryヶ月ごと';
+        }
+      } else if (_repeatInterval == kRepeatIntervals[3]) {
+        ret = '毎年';
+      }
+    }
+    return ret;
+  }
 }
