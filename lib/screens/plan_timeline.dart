@@ -41,24 +41,28 @@ class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
       case sfc.CalendarElement.appointment:
       case sfc.CalendarElement.agenda:
         sfc.Appointment appointmentDetails = details.appointments![0];
-        pushScreen(
-          context,
-          PlanModScreen(
-            loginProvider: widget.loginProvider,
-            homeProvider: widget.homeProvider,
-            planId: '${appointmentDetails.id}',
-          ),
-        );
+        if (widget.loginProvider.user?.admin == true) {
+          pushScreen(
+            context,
+            PlanModScreen(
+              loginProvider: widget.loginProvider,
+              homeProvider: widget.homeProvider,
+              planId: '${appointmentDetails.id}',
+            ),
+          );
+        }
         break;
       case sfc.CalendarElement.calendarCell:
-        pushScreen(
-          context,
-          PlanAddScreen(
-            loginProvider: widget.loginProvider,
-            homeProvider: widget.homeProvider,
-            date: details.date ?? DateTime.now(),
-          ),
-        );
+        if (widget.loginProvider.user?.admin == true) {
+          pushScreen(
+            context,
+            PlanAddScreen(
+              loginProvider: widget.loginProvider,
+              homeProvider: widget.homeProvider,
+              date: details.date ?? DateTime.now(),
+            ),
+          );
+        }
         break;
       default:
         break;

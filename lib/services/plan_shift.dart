@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/plan_shift.dart';
@@ -57,11 +58,13 @@ class PlanShiftService {
     List<sfc.Appointment> ret = [];
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
       PlanShiftModel planShift = PlanShiftModel.fromSnapshot(doc);
+      String startTimeText = dateText('HH:mm', planShift.startedAt);
+      String endTimeText = dateText('HH:mm', planShift.endedAt);
       if (currentGroup == null) {
         ret.add(sfc.Appointment(
           id: planShift.id,
           resourceIds: planShift.userIds,
-          subject: '勤務予定',
+          subject: '勤務予定 $startTimeText～$endTimeText',
           startTime: planShift.startedAt,
           endTime: planShift.endedAt,
           isAllDay: planShift.allDay,
@@ -74,7 +77,7 @@ class PlanShiftService {
         ret.add(sfc.Appointment(
           id: planShift.id,
           resourceIds: planShift.userIds,
-          subject: '勤務予定',
+          subject: '勤務予定 $startTimeText～$endTimeText',
           startTime: planShift.startedAt,
           endTime: planShift.endedAt,
           isAllDay: planShift.allDay,

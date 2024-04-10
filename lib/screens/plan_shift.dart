@@ -61,28 +61,32 @@ class _PlanShiftScreenState extends State<PlanShiftScreen> {
             ),
           );
         } else if (type == 'planShift') {
-          pushScreen(
-            context,
-            PlanShiftModScreen(
-              loginProvider: widget.loginProvider,
-              homeProvider: widget.homeProvider,
-              planShiftId: '${appointmentDetails.id}',
-            ),
-          );
+          if (widget.loginProvider.user?.admin == true) {
+            pushScreen(
+              context,
+              PlanShiftModScreen(
+                loginProvider: widget.loginProvider,
+                homeProvider: widget.homeProvider,
+                planShiftId: '${appointmentDetails.id}',
+              ),
+            );
+          }
         }
         break;
       case sfc.CalendarElement.calendarCell:
         final userId = details.resource?.id;
         if (userId == null) return;
-        pushScreen(
-          context,
-          PlanShiftAddScreen(
-            loginProvider: widget.loginProvider,
-            homeProvider: widget.homeProvider,
-            userId: '$userId',
-            date: details.date ?? DateTime.now(),
-          ),
-        );
+        if (widget.loginProvider.user?.admin == true) {
+          pushScreen(
+            context,
+            PlanShiftAddScreen(
+              loginProvider: widget.loginProvider,
+              homeProvider: widget.homeProvider,
+              userId: '$userId',
+              date: details.date ?? DateTime.now(),
+            ),
+          );
+        }
         break;
       default:
         break;
