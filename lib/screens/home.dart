@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
@@ -14,10 +16,12 @@ import 'package:miel_work_app/screens/plan.dart';
 import 'package:miel_work_app/screens/plan_shift.dart';
 import 'package:miel_work_app/screens/user.dart';
 import 'package:miel_work_app/screens/user_setting.dart';
+import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/manual.dart';
 import 'package:miel_work_app/services/notice.dart';
 import 'package:miel_work_app/widgets/animation_background.dart';
 import 'package:miel_work_app/widgets/custom_appbar.dart';
+import 'package:miel_work_app/widgets/custom_button_sm.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_home_chat_card.dart';
 import 'package:miel_work_app/widgets/custom_home_icon_card.dart';
@@ -34,8 +38,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  ConfigService configService = ConfigService();
   ManualService manualService = ManualService();
   NoticeService noticeService = NoticeService();
+
+  void _init() async {
+    if (await configService.versionCheck()) {
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        builder: (context) => const VersionUpDialog(),
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -305,6 +326,58 @@ class _HomeScreenState extends State<HomeScreen> {
         loginProvider: loginProvider,
         homeProvider: homeProvider,
       ),
+    );
+  }
+}
+
+class VersionUpDialog extends StatelessWidget {
+  const VersionUpDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: kWhiteColor,
+      surfaceTintColor: kWhiteColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
+      title: const Text(
+        'バージョンアップのお知らせ',
+        style: TextStyle(fontSize: 16),
+      ),
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('新しいバージョンのアプリが利用可能になりました。アプリストアより更新を行ってから、ご利用ください。'),
+        ],
+      ),
+      actionsAlignment: MainAxisAlignment.spaceBetween,
+      actions: [
+        CustomButtonSm(
+          label: '閉じる',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButtonSm(
+          label: '更新する',
+          labelColor: kWhiteColor,
+          backgroundColor: kDeepOrangeColor,
+          onPressed: () async {
+            String urlText = '';
+            if (Platform.isIOS) {
+              urlText = ConfigService().APP_STORE_URL;
+            } else {
+              urlText = ConfigService().PLAY_STORE_URL;
+            }
+            Uri url = Uri.parse(urlText);
+            if (!await launchUrl(url)) {
+              throw Exception('Could not launch $url');
+            }
+          },
+        ),
+      ],
     );
   }
 }

@@ -23,6 +23,7 @@ const kTealColor = Color(0xFF009688);
 const kTeal300Color = Color(0xFF4DD0E1);
 const kOrangeColor = Color(0xFFFF9800);
 const kOrange300Color = Color(0xFFFFB74D);
+const kDeepOrangeColor = Color(0xFFFF5722);
 const kYellowColor = Color(0xFFFFEB3B);
 const kGreenColor = Color(0xFF4CAF50);
 
