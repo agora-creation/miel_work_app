@@ -28,7 +28,7 @@ class CustomFooter extends StatefulWidget {
 class _CustomFooterState extends State<CustomFooter>
     with WidgetsBindingObserver {
   void _versionCheck() async {
-    if (await ConfigService().versionCheck()) {
+    if (await ConfigService().checkVersion()) {
       if (!mounted) return;
       showDialog(
         context: context,
@@ -70,6 +70,7 @@ class _CustomFooterState extends State<CustomFooter>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {});
+    FlutterAppBadger.removeBadge();
     _nowCheck();
     _versionCheck();
   }

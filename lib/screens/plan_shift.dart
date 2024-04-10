@@ -10,6 +10,7 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/plan.dart';
 import 'package:miel_work_app/screens/plan_shift_add.dart';
 import 'package:miel_work_app/screens/plan_shift_mod.dart';
+import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/plan.dart';
 import 'package:miel_work_app/services/plan_shift.dart';
 import 'package:miel_work_app/services/user.dart';
@@ -38,6 +39,10 @@ class _PlanShiftScreenState extends State<PlanShiftScreen> {
   UserService userService = UserService();
   List<sfc.CalendarResource> resourceColl = [];
   List<String> searchCategories = [];
+
+  void _init() async {
+    await ConfigService().checkReview();
+  }
 
   void _searchCategoriesChange() async {
     searchCategories = await getPrefsList('categories') ?? [];
@@ -121,6 +126,7 @@ class _PlanShiftScreenState extends State<PlanShiftScreen> {
     super.initState();
     _getUsers();
     _searchCategoriesChange();
+    _init();
   }
 
   @override

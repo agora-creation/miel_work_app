@@ -9,6 +9,7 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/chat_message.dart';
 import 'package:miel_work_app/services/chat.dart';
 import 'package:miel_work_app/services/chat_message.dart';
+import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/widgets/chat_list.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -31,6 +32,7 @@ class _ChatScreenState extends State<ChatScreen> {
   List<ChatModel> chats = [];
 
   void _init() async {
+    await ConfigService().checkReview();
     chats = await chatService.selectList(
       organizationId: widget.loginProvider.organization?.id,
       groupId: widget.homeProvider.currentGroup?.id,

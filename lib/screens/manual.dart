@@ -7,6 +7,7 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/manual_add.dart';
 import 'package:miel_work_app/screens/manual_pdf.dart';
+import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/manual.dart';
 import 'package:miel_work_app/widgets/custom_manual_list.dart';
 
@@ -28,6 +29,16 @@ class _ManualScreenState extends State<ManualScreen> {
   ManualService manualService = ManualService();
   DateTime? searchStart;
   DateTime? searchEnd;
+
+  void _init() async {
+    await ConfigService().checkReview();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
 
   @override
   Widget build(BuildContext context) {

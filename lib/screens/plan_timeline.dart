@@ -6,6 +6,7 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/plan_add.dart';
 import 'package:miel_work_app/screens/plan_mod.dart';
+import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/plan.dart';
 import 'package:miel_work_app/widgets/custom_calendar_timeline.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart' as sfc;
@@ -29,6 +30,10 @@ class PlanTimelineScreen extends StatefulWidget {
 class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
   PlanService planService = PlanService();
   List<String> searchCategories = [];
+
+  void _init() async {
+    await ConfigService().checkReview();
+  }
 
   void _searchCategoriesChange() async {
     searchCategories = await getPrefsList('categories') ?? [];
@@ -73,6 +78,7 @@ class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
   void initState() {
     super.initState();
     _searchCategoriesChange();
+    _init();
   }
 
   @override

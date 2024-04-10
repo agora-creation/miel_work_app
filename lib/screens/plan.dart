@@ -8,6 +8,7 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/category.dart';
 import 'package:miel_work_app/screens/plan_timeline.dart';
 import 'package:miel_work_app/services/category.dart';
+import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/plan.dart';
 import 'package:miel_work_app/widgets/custom_button_sm.dart';
 import 'package:miel_work_app/widgets/custom_calendar.dart';
@@ -32,6 +33,10 @@ class _PlanScreenState extends State<PlanScreen> {
   PlanService planService = PlanService();
   List<String> searchCategories = [];
 
+  void _init() async {
+    await ConfigService().checkReview();
+  }
+
   void _searchCategoriesChange() async {
     searchCategories = await getPrefsList('categories') ?? [];
     setState(() {});
@@ -46,6 +51,12 @@ class _PlanScreenState extends State<PlanScreen> {
         date: details.date ?? DateTime.now(),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
   }
 
   @override

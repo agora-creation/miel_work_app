@@ -7,6 +7,7 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/notice_add.dart';
 import 'package:miel_work_app/screens/notice_detail.dart';
+import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/notice.dart';
 import 'package:miel_work_app/widgets/custom_notice_list.dart';
 
@@ -28,6 +29,16 @@ class _NoticeScreenState extends State<NoticeScreen> {
   NoticeService noticeService = NoticeService();
   DateTime? searchStart;
   DateTime? searchEnd;
+
+  void _init() async {
+    await ConfigService().checkReview();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
 
   @override
   Widget build(BuildContext context) {

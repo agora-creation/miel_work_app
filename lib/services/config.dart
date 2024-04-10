@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:miel_work_app/common/functions.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:version/version.dart';
@@ -17,7 +17,7 @@ class ConfigService {
   final String PLAY_STORE_URL =
       'https://play.google.com/store/apps/details?id=com.agoracreation.miel_work_app';
 
-  Future<bool> versionCheck() async {
+  Future<bool> checkVersion() async {
     bool ret = false;
     //アプリのバージョンを取得
     PackageInfo info = await PackageInfo.fromPlatform();
@@ -38,7 +38,16 @@ class ConfigService {
     return ret;
   }
 
-  Future<bool> launchStoreReview(BuildContext context) async {
+  Future checkReview() async {
+    int reviewByCount = await getPrefsInt('reviewByCount') ?? 0;
+    if (reviewByCount == 50) {
+      await _launchStoreReview();
+    }
+    reviewByCount++;
+    await setPrefsInt('reviewByCount', reviewByCount);
+  }
+
+  Future<bool> _launchStoreReview() async {
     try {
       if (await review.isAvailable()) {
         review.requestReview();

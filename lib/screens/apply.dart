@@ -8,6 +8,7 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/apply_add.dart';
 import 'package:miel_work_app/screens/apply_detail.dart';
 import 'package:miel_work_app/services/apply.dart';
+import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/widgets/custom_apply_list.dart';
 
 class ApplyScreen extends StatefulWidget {
@@ -30,6 +31,16 @@ class _ApplyScreenState extends State<ApplyScreen> {
   ApplyService applyService = ApplyService();
   DateTime? searchStart;
   DateTime? searchEnd;
+
+  void _init() async {
+    await ConfigService().checkReview();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -13,6 +13,7 @@ import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/chat_message.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/services/chat_message.dart';
+import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/user.dart';
 import 'package:miel_work_app/widgets/custom_button_sm.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
@@ -44,6 +45,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
   }
 
   void _init() async {
+    await ConfigService().checkReview();
     await messageService.updateRead(
       chatId: widget.chat.id,
       loginUser: widget.loginProvider.user,
