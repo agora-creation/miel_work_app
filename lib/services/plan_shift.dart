@@ -63,7 +63,7 @@ class PlanShiftService {
       if (currentGroup == null) {
         ret.add(sfc.Appointment(
           id: planShift.id,
-          resourceIds: planShift.userIds,
+          resourceIds: [planShift.userId],
           subject: '勤務予定 $startTimeText～$endTimeText',
           startTime: planShift.startedAt,
           endTime: planShift.endedAt,
@@ -76,7 +76,7 @@ class PlanShiftService {
           planShift.groupId == '') {
         ret.add(sfc.Appointment(
           id: planShift.id,
-          resourceIds: planShift.userIds,
+          resourceIds: [planShift.userId],
           subject: '勤務予定 $startTimeText～$endTimeText',
           startTime: planShift.startedAt,
           endTime: planShift.endedAt,

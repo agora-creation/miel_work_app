@@ -4,13 +4,10 @@ import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/plan.dart';
-import 'package:miel_work_app/models/plan_shift.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/plan.dart';
-import 'package:miel_work_app/screens/plan_shift_add.dart';
-import 'package:miel_work_app/screens/plan_shift_mod.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/plan.dart';
 import 'package:miel_work_app/services/plan_shift.dart';
@@ -64,41 +61,6 @@ class _PlanShiftScreenState extends State<PlanShiftScreen> {
               loginProvider: widget.loginProvider,
               homeProvider: widget.homeProvider,
               planId: '${appointmentDetails.id}',
-            ),
-          );
-        } else if (type == 'planShift') {
-          if (widget.loginProvider.user?.admin == true) {
-            pushScreen(
-              context,
-              PlanShiftModScreen(
-                loginProvider: widget.loginProvider,
-                homeProvider: widget.homeProvider,
-                planShiftId: '${appointmentDetails.id}',
-              ),
-            );
-          } else {
-            showDialog(
-              context: context,
-              builder: (context) => PlanShiftDialog(
-                loginProvider: widget.loginProvider,
-                homeProvider: widget.homeProvider,
-                planShiftId: '${appointmentDetails.id}',
-              ),
-            );
-          }
-        }
-        break;
-      case sfc.CalendarElement.calendarCell:
-        final userId = details.resource?.id;
-        if (userId == null) return;
-        if (widget.loginProvider.user?.admin == true) {
-          pushScreen(
-            context,
-            PlanShiftAddScreen(
-              loginProvider: widget.loginProvider,
-              homeProvider: widget.homeProvider,
-              userId: '$userId',
-              date: details.date ?? DateTime.now(),
             ),
           );
         }
@@ -319,118 +281,6 @@ class _PlanDialogState extends State<PlanDialog> {
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class PlanShiftDialog extends StatefulWidget {
-  final LoginProvider loginProvider;
-  final HomeProvider homeProvider;
-  final String planShiftId;
-
-  const PlanShiftDialog({
-    required this.loginProvider,
-    required this.homeProvider,
-    required this.planShiftId,
-    super.key,
-  });
-
-  @override
-  State<PlanShiftDialog> createState() => _PlanShiftDialogState();
-}
-
-class _PlanShiftDialogState extends State<PlanShiftDialog> {
-  PlanShiftService planShiftService = PlanShiftService();
-  UserService userService = UserService();
-  String usersText = '';
-  String dateTimeText = '';
-  String repeatText = '';
-
-  void _init() async {
-    PlanShiftModel? planShift = await planShiftService.selectData(
-      id: widget.planShiftId,
-    );
-    if (planShift == null) {
-      if (!mounted) return;
-      showMessage(context, '勤務予定データの取得に失敗しました', false);
-      Navigator.pop(context);
-      return;
-    }
-    List<UserModel> users = await userService.selectList(
-      userIds: planShift.userIds,
-    );
-    if (users.isNotEmpty) {
-      for (UserModel user in users) {
-        if (usersText != '') usersText += ',';
-        usersText += user.name;
-      }
-    }
-    dateTimeText =
-        '${dateText('yyyy/MM/dd HH:mm', planShift.startedAt)}〜${dateText('yyyy/MM/dd HH:mm', planShift.endedAt)}';
-    repeatText = planShift.getRepeatText();
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _init();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const ListTile(
-            tileColor: kLightBlue800Color,
-            title: Text(
-              '勤務予定',
-              style: TextStyle(color: kWhiteColor),
-            ),
-          ),
-          const SizedBox(height: 8),
-          FormLabel(
-            label: '働くスタッフ',
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Text(
-                usersText,
-                style: const TextStyle(fontSize: 16),
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          FormLabel(
-            label: '働く時間帯',
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Text(
-                dateTimeText,
-                style: const TextStyle(fontSize: 16),
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          repeatText != ''
-              ? FormLabel(
-                  label: '繰り返し設定',
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Text(
-                      repeatText,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ),
-                )
-              : Container(),
         ],
       ),
     );

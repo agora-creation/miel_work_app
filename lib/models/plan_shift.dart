@@ -6,7 +6,7 @@ class PlanShiftModel {
   String _id = '';
   String _organizationId = '';
   String _groupId = '';
-  List<String> userIds = [];
+  String _userId = '';
   DateTime _startedAt = DateTime.now();
   DateTime _endedAt = DateTime.now();
   bool _allDay = false;
@@ -14,6 +14,7 @@ class PlanShiftModel {
   String _repeatInterval = '';
   int _repeatEvery = 0;
   List<String> repeatWeeks = [];
+  DateTime? _repeatUntil;
   int _alertMinute = 0;
   DateTime _alertedAt = DateTime.now();
   DateTime _createdAt = DateTime.now();
@@ -22,12 +23,14 @@ class PlanShiftModel {
   String get id => _id;
   String get organizationId => _organizationId;
   String get groupId => _groupId;
+  String get userId => _userId;
   DateTime get startedAt => _startedAt;
   DateTime get endedAt => _endedAt;
   bool get allDay => _allDay;
   bool get repeat => _repeat;
   String get repeatInterval => _repeatInterval;
   int get repeatEvery => _repeatEvery;
+  DateTime? get repeatUntil => _repeatUntil;
   int get alertMinute => _alertMinute;
   DateTime get alertedAt => _alertedAt;
   DateTime get createdAt => _createdAt;
@@ -39,7 +42,7 @@ class PlanShiftModel {
     _id = data['id'] ?? '';
     _organizationId = data['organizationId'] ?? '';
     _groupId = data['groupId'] ?? '';
-    userIds = _convertUserIds(data['userIds']);
+    _userId = data['userId'] ?? '';
     _startedAt = data['startedAt'].toDate() ?? DateTime.now();
     _endedAt = data['endedAt'].toDate() ?? DateTime.now();
     _allDay = data['allDay'] ?? false;
@@ -47,18 +50,13 @@ class PlanShiftModel {
     _repeatInterval = data['repeatInterval'] ?? '';
     _repeatEvery = data['repeatEvery'] ?? 0;
     repeatWeeks = _convertRepeatWeeks(data['repeatWeeks'] ?? []);
+    if (data['repeatUntil'] != null) {
+      _repeatUntil = data['repeatUntil'].toDate();
+    }
     _alertMinute = data['alertMinute'] ?? 0;
     _alertedAt = data['alertedAt'].toDate() ?? DateTime.now();
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
     _expirationAt = data['expirationAt'].toDate() ?? DateTime.now();
-  }
-
-  List<String> _convertUserIds(List list) {
-    List<String> ret = [];
-    for (dynamic id in list) {
-      ret.add('$id');
-    }
-    return ret;
   }
 
   List<String> _convertRepeatWeeks(List list) {
@@ -72,6 +70,7 @@ class PlanShiftModel {
   String? getRepeatRule() {
     String? ret;
     if (_repeat) {
+      ret = '';
       if (_repeatInterval == kRepeatIntervals[0]) {
         ret = 'FREQ=DAILY;';
         if (_repeatEvery > 0) {
@@ -101,38 +100,8 @@ class PlanShiftModel {
           ret += 'INTERVAL=$_repeatEvery;';
         }
       }
-    }
-    return ret;
-  }
-
-  String getRepeatText() {
-    String ret = '';
-    if (_repeat) {
-      if (_repeatInterval == kRepeatIntervals[0]) {
-        ret = '毎日';
-        if (_repeatEvery > 0) {
-          ret += '$_repeatEvery日ごと';
-        }
-      } else if (_repeatInterval == kRepeatIntervals[1]) {
-        ret = '毎週';
-        if (_repeatEvery > 0) {
-          ret += '$_repeatEvery週間ごと';
-        }
-        if (repeatWeeks.isNotEmpty) {
-          String weeksText = '';
-          for (String week in repeatWeeks) {
-            if (weeksText != '') weeksText += ',';
-            weeksText += week;
-          }
-          ret += '($weeksText)';
-        }
-      } else if (_repeatInterval == kRepeatIntervals[2]) {
-        ret = '毎月';
-        if (_repeatEvery > 0) {
-          ret += '$_repeatEveryヶ月ごと';
-        }
-      } else if (_repeatInterval == kRepeatIntervals[3]) {
-        ret = '毎年';
+      if (_repeatUntil != null) {
+        ret += 'UNTIL=${dateText('yyyyMMddTHHmmss', _repeatUntil)}Z;';
       }
     }
     return ret;
