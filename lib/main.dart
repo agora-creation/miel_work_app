@@ -30,6 +30,7 @@ Future main() async {
             appId: '1:66212259980:android:0c87140f712c46b83933a9',
             messagingSenderId: '66212259980',
             projectId: 'miel-work-project',
+            storageBucket: 'miel-work-project.appspot.com',
           ),
         )
       : await Firebase.initializeApp();
