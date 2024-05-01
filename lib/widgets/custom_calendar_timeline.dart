@@ -25,6 +25,10 @@ class CustomCalendarTimeline extends StatelessWidget {
       view: sfc.CalendarView.day,
       onTap: onTap,
       cellBorderColor: kGrey600Color,
+      appointmentTextStyle: const TextStyle(
+        color: kWhiteColor,
+        fontSize: 10,
+      ),
     );
   }
 }

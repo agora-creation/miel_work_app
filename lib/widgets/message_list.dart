@@ -51,7 +51,7 @@ class MessageList extends StatelessWidget {
                 : Container(),
             message.image != ''
                 ? GestureDetector(
-                    onLongPress: onTapImage,
+                    onTap: onTapImage,
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
@@ -70,7 +70,7 @@ class MessageList extends StatelessWidget {
                 : Container(),
             message.file != ''
                 ? GestureDetector(
-                    onLongPress: onTapFile,
+                    onTap: onTapFile,
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
@@ -144,7 +144,7 @@ class MessageList extends StatelessWidget {
                 : Container(),
             message.image != ''
                 ? GestureDetector(
-                    onLongPress: onTapImage,
+                    onTap: onTapImage,
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
@@ -163,7 +163,7 @@ class MessageList extends StatelessWidget {
                 : Container(),
             message.file != ''
                 ? GestureDetector(
-                    onLongPress: onTapFile,
+                    onTap: onTapFile,
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
