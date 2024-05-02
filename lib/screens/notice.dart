@@ -129,25 +129,23 @@ class _NoticeScreenState extends State<NoticeScreen> {
           );
         },
       ),
-      floatingActionButton: widget.loginProvider.user?.admin == true
-          ? FloatingActionButton.extended(
-              onPressed: () => pushScreen(
-                context,
-                NoticeAddScreen(
-                  loginProvider: widget.loginProvider,
-                  homeProvider: widget.homeProvider,
-                ),
-              ),
-              icon: const Icon(
-                Icons.add,
-                color: kWhiteColor,
-              ),
-              label: const Text(
-                '新規追加',
-                style: TextStyle(color: kWhiteColor),
-              ),
-            )
-          : null,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => pushScreen(
+          context,
+          NoticeAddScreen(
+            loginProvider: widget.loginProvider,
+            homeProvider: widget.homeProvider,
+          ),
+        ),
+        icon: const Icon(
+          Icons.add,
+          color: kWhiteColor,
+        ),
+        label: const Text(
+          '新規追加',
+          style: TextStyle(color: kWhiteColor),
+        ),
+      ),
     );
   }
 }
