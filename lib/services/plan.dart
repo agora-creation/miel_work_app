@@ -101,7 +101,7 @@ class PlanService {
           endTime: plan.endedAt,
           isAllDay: plan.allDay,
           color:
-              shift ? plan.categoryColor.withOpacity(0.3) : plan.categoryColor,
+              shift ? plan.categoryColor.withOpacity(0.5) : plan.categoryColor,
           notes: 'plan',
           recurrenceRule: plan.getRepeatRule(),
         ));
@@ -114,7 +114,7 @@ class PlanService {
           endTime: plan.endedAt,
           isAllDay: plan.allDay,
           color:
-              shift ? plan.categoryColor.withOpacity(0.3) : plan.categoryColor,
+              shift ? plan.categoryColor.withOpacity(0.5) : plan.categoryColor,
           notes: 'plan',
           recurrenceRule: plan.getRepeatRule(),
         ));
