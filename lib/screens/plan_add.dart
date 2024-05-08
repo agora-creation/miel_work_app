@@ -43,7 +43,11 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
   int alertMinute = kAlertMinutes[1];
 
   void _init() async {
-    selectedGroup = widget.homeProvider.currentGroup;
+    if (widget.loginProvider.isAllGroup()) {
+      selectedGroup = widget.homeProvider.currentGroup;
+    } else {
+      selectedGroup = widget.loginProvider.group;
+    }
     categories = await categoryService.selectList(
       organizationId: widget.loginProvider.organization?.id,
     );
@@ -86,20 +90,27 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
   Widget build(BuildContext context) {
     final planProvider = Provider.of<PlanProvider>(context);
     List<DropdownMenuItem<OrganizationGroupModel?>> groupItems = [];
-    if (widget.homeProvider.groups.isNotEmpty) {
-      groupItems.add(const DropdownMenuItem(
-        value: null,
-        child: Text(
-          'グループの指定なし',
-          style: TextStyle(color: kGreyColor),
-        ),
-      ));
-      for (OrganizationGroupModel group in widget.homeProvider.groups) {
-        groupItems.add(DropdownMenuItem(
-          value: group,
-          child: Text(group.name),
-        ));
+    groupItems.add(const DropdownMenuItem(
+      value: null,
+      child: Text(
+        'グループの指定なし',
+        style: TextStyle(color: kGreyColor),
+      ),
+    ));
+    if (widget.loginProvider.isAllGroup()) {
+      if (widget.homeProvider.groups.isNotEmpty) {
+        for (OrganizationGroupModel group in widget.homeProvider.groups) {
+          groupItems.add(DropdownMenuItem(
+            value: group,
+            child: Text(group.name),
+          ));
+        }
       }
+    } else {
+      groupItems.add(DropdownMenuItem(
+        value: widget.loginProvider.group,
+        child: Text(widget.loginProvider.group?.name ?? ''),
+      ));
     }
     return Scaffold(
       backgroundColor: kWhiteColor,
@@ -157,29 +168,21 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
             children: [
               FormLabel(
                 label: '公開グループ',
-                child: widget.loginProvider.isAllGroup()
-                    ? DropdownButton<OrganizationGroupModel?>(
-                        hint: const Text(
-                          'グループの指定なし',
-                          style: TextStyle(color: kGreyColor),
-                        ),
-                        underline: Container(),
-                        isExpanded: true,
-                        value: selectedGroup,
-                        items: groupItems,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedGroup = value;
-                          });
-                        },
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Text(
-                          '${selectedGroup?.name}',
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                      ),
+                child: DropdownButton<OrganizationGroupModel?>(
+                  hint: const Text(
+                    'グループの指定なし',
+                    style: TextStyle(color: kGreyColor),
+                  ),
+                  underline: Container(),
+                  isExpanded: true,
+                  value: selectedGroup,
+                  items: groupItems,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedGroup = value;
+                    });
+                  },
+                ),
               ),
               const SizedBox(height: 8),
               FormLabel(

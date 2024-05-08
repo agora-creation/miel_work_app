@@ -42,27 +42,38 @@ class _ManualModScreenState extends State<NoticeModScreen> {
     super.initState();
     titleController.text = widget.notice.title;
     contentController.text = widget.notice.content;
-    selectedGroup = widget.homeProvider.currentGroup;
+    if (widget.loginProvider.isAllGroup()) {
+      selectedGroup = widget.homeProvider.currentGroup;
+    } else {
+      selectedGroup = widget.loginProvider.group;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final noticeProvider = Provider.of<NoticeProvider>(context);
     List<DropdownMenuItem<OrganizationGroupModel?>> groupItems = [];
-    if (widget.homeProvider.groups.isNotEmpty) {
-      groupItems.add(const DropdownMenuItem(
-        value: null,
-        child: Text(
-          'グループの指定なし',
-          style: TextStyle(color: kGreyColor),
-        ),
-      ));
-      for (OrganizationGroupModel group in widget.homeProvider.groups) {
-        groupItems.add(DropdownMenuItem(
-          value: group,
-          child: Text(group.name),
-        ));
+    groupItems.add(const DropdownMenuItem(
+      value: null,
+      child: Text(
+        'グループの指定なし',
+        style: TextStyle(color: kGreyColor),
+      ),
+    ));
+    if (widget.loginProvider.isAllGroup()) {
+      if (widget.homeProvider.groups.isNotEmpty) {
+        for (OrganizationGroupModel group in widget.homeProvider.groups) {
+          groupItems.add(DropdownMenuItem(
+            value: group,
+            child: Text(group.name),
+          ));
+        }
       }
+    } else {
+      groupItems.add(DropdownMenuItem(
+        value: widget.loginProvider.group,
+        child: Text(widget.loginProvider.group?.name ?? ''),
+      ));
     }
     return Scaffold(
       backgroundColor: kWhiteColor,
