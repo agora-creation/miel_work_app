@@ -56,11 +56,24 @@ class HomeProvider with ChangeNotifier {
         'createdAt': DateTime.now(),
       });
       String chatId = _chatService.id();
+      //未所属のスタッフを登録
+      List<String> userIds = organization.userIds;
+      if (groups.isNotEmpty) {
+        for (OrganizationGroupModel group in groups) {
+          if (group.userIds.isNotEmpty) {
+            for (String userId in group.userIds) {
+              if (userIds.contains(userId)) {
+                userIds.remove(userId);
+              }
+            }
+          }
+        }
+      }
       _chatService.create({
         'id': chatId,
         'organizationId': organization.id,
         'groupId': groupId,
-        'userIds': [],
+        'userIds': userIds,
         'name': name,
         'lastMessage': '',
         'updatedAt': DateTime.now(),

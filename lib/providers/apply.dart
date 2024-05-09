@@ -20,6 +20,7 @@ class ApplyProvider with ChangeNotifier {
   Future<String?> create({
     required OrganizationModel? organization,
     required OrganizationGroupModel? group,
+    required String number,
     required String type,
     required String title,
     required String content,
@@ -52,6 +53,7 @@ class ApplyProvider with ChangeNotifier {
         'id': id,
         'organizationId': organization.id,
         'groupId': group?.id ?? '',
+        'number': number,
         'type': type,
         'title': title,
         'content': content,

@@ -89,6 +89,7 @@ class _UserModScreenState extends State<UserModScreen> {
           TextButton(
             onPressed: () async {
               String? error = await userProvider.update(
+                organization: widget.loginProvider.organization,
                 user: widget.user,
                 name: nameController.text,
                 email: emailController.text,
