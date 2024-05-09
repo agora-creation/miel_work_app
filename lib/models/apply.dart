@@ -8,6 +8,7 @@ class ApplyModel {
   String _id = '';
   String _organizationId = '';
   String _groupId = '';
+  String _number = '';
   String _type = '';
   String _title = '';
   String _content = '';
@@ -26,6 +27,7 @@ class ApplyModel {
   String get id => _id;
   String get organizationId => _organizationId;
   String get groupId => _groupId;
+  String get number => _number;
   String get type => _type;
   String get title => _title;
   String get content => _content;
@@ -46,6 +48,7 @@ class ApplyModel {
     _id = data['id'] ?? '';
     _organizationId = data['organizationId'] ?? '';
     _groupId = data['groupId'] ?? '';
+    _number = data['number'] ?? '';
     _type = data['type'] ?? '';
     _title = data['title'] ?? '';
     _content = data['content'] ?? '';
