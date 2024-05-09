@@ -49,16 +49,24 @@ class MessageFormField extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-              child: TextField(
-                controller: controller,
-                decoration: const InputDecoration.collapsed(
-                  hintText: 'メッセージを入力...',
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: kGrey200Color),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                child: Container(
+                  constraints: const BoxConstraints(maxHeight: 200),
+                  child: TextField(
+                    controller: controller,
+                    decoration: const InputDecoration.collapsed(
+                      hintText: 'メッセージを入力...',
+                    ),
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    enabled: enabled,
+                  ),
                 ),
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                enabled: enabled,
               ),
             ),
           ),

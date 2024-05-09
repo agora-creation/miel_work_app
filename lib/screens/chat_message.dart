@@ -136,6 +136,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                             return MessageList(
                               message: message,
                               loginUser: widget.loginProvider.user,
+                              onTapContent: () {},
                               onTapReadUsers: () => showDialog(
                                 context: context,
                                 builder: (context) => ReadUsersDialog(

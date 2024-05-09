@@ -70,7 +70,9 @@ class MyApp extends StatelessWidget {
         locale: const Locale('ja'),
         title: 'ひろめWORK',
         theme: customTheme(),
-        home: const SplashController(),
+        home: MediaQuery.withNoTextScaling(
+          child: const SplashController(),
+        ),
       ),
     );
   }

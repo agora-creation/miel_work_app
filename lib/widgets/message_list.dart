@@ -8,6 +8,7 @@ import 'package:miel_work_app/models/user.dart';
 class MessageList extends StatelessWidget {
   final ChatMessageModel message;
   final UserModel? loginUser;
+  final Function()? onTapContent;
   final Function()? onTapReadUsers;
   final Function()? onTapImage;
   final Function()? onTapFile;
@@ -15,6 +16,7 @@ class MessageList extends StatelessWidget {
   const MessageList({
     required this.message,
     required this.loginUser,
+    required this.onTapContent,
     required this.onTapReadUsers,
     required this.onTapImage,
     required this.onTapFile,
@@ -36,22 +38,25 @@ class MessageList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             message.image == '' && message.file == ''
-                ? Material(
-                    elevation: 4,
-                    borderRadius: BorderRadius.circular(8),
-                    color: kYellowColor,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8,
-                        horizontal: 12,
+                ? GestureDetector(
+                    onLongPress: onTapContent,
+                    child: Material(
+                      elevation: 4,
+                      borderRadius: BorderRadius.circular(8),
+                      color: kYellowColor,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 12,
+                        ),
+                        child: Text(message.content).urlToLink(context),
                       ),
-                      child: Text(message.content).urlToLink(context),
                     ),
                   )
                 : Container(),
             message.image != ''
                 ? GestureDetector(
-                    onTap: onTapImage,
+                    onLongPress: onTapImage,
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
@@ -70,7 +75,7 @@ class MessageList extends StatelessWidget {
                 : Container(),
             message.file != ''
                 ? GestureDetector(
-                    onTap: onTapFile,
+                    onLongPress: onTapFile,
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
@@ -104,7 +109,7 @@ class MessageList extends StatelessWidget {
             ),
             readUsers.isNotEmpty
                 ? GestureDetector(
-                    onTap: onTapReadUsers,
+                    onLongPress: onTapReadUsers,
                     child: Text(
                       '既読 ${readUsers.length}',
                       style: const TextStyle(
@@ -129,22 +134,25 @@ class MessageList extends StatelessWidget {
             ),
             const SizedBox(height: 2),
             message.image == '' && message.file == ''
-                ? Material(
-                    elevation: 4,
-                    borderRadius: BorderRadius.circular(8),
-                    color: kWhiteColor,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8,
-                        horizontal: 12,
+                ? GestureDetector(
+                    onLongPress: onTapContent,
+                    child: Material(
+                      elevation: 4,
+                      borderRadius: BorderRadius.circular(8),
+                      color: kWhiteColor,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 12,
+                        ),
+                        child: Text(message.content).urlToLink(context),
                       ),
-                      child: Text(message.content).urlToLink(context),
                     ),
                   )
                 : Container(),
             message.image != ''
                 ? GestureDetector(
-                    onTap: onTapImage,
+                    onLongPress: onTapImage,
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
@@ -163,7 +171,7 @@ class MessageList extends StatelessWidget {
                 : Container(),
             message.file != ''
                 ? GestureDetector(
-                    onTap: onTapFile,
+                    onLongPress: onTapFile,
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
@@ -197,7 +205,7 @@ class MessageList extends StatelessWidget {
             ),
             readUsers.isNotEmpty
                 ? GestureDetector(
-                    onTap: onTapReadUsers,
+                    onLongPress: onTapReadUsers,
                     child: Text(
                       '既読 ${readUsers.length}',
                       style: const TextStyle(

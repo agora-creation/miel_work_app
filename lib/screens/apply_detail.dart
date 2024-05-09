@@ -109,6 +109,10 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
+                      '申請番号: ${widget.apply.number}',
+                      style: const TextStyle(color: kGreyColor),
+                    ),
+                    Text(
                       '申請日時: ${dateText('yyyy/MM/dd HH:mm', widget.apply.createdAt)}',
                       style: const TextStyle(color: kGreyColor),
                     ),
