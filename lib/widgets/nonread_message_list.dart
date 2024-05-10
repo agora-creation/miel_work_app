@@ -16,7 +16,8 @@ class NonReadMessageList extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: kGrey600Color))),
+        border: Border(bottom: BorderSide(color: kGrey600Color)),
+      ),
       padding: const EdgeInsets.symmetric(
         vertical: 4,
         horizontal: 8,
