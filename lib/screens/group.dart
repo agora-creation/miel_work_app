@@ -43,66 +43,68 @@ class _GroupScreenState extends State<GroupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kWhiteColor,
-      appBar: AppBar(
+    return MediaQuery.withNoTextScaling(
+      child: Scaffold(
         backgroundColor: kWhiteColor,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
-            color: kBlackColor,
+        appBar: AppBar(
+          backgroundColor: kWhiteColor,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.chevron_left,
+              color: kBlackColor,
+            ),
+            onPressed: () => Navigator.pop(context),
           ),
-          onPressed: () => Navigator.pop(context),
+          centerTitle: true,
+          title: const Text(
+            'グループ管理',
+            style: TextStyle(color: kBlackColor),
+          ),
+          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
         ),
-        centerTitle: true,
-        title: const Text(
-          'グループ管理',
-          style: TextStyle(color: kBlackColor),
-        ),
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
-      ),
-      body: groups.isNotEmpty
-          ? ListView.builder(
-              itemCount: groups.length,
-              itemBuilder: (context, index) {
-                OrganizationGroupModel group = groups[index];
-                return Container(
-                  decoration: const BoxDecoration(
-                    border: Border(bottom: BorderSide(color: kGrey600Color)),
-                  ),
-                  child: ListTile(
-                    title: Text(group.name),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () => pushScreen(
-                      context,
-                      GroupModScreen(
-                        loginProvider: widget.loginProvider,
-                        homeProvider: widget.homeProvider,
-                        group: group,
-                        getGroups: _getGroups,
+        body: groups.isNotEmpty
+            ? ListView.builder(
+                itemCount: groups.length,
+                itemBuilder: (context, index) {
+                  OrganizationGroupModel group = groups[index];
+                  return Container(
+                    decoration: const BoxDecoration(
+                      border: Border(bottom: BorderSide(color: kGrey600Color)),
+                    ),
+                    child: ListTile(
+                      title: Text(group.name),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => pushScreen(
+                        context,
+                        GroupModScreen(
+                          loginProvider: widget.loginProvider,
+                          homeProvider: widget.homeProvider,
+                          group: group,
+                          getGroups: _getGroups,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
-            )
-          : const Center(child: Text('グループはありません')),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => showDialog(
-          context: context,
-          builder: (context) => AddGroupDialog(
-            loginProvider: widget.loginProvider,
-            homeProvider: widget.homeProvider,
-            getGroups: _getGroups,
+                  );
+                },
+              )
+            : const Center(child: Text('グループはありません')),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => showDialog(
+            context: context,
+            builder: (context) => AddGroupDialog(
+              loginProvider: widget.loginProvider,
+              homeProvider: widget.homeProvider,
+              getGroups: _getGroups,
+            ),
           ),
-        ),
-        icon: const Icon(
-          Icons.add,
-          color: kWhiteColor,
-        ),
-        label: const Text(
-          '新規追加',
-          style: TextStyle(color: kWhiteColor),
+          icon: const Icon(
+            Icons.add,
+            color: kWhiteColor,
+          ),
+          label: const Text(
+            '新規追加',
+            style: TextStyle(color: kWhiteColor),
+          ),
         ),
       ),
     );

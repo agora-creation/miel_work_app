@@ -57,95 +57,97 @@ class _ManualAddScreenState extends State<ManualAddScreen> {
         ));
       }
     }
-    return Scaffold(
-      backgroundColor: kWhiteColor,
-      appBar: AppBar(
+    return MediaQuery.withNoTextScaling(
+      child: Scaffold(
         backgroundColor: kWhiteColor,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
-            color: kBlackColor,
+        appBar: AppBar(
+          backgroundColor: kWhiteColor,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.chevron_left,
+              color: kBlackColor,
+            ),
+            onPressed: () => Navigator.pop(context),
           ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
-        title: const Text(
-          '業務マニュアルを追加',
-          style: TextStyle(color: kBlackColor),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              String? error = await manualProvider.create(
-                organization: widget.loginProvider.organization,
-                title: titleController.text,
-                pickedFile: pickedFile,
-                group: selectedGroup,
-                loginUser: widget.loginProvider.user,
-              );
-              if (error != null) {
+          centerTitle: true,
+          title: const Text(
+            '業務マニュアルを追加',
+            style: TextStyle(color: kBlackColor),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                String? error = await manualProvider.create(
+                  organization: widget.loginProvider.organization,
+                  title: titleController.text,
+                  pickedFile: pickedFile,
+                  group: selectedGroup,
+                  loginUser: widget.loginProvider.user,
+                );
+                if (error != null) {
+                  if (!mounted) return;
+                  showMessage(context, error, false);
+                  return;
+                }
                 if (!mounted) return;
-                showMessage(context, error, false);
-                return;
-              }
-              if (!mounted) return;
-              showMessage(context, '業務マニュアルを追加しました', true);
-              Navigator.pop(context);
-            },
-            child: const Text('保存'),
-          ),
-        ],
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
-      ),
-      body: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomTextField(
-                  controller: titleController,
-                  textInputType: TextInputType.name,
-                  maxLines: 1,
-                  label: 'タイトル',
-                ),
-                const SizedBox(height: 8),
-                CustomPdfField(
-                  value: pickedFile,
-                  defaultValue: '',
-                  onTap: () async {
-                    final result = await FilePicker.platform.pickFiles(
-                      type: FileType.custom,
-                      allowedExtensions: ['pdf'],
-                    );
-                    if (result == null) return;
-                    setState(() {
-                      pickedFile = File(result.files.single.path!);
-                    });
-                  },
-                ),
-                const SizedBox(height: 8),
-                FormLabel(
-                  label: '公開グループ',
-                  child: DropdownButton<OrganizationGroupModel?>(
-                    hint: const Text(
-                      'グループの指定なし',
-                      style: TextStyle(color: kGreyColor),
-                    ),
-                    underline: Container(),
-                    isExpanded: true,
-                    value: selectedGroup,
-                    items: groupItems,
-                    onChanged: (value) {
+                showMessage(context, '業務マニュアルを追加しました', true);
+                Navigator.pop(context);
+              },
+              child: const Text('保存'),
+            ),
+          ],
+          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        ),
+        body: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomTextField(
+                    controller: titleController,
+                    textInputType: TextInputType.name,
+                    maxLines: 1,
+                    label: 'タイトル',
+                  ),
+                  const SizedBox(height: 8),
+                  CustomPdfField(
+                    value: pickedFile,
+                    defaultValue: '',
+                    onTap: () async {
+                      final result = await FilePicker.platform.pickFiles(
+                        type: FileType.custom,
+                        allowedExtensions: ['pdf'],
+                      );
+                      if (result == null) return;
                       setState(() {
-                        selectedGroup = value;
+                        pickedFile = File(result.files.single.path!);
                       });
                     },
                   ),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    label: '公開グループ',
+                    child: DropdownButton<OrganizationGroupModel?>(
+                      hint: const Text(
+                        'グループの指定なし',
+                        style: TextStyle(color: kGreyColor),
+                      ),
+                      underline: Container(),
+                      isExpanded: true,
+                      value: selectedGroup,
+                      items: groupItems,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedGroup = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

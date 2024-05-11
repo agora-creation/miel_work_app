@@ -8,35 +8,37 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          const AnimationBackground(),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    border: Border(bottom: BorderSide(color: kBlackColor)),
-                  ),
-                  child: const Text(
-                    'ひろめWORK',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'SourceHanSansJP-Bold',
-                      letterSpacing: 2,
+    return MediaQuery.withNoTextScaling(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            const AnimationBackground(),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      border: Border(bottom: BorderSide(color: kBlackColor)),
+                    ),
+                    child: const Text(
+                      'ひろめWORK',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'SourceHanSansJP-Bold',
+                        letterSpacing: 2,
+                      ),
                     ),
                   ),
-                ),
-                const SpinKitCubeGrid(
-                  color: kBlackColor,
-                ),
-              ],
+                  const SpinKitCubeGrid(
+                    color: kBlackColor,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

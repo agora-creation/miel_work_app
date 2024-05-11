@@ -29,67 +29,69 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kWhiteColor,
-      appBar: AppBar(
+    return MediaQuery.withNoTextScaling(
+      child: Scaffold(
         backgroundColor: kWhiteColor,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
-            color: kBlackColor,
+        appBar: AppBar(
+          backgroundColor: kWhiteColor,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.chevron_left,
+              color: kBlackColor,
+            ),
+            onPressed: () => Navigator.pop(context),
           ),
-          onPressed: () => Navigator.pop(context),
+          centerTitle: true,
+          title: const Text(
+            'カテゴリ管理',
+            style: TextStyle(color: kBlackColor),
+          ),
+          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
         ),
-        centerTitle: true,
-        title: const Text(
-          'カテゴリ管理',
-          style: TextStyle(color: kBlackColor),
-        ),
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
-      ),
-      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: categoryService.streamList(
-          organizationId: widget.organization?.id,
-        ),
-        builder: (context, snapshot) {
-          List<CategoryModel> categories = [];
-          if (snapshot.hasData) {
-            categories = categoryService.generateList(
-              data: snapshot.data,
-            );
-          }
-          if (categories.isEmpty) {
-            return const Center(child: Text('カテゴリはありません'));
-          }
-          return ListView.builder(
-            itemCount: categories.length,
-            itemBuilder: (context, index) {
-              CategoryModel category = categories[index];
-              return CustomCategoryList(
-                category: category,
-                onTap: () => showDialog(
-                  context: context,
-                  builder: (context) => DelCategoryDialog(category: category),
-                ),
+        body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: categoryService.streamList(
+            organizationId: widget.organization?.id,
+          ),
+          builder: (context, snapshot) {
+            List<CategoryModel> categories = [];
+            if (snapshot.hasData) {
+              categories = categoryService.generateList(
+                data: snapshot.data,
               );
-            },
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => showDialog(
-          context: context,
-          builder: (context) => AddCategoryDialog(
-            organization: widget.organization,
+            }
+            if (categories.isEmpty) {
+              return const Center(child: Text('カテゴリはありません'));
+            }
+            return ListView.builder(
+              itemCount: categories.length,
+              itemBuilder: (context, index) {
+                CategoryModel category = categories[index];
+                return CustomCategoryList(
+                  category: category,
+                  onTap: () => showDialog(
+                    context: context,
+                    builder: (context) => DelCategoryDialog(category: category),
+                  ),
+                );
+              },
+            );
+          },
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => showDialog(
+            context: context,
+            builder: (context) => AddCategoryDialog(
+              organization: widget.organization,
+            ),
           ),
-        ),
-        icon: const Icon(
-          Icons.add,
-          color: kWhiteColor,
-        ),
-        label: const Text(
-          '新規追加',
-          style: TextStyle(color: kWhiteColor),
+          icon: const Icon(
+            Icons.add,
+            color: kWhiteColor,
+          ),
+          label: const Text(
+            '新規追加',
+            style: TextStyle(color: kWhiteColor),
+          ),
         ),
       ),
     );

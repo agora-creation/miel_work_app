@@ -48,80 +48,82 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kWhiteColor,
-      appBar: AppBar(
+    return MediaQuery.withNoTextScaling(
+      child: Scaffold(
         backgroundColor: kWhiteColor,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
-            color: kBlackColor,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
-        title: Text(
-          widget.notice.title,
-          style: const TextStyle(color: kBlackColor),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () => pushScreen(
-              context,
-              NoticeModScreen(
-                loginProvider: widget.loginProvider,
-                homeProvider: widget.homeProvider,
-                notice: widget.notice,
-              ),
+        appBar: AppBar(
+          backgroundColor: kWhiteColor,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.chevron_left,
+              color: kBlackColor,
             ),
-            icon: const Icon(Icons.edit, color: kBlueColor),
+            onPressed: () => Navigator.pop(context),
           ),
-        ],
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  dateText('yyyy/MM/dd HH:mm', widget.notice.createdAt),
-                  style: const TextStyle(color: kGreyColor),
+          centerTitle: true,
+          title: Text(
+            widget.notice.title,
+            style: const TextStyle(color: kBlackColor),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () => pushScreen(
+                context,
+                NoticeModScreen(
+                  loginProvider: widget.loginProvider,
+                  homeProvider: widget.homeProvider,
+                  notice: widget.notice,
                 ),
               ),
-              const SizedBox(height: 4),
-              Text(widget.notice.content),
-              const SizedBox(height: 16),
-              widget.notice.file != ''
-                  ? LinkText(
-                      label: '添付ファイル',
-                      color: kBlueColor,
-                      onTap: () async {
-                        if (await saveFile(
-                          widget.notice.file,
-                          '${widget.notice.id}${widget.notice.fileExt}',
-                        )) {
-                          if (!mounted) return;
-                          showMessage(
-                            context,
-                            'ファイルのダウンロードが完了しました',
-                            true,
-                          );
-                        } else {
-                          if (!mounted) return;
-                          showMessage(
-                            context,
-                            'ファイルのダウンロードに失敗しました',
-                            false,
-                          );
-                        }
-                      },
-                    )
-                  : Container(),
-            ],
+              icon: const Icon(Icons.edit, color: kBlueColor),
+            ),
+          ],
+          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    dateText('yyyy/MM/dd HH:mm', widget.notice.createdAt),
+                    style: const TextStyle(color: kGreyColor),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(widget.notice.content),
+                const SizedBox(height: 16),
+                widget.notice.file != ''
+                    ? LinkText(
+                        label: '添付ファイル',
+                        color: kBlueColor,
+                        onTap: () async {
+                          if (await saveFile(
+                            widget.notice.file,
+                            '${widget.notice.id}${widget.notice.fileExt}',
+                          )) {
+                            if (!mounted) return;
+                            showMessage(
+                              context,
+                              'ファイルのダウンロードが完了しました',
+                              true,
+                            );
+                          } else {
+                            if (!mounted) return;
+                            showMessage(
+                              context,
+                              'ファイルのダウンロードに失敗しました',
+                              false,
+                            );
+                          }
+                        },
+                      )
+                    : Container(),
+              ],
+            ),
           ),
         ),
       ),

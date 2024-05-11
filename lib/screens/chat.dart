@@ -48,55 +48,57 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kWhiteColor,
-      appBar: AppBar(
+    return MediaQuery.withClampedTextScaling(
+      child: Scaffold(
         backgroundColor: kWhiteColor,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
-            color: kBlackColor,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
-        title: const Text(
-          'チャットルーム一覧',
-          style: TextStyle(color: kBlackColor),
-        ),
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
-      ),
-      body: ListView.builder(
-        itemCount: chats.length,
-        itemBuilder: (context, index) {
-          ChatModel chat = chats[index];
-          return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-            stream: messageService.streamList(
-              chatId: chat.id,
+        appBar: AppBar(
+          backgroundColor: kWhiteColor,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.chevron_left,
+              color: kBlackColor,
             ),
-            builder: (context, snapshot) {
-              List<ChatMessageModel> messages = [];
-              if (snapshot.hasData) {
-                messages = messageService.generateListUnread(
-                  data: snapshot.data,
-                  currentGroup: widget.homeProvider.currentGroup,
-                  loginUser: widget.loginProvider.user,
-                );
-              }
-              return ChatList(
-                chat: chat,
-                unreadCount: messages.length,
-                onTap: () => pushScreen(
-                  context,
-                  ChatMessageScreen(
-                    loginProvider: widget.loginProvider,
-                    chat: chat,
+            onPressed: () => Navigator.pop(context),
+          ),
+          centerTitle: true,
+          title: const Text(
+            'チャットルーム一覧',
+            style: TextStyle(color: kBlackColor),
+          ),
+          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        ),
+        body: ListView.builder(
+          itemCount: chats.length,
+          itemBuilder: (context, index) {
+            ChatModel chat = chats[index];
+            return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream: messageService.streamList(
+                chatId: chat.id,
+              ),
+              builder: (context, snapshot) {
+                List<ChatMessageModel> messages = [];
+                if (snapshot.hasData) {
+                  messages = messageService.generateListUnread(
+                    data: snapshot.data,
+                    currentGroup: widget.homeProvider.currentGroup,
+                    loginUser: widget.loginProvider.user,
+                  );
+                }
+                return ChatList(
+                  chat: chat,
+                  unreadCount: messages.length,
+                  onTap: () => pushScreen(
+                    context,
+                    ChatMessageScreen(
+                      loginProvider: widget.loginProvider,
+                      chat: chat,
+                    ),
                   ),
-                ),
-              );
-            },
-          );
-        },
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

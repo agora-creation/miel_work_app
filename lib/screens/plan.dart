@@ -61,62 +61,64 @@ class _PlanScreenState extends State<PlanScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kWhiteColor,
-      appBar: AppBar(
+    return MediaQuery.withNoTextScaling(
+      child: Scaffold(
         backgroundColor: kWhiteColor,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
-            color: kBlackColor,
+        appBar: AppBar(
+          backgroundColor: kWhiteColor,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.chevron_left,
+              color: kBlackColor,
+            ),
+            onPressed: () => Navigator.pop(context),
           ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
-        title: const Text(
-          'スケジュール',
-          style: TextStyle(color: kBlackColor),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () => showDialog(
-              context: context,
-              builder: (context) => SearchCategoryDialog(
-                loginProvider: widget.loginProvider,
-                searchCategoriesChange: _searchCategoriesChange,
+          centerTitle: true,
+          title: const Text(
+            'スケジュール',
+            style: TextStyle(color: kBlackColor),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () => showDialog(
+                context: context,
+                builder: (context) => SearchCategoryDialog(
+                  loginProvider: widget.loginProvider,
+                  searchCategoriesChange: _searchCategoriesChange,
+                ),
               ),
+              icon: const Icon(Icons.search),
             ),
-            icon: const Icon(Icons.search),
-          ),
-          IconButton(
-            onPressed: () => pushScreen(
-              context,
-              CategoryScreen(organization: widget.loginProvider.organization),
+            IconButton(
+              onPressed: () => pushScreen(
+                context,
+                CategoryScreen(organization: widget.loginProvider.organization),
+              ),
+              icon: const Icon(Icons.list),
             ),
-            icon: const Icon(Icons.list),
-          ),
-        ],
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
-      ),
-      body: SafeArea(
-        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: planService.streamList(
-            organizationId: widget.loginProvider.organization?.id,
-            categories: searchCategories,
-          ),
-          builder: (context, snapshot) {
-            List<sfc.Appointment> appointments = [];
-            if (snapshot.hasData) {
-              appointments = planService.generateListAppointment(
-                data: snapshot.data,
-                currentGroup: widget.homeProvider.currentGroup,
+          ],
+          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        ),
+        body: SafeArea(
+          child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+            stream: planService.streamList(
+              organizationId: widget.loginProvider.organization?.id,
+              categories: searchCategories,
+            ),
+            builder: (context, snapshot) {
+              List<sfc.Appointment> appointments = [];
+              if (snapshot.hasData) {
+                appointments = planService.generateListAppointment(
+                  data: snapshot.data,
+                  currentGroup: widget.homeProvider.currentGroup,
+                );
+              }
+              return CustomCalendar(
+                dataSource: _DataSource(appointments),
+                onTap: _calendarTap,
               );
-            }
-            return CustomCalendar(
-              dataSource: _DataSource(appointments),
-              onTap: _calendarTap,
-            );
-          },
+            },
+          ),
         ),
       ),
     );

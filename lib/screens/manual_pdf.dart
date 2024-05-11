@@ -51,38 +51,40 @@ class _ManualPdfScreenState extends State<ManualPdfScreen> {
   @override
   Widget build(BuildContext context) {
     File file = File(widget.manual.file);
-    return Scaffold(
-      backgroundColor: kWhiteColor,
-      appBar: AppBar(
+    return MediaQuery.withNoTextScaling(
+      child: Scaffold(
         backgroundColor: kWhiteColor,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
-            color: kBlackColor,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
-        title: Text(
-          widget.manual.title,
-          style: const TextStyle(color: kBlackColor),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () => pushScreen(
-              context,
-              ManualModScreen(
-                loginProvider: widget.loginProvider,
-                homeProvider: widget.homeProvider,
-                manual: widget.manual,
-              ),
+        appBar: AppBar(
+          backgroundColor: kWhiteColor,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.chevron_left,
+              color: kBlackColor,
             ),
-            icon: const Icon(Icons.edit, color: kBlueColor),
+            onPressed: () => Navigator.pop(context),
           ),
-        ],
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+          centerTitle: true,
+          title: Text(
+            widget.manual.title,
+            style: const TextStyle(color: kBlackColor),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () => pushScreen(
+                context,
+                ManualModScreen(
+                  loginProvider: widget.loginProvider,
+                  homeProvider: widget.homeProvider,
+                  manual: widget.manual,
+                ),
+              ),
+              icon: const Icon(Icons.edit, color: kBlueColor),
+            ),
+          ],
+          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        ),
+        body: SfPdfViewer.network(file.path),
       ),
-      body: SfPdfViewer.network(file.path),
     );
   }
 }

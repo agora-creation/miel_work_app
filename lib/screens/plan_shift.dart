@@ -110,60 +110,62 @@ class _PlanShiftScreenState extends State<PlanShiftScreen> {
     var stream2 = planShiftService.streamList(
       organizationId: widget.loginProvider.organization?.id,
     );
-    return Scaffold(
-      backgroundColor: kWhiteColor,
-      appBar: AppBar(
+    return MediaQuery.withNoTextScaling(
+      child: Scaffold(
         backgroundColor: kWhiteColor,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
-            color: kBlackColor,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
-        title: const Text(
-          'シフト表',
-          style: TextStyle(color: kBlackColor),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () => showDialog(
-              context: context,
-              builder: (context) => SearchCategoryDialog(
-                loginProvider: widget.loginProvider,
-                searchCategoriesChange: _searchCategoriesChange,
-              ),
+        appBar: AppBar(
+          backgroundColor: kWhiteColor,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.chevron_left,
+              color: kBlackColor,
             ),
-            icon: const Icon(Icons.search),
-          )
-        ],
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
-      ),
-      body: SafeArea(
-        child: StreamBuilder2<QuerySnapshot<Map<String, dynamic>>,
-            QuerySnapshot<Map<String, dynamic>>>(
-          streams: StreamTuple2(stream1!, stream2!),
-          builder: (context, snapshot) {
-            List<sfc.Appointment> source = [];
-            if (snapshot.snapshot1.hasData) {
-              source = planService.generateListAppointment(
-                data: snapshot.snapshot1.data,
-                currentGroup: widget.homeProvider.currentGroup,
-                shift: true,
+            onPressed: () => Navigator.pop(context),
+          ),
+          centerTitle: true,
+          title: const Text(
+            'シフト表',
+            style: TextStyle(color: kBlackColor),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () => showDialog(
+                context: context,
+                builder: (context) => SearchCategoryDialog(
+                  loginProvider: widget.loginProvider,
+                  searchCategoriesChange: _searchCategoriesChange,
+                ),
+              ),
+              icon: const Icon(Icons.search),
+            )
+          ],
+          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        ),
+        body: SafeArea(
+          child: StreamBuilder2<QuerySnapshot<Map<String, dynamic>>,
+              QuerySnapshot<Map<String, dynamic>>>(
+            streams: StreamTuple2(stream1!, stream2!),
+            builder: (context, snapshot) {
+              List<sfc.Appointment> source = [];
+              if (snapshot.snapshot1.hasData) {
+                source = planService.generateListAppointment(
+                  data: snapshot.snapshot1.data,
+                  currentGroup: widget.homeProvider.currentGroup,
+                  shift: true,
+                );
+              }
+              if (snapshot.snapshot2.hasData) {
+                source.addAll(planShiftService.generateList(
+                  data: snapshot.snapshot2.data,
+                  currentGroup: widget.homeProvider.currentGroup,
+                ));
+              }
+              return CustomCalendarShift(
+                dataSource: _ShiftDataSource(source, resourceColl),
+                onTap: _calendarTap,
               );
-            }
-            if (snapshot.snapshot2.hasData) {
-              source.addAll(planShiftService.generateList(
-                data: snapshot.snapshot2.data,
-                currentGroup: widget.homeProvider.currentGroup,
-              ));
-            }
-            return CustomCalendarShift(
-              dataSource: _ShiftDataSource(source, resourceColl),
-              onTap: _calendarTap,
-            );
-          },
+            },
+          ),
         ),
       ),
     );

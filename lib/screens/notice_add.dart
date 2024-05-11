@@ -69,101 +69,103 @@ class _NoticeAddScreenState extends State<NoticeAddScreen> {
         child: Text(widget.loginProvider.group?.name ?? ''),
       ));
     }
-    return Scaffold(
-      backgroundColor: kWhiteColor,
-      appBar: AppBar(
+    return MediaQuery.withNoTextScaling(
+      child: Scaffold(
         backgroundColor: kWhiteColor,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
-            color: kBlackColor,
+        appBar: AppBar(
+          backgroundColor: kWhiteColor,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.chevron_left,
+              color: kBlackColor,
+            ),
+            onPressed: () => Navigator.pop(context),
           ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
-        title: const Text(
-          'お知らせを追加',
-          style: TextStyle(color: kBlackColor),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              String? error = await noticeProvider.create(
-                organization: widget.loginProvider.organization,
-                title: titleController.text,
-                content: contentController.text,
-                group: selectedGroup,
-                pickedFile: pickedFile,
-                loginUser: widget.loginProvider.user,
-              );
-              if (error != null) {
+          centerTitle: true,
+          title: const Text(
+            'お知らせを追加',
+            style: TextStyle(color: kBlackColor),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                String? error = await noticeProvider.create(
+                  organization: widget.loginProvider.organization,
+                  title: titleController.text,
+                  content: contentController.text,
+                  group: selectedGroup,
+                  pickedFile: pickedFile,
+                  loginUser: widget.loginProvider.user,
+                );
+                if (error != null) {
+                  if (!mounted) return;
+                  showMessage(context, error, false);
+                  return;
+                }
                 if (!mounted) return;
-                showMessage(context, error, false);
-                return;
-              }
-              if (!mounted) return;
-              showMessage(context, 'お知らせを追加しました', true);
-              Navigator.pop(context);
-            },
-            child: const Text('保存'),
-          ),
-        ],
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
-      ),
-      body: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              children: [
-                CustomTextField(
-                  controller: titleController,
-                  textInputType: TextInputType.name,
-                  maxLines: 1,
-                  label: 'タイトル',
-                ),
-                const SizedBox(height: 8),
-                CustomTextField(
-                  controller: contentController,
-                  textInputType: TextInputType.multiline,
-                  maxLines: 15,
-                  label: 'お知らせ内容',
-                ),
-                const SizedBox(height: 8),
-                FormLabel(
-                  label: '送信先グループ',
-                  child: DropdownButton<OrganizationGroupModel?>(
-                    hint: const Text(
-                      'グループの指定なし',
-                      style: TextStyle(color: kGreyColor),
+                showMessage(context, 'お知らせを追加しました', true);
+                Navigator.pop(context);
+              },
+              child: const Text('保存'),
+            ),
+          ],
+          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        ),
+        body: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                children: [
+                  CustomTextField(
+                    controller: titleController,
+                    textInputType: TextInputType.name,
+                    maxLines: 1,
+                    label: 'タイトル',
+                  ),
+                  const SizedBox(height: 8),
+                  CustomTextField(
+                    controller: contentController,
+                    textInputType: TextInputType.multiline,
+                    maxLines: 15,
+                    label: 'お知らせ内容',
+                  ),
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    label: '送信先グループ',
+                    child: DropdownButton<OrganizationGroupModel?>(
+                      hint: const Text(
+                        'グループの指定なし',
+                        style: TextStyle(color: kGreyColor),
+                      ),
+                      underline: Container(),
+                      isExpanded: true,
+                      value: selectedGroup,
+                      items: groupItems,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedGroup = value;
+                        });
+                      },
                     ),
-                    underline: Container(),
-                    isExpanded: true,
-                    value: selectedGroup,
-                    items: groupItems,
-                    onChanged: (value) {
+                  ),
+                  const SizedBox(height: 8),
+                  CustomFileField(
+                    value: pickedFile,
+                    defaultValue: '',
+                    onTap: () async {
+                      final result = await FilePicker.platform.pickFiles(
+                        type: FileType.any,
+                      );
+                      if (result == null) return;
                       setState(() {
-                        selectedGroup = value;
+                        pickedFile = File(result.files.single.path!);
                       });
                     },
                   ),
-                ),
-                const SizedBox(height: 8),
-                CustomFileField(
-                  value: pickedFile,
-                  defaultValue: '',
-                  onTap: () async {
-                    final result = await FilePicker.platform.pickFiles(
-                      type: FileType.any,
-                    );
-                    if (result == null) return;
-                    setState(() {
-                      pickedFile = File(result.files.single.path!);
-                    });
-                  },
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

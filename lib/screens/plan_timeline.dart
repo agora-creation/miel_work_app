@@ -79,46 +79,48 @@ class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kWhiteColor,
-      appBar: AppBar(
+    return MediaQuery.withNoTextScaling(
+      child: Scaffold(
         backgroundColor: kWhiteColor,
-        automaticallyImplyLeading: false,
-        title: Text(
-          dateText('yyyy年MM月dd日(E)', widget.date),
-          style: const TextStyle(color: kBlackColor),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.close,
-              color: kBlackColor,
+        appBar: AppBar(
+          backgroundColor: kWhiteColor,
+          automaticallyImplyLeading: false,
+          title: Text(
+            dateText('yyyy年MM月dd日(E)', widget.date),
+            style: const TextStyle(color: kBlackColor),
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.close,
+                color: kBlackColor,
+              ),
+              onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
             ),
-            onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: planService.streamListDate(
-            organizationId: widget.loginProvider.organization?.id,
-            date: widget.date,
-            categories: searchCategories,
-          ),
-          builder: (context, snapshot) {
-            List<sfc.Appointment> appointments = [];
-            if (snapshot.hasData) {
-              appointments = planService.generateListAppointment(
-                data: snapshot.data,
-                currentGroup: widget.homeProvider.currentGroup,
+          ],
+        ),
+        body: SafeArea(
+          child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+            stream: planService.streamListDate(
+              organizationId: widget.loginProvider.organization?.id,
+              date: widget.date,
+              categories: searchCategories,
+            ),
+            builder: (context, snapshot) {
+              List<sfc.Appointment> appointments = [];
+              if (snapshot.hasData) {
+                appointments = planService.generateListAppointment(
+                  data: snapshot.data,
+                  currentGroup: widget.homeProvider.currentGroup,
+                );
+              }
+              return CustomCalendarTimeline(
+                initialDisplayDate: widget.date,
+                dataSource: _DataSource(appointments),
+                onTap: _calendarTap,
               );
-            }
-            return CustomCalendarTimeline(
-              initialDisplayDate: widget.date,
-              dataSource: _DataSource(appointments),
-              onTap: _calendarTap,
-            );
-          },
+            },
+          ),
         ),
       ),
     );

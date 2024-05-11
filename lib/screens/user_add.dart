@@ -58,128 +58,130 @@ class _UserAddScreenState extends State<UserAddScreen> {
         ));
       }
     }
-    return Scaffold(
-      backgroundColor: kWhiteColor,
-      appBar: AppBar(
+    return MediaQuery.withNoTextScaling(
+      child: Scaffold(
         backgroundColor: kWhiteColor,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
-            color: kBlackColor,
+        appBar: AppBar(
+          backgroundColor: kWhiteColor,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.chevron_left,
+              color: kBlackColor,
+            ),
+            onPressed: () => Navigator.pop(context),
           ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
-        title: const Text(
-          'スタッフを追加',
-          style: TextStyle(color: kBlackColor),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              String? error = await userProvider.create(
-                organization: widget.loginProvider.organization,
-                name: nameController.text,
-                email: emailController.text,
-                password: passwordController.text,
-                group: selectedGroup,
-                admin: admin,
-                president: president,
-              );
-              if (error != null) {
+          centerTitle: true,
+          title: const Text(
+            'スタッフを追加',
+            style: TextStyle(color: kBlackColor),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                String? error = await userProvider.create(
+                  organization: widget.loginProvider.organization,
+                  name: nameController.text,
+                  email: emailController.text,
+                  password: passwordController.text,
+                  group: selectedGroup,
+                  admin: admin,
+                  president: president,
+                );
+                if (error != null) {
+                  if (!mounted) return;
+                  showMessage(context, error, false);
+                  return;
+                }
+                await widget.loginProvider.reload();
+                widget.homeProvider.setGroups(
+                  organizationId:
+                      widget.loginProvider.organization?.id ?? 'error',
+                );
+                widget.getUsers();
                 if (!mounted) return;
-                showMessage(context, error, false);
-                return;
-              }
-              await widget.loginProvider.reload();
-              widget.homeProvider.setGroups(
-                organizationId:
-                    widget.loginProvider.organization?.id ?? 'error',
-              );
-              widget.getUsers();
-              if (!mounted) return;
-              showMessage(context, 'スタッフを追加しました', true);
-              Navigator.pop(context);
-            },
-            child: const Text('保存'),
-          ),
-        ],
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
-      ),
-      body: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomTextField(
-                  controller: nameController,
-                  textInputType: TextInputType.name,
-                  maxLines: 1,
-                  label: 'スタッフ名',
-                ),
-                const SizedBox(height: 8),
-                CustomTextField(
-                  controller: emailController,
-                  textInputType: TextInputType.emailAddress,
-                  maxLines: 1,
-                  label: 'メールアドレス',
-                ),
-                const SizedBox(height: 8),
-                CustomTextField(
-                  controller: passwordController,
-                  textInputType: TextInputType.visiblePassword,
-                  maxLines: 1,
-                  label: 'パスワード',
-                ),
-                const SizedBox(height: 8),
-                FormLabel(
-                  label: '所属グループ',
-                  child: DropdownButton<OrganizationGroupModel?>(
-                    hint: const Text(
-                      '未所属',
-                      style: TextStyle(color: kGreyColor),
+                showMessage(context, 'スタッフを追加しました', true);
+                Navigator.pop(context);
+              },
+              child: const Text('保存'),
+            ),
+          ],
+          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        ),
+        body: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomTextField(
+                    controller: nameController,
+                    textInputType: TextInputType.name,
+                    maxLines: 1,
+                    label: 'スタッフ名',
+                  ),
+                  const SizedBox(height: 8),
+                  CustomTextField(
+                    controller: emailController,
+                    textInputType: TextInputType.emailAddress,
+                    maxLines: 1,
+                    label: 'メールアドレス',
+                  ),
+                  const SizedBox(height: 8),
+                  CustomTextField(
+                    controller: passwordController,
+                    textInputType: TextInputType.visiblePassword,
+                    maxLines: 1,
+                    label: 'パスワード',
+                  ),
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    label: '所属グループ',
+                    child: DropdownButton<OrganizationGroupModel?>(
+                      hint: const Text(
+                        '未所属',
+                        style: TextStyle(color: kGreyColor),
+                      ),
+                      underline: Container(),
+                      isExpanded: true,
+                      value: selectedGroup,
+                      items: groupItems,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedGroup = value;
+                        });
+                      },
                     ),
-                    underline: Container(),
-                    isExpanded: true,
-                    value: selectedGroup,
-                    items: groupItems,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedGroup = value;
-                      });
-                    },
                   ),
-                ),
-                const SizedBox(height: 8),
-                FormLabel(
-                  label: '管理者権限',
-                  child: CheckboxListTile(
-                    value: admin,
-                    onChanged: (value) {
-                      setState(() {
-                        admin = value ?? false;
-                      });
-                    },
-                    title: const Text('このスタッフを管理者にする'),
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    label: '管理者権限',
+                    child: CheckboxListTile(
+                      value: admin,
+                      onChanged: (value) {
+                        setState(() {
+                          admin = value ?? false;
+                        });
+                      },
+                      title: const Text('このスタッフを管理者にする'),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                FormLabel(
-                  label: '社長権限',
-                  child: CheckboxListTile(
-                    value: president,
-                    onChanged: (value) {
-                      setState(() {
-                        president = value ?? false;
-                      });
-                    },
-                    title: const Text('このスタッフを社長にする'),
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    label: '社長権限',
+                    child: CheckboxListTile(
+                      value: president,
+                      onChanged: (value) {
+                        setState(() {
+                          president = value ?? false;
+                        });
+                      },
+                      title: const Text('このスタッフを社長にする'),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

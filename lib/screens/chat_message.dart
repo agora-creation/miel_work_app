@@ -63,169 +63,172 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
   @override
   Widget build(BuildContext context) {
     final messageProvider = Provider.of<ChatMessageProvider>(context);
-    return Scaffold(
-      backgroundColor: kWhiteColor,
-      appBar: AppBar(
+    return MediaQuery.withClampedTextScaling(
+      child: Scaffold(
         backgroundColor: kWhiteColor,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
-            color: kBlackColor,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
-        title: Text(
-          widget.chat.name,
-          style: const TextStyle(color: kBlackColor),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () => showDialog(
-              context: context,
-              builder: (context) => SearchKeywordDialog(
-                getKeyword: _getKeyword,
-              ),
+        appBar: AppBar(
+          backgroundColor: kWhiteColor,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.chevron_left,
+              color: kBlackColor,
             ),
-            icon: const Icon(Icons.search),
+            onPressed: () => Navigator.pop(context),
           ),
-          IconButton(
-            onPressed: () => showDialog(
-              context: context,
-              builder: (context) => ChatUsersDialog(
-                chat: widget.chat,
+          centerTitle: true,
+          title: Text(
+            widget.chat.name,
+            style: const TextStyle(color: kBlackColor),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () => showDialog(
+                context: context,
+                builder: (context) => SearchKeywordDialog(
+                  getKeyword: _getKeyword,
+                ),
               ),
+              icon: const Icon(Icons.search),
             ),
-            icon: const Icon(Icons.groups),
-          ),
-        ],
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
-      ),
-      body: SafeArea(
-        child: Focus(
-          focusNode: messageProvider.contentFocusNode,
-          child: GestureDetector(
-            onTap: messageProvider.contentFocusNode.requestFocus,
-            child: Container(
-              color: kGrey200Color,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                      stream: messageService.streamList(chatId: widget.chat.id),
-                      builder: (context, snapshot) {
-                        List<ChatMessageModel> messages = [];
-                        if (snapshot.hasData) {
-                          messages = messageService.generateListKeyword(
-                            data: snapshot.data,
-                            keyword: searchKeyword,
-                          );
-                        }
-                        if (messages.isEmpty) {
-                          return const Center(child: Text('メッセージがありません'));
-                        }
-                        return ListView.builder(
-                          padding: const EdgeInsets.all(8),
-                          shrinkWrap: true,
-                          reverse: true,
-                          itemCount: messages.length,
-                          itemBuilder: (context, index) {
-                            ChatMessageModel message = messages[index];
-                            return MessageList(
-                              message: message,
-                              loginUser: widget.loginProvider.user,
-                              onTapContent: () {},
-                              onTapReadUsers: () => showDialog(
-                                context: context,
-                                builder: (context) => ReadUsersDialog(
-                                  readUsers: message.readUsers,
-                                ),
-                              ),
-                              onTapImage: () => showDialog(
-                                barrierDismissible: true,
-                                barrierLabel: '閉じる',
-                                context: context,
-                                builder: (context) => ImageDialog(
-                                  image: message.image,
-                                ),
-                              ),
-                              onTapFile: () async {
-                                if (await saveFile(
-                                  message.file,
-                                  '${message.id}${message.fileExt}',
-                                )) {
-                                  if (!mounted) return;
-                                  showMessage(
-                                    context,
-                                    'ファイルのダウンロードが完了しました',
-                                    true,
-                                  );
-                                } else {
-                                  if (!mounted) return;
-                                  showMessage(
-                                    context,
-                                    'ファイルのダウンロードに失敗しました',
-                                    false,
-                                  );
-                                }
-                              },
+            IconButton(
+              onPressed: () => showDialog(
+                context: context,
+                builder: (context) => ChatUsersDialog(
+                  chat: widget.chat,
+                ),
+              ),
+              icon: const Icon(Icons.groups),
+            ),
+          ],
+          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        ),
+        body: SafeArea(
+          child: Focus(
+            focusNode: messageProvider.contentFocusNode,
+            child: GestureDetector(
+              onTap: messageProvider.contentFocusNode.requestFocus,
+              child: Container(
+                color: kGrey200Color,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                        stream:
+                            messageService.streamList(chatId: widget.chat.id),
+                        builder: (context, snapshot) {
+                          List<ChatMessageModel> messages = [];
+                          if (snapshot.hasData) {
+                            messages = messageService.generateListKeyword(
+                              data: snapshot.data,
+                              keyword: searchKeyword,
                             );
-                          },
-                        );
-                      },
+                          }
+                          if (messages.isEmpty) {
+                            return const Center(child: Text('メッセージがありません'));
+                          }
+                          return ListView.builder(
+                            padding: const EdgeInsets.all(8),
+                            shrinkWrap: true,
+                            reverse: true,
+                            itemCount: messages.length,
+                            itemBuilder: (context, index) {
+                              ChatMessageModel message = messages[index];
+                              return MessageList(
+                                message: message,
+                                loginUser: widget.loginProvider.user,
+                                onTapContent: () {},
+                                onTapReadUsers: () => showDialog(
+                                  context: context,
+                                  builder: (context) => ReadUsersDialog(
+                                    readUsers: message.readUsers,
+                                  ),
+                                ),
+                                onTapImage: () => showDialog(
+                                  barrierDismissible: true,
+                                  barrierLabel: '閉じる',
+                                  context: context,
+                                  builder: (context) => ImageDialog(
+                                    image: message.image,
+                                  ),
+                                ),
+                                onTapFile: () async {
+                                  if (await saveFile(
+                                    message.file,
+                                    '${message.id}${message.fileExt}',
+                                  )) {
+                                    if (!mounted) return;
+                                    showMessage(
+                                      context,
+                                      'ファイルのダウンロードが完了しました',
+                                      true,
+                                    );
+                                  } else {
+                                    if (!mounted) return;
+                                    showMessage(
+                                      context,
+                                      'ファイルのダウンロードに失敗しました',
+                                      false,
+                                    );
+                                  }
+                                },
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  MessageFormField(
-                    controller: messageProvider.contentController,
-                    filePressed: () async {
-                      final result = await FilePicker.platform.pickFiles(
-                        type: FileType.any,
-                      );
-                      if (result == null) return;
-                      String? error = await messageProvider.sendFile(
-                        chat: widget.chat,
-                        loginUser: widget.loginProvider.user,
-                        pickedFile: File(result.files.single.path!),
-                      );
-                      if (error != null) {
-                        if (!mounted) return;
-                        showMessage(context, error, false);
-                        return;
-                      }
-                    },
-                    galleryPressed: () async {
-                      final result = await ImagePicker().pickImage(
-                        source: ImageSource.gallery,
-                      );
-                      if (result == null) return;
-                      String? error = await messageProvider.sendImage(
-                        chat: widget.chat,
-                        loginUser: widget.loginProvider.user,
-                        imageXFile: result,
-                      );
-                      if (error != null) {
-                        if (!mounted) return;
-                        showMessage(context, error, false);
-                        return;
-                      }
-                    },
-                    sendPressed: () async {
-                      String? error = await messageProvider.send(
-                        chat: widget.chat,
-                        loginUser: widget.loginProvider.user,
-                      );
-                      if (error != null) {
-                        if (!mounted) return;
-                        showMessage(context, error, false);
-                        return;
-                      }
-                    },
-                    enabled: widget.chat.userIds
-                        .contains(widget.loginProvider.user?.id),
-                  ),
-                ],
+                    MessageFormField(
+                      controller: messageProvider.contentController,
+                      filePressed: () async {
+                        final result = await FilePicker.platform.pickFiles(
+                          type: FileType.any,
+                        );
+                        if (result == null) return;
+                        String? error = await messageProvider.sendFile(
+                          chat: widget.chat,
+                          loginUser: widget.loginProvider.user,
+                          pickedFile: File(result.files.single.path!),
+                        );
+                        if (error != null) {
+                          if (!mounted) return;
+                          showMessage(context, error, false);
+                          return;
+                        }
+                      },
+                      galleryPressed: () async {
+                        final result = await ImagePicker().pickImage(
+                          source: ImageSource.gallery,
+                        );
+                        if (result == null) return;
+                        String? error = await messageProvider.sendImage(
+                          chat: widget.chat,
+                          loginUser: widget.loginProvider.user,
+                          imageXFile: result,
+                        );
+                        if (error != null) {
+                          if (!mounted) return;
+                          showMessage(context, error, false);
+                          return;
+                        }
+                      },
+                      sendPressed: () async {
+                        String? error = await messageProvider.send(
+                          chat: widget.chat,
+                          loginUser: widget.loginProvider.user,
+                        );
+                        if (error != null) {
+                          if (!mounted) return;
+                          showMessage(context, error, false);
+                          return;
+                        }
+                      },
+                      enabled: widget.chat.userIds
+                          .contains(widget.loginProvider.user?.id),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
