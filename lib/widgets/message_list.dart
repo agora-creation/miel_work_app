@@ -1,14 +1,17 @@
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/chat_message.dart';
 import 'package:miel_work_app/models/read_user.dart';
 import 'package:miel_work_app/models/user.dart';
-import 'package:miel_work_app/widgets/message_popup.dart';
+import 'package:miel_work_app/widgets/popup_icon_button.dart';
 
 class MessageList extends StatelessWidget {
   final ChatMessageModel message;
   final UserModel? loginUser;
+  final Function() copyAction;
+  final Function() deleteAction;
   final Function()? onTapReadUsers;
   final Function()? onTapImage;
   final Function()? onTapFile;
@@ -16,6 +19,8 @@ class MessageList extends StatelessWidget {
   const MessageList({
     required this.message,
     required this.loginUser,
+    required this.copyAction,
+    required this.deleteAction,
     required this.onTapReadUsers,
     required this.onTapImage,
     required this.onTapFile,
@@ -24,6 +29,47 @@ class MessageList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final CustomPopupMenuController controller = CustomPopupMenuController();
+
+    Widget buildLongPressMenu() {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(5),
+        child: Container(
+          width: 220,
+          color: const Color(0xFF4C4C4C),
+          child: GridView.count(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 5,
+              vertical: 10,
+            ),
+            crossAxisCount: 5,
+            crossAxisSpacing: 0,
+            mainAxisSpacing: 10,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              PopupIconButton(
+                icon: Icons.copy,
+                label: 'コピー',
+                onTap: () {
+                  copyAction();
+                  controller.hideMenu();
+                },
+              ),
+              PopupIconButton(
+                icon: Icons.delete,
+                label: '削除',
+                onTap: () {
+                  deleteAction();
+                  controller.hideMenu();
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     List<ReadUserModel> readUsers = [];
     for (ReadUserModel readUser in message.readUsers) {
       if (readUser.userId != loginUser?.id) {
@@ -37,13 +83,11 @@ class MessageList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             message.image == '' && message.file == ''
-                ? MessagePopup(
-                    copyAction: () {
-                      Navigator.pop(context);
-                    },
-                    deleteAction: () {
-                      Navigator.pop(context);
-                    },
+                ? CustomPopupMenu(
+                    menuBuilder: buildLongPressMenu,
+                    barrierColor: Colors.transparent,
+                    pressType: PressType.longPress,
+                    controller: controller,
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
@@ -138,13 +182,11 @@ class MessageList extends StatelessWidget {
             ),
             const SizedBox(height: 2),
             message.image == '' && message.file == ''
-                ? MessagePopup(
-                    copyAction: () {
-                      Navigator.pop(context);
-                    },
-                    deleteAction: () {
-                      Navigator.pop(context);
-                    },
+                ? CustomPopupMenu(
+                    menuBuilder: buildLongPressMenu,
+                    barrierColor: Colors.transparent,
+                    pressType: PressType.longPress,
+                    controller: controller,
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
@@ -138,6 +139,24 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                               return MessageList(
                                 message: message,
                                 loginUser: widget.loginProvider.user,
+                                copyAction: () async {
+                                  final data = ClipboardData(
+                                    text: message.content,
+                                  );
+                                  await Clipboard.setData(data);
+                                },
+                                deleteAction: () async {
+                                  String? error = await messageProvider.delete(
+                                    message: message,
+                                  );
+                                  if (error != null) {
+                                    if (!mounted) return;
+                                    showMessage(context, error, false);
+                                    return;
+                                  }
+                                  if (!mounted) return;
+                                  showMessage(context, 'メッセージを削除しました', true);
+                                },
                                 onTapReadUsers: () => showDialog(
                                   context: context,
                                   builder: (context) => ReadUsersDialog(
