@@ -4,11 +4,11 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/chat_message.dart';
 import 'package:miel_work_app/models/read_user.dart';
 import 'package:miel_work_app/models/user.dart';
+import 'package:miel_work_app/widgets/message_popup.dart';
 
 class MessageList extends StatelessWidget {
   final ChatMessageModel message;
   final UserModel? loginUser;
-  final Function()? onTapContent;
   final Function()? onTapReadUsers;
   final Function()? onTapImage;
   final Function()? onTapFile;
@@ -16,7 +16,6 @@ class MessageList extends StatelessWidget {
   const MessageList({
     required this.message,
     required this.loginUser,
-    required this.onTapContent,
     required this.onTapReadUsers,
     required this.onTapImage,
     required this.onTapFile,
@@ -38,8 +37,13 @@ class MessageList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             message.image == '' && message.file == ''
-                ? GestureDetector(
-                    onLongPress: onTapContent,
+                ? MessagePopup(
+                    copyAction: () {
+                      Navigator.pop(context);
+                    },
+                    deleteAction: () {
+                      Navigator.pop(context);
+                    },
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
@@ -134,8 +138,13 @@ class MessageList extends StatelessWidget {
             ),
             const SizedBox(height: 2),
             message.image == '' && message.file == ''
-                ? GestureDetector(
-                    onLongPress: onTapContent,
+                ? MessagePopup(
+                    copyAction: () {
+                      Navigator.pop(context);
+                    },
+                    deleteAction: () {
+                      Navigator.pop(context);
+                    },
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
