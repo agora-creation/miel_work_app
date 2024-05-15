@@ -156,7 +156,7 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
                           controller: priceController,
                           textInputType: TextInputType.number,
                           inputFormatters: [
-                            CurrencyTextInputFormatter(
+                            CurrencyTextInputFormatter.currency(
                               locale: 'ja',
                               decimalDigits: 0,
                               symbol: '',
