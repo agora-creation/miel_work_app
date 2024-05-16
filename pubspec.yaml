@@ -54,6 +54,10 @@ dependencies:
 
 dependency_overrides:
   modal_bottom_sheet: ^3.0.0-pre
+  flutter_colorpicker:
+    git:
+      url: https://github.com/mchome/flutter_colorpicker
+      ref: master  # or 786d04363f587b818ce585d25b9c2bb62de95aba
 
 dev_dependencies:
   flutter_test:

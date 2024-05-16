@@ -22,12 +22,16 @@ class CustomCalendarShift extends StatelessWidget {
       headerDateFormat: 'yyyy年MM月',
       onTap: onTap,
       resourceViewSettings: const sfc.ResourceViewSettings(
-        visibleResourceCount: 5,
+        visibleResourceCount: 3,
         showAvatar: false,
         displayNameTextStyle: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.bold,
         ),
+      ),
+      appointmentTextStyle: const TextStyle(
+        color: kWhiteColor,
+        fontSize: 12,
       ),
       cellBorderColor: kGrey600Color,
     );
