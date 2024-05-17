@@ -10,7 +10,6 @@ import 'package:miel_work_app/widgets/popup_icon_button.dart';
 class MessageList extends StatelessWidget {
   final ChatMessageModel message;
   final UserModel? loginUser;
-  final CustomPopupMenuController menuController;
   final Function() copyAction;
   final Function() deleteAction;
   final Function()? onTapReadUsers;
@@ -20,7 +19,6 @@ class MessageList extends StatelessWidget {
   const MessageList({
     required this.message,
     required this.loginUser,
-    required this.menuController,
     required this.copyAction,
     required this.deleteAction,
     required this.onTapReadUsers,
@@ -31,20 +29,22 @@ class MessageList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CustomPopupMenuController menuController = CustomPopupMenuController();
+
     Widget buildLongPressMenu() {
       return ClipRRect(
         borderRadius: BorderRadius.circular(5),
         child: Container(
-          width: 220,
+          width: 280,
           color: const Color(0xFF4C4C4C),
           child: GridView.count(
             padding: const EdgeInsets.symmetric(
-              horizontal: 5,
-              vertical: 10,
+              horizontal: 8,
+              vertical: 16,
             ),
             crossAxisCount: 5,
-            crossAxisSpacing: 0,
-            mainAxisSpacing: 10,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 16,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             children: [

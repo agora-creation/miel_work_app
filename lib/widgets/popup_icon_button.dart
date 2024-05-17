@@ -21,14 +21,14 @@ class PopupIconButton extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: 20,
+            size: 24,
             color: Colors.white,
           ),
           Container(
             margin: const EdgeInsets.only(top: 2),
             child: Text(
               label,
-              style: const TextStyle(color: Colors.white, fontSize: 12),
+              style: const TextStyle(color: Colors.white, fontSize: 14),
             ),
           ),
         ],

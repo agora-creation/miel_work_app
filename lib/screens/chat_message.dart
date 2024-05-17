@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -41,7 +40,6 @@ class ChatMessageScreen extends StatefulWidget {
 class _ChatMessageScreenState extends State<ChatMessageScreen> {
   ChatMessageService messageService = ChatMessageService();
   String searchKeyword = '';
-  CustomPopupMenuController menuController = CustomPopupMenuController();
 
   void _getKeyword() async {
     searchKeyword = await getPrefsString('keyword') ?? '';
@@ -142,7 +140,6 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                               return MessageList(
                                 message: message,
                                 loginUser: widget.loginProvider.user,
-                                menuController: menuController,
                                 copyAction: () async {
                                   final data = ClipboardData(
                                     text: message.content,
