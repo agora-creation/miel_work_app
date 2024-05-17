@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
@@ -13,6 +15,7 @@ import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class ApplyDetailScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -126,6 +129,15 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                               ),
                             )
                           : Container(),
+                      widget.apply.approval == 1
+                          ? Text(
+                              '承認番号: ${widget.apply.approvalNumber}',
+                              style: const TextStyle(
+                                color: kRedColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          : Container(),
                       Text(
                         '申請者: ${widget.apply.createdUserName}',
                         style: const TextStyle(color: kGreyColor),
@@ -193,23 +205,22 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                     ? LinkText(
                         label: '添付ファイル',
                         color: kBlueColor,
-                        onTap: () async {
-                          if (await saveFile(
-                            widget.apply.file,
-                            '${widget.apply.id}${widget.apply.fileExt}',
-                          )) {
-                            if (!mounted) return;
-                            showMessage(
-                              context,
-                              'ファイルのダウンロードが完了しました',
-                              true,
+                        onTap: () {
+                          String ext = widget.apply.fileExt;
+                          if (imageExtensions.contains(ext)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => ImageDialog(
+                                file: widget.apply.file,
+                              ),
                             );
-                          } else {
-                            if (!mounted) return;
-                            showMessage(
-                              context,
-                              'ファイルのダウンロードに失敗しました',
-                              false,
+                          }
+                          if (pdfExtensions.contains(ext)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => PdfDialog(
+                                file: widget.apply.file,
+                              ),
                             );
                           }
                         },
@@ -336,6 +347,98 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
   }
 }
 
+class ImageDialog extends StatelessWidget {
+  final String file;
+
+  const ImageDialog({
+    required this.file,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: InteractiveViewer(
+                minScale: 0.1,
+                maxScale: 5,
+                child: Image.network(File(file).path),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Material(
+              color: Colors.transparent,
+              child: IconButton(
+                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(
+                  Icons.close,
+                  color: kWhiteColor,
+                  size: 30,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class PdfDialog extends StatelessWidget {
+  final String file;
+
+  const PdfDialog({
+    required this.file,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: InteractiveViewer(
+                minScale: 0.1,
+                maxScale: 5,
+                child: SfPdfViewer.network(File(file).path),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Material(
+              color: Colors.transparent,
+              child: IconButton(
+                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(
+                  Icons.close,
+                  color: kWhiteColor,
+                  size: 30,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 class DelApplyDialog extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
@@ -422,6 +525,8 @@ class ApprovalApplyDialog extends StatefulWidget {
 }
 
 class _ApprovalApplyDialogState extends State<ApprovalApplyDialog> {
+  TextEditingController approvalNumberController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final applyProvider = Provider.of<ApplyProvider>(context);
@@ -431,14 +536,21 @@ class _ApprovalApplyDialogState extends State<ApprovalApplyDialog> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
-      content: const Column(
+      content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 8),
-          Text(
+          const SizedBox(height: 8),
+          const Text(
             '本当に承認しますか？',
             style: TextStyle(color: kBlackColor),
+          ),
+          const SizedBox(height: 8),
+          CustomTextField(
+            controller: approvalNumberController,
+            textInputType: TextInputType.number,
+            maxLines: 1,
+            label: '承認番号',
           ),
         ],
       ),
@@ -458,6 +570,7 @@ class _ApprovalApplyDialogState extends State<ApprovalApplyDialog> {
             String? error = await applyProvider.approval(
               apply: widget.apply,
               loginUser: widget.loginProvider.user,
+              approvalNumber: approvalNumberController.text,
             );
             if (error != null) {
               if (!mounted) return;

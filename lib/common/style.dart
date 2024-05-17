@@ -91,3 +91,20 @@ const kDatePickerTheme = picker.DatePickerTheme(
     fontSize: 16,
   ),
 );
+
+const List<String> imageExtensions = [
+  '.HEIC',
+  '.heic',
+  '.JPEG',
+  '.jpeg',
+  '.JPG',
+  '.jpg',
+  '.GIF',
+  '.gif',
+  '.PNG',
+  '.png',
+];
+
+const List<String> pdfExtensions = [
+  '.pdf',
+];

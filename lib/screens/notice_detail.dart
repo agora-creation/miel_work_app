@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
@@ -8,6 +10,7 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/notice_mod.dart';
 import 'package:miel_work_app/services/notice.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class NoticeDetailScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -100,23 +103,22 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
                     ? LinkText(
                         label: '添付ファイル',
                         color: kBlueColor,
-                        onTap: () async {
-                          if (await saveFile(
-                            widget.notice.file,
-                            '${widget.notice.id}${widget.notice.fileExt}',
-                          )) {
-                            if (!mounted) return;
-                            showMessage(
-                              context,
-                              'ファイルのダウンロードが完了しました',
-                              true,
+                        onTap: () {
+                          String ext = widget.notice.fileExt;
+                          if (imageExtensions.contains(ext)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => ImageDialog(
+                                file: widget.notice.file,
+                              ),
                             );
-                          } else {
-                            if (!mounted) return;
-                            showMessage(
-                              context,
-                              'ファイルのダウンロードに失敗しました',
-                              false,
+                          }
+                          if (pdfExtensions.contains(ext)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => PdfDialog(
+                                file: widget.notice.file,
+                              ),
                             );
                           }
                         },
@@ -127,6 +129,98 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ImageDialog extends StatelessWidget {
+  final String file;
+
+  const ImageDialog({
+    required this.file,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: InteractiveViewer(
+                minScale: 0.1,
+                maxScale: 5,
+                child: Image.network(File(file).path),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Material(
+              color: Colors.transparent,
+              child: IconButton(
+                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(
+                  Icons.close,
+                  color: kWhiteColor,
+                  size: 30,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class PdfDialog extends StatelessWidget {
+  final String file;
+
+  const PdfDialog({
+    required this.file,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: InteractiveViewer(
+                minScale: 0.1,
+                maxScale: 5,
+                child: SfPdfViewer.network(File(file).path),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Material(
+              color: Colors.transparent,
+              child: IconButton(
+                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(
+                  Icons.close,
+                  color: kWhiteColor,
+                  size: 30,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

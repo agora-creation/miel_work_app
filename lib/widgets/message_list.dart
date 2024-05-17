@@ -10,6 +10,7 @@ import 'package:miel_work_app/widgets/popup_icon_button.dart';
 class MessageList extends StatelessWidget {
   final ChatMessageModel message;
   final UserModel? loginUser;
+  final CustomPopupMenuController menuController;
   final Function() copyAction;
   final Function() deleteAction;
   final Function()? onTapReadUsers;
@@ -19,6 +20,7 @@ class MessageList extends StatelessWidget {
   const MessageList({
     required this.message,
     required this.loginUser,
+    required this.menuController,
     required this.copyAction,
     required this.deleteAction,
     required this.onTapReadUsers,
@@ -29,8 +31,6 @@ class MessageList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CustomPopupMenuController controller = CustomPopupMenuController();
-
     Widget buildLongPressMenu() {
       return ClipRRect(
         borderRadius: BorderRadius.circular(5),
@@ -53,7 +53,8 @@ class MessageList extends StatelessWidget {
                 label: 'コピー',
                 onTap: () {
                   copyAction();
-                  controller.hideMenu();
+                  showMessage(context, 'コピーしました', true);
+                  menuController.hideMenu();
                 },
               ),
               PopupIconButton(
@@ -61,7 +62,7 @@ class MessageList extends StatelessWidget {
                 label: '削除',
                 onTap: () {
                   deleteAction();
-                  controller.hideMenu();
+                  menuController.hideMenu();
                 },
               ),
             ],
@@ -87,7 +88,7 @@ class MessageList extends StatelessWidget {
                     menuBuilder: buildLongPressMenu,
                     barrierColor: Colors.transparent,
                     pressType: PressType.longPress,
-                    controller: controller,
+                    controller: menuController,
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
@@ -186,7 +187,7 @@ class MessageList extends StatelessWidget {
                     menuBuilder: buildLongPressMenu,
                     barrierColor: Colors.transparent,
                     pressType: PressType.longPress,
-                    controller: controller,
+                    controller: menuController,
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),

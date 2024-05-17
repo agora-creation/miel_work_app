@@ -217,6 +217,18 @@ class ChatMessageProvider with ChangeNotifier {
       _messageService.delete({
         'id': message.id,
       });
+      if (message.image != '') {
+        await FirebaseStorage.instance
+            .ref()
+            .child('chat/${message.chatId}/${message.id}')
+            .delete();
+      }
+      if (message.file != '') {
+        await FirebaseStorage.instance
+            .ref()
+            .child('chat/${message.chatId}/${message.id}${message.fileExt}')
+            .delete();
+      }
     } catch (e) {
       error = 'メッセージの削除に失敗しました';
     }
