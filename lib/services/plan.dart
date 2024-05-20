@@ -62,16 +62,18 @@ class PlanService {
       PlanModel plan = PlanModel.fromSnapshot(doc);
       if (currentGroup == null) {
         if (date != null) {
+          DateTime dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
+          DateTime dateE =
+              DateTime(date.year, date.month, date.day, 23, 59, 59);
           if (plan.startedAt.millisecondsSinceEpoch <=
-                  date.millisecondsSinceEpoch &&
-              date.millisecondsSinceEpoch <=
+                  dateS.millisecondsSinceEpoch &&
+              dateS.millisecondsSinceEpoch <=
                   plan.endedAt.millisecondsSinceEpoch) {
             ret.add(plan);
-          }
-          if (date.millisecondsSinceEpoch <=
+          } else if (dateS.millisecondsSinceEpoch <=
                   plan.startedAt.millisecondsSinceEpoch &&
               plan.endedAt.millisecondsSinceEpoch <=
-                  date.millisecondsSinceEpoch) {
+                  dateE.millisecondsSinceEpoch) {
             ret.add(plan);
           }
         } else {
@@ -79,16 +81,18 @@ class PlanService {
         }
       } else if (plan.groupId == currentGroup.id || plan.groupId == '') {
         if (date != null) {
+          DateTime dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
+          DateTime dateE =
+              DateTime(date.year, date.month, date.day, 23, 59, 59);
           if (plan.startedAt.millisecondsSinceEpoch <=
-                  date.millisecondsSinceEpoch &&
-              date.millisecondsSinceEpoch <=
+                  dateS.millisecondsSinceEpoch &&
+              dateS.millisecondsSinceEpoch <=
                   plan.endedAt.millisecondsSinceEpoch) {
             ret.add(plan);
-          }
-          if (date.millisecondsSinceEpoch <=
+          } else if (dateS.millisecondsSinceEpoch <=
                   plan.startedAt.millisecondsSinceEpoch &&
               plan.endedAt.millisecondsSinceEpoch <=
-                  date.millisecondsSinceEpoch) {
+                  dateE.millisecondsSinceEpoch) {
             ret.add(plan);
           }
         } else {
@@ -110,22 +114,9 @@ class PlanService {
       PlanModel plan = PlanModel.fromSnapshot(doc);
       if (currentGroup == null) {
         if (date != null) {
-          DateTime dateS = DateTime(
-            date.year,
-            date.month,
-            date.day,
-            0,
-            0,
-            0,
-          );
-          DateTime dateE = DateTime(
-            date.year,
-            date.month,
-            date.day,
-            23,
-            59,
-            59,
-          );
+          DateTime dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
+          DateTime dateE =
+              DateTime(date.year, date.month, date.day, 23, 59, 59);
           if (plan.startedAt.millisecondsSinceEpoch <=
                   dateS.millisecondsSinceEpoch &&
               dateS.millisecondsSinceEpoch <=
