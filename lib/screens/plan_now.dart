@@ -40,9 +40,8 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
           ),
         ),
         body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: planService.streamListDate(
+          stream: planService.streamList(
             organizationId: widget.loginProvider.organization?.id,
-            date: now,
             categories: [],
           ),
           builder: (context, snapshot) {
@@ -51,6 +50,7 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
               plans = planService.generateList(
                 data: snapshot.data,
                 currentGroup: widget.homeProvider.currentGroup,
+                date: now,
               );
             }
             if (plans.isEmpty) {

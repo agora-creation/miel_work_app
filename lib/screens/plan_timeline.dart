@@ -101,9 +101,8 @@ class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
         ),
         body: SafeArea(
           child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-            stream: planService.streamListDate(
+            stream: planService.streamList(
               organizationId: widget.loginProvider.organization?.id,
-              date: widget.date,
               categories: searchCategories,
             ),
             builder: (context, snapshot) {
@@ -112,6 +111,7 @@ class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
                 appointments = planService.generateListAppointment(
                   data: snapshot.data,
                   currentGroup: widget.homeProvider.currentGroup,
+                  date: widget.date,
                 );
               }
               return CustomCalendarTimeline(

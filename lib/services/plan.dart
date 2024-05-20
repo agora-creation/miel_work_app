@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/plan.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart' as sfc;
@@ -52,33 +51,49 @@ class PlanService {
         .snapshots();
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>>? streamListDate({
-    required String? organizationId,
-    required DateTime date,
-    required List<String> categories,
-  }) {
-    Timestamp startAt = convertTimestamp(date, false);
-    Timestamp endAt = convertTimestamp(date, true);
-    return FirebaseFirestore.instance
-        .collection(collection)
-        .where('organizationId', isEqualTo: organizationId ?? 'error')
-        .where('category', whereIn: categories.isNotEmpty ? categories : null)
-        .orderBy('startedAt', descending: false)
-        .startAt([startAt]).endAt([endAt]).snapshots();
-  }
-
   List<PlanModel> generateList({
     required QuerySnapshot<Map<String, dynamic>>? data,
     required OrganizationGroupModel? currentGroup,
+    DateTime? date,
     bool shift = false,
   }) {
     List<PlanModel> ret = [];
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
       PlanModel plan = PlanModel.fromSnapshot(doc);
       if (currentGroup == null) {
-        ret.add(plan);
+        if (date != null) {
+          if (plan.startedAt.millisecondsSinceEpoch <=
+                  date.millisecondsSinceEpoch &&
+              date.millisecondsSinceEpoch <=
+                  plan.endedAt.millisecondsSinceEpoch) {
+            ret.add(plan);
+          }
+          if (date.millisecondsSinceEpoch <=
+                  plan.startedAt.millisecondsSinceEpoch &&
+              plan.endedAt.millisecondsSinceEpoch <=
+                  date.millisecondsSinceEpoch) {
+            ret.add(plan);
+          }
+        } else {
+          ret.add(plan);
+        }
       } else if (plan.groupId == currentGroup.id || plan.groupId == '') {
-        ret.add(plan);
+        if (date != null) {
+          if (plan.startedAt.millisecondsSinceEpoch <=
+                  date.millisecondsSinceEpoch &&
+              date.millisecondsSinceEpoch <=
+                  plan.endedAt.millisecondsSinceEpoch) {
+            ret.add(plan);
+          }
+          if (date.millisecondsSinceEpoch <=
+                  plan.startedAt.millisecondsSinceEpoch &&
+              plan.endedAt.millisecondsSinceEpoch <=
+                  date.millisecondsSinceEpoch) {
+            ret.add(plan);
+          }
+        } else {
+          ret.add(plan);
+        }
       }
     }
     return ret;
@@ -87,37 +102,148 @@ class PlanService {
   List<sfc.Appointment> generateListAppointment({
     required QuerySnapshot<Map<String, dynamic>>? data,
     required OrganizationGroupModel? currentGroup,
+    DateTime? date,
     bool shift = false,
   }) {
     List<sfc.Appointment> ret = [];
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
       PlanModel plan = PlanModel.fromSnapshot(doc);
       if (currentGroup == null) {
-        ret.add(sfc.Appointment(
-          id: plan.id,
-          resourceIds: plan.userIds,
-          subject: '[${plan.category}]${plan.subject}',
-          startTime: plan.startedAt,
-          endTime: plan.endedAt,
-          isAllDay: plan.allDay,
-          color:
-              shift ? plan.categoryColor.withOpacity(0.3) : plan.categoryColor,
-          notes: 'plan',
-          recurrenceRule: plan.getRepeatRule(),
-        ));
+        if (date != null) {
+          DateTime dateS = DateTime(
+            date.year,
+            date.month,
+            date.day,
+            0,
+            0,
+            0,
+          );
+          DateTime dateE = DateTime(
+            date.year,
+            date.month,
+            date.day,
+            23,
+            59,
+            59,
+          );
+          if (plan.startedAt.millisecondsSinceEpoch <=
+                  dateS.millisecondsSinceEpoch &&
+              dateS.millisecondsSinceEpoch <=
+                  plan.endedAt.millisecondsSinceEpoch) {
+            ret.add(sfc.Appointment(
+              id: plan.id,
+              resourceIds: plan.userIds,
+              subject: '[${plan.category}]${plan.subject}',
+              startTime: plan.startedAt,
+              endTime: plan.endedAt,
+              isAllDay: plan.allDay,
+              color: shift
+                  ? plan.categoryColor.withOpacity(0.3)
+                  : plan.categoryColor,
+              notes: 'plan',
+              recurrenceRule: plan.getRepeatRule(),
+            ));
+          } else if (dateS.millisecondsSinceEpoch <=
+                  plan.startedAt.millisecondsSinceEpoch &&
+              plan.endedAt.millisecondsSinceEpoch <=
+                  dateE.millisecondsSinceEpoch) {
+            ret.add(sfc.Appointment(
+              id: plan.id,
+              resourceIds: plan.userIds,
+              subject: '[${plan.category}]${plan.subject}',
+              startTime: plan.startedAt,
+              endTime: plan.endedAt,
+              isAllDay: plan.allDay,
+              color: shift
+                  ? plan.categoryColor.withOpacity(0.3)
+                  : plan.categoryColor,
+              notes: 'plan',
+              recurrenceRule: plan.getRepeatRule(),
+            ));
+          }
+        } else {
+          ret.add(sfc.Appointment(
+            id: plan.id,
+            resourceIds: plan.userIds,
+            subject: '[${plan.category}]${plan.subject}',
+            startTime: plan.startedAt,
+            endTime: plan.endedAt,
+            isAllDay: plan.allDay,
+            color: shift
+                ? plan.categoryColor.withOpacity(0.3)
+                : plan.categoryColor,
+            notes: 'plan',
+            recurrenceRule: plan.getRepeatRule(),
+          ));
+        }
       } else if (plan.groupId == currentGroup.id || plan.groupId == '') {
-        ret.add(sfc.Appointment(
-          id: plan.id,
-          resourceIds: plan.userIds,
-          subject: '[${plan.category}]${plan.subject}',
-          startTime: plan.startedAt,
-          endTime: plan.endedAt,
-          isAllDay: plan.allDay,
-          color:
-              shift ? plan.categoryColor.withOpacity(0.5) : plan.categoryColor,
-          notes: 'plan',
-          recurrenceRule: plan.getRepeatRule(),
-        ));
+        if (date != null) {
+          DateTime dateS = DateTime(
+            date.year,
+            date.month,
+            date.day,
+            0,
+            0,
+            0,
+          );
+          DateTime dateE = DateTime(
+            date.year,
+            date.month,
+            date.day,
+            23,
+            59,
+            59,
+          );
+          if (plan.startedAt.millisecondsSinceEpoch <=
+                  dateS.millisecondsSinceEpoch &&
+              dateS.millisecondsSinceEpoch <=
+                  plan.endedAt.millisecondsSinceEpoch) {
+            ret.add(sfc.Appointment(
+              id: plan.id,
+              resourceIds: plan.userIds,
+              subject: '[${plan.category}]${plan.subject}',
+              startTime: plan.startedAt,
+              endTime: plan.endedAt,
+              isAllDay: plan.allDay,
+              color: shift
+                  ? plan.categoryColor.withOpacity(0.5)
+                  : plan.categoryColor,
+              notes: 'plan',
+              recurrenceRule: plan.getRepeatRule(),
+            ));
+          } else if (dateS.millisecondsSinceEpoch <=
+                  plan.startedAt.millisecondsSinceEpoch &&
+              plan.endedAt.millisecondsSinceEpoch <=
+                  dateE.millisecondsSinceEpoch) {
+            ret.add(sfc.Appointment(
+              id: plan.id,
+              resourceIds: plan.userIds,
+              subject: '[${plan.category}]${plan.subject}',
+              startTime: plan.startedAt,
+              endTime: plan.endedAt,
+              isAllDay: plan.allDay,
+              color: shift
+                  ? plan.categoryColor.withOpacity(0.5)
+                  : plan.categoryColor,
+              notes: 'plan',
+              recurrenceRule: plan.getRepeatRule(),
+            ));
+          }
+        } else {
+          ret.add(sfc.Appointment(
+            id: plan.id,
+            resourceIds: plan.userIds,
+            subject: '[${plan.category}]${plan.subject}',
+            startTime: plan.startedAt,
+            endTime: plan.endedAt,
+            isAllDay: plan.allDay,
+            color: shift
+                ? plan.categoryColor.withOpacity(0.5)
+                : plan.categoryColor,
+            notes: 'plan',
+            recurrenceRule: plan.getRepeatRule(),
+          ));
+        }
       }
     }
     return ret;
