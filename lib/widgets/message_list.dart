@@ -49,6 +49,11 @@ class MessageList extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             children: [
               PopupIconButton(
+                icon: Icons.reply,
+                label: 'リプライ',
+                onTap: () {},
+              ),
+              PopupIconButton(
                 icon: Icons.copy,
                 label: 'コピー',
                 onTap: () {

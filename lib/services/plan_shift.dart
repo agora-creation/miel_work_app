@@ -60,20 +60,15 @@ class PlanShiftService {
       PlanShiftModel planShift = PlanShiftModel.fromSnapshot(doc);
       String startTimeText = dateText('HH:mm', planShift.startedAt);
       String endTimeText = dateText('HH:mm', planShift.endedAt);
+      bool listIn = false;
       if (currentGroup == null) {
-        ret.add(sfc.Appointment(
-          id: planShift.id,
-          resourceIds: [planShift.userId],
-          subject: '勤務予定 $startTimeText～$endTimeText',
-          startTime: planShift.startedAt,
-          endTime: planShift.endedAt,
-          isAllDay: planShift.allDay,
-          color: kLightBlue800Color,
-          notes: 'planShift',
-          recurrenceRule: planShift.getRepeatRule(),
-        ));
-      } else if (planShift.groupId == currentGroup.id ||
-          planShift.groupId == '') {
+        listIn = true;
+      } else {
+        if (currentGroup.id == planShift.groupId || planShift.groupId == '') {
+          listIn = true;
+        }
+      }
+      if (listIn) {
         ret.add(sfc.Appointment(
           id: planShift.id,
           resourceIds: [planShift.userId],

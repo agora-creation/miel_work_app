@@ -60,44 +60,48 @@ class PlanService {
     List<PlanModel> ret = [];
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
       PlanModel plan = PlanModel.fromSnapshot(doc);
+      bool listIn = false;
       if (currentGroup == null) {
         if (date != null) {
-          DateTime dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
-          DateTime dateE =
-              DateTime(date.year, date.month, date.day, 23, 59, 59);
+          var dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
+          var dateE = DateTime(date.year, date.month, date.day, 23, 59, 59);
           if (plan.startedAt.millisecondsSinceEpoch <=
                   dateS.millisecondsSinceEpoch &&
               dateS.millisecondsSinceEpoch <=
                   plan.endedAt.millisecondsSinceEpoch) {
-            ret.add(plan);
+            listIn = true;
           } else if (dateS.millisecondsSinceEpoch <=
                   plan.startedAt.millisecondsSinceEpoch &&
               plan.endedAt.millisecondsSinceEpoch <=
                   dateE.millisecondsSinceEpoch) {
-            ret.add(plan);
+            listIn = true;
           }
         } else {
-          ret.add(plan);
+          listIn = true;
         }
-      } else if (plan.groupId == currentGroup.id || plan.groupId == '') {
-        if (date != null) {
-          DateTime dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
-          DateTime dateE =
-              DateTime(date.year, date.month, date.day, 23, 59, 59);
-          if (plan.startedAt.millisecondsSinceEpoch <=
-                  dateS.millisecondsSinceEpoch &&
-              dateS.millisecondsSinceEpoch <=
-                  plan.endedAt.millisecondsSinceEpoch) {
-            ret.add(plan);
-          } else if (dateS.millisecondsSinceEpoch <=
-                  plan.startedAt.millisecondsSinceEpoch &&
-              plan.endedAt.millisecondsSinceEpoch <=
-                  dateE.millisecondsSinceEpoch) {
-            ret.add(plan);
+      } else {
+        if (currentGroup.id == plan.groupId || plan.groupId == '') {
+          if (date != null) {
+            var dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
+            var dateE = DateTime(date.year, date.month, date.day, 23, 59, 59);
+            if (plan.startedAt.millisecondsSinceEpoch <=
+                    dateS.millisecondsSinceEpoch &&
+                dateS.millisecondsSinceEpoch <=
+                    plan.endedAt.millisecondsSinceEpoch) {
+              listIn = true;
+            } else if (dateS.millisecondsSinceEpoch <=
+                    plan.startedAt.millisecondsSinceEpoch &&
+                plan.endedAt.millisecondsSinceEpoch <=
+                    dateE.millisecondsSinceEpoch) {
+              listIn = true;
+            }
+          } else {
+            listIn = true;
           }
-        } else {
-          ret.add(plan);
         }
+      }
+      if (listIn) {
+        ret.add(plan);
       }
     }
     return ret;
@@ -112,129 +116,59 @@ class PlanService {
     List<sfc.Appointment> ret = [];
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
       PlanModel plan = PlanModel.fromSnapshot(doc);
+      bool listIn = false;
       if (currentGroup == null) {
         if (date != null) {
-          DateTime dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
-          DateTime dateE =
-              DateTime(date.year, date.month, date.day, 23, 59, 59);
+          var dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
+          var dateE = DateTime(date.year, date.month, date.day, 23, 59, 59);
           if (plan.startedAt.millisecondsSinceEpoch <=
                   dateS.millisecondsSinceEpoch &&
               dateS.millisecondsSinceEpoch <=
                   plan.endedAt.millisecondsSinceEpoch) {
-            ret.add(sfc.Appointment(
-              id: plan.id,
-              resourceIds: plan.userIds,
-              subject: '[${plan.category}]${plan.subject}',
-              startTime: plan.startedAt,
-              endTime: plan.endedAt,
-              isAllDay: plan.allDay,
-              color: shift
-                  ? plan.categoryColor.withOpacity(0.3)
-                  : plan.categoryColor,
-              notes: 'plan',
-              recurrenceRule: plan.getRepeatRule(),
-            ));
+            listIn = true;
           } else if (dateS.millisecondsSinceEpoch <=
                   plan.startedAt.millisecondsSinceEpoch &&
               plan.endedAt.millisecondsSinceEpoch <=
                   dateE.millisecondsSinceEpoch) {
-            ret.add(sfc.Appointment(
-              id: plan.id,
-              resourceIds: plan.userIds,
-              subject: '[${plan.category}]${plan.subject}',
-              startTime: plan.startedAt,
-              endTime: plan.endedAt,
-              isAllDay: plan.allDay,
-              color: shift
-                  ? plan.categoryColor.withOpacity(0.3)
-                  : plan.categoryColor,
-              notes: 'plan',
-              recurrenceRule: plan.getRepeatRule(),
-            ));
+            listIn = true;
           }
         } else {
-          ret.add(sfc.Appointment(
-            id: plan.id,
-            resourceIds: plan.userIds,
-            subject: '[${plan.category}]${plan.subject}',
-            startTime: plan.startedAt,
-            endTime: plan.endedAt,
-            isAllDay: plan.allDay,
-            color: shift
-                ? plan.categoryColor.withOpacity(0.3)
-                : plan.categoryColor,
-            notes: 'plan',
-            recurrenceRule: plan.getRepeatRule(),
-          ));
+          listIn = true;
         }
-      } else if (plan.groupId == currentGroup.id || plan.groupId == '') {
-        if (date != null) {
-          DateTime dateS = DateTime(
-            date.year,
-            date.month,
-            date.day,
-            0,
-            0,
-            0,
-          );
-          DateTime dateE = DateTime(
-            date.year,
-            date.month,
-            date.day,
-            23,
-            59,
-            59,
-          );
-          if (plan.startedAt.millisecondsSinceEpoch <=
-                  dateS.millisecondsSinceEpoch &&
-              dateS.millisecondsSinceEpoch <=
-                  plan.endedAt.millisecondsSinceEpoch) {
-            ret.add(sfc.Appointment(
-              id: plan.id,
-              resourceIds: plan.userIds,
-              subject: '[${plan.category}]${plan.subject}',
-              startTime: plan.startedAt,
-              endTime: plan.endedAt,
-              isAllDay: plan.allDay,
-              color: shift
-                  ? plan.categoryColor.withOpacity(0.5)
-                  : plan.categoryColor,
-              notes: 'plan',
-              recurrenceRule: plan.getRepeatRule(),
-            ));
-          } else if (dateS.millisecondsSinceEpoch <=
-                  plan.startedAt.millisecondsSinceEpoch &&
-              plan.endedAt.millisecondsSinceEpoch <=
-                  dateE.millisecondsSinceEpoch) {
-            ret.add(sfc.Appointment(
-              id: plan.id,
-              resourceIds: plan.userIds,
-              subject: '[${plan.category}]${plan.subject}',
-              startTime: plan.startedAt,
-              endTime: plan.endedAt,
-              isAllDay: plan.allDay,
-              color: shift
-                  ? plan.categoryColor.withOpacity(0.5)
-                  : plan.categoryColor,
-              notes: 'plan',
-              recurrenceRule: plan.getRepeatRule(),
-            ));
+      } else {
+        if (currentGroup.id == plan.groupId || plan.groupId == '') {
+          if (date != null) {
+            var dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
+            var dateE = DateTime(date.year, date.month, date.day, 23, 59, 59);
+            if (plan.startedAt.millisecondsSinceEpoch <=
+                    dateS.millisecondsSinceEpoch &&
+                dateS.millisecondsSinceEpoch <=
+                    plan.endedAt.millisecondsSinceEpoch) {
+              listIn = true;
+            } else if (dateS.millisecondsSinceEpoch <=
+                    plan.startedAt.millisecondsSinceEpoch &&
+                plan.endedAt.millisecondsSinceEpoch <=
+                    dateE.millisecondsSinceEpoch) {
+              listIn = true;
+            }
+          } else {
+            listIn = true;
           }
-        } else {
-          ret.add(sfc.Appointment(
-            id: plan.id,
-            resourceIds: plan.userIds,
-            subject: '[${plan.category}]${plan.subject}',
-            startTime: plan.startedAt,
-            endTime: plan.endedAt,
-            isAllDay: plan.allDay,
-            color: shift
-                ? plan.categoryColor.withOpacity(0.5)
-                : plan.categoryColor,
-            notes: 'plan',
-            recurrenceRule: plan.getRepeatRule(),
-          ));
         }
+      }
+      if (listIn) {
+        ret.add(sfc.Appointment(
+          id: plan.id,
+          resourceIds: plan.userIds,
+          subject: '[${plan.category}]${plan.subject}',
+          startTime: plan.startedAt,
+          endTime: plan.endedAt,
+          isAllDay: plan.allDay,
+          color:
+              shift ? plan.categoryColor.withOpacity(0.3) : plan.categoryColor,
+          notes: 'plan',
+          recurrenceRule: plan.getRepeatRule(),
+        ));
       }
     }
     return ret;
