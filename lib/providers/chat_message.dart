@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:miel_work_app/models/chat.dart';
 import 'package:miel_work_app/models/chat_message.dart';
 import 'package:miel_work_app/models/user.dart';
@@ -91,14 +91,14 @@ class ChatMessageProvider with ChangeNotifier {
       String id = _messageService.id();
       String content = '画像を送信しました';
       File imageFile = File(imageXFile.path);
-      //画像圧縮
-      var imageFileCompress = await FlutterImageCompress.compressWithFile(
-        imageFile.path,
-        quality: 80,
-      );
-      if (imageFileCompress != null) {
-        imageFile = File.fromRawPath(imageFileCompress);
-      }
+      // //画像圧縮
+      // var imageFileCompress = await FlutterImageCompress.compressWithFile(
+      //   imageFile.path,
+      //   quality: 80,
+      // );
+      // if (imageFileCompress != null) {
+      //   imageFile = File.fromRawPath(imageFileCompress);
+      // }
       FirebaseStorage storage = FirebaseStorage.instance;
       String storagePath = 'chat/${chat.id}/$id';
       final task = await storage.ref(storagePath).putFile(imageFile);
