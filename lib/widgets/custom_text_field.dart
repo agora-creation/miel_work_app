@@ -42,6 +42,7 @@ class CustomTextField extends StatelessWidget {
         prefix: prefix,
         enabled: enabled,
       ),
+      style: const TextStyle(fontSize: 18),
       onChanged: onChanged,
     );
   }

@@ -24,15 +24,15 @@ class CustomButtonSm extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
         ),
         padding: const EdgeInsets.symmetric(
-          vertical: 4,
-          horizontal: 10,
+          vertical: 6,
+          horizontal: 12,
         ),
       ),
       child: Text(
         label,
         style: TextStyle(
           color: labelColor,
-          fontSize: 14,
+          fontSize: 18,
         ),
       ),
     );

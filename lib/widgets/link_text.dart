@@ -31,6 +31,7 @@ class LinkText extends StatelessWidget {
           label,
           style: TextStyle(
             color: enabled ? color : kGreyColor,
+            fontSize: 16,
             decoration: enabled ? null : TextDecoration.lineThrough,
           ),
         ),

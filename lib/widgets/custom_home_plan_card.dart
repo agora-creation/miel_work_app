@@ -39,8 +39,8 @@ class _CustomHomePlanCardState extends State<CustomHomePlanCard> {
         elevation: 8,
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            vertical: 8,
-            horizontal: 12,
+            vertical: 10,
+            horizontal: 14,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,7 +54,7 @@ class _CustomHomePlanCardState extends State<CustomHomePlanCard> {
                   'スケジュール',
                   style: TextStyle(
                     color: kBlackColor,
-                    fontSize: 16,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

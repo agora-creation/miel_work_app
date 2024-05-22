@@ -15,7 +15,7 @@ class CustomHomeIconCard extends StatelessWidget {
     required this.icon,
     this.iconSize = 60,
     required this.label,
-    this.labelFontSize = 18,
+    this.labelFontSize = 20,
     required this.color,
     required this.backgroundColor,
     this.alert = false,

@@ -126,7 +126,7 @@ class _ModNameDialogState extends State<ModNameDialog> {
       ),
       title: const Text(
         '名前を変更',
-        style: TextStyle(fontSize: 16),
+        style: TextStyle(fontSize: 18),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -203,7 +203,7 @@ class _ModEmailDialogState extends State<ModEmailDialog> {
       ),
       title: const Text(
         'メールアドレスを変更',
-        style: TextStyle(fontSize: 16),
+        style: TextStyle(fontSize: 18),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -274,7 +274,7 @@ class _ModPasswordDialogState extends State<ModPasswordDialog> {
       ),
       title: const Text(
         'パスワードを変更',
-        style: TextStyle(fontSize: 16),
+        style: TextStyle(fontSize: 18),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -348,7 +348,10 @@ class _LogoutDialogState extends State<LogoutDialog> {
           SizedBox(height: 8),
           Text(
             '本当にログアウトしますか？',
-            style: TextStyle(color: kBlackColor),
+            style: TextStyle(
+              color: kBlackColor,
+              fontSize: 16,
+            ),
           ),
         ],
       ),

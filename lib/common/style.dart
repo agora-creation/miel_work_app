@@ -38,22 +38,23 @@ ThemeData customTheme() {
       systemOverlayStyle: SystemUiOverlayStyle.dark,
       titleTextStyle: TextStyle(
         color: kBlackColor,
-        fontSize: 18,
+        fontSize: 24,
         fontWeight: FontWeight.bold,
         fontFamily: 'SourceHanSansJP-Bold',
       ),
       iconTheme: IconThemeData(color: kBlackColor),
     ),
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: kBlackColor),
-      bodyMedium: TextStyle(color: kBlackColor),
-      bodySmall: TextStyle(color: kBlackColor),
+      bodyLarge: TextStyle(color: kBlackColor, fontSize: 16),
+      bodyMedium: TextStyle(color: kBlackColor, fontSize: 16),
+      bodySmall: TextStyle(color: kBlackColor, fontSize: 16),
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: kBlueColor,
       elevation: 5,
       extendedTextStyle: TextStyle(
         color: kWhiteColor,
+        fontSize: 18,
         fontWeight: FontWeight.bold,
         fontFamily: 'SourceHanSansJP-Bold',
       ),

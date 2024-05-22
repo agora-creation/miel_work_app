@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Text(
                       'ひろめWORK',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -59,12 +59,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Text(
                                   'スタッフログイン',
                                   style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'SourceHanSansJP-Bold',
                                   ),
                                 ),
-                                Text('管理者からメールアドレスとパスワードを貰い、ログインしてください。'),
+                                Text(
+                                  '管理者からメールアドレスとパスワードを貰い、ログインしてください。',
+                                  style: TextStyle(fontSize: 18),
+                                ),
                               ],
                             ),
                           ),

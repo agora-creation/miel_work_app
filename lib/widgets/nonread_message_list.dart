@@ -19,8 +19,8 @@ class NonReadMessageList extends StatelessWidget {
         border: Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       padding: const EdgeInsets.symmetric(
-        vertical: 4,
-        horizontal: 8,
+        vertical: 8,
+        horizontal: 12,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,7 +28,7 @@ class NonReadMessageList extends StatelessWidget {
           Text(
             message.content,
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
             softWrap: false,
@@ -40,14 +40,14 @@ class NonReadMessageList extends StatelessWidget {
             children: [
               Text(
                 message.createdUserName,
-                style: const TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 14),
                 softWrap: false,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
               Text(
                 dateText('yyyy/MM/dd HH:mm', message.createdAt),
-                style: const TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 14),
                 softWrap: false,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,

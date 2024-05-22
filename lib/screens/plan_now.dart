@@ -35,7 +35,10 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
         automaticallyImplyLeading: false,
         title: Text(
           dateText('yyyy年MM月dd日(E)の予定', now),
-          style: const TextStyle(color: kBlackColor),
+          style: const TextStyle(
+            color: kBlackColor,
+            fontSize: 24,
+          ),
         ),
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
@@ -76,7 +79,10 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
         ),
         label: const Text(
           'ホームへ',
-          style: TextStyle(color: kWhiteColor),
+          style: TextStyle(
+            color: kWhiteColor,
+            fontSize: 18,
+          ),
         ),
       ),
     );

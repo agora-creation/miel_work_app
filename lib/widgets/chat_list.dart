@@ -24,9 +24,13 @@ class ChatList extends StatelessWidget {
         ),
       ),
       child: ListTile(
-        title: Text('${chat.name} (${chat.userIds.length})'),
+        title: Text(
+          '${chat.name} (${chat.userIds.length})',
+          style: const TextStyle(fontSize: 18),
+        ),
         subtitle: Text(
           chat.lastMessage,
+          style: const TextStyle(fontSize: 14),
           softWrap: false,
           overflow: TextOverflow.ellipsis,
           maxLines: 1,

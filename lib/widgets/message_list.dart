@@ -49,11 +49,6 @@ class MessageList extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             children: [
               PopupIconButton(
-                icon: Icons.reply,
-                label: 'リプライ',
-                onTap: () {},
-              ),
-              PopupIconButton(
                 icon: Icons.copy,
                 label: 'コピー',
                 onTap: () {
@@ -100,8 +95,8 @@ class MessageList extends StatelessWidget {
                       color: kYellowColor,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 12,
+                          vertical: 10,
+                          horizontal: 14,
                         ),
                         child: Text(message.content).urlToLink(context),
                       ),
@@ -119,8 +114,8 @@ class MessageList extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                         child: Image.network(
                           message.image,
-                          width: 200,
-                          height: 200,
+                          width: 300,
+                          height: 300,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -138,8 +133,8 @@ class MessageList extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 12,
+                            vertical: 10,
+                            horizontal: 14,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,8 +194,8 @@ class MessageList extends StatelessWidget {
                       color: kWhiteColor,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 12,
+                          vertical: 10,
+                          horizontal: 14,
                         ),
                         child: Text(message.content).urlToLink(context),
                       ),
@@ -218,8 +213,8 @@ class MessageList extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                         child: Image.network(
                           message.image,
-                          width: 200,
-                          height: 200,
+                          width: 300,
+                          height: 300,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -237,8 +232,8 @@ class MessageList extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 12,
+                            vertical: 10,
+                            horizontal: 14,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

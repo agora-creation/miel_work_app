@@ -237,6 +237,7 @@ extension TextEx on Text {
             text: tmpMatch,
             style: const TextStyle(
               color: Colors.blue,
+              fontSize: 18,
               decoration: TextDecoration.underline,
             ),
             recognizer: TapGestureRecognizer()
@@ -253,6 +254,7 @@ extension TextEx on Text {
             text: text,
             style: const TextStyle(
               color: Colors.black,
+              fontSize: 18,
             ),
           ),
         );

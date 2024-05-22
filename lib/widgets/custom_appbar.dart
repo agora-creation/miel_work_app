@@ -31,7 +31,7 @@ class CustomAppbar extends StatelessWidget {
               Text(
                 userName,
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -39,7 +39,7 @@ class CustomAppbar extends StatelessWidget {
                 children: [
                   Text(
                     '$orgName $groupName',
-                    style: const TextStyle(fontSize: 14),
+                    style: const TextStyle(fontSize: 16),
                   ),
                   const SizedBox(width: 4),
                   loginProvider.user?.admin == true
@@ -47,7 +47,7 @@ class CustomAppbar extends StatelessWidget {
                           '管理者',
                           style: TextStyle(
                             color: kRedColor,
-                            fontSize: 14,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         )

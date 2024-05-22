@@ -92,11 +92,17 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
                 alignment: Alignment.centerRight,
                 child: Text(
                   dateText('yyyy/MM/dd HH:mm', widget.notice.createdAt),
-                  style: const TextStyle(color: kGreyColor),
+                  style: const TextStyle(
+                    color: kGreyColor,
+                    fontSize: 14,
+                  ),
                 ),
               ),
               const SizedBox(height: 4),
-              Text(widget.notice.content),
+              Text(
+                widget.notice.content,
+                style: const TextStyle(fontSize: 18),
+              ),
               const SizedBox(height: 16),
               widget.notice.file != ''
                   ? LinkText(

@@ -22,10 +22,16 @@ class CustomGroupRadio extends StatelessWidget {
       ),
       child: RadioListTile<OrganizationGroupModel?>(
         title: group != null
-            ? Text(group?.name ?? '')
+            ? Text(
+                group?.name ?? '',
+                style: const TextStyle(fontSize: 20),
+              )
             : const Text(
                 'グループの指定なし',
-                style: TextStyle(color: kGreyColor),
+                style: TextStyle(
+                  color: kGreyColor,
+                  fontSize: 20,
+                ),
               ),
         value: group,
         groupValue: value,

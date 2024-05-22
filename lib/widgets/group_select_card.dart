@@ -54,10 +54,16 @@ class _GroupSelectCardState extends State<GroupSelectCard> {
           ),
           child: ListTile(
             title: widget.homeProvider.currentGroup != null
-                ? Text(widget.homeProvider.currentGroup?.name ?? '')
+                ? Text(
+                    widget.homeProvider.currentGroup?.name ?? '',
+                    style: const TextStyle(fontSize: 20),
+                  )
                 : const Text(
                     'グループの指定なし',
-                    style: TextStyle(color: kGreyColor),
+                    style: TextStyle(
+                      color: kGreyColor,
+                      fontSize: 20,
+                    ),
                   ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),

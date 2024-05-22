@@ -29,11 +29,17 @@ class CustomSettingList extends StatelessWidget {
           children: [
             Text(
               label,
-              style: const TextStyle(color: kGrey600Color),
+              style: const TextStyle(
+                color: kGrey600Color,
+                fontSize: 18,
+              ),
             ),
             Text(
               value,
-              style: const TextStyle(color: kBlackColor),
+              style: const TextStyle(
+                color: kBlackColor,
+                fontSize: 18,
+              ),
             ),
           ],
         ),

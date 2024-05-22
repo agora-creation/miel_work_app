@@ -25,8 +25,14 @@ class CustomNoticeList extends StatelessWidget {
         ),
       ),
       child: ListTile(
-        title: Text(notice.title),
-        subtitle: Text(dateText('yyyy/MM/dd HH:mm', notice.createdAt)),
+        title: Text(
+          notice.title,
+          style: const TextStyle(fontSize: 18),
+        ),
+        subtitle: Text(
+          dateText('yyyy/MM/dd HH:mm', notice.createdAt),
+          style: const TextStyle(fontSize: 14),
+        ),
         trailing: const Icon(
           Icons.chevron_right,
           color: kGreyColor,

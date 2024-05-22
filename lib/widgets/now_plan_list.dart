@@ -31,8 +31,8 @@ class NowPlanList extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
         ),
         padding: const EdgeInsets.symmetric(
-          vertical: 4,
-          horizontal: 8,
+          vertical: 8,
+          horizontal: 12,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +44,7 @@ class NowPlanList extends StatelessWidget {
                   '${dateText('HH:mm', plan.startedAt)}〜${dateText('HH:mm', plan.endedAt)}',
                   style: const TextStyle(
                     color: kWhiteColor,
-                    fontSize: 14,
+                    fontSize: 18,
                   ),
                   softWrap: false,
                   overflow: TextOverflow.ellipsis,
@@ -54,7 +54,7 @@ class NowPlanList extends StatelessWidget {
                   groupName,
                   style: const TextStyle(
                     color: kWhiteColor,
-                    fontSize: 14,
+                    fontSize: 18,
                   ),
                   softWrap: false,
                   overflow: TextOverflow.ellipsis,
@@ -66,7 +66,7 @@ class NowPlanList extends StatelessWidget {
               '[${plan.category}]${plan.subject}',
               style: const TextStyle(
                 color: kWhiteColor,
-                fontSize: 16,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
               softWrap: false,

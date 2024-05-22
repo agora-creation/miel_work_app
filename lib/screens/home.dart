@@ -180,9 +180,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           CustomHomeIconCard(
                             icon: Icons.view_timeline,
-                            iconSize: 40,
+                            iconSize: 42,
                             label: 'シフト表',
-                            labelFontSize: 14,
+                            labelFontSize: 16,
                             color: kBlackColor,
                             backgroundColor: kTeal300Color,
                             onTap: () => pushScreen(
@@ -195,9 +195,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           CustomHomeIconCard(
                             icon: Icons.edit_note,
-                            iconSize: 40,
+                            iconSize: 42,
                             label: '稟議申請',
-                            labelFontSize: 14,
+                            labelFontSize: 16,
                             color: kBlackColor,
                             backgroundColor: kOrange300Color,
                             onTap: () => pushScreen(
@@ -211,9 +211,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           CustomHomeIconCard(
                             icon: Icons.edit_note,
-                            iconSize: 40,
+                            iconSize: 42,
                             label: '協議・報告申請',
-                            labelFontSize: 14,
+                            labelFontSize: 16,
                             color: kBlackColor,
                             backgroundColor: kOrange300Color,
                             onTap: () => pushScreen(
@@ -227,9 +227,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           CustomHomeIconCard(
                             icon: Icons.edit_note,
-                            iconSize: 40,
+                            iconSize: 42,
                             label: '企画申請',
-                            labelFontSize: 14,
+                            labelFontSize: 16,
                             color: kBlackColor,
                             backgroundColor: kOrange300Color,
                             onTap: () => pushScreen(
@@ -243,9 +243,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           CustomHomeIconCard(
                             icon: Icons.gas_meter,
-                            iconSize: 40,
+                            iconSize: 42,
                             label: 'メーター検針',
-                            labelFontSize: 14,
+                            labelFontSize: 16,
                             color: kBlackColor,
                             backgroundColor: kYellowColor,
                             onTap: () async {
@@ -259,9 +259,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           loginProvider.user?.admin == true
                               ? CustomHomeIconCard(
                                   icon: Icons.category,
-                                  iconSize: 40,
+                                  iconSize: 42,
                                   label: 'グループ管理',
-                                  labelFontSize: 14,
+                                  labelFontSize: 16,
                                   color: kWhiteColor,
                                   backgroundColor: kGrey600Color,
                                   onTap: () => pushScreen(
@@ -276,9 +276,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           loginProvider.user?.admin == true
                               ? CustomHomeIconCard(
                                   icon: Icons.groups,
-                                  iconSize: 40,
+                                  iconSize: 42,
                                   label: 'スタッフ管理',
-                                  labelFontSize: 14,
+                                  labelFontSize: 16,
                                   color: kWhiteColor,
                                   backgroundColor: kGrey600Color,
                                   onTap: () => pushScreen(
