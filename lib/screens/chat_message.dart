@@ -65,193 +65,190 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
   @override
   Widget build(BuildContext context) {
     final messageProvider = Provider.of<ChatMessageProvider>(context);
-    return MediaQuery.withClampedTextScaling(
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: kWhiteColor,
+      appBar: AppBar(
         backgroundColor: kWhiteColor,
-        appBar: AppBar(
-          backgroundColor: kWhiteColor,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.chevron_left,
-              color: kBlackColor,
-            ),
-            onPressed: () => Navigator.pop(context),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.chevron_left,
+            color: kBlackColor,
           ),
-          centerTitle: true,
-          title: Text(
-            widget.chat.name,
-            style: const TextStyle(color: kBlackColor),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () => showDialog(
-                context: context,
-                builder: (context) => SearchKeywordDialog(
-                  getKeyword: _getKeyword,
-                ),
-              ),
-              icon: const Icon(Icons.search),
-            ),
-            IconButton(
-              onPressed: () => showDialog(
-                context: context,
-                builder: (context) => ChatUsersDialog(
-                  chat: widget.chat,
-                ),
-              ),
-              icon: const Icon(Icons.groups),
-            ),
-          ],
-          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+          onPressed: () => Navigator.pop(context),
         ),
-        body: SafeArea(
-          child: Focus(
-            focusNode: messageProvider.contentFocusNode,
-            child: GestureDetector(
-              onTap: messageProvider.contentFocusNode.requestFocus,
-              child: Container(
-                color: kGrey200Color,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                        stream:
-                            messageService.streamList(chatId: widget.chat.id),
-                        builder: (context, snapshot) {
-                          List<ChatMessageModel> messages = [];
-                          if (snapshot.hasData) {
-                            messages = messageService.generateListKeyword(
-                              data: snapshot.data,
-                              keyword: searchKeyword,
-                            );
-                          }
-                          if (messages.isEmpty) {
-                            return const Center(child: Text('メッセージがありません'));
-                          }
-                          return ListView.builder(
-                            padding: const EdgeInsets.all(8),
-                            shrinkWrap: true,
-                            reverse: true,
-                            itemCount: messages.length,
-                            itemBuilder: (context, index) {
-                              ChatMessageModel message = messages[index];
-                              return MessageList(
-                                message: message,
-                                loginUser: widget.loginProvider.user,
-                                copyAction: () async {
-                                  final data = ClipboardData(
-                                    text: message.content,
-                                  );
-                                  await Clipboard.setData(data);
-                                },
-                                deleteAction: () async {
-                                  String? error = await messageProvider.delete(
-                                    message: message,
-                                  );
-                                  if (error != null) {
-                                    if (!mounted) return;
-                                    showMessage(context, error, false);
-                                    return;
-                                  }
-                                  if (!mounted) return;
-                                  showMessage(context, 'メッセージを削除しました', true);
-                                },
-                                onTapReadUsers: () => showDialog(
-                                  context: context,
-                                  builder: (context) => ReadUsersDialog(
-                                    readUsers: message.readUsers,
-                                  ),
-                                ),
-                                onTapImage: () => showDialog(
-                                  barrierDismissible: true,
-                                  barrierLabel: '閉じる',
-                                  context: context,
-                                  builder: (context) => ImageDialog(
-                                    messageProvider: messageProvider,
-                                    message: message,
-                                  ),
-                                ),
-                                onTapFile: () {
-                                  String ext = message.fileExt;
-                                  if (imageExtensions.contains(ext)) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => ImageDialog(
-                                        messageProvider: messageProvider,
-                                        message: message,
-                                        file: message.file,
-                                      ),
-                                    );
-                                  }
-                                  if (pdfExtensions.contains(ext)) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => PdfDialog(
-                                        messageProvider: messageProvider,
-                                        message: message,
-                                        file: message.file,
-                                      ),
-                                    );
-                                  }
-                                },
-                              );
-                            },
+        centerTitle: true,
+        title: Text(
+          widget.chat.name,
+          style: const TextStyle(color: kBlackColor),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => SearchKeywordDialog(
+                getKeyword: _getKeyword,
+              ),
+            ),
+            icon: const Icon(Icons.search),
+          ),
+          IconButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => ChatUsersDialog(
+                chat: widget.chat,
+              ),
+            ),
+            icon: const Icon(Icons.groups),
+          ),
+        ],
+        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+      ),
+      body: SafeArea(
+        child: Focus(
+          focusNode: messageProvider.contentFocusNode,
+          child: GestureDetector(
+            onTap: messageProvider.contentFocusNode.requestFocus,
+            child: Container(
+              color: kGrey200Color,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                      stream: messageService.streamList(chatId: widget.chat.id),
+                      builder: (context, snapshot) {
+                        List<ChatMessageModel> messages = [];
+                        if (snapshot.hasData) {
+                          messages = messageService.generateListKeyword(
+                            data: snapshot.data,
+                            keyword: searchKeyword,
                           );
-                        },
-                      ),
+                        }
+                        if (messages.isEmpty) {
+                          return const Center(child: Text('メッセージがありません'));
+                        }
+                        return ListView.builder(
+                          padding: const EdgeInsets.all(8),
+                          shrinkWrap: true,
+                          reverse: true,
+                          itemCount: messages.length,
+                          itemBuilder: (context, index) {
+                            ChatMessageModel message = messages[index];
+                            return MessageList(
+                              message: message,
+                              loginUser: widget.loginProvider.user,
+                              copyAction: () async {
+                                final data = ClipboardData(
+                                  text: message.content,
+                                );
+                                await Clipboard.setData(data);
+                              },
+                              deleteAction: () async {
+                                String? error = await messageProvider.delete(
+                                  message: message,
+                                );
+                                if (error != null) {
+                                  if (!mounted) return;
+                                  showMessage(context, error, false);
+                                  return;
+                                }
+                                if (!mounted) return;
+                                showMessage(context, 'メッセージを削除しました', true);
+                              },
+                              onTapReadUsers: () => showDialog(
+                                context: context,
+                                builder: (context) => ReadUsersDialog(
+                                  readUsers: message.readUsers,
+                                ),
+                              ),
+                              onTapImage: () => showDialog(
+                                barrierDismissible: true,
+                                barrierLabel: '閉じる',
+                                context: context,
+                                builder: (context) => ImageDialog(
+                                  messageProvider: messageProvider,
+                                  message: message,
+                                ),
+                              ),
+                              onTapFile: () {
+                                String ext = message.fileExt;
+                                if (imageExtensions.contains(ext)) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => ImageDialog(
+                                      messageProvider: messageProvider,
+                                      message: message,
+                                      file: message.file,
+                                    ),
+                                  );
+                                }
+                                if (pdfExtensions.contains(ext)) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => PdfDialog(
+                                      messageProvider: messageProvider,
+                                      message: message,
+                                      file: message.file,
+                                    ),
+                                  );
+                                }
+                              },
+                            );
+                          },
+                        );
+                      },
                     ),
-                    MessageFormField(
-                      controller: messageProvider.contentController,
-                      filePressed: () async {
-                        final result = await FilePicker.platform.pickFiles(
-                          type: FileType.any,
-                        );
-                        if (result == null) return;
-                        String? error = await messageProvider.sendFile(
-                          chat: widget.chat,
-                          loginUser: widget.loginProvider.user,
-                          pickedFile: File(result.files.single.path!),
-                        );
-                        if (error != null) {
-                          if (!mounted) return;
-                          showMessage(context, error, false);
-                          return;
-                        }
-                      },
-                      galleryPressed: () async {
-                        final result = await ImagePicker().pickImage(
-                          source: ImageSource.gallery,
-                        );
-                        if (result == null) return;
-                        String? error = await messageProvider.sendImage(
-                          chat: widget.chat,
-                          loginUser: widget.loginProvider.user,
-                          imageXFile: result,
-                        );
-                        if (error != null) {
-                          if (!mounted) return;
-                          showMessage(context, error, false);
-                          return;
-                        }
-                      },
-                      sendPressed: () async {
-                        String? error = await messageProvider.send(
-                          chat: widget.chat,
-                          loginUser: widget.loginProvider.user,
-                        );
-                        if (error != null) {
-                          if (!mounted) return;
-                          showMessage(context, error, false);
-                          return;
-                        }
-                      },
-                      enabled: widget.chat.userIds
-                          .contains(widget.loginProvider.user?.id),
-                    ),
-                  ],
-                ),
+                  ),
+                  MessageFormField(
+                    controller: messageProvider.contentController,
+                    filePressed: () async {
+                      final result = await FilePicker.platform.pickFiles(
+                        type: FileType.any,
+                      );
+                      if (result == null) return;
+                      String? error = await messageProvider.sendFile(
+                        chat: widget.chat,
+                        loginUser: widget.loginProvider.user,
+                        pickedFile: File(result.files.single.path!),
+                      );
+                      if (error != null) {
+                        if (!mounted) return;
+                        showMessage(context, error, false);
+                        return;
+                      }
+                    },
+                    galleryPressed: () async {
+                      final result = await ImagePicker().pickImage(
+                        source: ImageSource.gallery,
+                      );
+                      if (result == null) return;
+                      String? error = await messageProvider.sendImage(
+                        chat: widget.chat,
+                        loginUser: widget.loginProvider.user,
+                        imageXFile: result,
+                      );
+                      if (error != null) {
+                        if (!mounted) return;
+                        showMessage(context, error, false);
+                        return;
+                      }
+                    },
+                    sendPressed: () async {
+                      String? error = await messageProvider.send(
+                        chat: widget.chat,
+                        loginUser: widget.loginProvider.user,
+                      );
+                      if (error != null) {
+                        if (!mounted) return;
+                        showMessage(context, error, false);
+                        return;
+                      }
+                    },
+                    enabled: widget.chat.userIds
+                        .contains(widget.loginProvider.user?.id),
+                  ),
+                ],
               ),
             ),
           ),

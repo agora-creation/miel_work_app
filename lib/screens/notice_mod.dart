@@ -75,123 +75,121 @@ class _ManualModScreenState extends State<NoticeModScreen> {
         child: Text(widget.loginProvider.group?.name ?? ''),
       ));
     }
-    return MediaQuery.withNoTextScaling(
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: kWhiteColor,
+      appBar: AppBar(
         backgroundColor: kWhiteColor,
-        appBar: AppBar(
-          backgroundColor: kWhiteColor,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.chevron_left,
-              color: kBlackColor,
-            ),
-            onPressed: () => Navigator.pop(context),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.chevron_left,
+            color: kBlackColor,
           ),
-          centerTitle: true,
-          title: const Text(
-            'お知らせ情報の編集',
-            style: TextStyle(color: kBlackColor),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                String? error = await noticeProvider.update(
-                  organization: widget.loginProvider.organization,
-                  notice: widget.notice,
-                  title: titleController.text,
-                  content: contentController.text,
-                  group: selectedGroup,
-                  pickedFile: pickedFile,
-                  loginUser: widget.loginProvider.user,
-                );
-                if (error != null) {
-                  if (!mounted) return;
-                  showMessage(context, error, false);
-                  return;
-                }
-                if (!mounted) return;
-                showMessage(context, 'お知らせ情報を変更しました', true);
-                Navigator.pop(context);
-              },
-              child: const Text('保存'),
-            ),
-          ],
-          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+          onPressed: () => Navigator.pop(context),
         ),
-        body: GestureDetector(
-          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomTextField(
-                    controller: titleController,
-                    textInputType: TextInputType.name,
-                    maxLines: 1,
-                    label: 'タイトル',
-                  ),
-                  const SizedBox(height: 8),
-                  CustomTextField(
-                    controller: contentController,
-                    textInputType: TextInputType.multiline,
-                    maxLines: 15,
-                    label: 'お知らせ内容',
-                  ),
-                  const SizedBox(height: 8),
-                  FormLabel(
-                    label: '送信先グループ',
-                    child: DropdownButton<OrganizationGroupModel?>(
-                      hint: const Text(
-                        'グループの指定なし',
-                        style: TextStyle(color: kGreyColor),
-                      ),
-                      underline: Container(),
-                      isExpanded: true,
-                      value: selectedGroup,
-                      items: groupItems,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedGroup = value;
-                        });
-                      },
+        centerTitle: true,
+        title: const Text(
+          'お知らせ情報の編集',
+          style: TextStyle(color: kBlackColor),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              String? error = await noticeProvider.update(
+                organization: widget.loginProvider.organization,
+                notice: widget.notice,
+                title: titleController.text,
+                content: contentController.text,
+                group: selectedGroup,
+                pickedFile: pickedFile,
+                loginUser: widget.loginProvider.user,
+              );
+              if (error != null) {
+                if (!mounted) return;
+                showMessage(context, error, false);
+                return;
+              }
+              if (!mounted) return;
+              showMessage(context, 'お知らせ情報を変更しました', true);
+              Navigator.pop(context);
+            },
+            child: const Text('保存'),
+          ),
+        ],
+        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+      ),
+      body: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomTextField(
+                  controller: titleController,
+                  textInputType: TextInputType.name,
+                  maxLines: 1,
+                  label: 'タイトル',
+                ),
+                const SizedBox(height: 8),
+                CustomTextField(
+                  controller: contentController,
+                  textInputType: TextInputType.multiline,
+                  maxLines: 15,
+                  label: 'お知らせ内容',
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  label: '送信先グループ',
+                  child: DropdownButton<OrganizationGroupModel?>(
+                    hint: const Text(
+                      'グループの指定なし',
+                      style: TextStyle(color: kGreyColor),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  CustomFileField(
-                    value: pickedFile,
-                    defaultValue: widget.notice.file,
-                    onTap: () async {
-                      final result = await FilePicker.platform.pickFiles(
-                        type: FileType.any,
-                      );
-                      if (result == null) return;
+                    underline: Container(),
+                    isExpanded: true,
+                    value: selectedGroup,
+                    items: groupItems,
+                    onChanged: (value) {
                       setState(() {
-                        pickedFile = File(result.files.single.path!);
+                        selectedGroup = value;
                       });
                     },
                   ),
-                  const SizedBox(height: 24),
-                  LinkText(
-                    label: 'このお知らせを削除する',
-                    color: kRedColor,
-                    onTap: () async {
-                      String? error = await noticeProvider.delete(
-                        notice: widget.notice,
-                      );
-                      if (error != null) {
-                        if (!mounted) return;
-                        showMessage(context, error, false);
-                        return;
-                      }
+                ),
+                const SizedBox(height: 8),
+                CustomFileField(
+                  value: pickedFile,
+                  defaultValue: widget.notice.file,
+                  onTap: () async {
+                    final result = await FilePicker.platform.pickFiles(
+                      type: FileType.any,
+                    );
+                    if (result == null) return;
+                    setState(() {
+                      pickedFile = File(result.files.single.path!);
+                    });
+                  },
+                ),
+                const SizedBox(height: 24),
+                LinkText(
+                  label: 'このお知らせを削除する',
+                  color: kRedColor,
+                  onTap: () async {
+                    String? error = await noticeProvider.delete(
+                      notice: widget.notice,
+                    );
+                    if (error != null) {
                       if (!mounted) return;
-                      showMessage(context, 'お知らせを削除しました', true);
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
+                      showMessage(context, error, false);
+                      return;
+                    }
+                    if (!mounted) return;
+                    showMessage(context, 'お知らせを削除しました', true);
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
             ),
           ),
         ),

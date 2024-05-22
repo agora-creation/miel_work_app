@@ -26,72 +26,70 @@ class UserSettingScreen extends StatefulWidget {
 class _UserSettingScreenState extends State<UserSettingScreen> {
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.withNoTextScaling(
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: kWhiteColor,
+      appBar: AppBar(
         backgroundColor: kWhiteColor,
-        appBar: AppBar(
-          backgroundColor: kWhiteColor,
-          automaticallyImplyLeading: false,
-          title: const Text(
-            'スタッフ設定',
-            style: TextStyle(color: kBlackColor),
+        automaticallyImplyLeading: false,
+        title: const Text(
+          'スタッフ設定',
+          style: TextStyle(color: kBlackColor),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.close,
+              color: kBlackColor,
+            ),
+            onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.close,
-                color: kBlackColor,
-              ),
-              onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-            ),
-          ],
-          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
-        ),
-        body: Column(
-          children: [
-            CustomSettingList(
-              label: '名前',
-              value: widget.loginProvider.user?.name ?? '',
-              onTap: () => showDialog(
-                context: context,
-                builder: (context) => ModNameDialog(
-                  loginProvider: widget.loginProvider,
-                ),
+        ],
+        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+      ),
+      body: Column(
+        children: [
+          CustomSettingList(
+            label: '名前',
+            value: widget.loginProvider.user?.name ?? '',
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => ModNameDialog(
+                loginProvider: widget.loginProvider,
               ),
             ),
-            CustomSettingList(
-              label: 'メールアドレス',
-              value: widget.loginProvider.user?.email ?? '',
-              onTap: () => showDialog(
-                context: context,
-                builder: (context) => ModEmailDialog(
-                  loginProvider: widget.loginProvider,
-                ),
+          ),
+          CustomSettingList(
+            label: 'メールアドレス',
+            value: widget.loginProvider.user?.email ?? '',
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => ModEmailDialog(
+                loginProvider: widget.loginProvider,
               ),
             ),
-            CustomSettingList(
-              label: 'パスワード',
-              value: '********',
-              onTap: () => showDialog(
-                context: context,
-                builder: (context) => ModPasswordDialog(
-                  loginProvider: widget.loginProvider,
-                ),
+          ),
+          CustomSettingList(
+            label: 'パスワード',
+            value: '********',
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => ModPasswordDialog(
+                loginProvider: widget.loginProvider,
               ),
             ),
-            const SizedBox(height: 24),
-            LinkText(
-              label: 'この端末からログアウトする',
-              color: kRedColor,
-              onTap: () => showDialog(
-                context: context,
-                builder: (context) => LogoutDialog(
-                  loginProvider: widget.loginProvider,
-                ),
+          ),
+          const SizedBox(height: 24),
+          LinkText(
+            label: 'この端末からログアウトする',
+            color: kRedColor,
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => LogoutDialog(
+                loginProvider: widget.loginProvider,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

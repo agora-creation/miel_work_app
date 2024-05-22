@@ -28,57 +28,55 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
-    return MediaQuery.withNoTextScaling(
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: kWhiteColor,
+      appBar: AppBar(
         backgroundColor: kWhiteColor,
-        appBar: AppBar(
-          backgroundColor: kWhiteColor,
-          automaticallyImplyLeading: false,
-          title: Text(
-            dateText('yyyy年MM月dd日(E)の予定', now),
-            style: const TextStyle(color: kBlackColor),
-          ),
+        automaticallyImplyLeading: false,
+        title: Text(
+          dateText('yyyy年MM月dd日(E)の予定', now),
+          style: const TextStyle(color: kBlackColor),
         ),
-        body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: planService.streamList(
-            organizationId: widget.loginProvider.organization?.id,
-            categories: [],
-          ),
-          builder: (context, snapshot) {
-            List<PlanModel> plans = [];
-            if (snapshot.hasData) {
-              plans = planService.generateList(
-                data: snapshot.data,
-                currentGroup: widget.homeProvider.currentGroup,
-                date: now,
-              );
-            }
-            if (plans.isEmpty) {
-              return const Center(child: Text('今日の予定はありません'));
-            }
-            return ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: plans.length,
-              itemBuilder: (context, index) {
-                PlanModel plan = plans[index];
-                return NowPlanList(
-                  plan: plan,
-                  groups: widget.homeProvider.groups,
-                );
-              },
+      ),
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: planService.streamList(
+          organizationId: widget.loginProvider.organization?.id,
+          categories: [],
+        ),
+        builder: (context, snapshot) {
+          List<PlanModel> plans = [];
+          if (snapshot.hasData) {
+            plans = planService.generateList(
+              data: snapshot.data,
+              currentGroup: widget.homeProvider.currentGroup,
+              date: now,
             );
-          },
+          }
+          if (plans.isEmpty) {
+            return const Center(child: Text('今日の予定はありません'));
+          }
+          return ListView.builder(
+            padding: const EdgeInsets.all(8),
+            itemCount: plans.length,
+            itemBuilder: (context, index) {
+              PlanModel plan = plans[index];
+              return NowPlanList(
+                plan: plan,
+                groups: widget.homeProvider.groups,
+              );
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+        icon: const Icon(
+          Icons.home,
+          color: kWhiteColor,
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-          icon: const Icon(
-            Icons.home,
-            color: kWhiteColor,
-          ),
-          label: const Text(
-            'ホームへ',
-            style: TextStyle(color: kWhiteColor),
-          ),
+        label: const Text(
+          'ホームへ',
+          style: TextStyle(color: kWhiteColor),
         ),
       ),
     );

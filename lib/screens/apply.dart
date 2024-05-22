@@ -44,208 +44,206 @@ class _ApplyScreenState extends State<ApplyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.withNoTextScaling(
-      child: DefaultTabController(
-        length: 3,
-        child: Scaffold(
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        backgroundColor: kWhiteColor,
+        appBar: AppBar(
           backgroundColor: kWhiteColor,
-          appBar: AppBar(
-            backgroundColor: kWhiteColor,
-            leading: IconButton(
-              icon: const Icon(
-                Icons.chevron_left,
-                color: kBlackColor,
-              ),
-              onPressed: () => Navigator.pop(context),
-            ),
-            centerTitle: true,
-            title: Text(
-              '${widget.type}申請一覧',
-              style: const TextStyle(color: kBlackColor),
-            ),
-            actions: [
-              IconButton(
-                onPressed: () async {
-                  var selected = await showDataRangePickerDialog(
-                    context: context,
-                    startValue: searchStart,
-                    endValue: searchEnd,
-                  );
-                  if (selected != null &&
-                      selected.first != null &&
-                      selected.last != null) {
-                    var diff = selected.last!.difference(selected.first!);
-                    int diffDays = diff.inDays;
-                    if (diffDays > 31) {
-                      if (!mounted) return;
-                      showMessage(context, '1ヵ月以上の範囲が選択されています', false);
-                      return;
-                    }
-                    searchStart = selected.first;
-                    searchEnd = selected.last;
-                    setState(() {});
-                  }
-                },
-                icon: const Icon(Icons.date_range, color: kBlueColor),
-              ),
-            ],
-            bottom: const TabBar(
-              tabs: [
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Text('承認待ち'),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Text('承認済み'),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Text('否決'),
-                ),
-              ],
-              indicator: UnderlineTabIndicator(
-                borderSide: BorderSide(width: 5, color: kBlueColor),
-              ),
-              indicatorSize: TabBarIndicatorSize.tab,
-            ),
-            shape: const Border(bottom: BorderSide(color: kGrey600Color)),
-          ),
-          body: TabBarView(
-            children: [
-              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                stream: applyService.streamList(
-                  organizationId: widget.loginProvider.organization?.id,
-                  searchType: widget.type,
-                  searchApproval: 0,
-                  searchStart: searchStart,
-                  searchEnd: searchEnd,
-                ),
-                builder: (context, snapshot) {
-                  List<ApplyModel> applies = [];
-                  if (snapshot.hasData) {
-                    applies = applyService.generateList(
-                      data: snapshot.data,
-                      currentGroup: widget.homeProvider.currentGroup,
-                    );
-                  }
-                  if (applies.isEmpty) {
-                    return const Center(child: Text('申請はありません'));
-                  }
-                  return ListView.builder(
-                    itemCount: applies.length,
-                    itemBuilder: (context, index) {
-                      ApplyModel apply = applies[index];
-                      return CustomApplyList(
-                        apply: apply,
-                        onTap: () => pushScreen(
-                          context,
-                          ApplyDetailScreen(
-                            loginProvider: widget.loginProvider,
-                            homeProvider: widget.homeProvider,
-                            apply: apply,
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                stream: applyService.streamList(
-                  organizationId: widget.loginProvider.organization?.id,
-                  searchType: widget.type,
-                  searchApproval: 1,
-                  searchStart: searchStart,
-                  searchEnd: searchEnd,
-                ),
-                builder: (context, snapshot) {
-                  List<ApplyModel> applies = [];
-                  if (snapshot.hasData) {
-                    applies = applyService.generateList(
-                      data: snapshot.data,
-                      currentGroup: widget.homeProvider.currentGroup,
-                    );
-                  }
-                  if (applies.isEmpty) {
-                    return const Center(child: Text('申請はありません'));
-                  }
-                  return ListView.builder(
-                    itemCount: applies.length,
-                    itemBuilder: (context, index) {
-                      ApplyModel apply = applies[index];
-                      return CustomApplyList(
-                        apply: apply,
-                        onTap: () => pushScreen(
-                          context,
-                          ApplyDetailScreen(
-                            loginProvider: widget.loginProvider,
-                            homeProvider: widget.homeProvider,
-                            apply: apply,
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                stream: applyService.streamList(
-                  organizationId: widget.loginProvider.organization?.id,
-                  searchType: widget.type,
-                  searchApproval: 9,
-                  searchStart: searchStart,
-                  searchEnd: searchEnd,
-                ),
-                builder: (context, snapshot) {
-                  List<ApplyModel> applies = [];
-                  if (snapshot.hasData) {
-                    applies = applyService.generateList(
-                      data: snapshot.data,
-                      currentGroup: widget.homeProvider.currentGroup,
-                    );
-                  }
-                  if (applies.isEmpty) {
-                    return const Center(child: Text('申請はありません'));
-                  }
-                  return ListView.builder(
-                    itemCount: applies.length,
-                    itemBuilder: (context, index) {
-                      ApplyModel apply = applies[index];
-                      return CustomApplyList(
-                        apply: apply,
-                        onTap: () => pushScreen(
-                          context,
-                          ApplyDetailScreen(
-                            loginProvider: widget.loginProvider,
-                            homeProvider: widget.homeProvider,
-                            apply: apply,
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: () => pushScreen(
-              context,
-              ApplyAddScreen(
-                loginProvider: widget.loginProvider,
-                homeProvider: widget.homeProvider,
-                type: widget.type,
-              ),
-            ),
+          leading: IconButton(
             icon: const Icon(
-              Icons.add,
-              color: kWhiteColor,
+              Icons.chevron_left,
+              color: kBlackColor,
             ),
-            label: const Text(
-              '新規申請',
-              style: TextStyle(color: kWhiteColor),
+            onPressed: () => Navigator.pop(context),
+          ),
+          centerTitle: true,
+          title: Text(
+            '${widget.type}申請一覧',
+            style: const TextStyle(color: kBlackColor),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                var selected = await showDataRangePickerDialog(
+                  context: context,
+                  startValue: searchStart,
+                  endValue: searchEnd,
+                );
+                if (selected != null &&
+                    selected.first != null &&
+                    selected.last != null) {
+                  var diff = selected.last!.difference(selected.first!);
+                  int diffDays = diff.inDays;
+                  if (diffDays > 31) {
+                    if (!mounted) return;
+                    showMessage(context, '1ヵ月以上の範囲が選択されています', false);
+                    return;
+                  }
+                  searchStart = selected.first;
+                  searchEnd = selected.last;
+                  setState(() {});
+                }
+              },
+              icon: const Icon(Icons.date_range, color: kBlueColor),
             ),
+          ],
+          bottom: const TabBar(
+            tabs: [
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text('承認待ち'),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text('承認済み'),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text('否決'),
+              ),
+            ],
+            indicator: UnderlineTabIndicator(
+              borderSide: BorderSide(width: 5, color: kBlueColor),
+            ),
+            indicatorSize: TabBarIndicatorSize.tab,
+          ),
+          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        ),
+        body: TabBarView(
+          children: [
+            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream: applyService.streamList(
+                organizationId: widget.loginProvider.organization?.id,
+                searchType: widget.type,
+                searchApproval: 0,
+                searchStart: searchStart,
+                searchEnd: searchEnd,
+              ),
+              builder: (context, snapshot) {
+                List<ApplyModel> applies = [];
+                if (snapshot.hasData) {
+                  applies = applyService.generateList(
+                    data: snapshot.data,
+                    currentGroup: widget.homeProvider.currentGroup,
+                  );
+                }
+                if (applies.isEmpty) {
+                  return const Center(child: Text('申請はありません'));
+                }
+                return ListView.builder(
+                  itemCount: applies.length,
+                  itemBuilder: (context, index) {
+                    ApplyModel apply = applies[index];
+                    return CustomApplyList(
+                      apply: apply,
+                      onTap: () => pushScreen(
+                        context,
+                        ApplyDetailScreen(
+                          loginProvider: widget.loginProvider,
+                          homeProvider: widget.homeProvider,
+                          apply: apply,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream: applyService.streamList(
+                organizationId: widget.loginProvider.organization?.id,
+                searchType: widget.type,
+                searchApproval: 1,
+                searchStart: searchStart,
+                searchEnd: searchEnd,
+              ),
+              builder: (context, snapshot) {
+                List<ApplyModel> applies = [];
+                if (snapshot.hasData) {
+                  applies = applyService.generateList(
+                    data: snapshot.data,
+                    currentGroup: widget.homeProvider.currentGroup,
+                  );
+                }
+                if (applies.isEmpty) {
+                  return const Center(child: Text('申請はありません'));
+                }
+                return ListView.builder(
+                  itemCount: applies.length,
+                  itemBuilder: (context, index) {
+                    ApplyModel apply = applies[index];
+                    return CustomApplyList(
+                      apply: apply,
+                      onTap: () => pushScreen(
+                        context,
+                        ApplyDetailScreen(
+                          loginProvider: widget.loginProvider,
+                          homeProvider: widget.homeProvider,
+                          apply: apply,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream: applyService.streamList(
+                organizationId: widget.loginProvider.organization?.id,
+                searchType: widget.type,
+                searchApproval: 9,
+                searchStart: searchStart,
+                searchEnd: searchEnd,
+              ),
+              builder: (context, snapshot) {
+                List<ApplyModel> applies = [];
+                if (snapshot.hasData) {
+                  applies = applyService.generateList(
+                    data: snapshot.data,
+                    currentGroup: widget.homeProvider.currentGroup,
+                  );
+                }
+                if (applies.isEmpty) {
+                  return const Center(child: Text('申請はありません'));
+                }
+                return ListView.builder(
+                  itemCount: applies.length,
+                  itemBuilder: (context, index) {
+                    ApplyModel apply = applies[index];
+                    return CustomApplyList(
+                      apply: apply,
+                      onTap: () => pushScreen(
+                        context,
+                        ApplyDetailScreen(
+                          loginProvider: widget.loginProvider,
+                          homeProvider: widget.homeProvider,
+                          apply: apply,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => pushScreen(
+            context,
+            ApplyAddScreen(
+              loginProvider: widget.loginProvider,
+              homeProvider: widget.homeProvider,
+              type: widget.type,
+            ),
+          ),
+          icon: const Icon(
+            Icons.add,
+            color: kWhiteColor,
+          ),
+          label: const Text(
+            '新規申請',
+            style: TextStyle(color: kWhiteColor),
           ),
         ),
       ),

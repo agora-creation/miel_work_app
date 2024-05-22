@@ -48,108 +48,106 @@ class _ManualScreenState extends State<ManualScreen> {
     } else {
       appBarTitle = '全ての業務マニュアル';
     }
-    return MediaQuery.withNoTextScaling(
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: kWhiteColor,
+      appBar: AppBar(
         backgroundColor: kWhiteColor,
-        appBar: AppBar(
-          backgroundColor: kWhiteColor,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.chevron_left,
-              color: kBlackColor,
-            ),
-            onPressed: () => Navigator.pop(context),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.chevron_left,
+            color: kBlackColor,
           ),
-          centerTitle: true,
-          title: Text(
-            appBarTitle,
-            style: const TextStyle(color: kBlackColor),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () async {
-                var selected = await showDataRangePickerDialog(
-                  context: context,
-                  startValue: searchStart,
-                  endValue: searchEnd,
-                );
-                if (selected != null &&
-                    selected.first != null &&
-                    selected.last != null) {
-                  var diff = selected.last!.difference(selected.first!);
-                  int diffDays = diff.inDays;
-                  if (diffDays > 31) {
-                    if (!mounted) return;
-                    showMessage(context, '1ヵ月以上の範囲が選択されています', false);
-                    return;
-                  }
-                  searchStart = selected.first;
-                  searchEnd = selected.last;
-                  setState(() {});
-                }
-              },
-              icon: const Icon(Icons.date_range, color: kBlueColor),
-            ),
-          ],
-          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+          onPressed: () => Navigator.pop(context),
         ),
-        body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: manualService.streamList(
-            organizationId: widget.loginProvider.organization?.id,
-            searchStart: searchStart,
-            searchEnd: searchEnd,
-          ),
-          builder: (context, snapshot) {
-            List<ManualModel> manuals = [];
-            if (snapshot.hasData) {
-              manuals = manualService.generateList(
-                data: snapshot.data,
-                currentGroup: widget.homeProvider.currentGroup,
+        centerTitle: true,
+        title: Text(
+          appBarTitle,
+          style: const TextStyle(color: kBlackColor),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              var selected = await showDataRangePickerDialog(
+                context: context,
+                startValue: searchStart,
+                endValue: searchEnd,
               );
-            }
-            if (manuals.isEmpty) {
-              return const Center(child: Text('業務マニュアルはありません'));
-            }
-            return ListView.builder(
-              itemCount: manuals.length,
-              itemBuilder: (context, index) {
-                ManualModel manual = manuals[index];
-                return CustomManualList(
-                  manual: manual,
-                  user: widget.loginProvider.user,
-                  onTap: () => pushScreen(
-                    context,
-                    ManualPdfScreen(
-                      loginProvider: widget.loginProvider,
-                      homeProvider: widget.homeProvider,
-                      manual: manual,
-                    ),
-                  ),
-                );
-              },
-            );
-          },
+              if (selected != null &&
+                  selected.first != null &&
+                  selected.last != null) {
+                var diff = selected.last!.difference(selected.first!);
+                int diffDays = diff.inDays;
+                if (diffDays > 31) {
+                  if (!mounted) return;
+                  showMessage(context, '1ヵ月以上の範囲が選択されています', false);
+                  return;
+                }
+                searchStart = selected.first;
+                searchEnd = selected.last;
+                setState(() {});
+              }
+            },
+            icon: const Icon(Icons.date_range, color: kBlueColor),
+          ),
+        ],
+        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+      ),
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: manualService.streamList(
+          organizationId: widget.loginProvider.organization?.id,
+          searchStart: searchStart,
+          searchEnd: searchEnd,
         ),
-        floatingActionButton: widget.loginProvider.user?.admin == true
-            ? FloatingActionButton.extended(
-                onPressed: () => pushScreen(
+        builder: (context, snapshot) {
+          List<ManualModel> manuals = [];
+          if (snapshot.hasData) {
+            manuals = manualService.generateList(
+              data: snapshot.data,
+              currentGroup: widget.homeProvider.currentGroup,
+            );
+          }
+          if (manuals.isEmpty) {
+            return const Center(child: Text('業務マニュアルはありません'));
+          }
+          return ListView.builder(
+            itemCount: manuals.length,
+            itemBuilder: (context, index) {
+              ManualModel manual = manuals[index];
+              return CustomManualList(
+                manual: manual,
+                user: widget.loginProvider.user,
+                onTap: () => pushScreen(
                   context,
-                  ManualAddScreen(
+                  ManualPdfScreen(
                     loginProvider: widget.loginProvider,
                     homeProvider: widget.homeProvider,
+                    manual: manual,
                   ),
                 ),
-                icon: const Icon(
-                  Icons.add,
-                  color: kWhiteColor,
-                ),
-                label: const Text(
-                  '新規追加',
-                  style: TextStyle(color: kWhiteColor),
-                ),
-              )
-            : null,
+              );
+            },
+          );
+        },
       ),
+      floatingActionButton: widget.loginProvider.user?.admin == true
+          ? FloatingActionButton.extended(
+              onPressed: () => pushScreen(
+                context,
+                ManualAddScreen(
+                  loginProvider: widget.loginProvider,
+                  homeProvider: widget.homeProvider,
+                ),
+              ),
+              icon: const Icon(
+                Icons.add,
+                color: kWhiteColor,
+              ),
+              label: const Text(
+                '新規追加',
+                style: TextStyle(color: kWhiteColor),
+              ),
+            )
+          : null,
     );
   }
 }

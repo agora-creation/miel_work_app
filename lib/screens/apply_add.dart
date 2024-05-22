@@ -59,137 +59,135 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
   @override
   Widget build(BuildContext context) {
     final applyProvider = Provider.of<ApplyProvider>(context);
-    return MediaQuery.withNoTextScaling(
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: kWhiteColor,
+      appBar: AppBar(
         backgroundColor: kWhiteColor,
-        appBar: AppBar(
-          backgroundColor: kWhiteColor,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.chevron_left,
-              color: kBlackColor,
-            ),
-            onPressed: () => Navigator.pop(context),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.chevron_left,
+            color: kBlackColor,
           ),
-          centerTitle: true,
-          title: const Text(
-            '新規申請',
-            style: TextStyle(color: kBlackColor),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                int price = 0;
-                if (type == '稟議') {
-                  String priceText = priceController.text.replaceAll(',', '');
-                  price = int.parse(priceText);
-                }
-                String? error = await applyProvider.create(
-                  organization: widget.loginProvider.organization,
-                  group: null,
-                  number: numberController.text,
-                  type: type,
-                  title: titleController.text,
-                  content: contentController.text,
-                  price: price,
-                  pickedFile: pickedFile,
-                  loginUser: widget.loginProvider.user,
-                );
-                if (error != null) {
-                  if (!mounted) return;
-                  showMessage(context, error, false);
-                  return;
-                }
-                if (!mounted) return;
-                showMessage(context, '新規申請を送信しました', true);
-                Navigator.pop(context);
-              },
-              child: const Text('送信する'),
-            ),
-          ],
-          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+          onPressed: () => Navigator.pop(context),
         ),
-        body: GestureDetector(
-          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-          behavior: HitTestBehavior.opaque,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                children: [
-                  CustomTextField(
-                    controller: numberController,
-                    textInputType: TextInputType.number,
-                    maxLines: 1,
-                    label: '申請番号',
-                  ),
-                  const SizedBox(height: 8),
-                  FormLabel(
-                    label: '申請種別',
-                    child: DropdownButton<String>(
-                      underline: Container(),
-                      isExpanded: true,
-                      value: type,
-                      items: kApplyTypes.map((e) {
-                        return DropdownMenuItem(
-                          value: e,
-                          child: Text('$e申請'),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          type = value ?? kApplyTypes.first;
-                        });
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  CustomTextField(
-                    controller: titleController,
-                    textInputType: TextInputType.text,
-                    maxLines: 1,
-                    label: '件名',
-                  ),
-                  const SizedBox(height: 8),
-                  type == '稟議'
-                      ? CustomTextField(
-                          controller: priceController,
-                          textInputType: TextInputType.number,
-                          inputFormatters: [
-                            CurrencyTextInputFormatter.currency(
-                              locale: 'ja',
-                              decimalDigits: 0,
-                              symbol: '',
-                            ),
-                          ],
-                          maxLines: 1,
-                          label: '金額',
-                          prefix: const Text('¥ '),
-                        )
-                      : Container(),
-                  const SizedBox(height: 8),
-                  CustomTextField(
-                    controller: contentController,
-                    textInputType: TextInputType.multiline,
-                    maxLines: 15,
-                    label: '内容',
-                  ),
-                  const SizedBox(height: 8),
-                  CustomFileField(
-                    value: pickedFile,
-                    defaultValue: '',
-                    onTap: () async {
-                      final result = await FilePicker.platform.pickFiles(
-                        type: FileType.any,
+        centerTitle: true,
+        title: const Text(
+          '新規申請',
+          style: TextStyle(color: kBlackColor),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              int price = 0;
+              if (type == '稟議') {
+                String priceText = priceController.text.replaceAll(',', '');
+                price = int.parse(priceText);
+              }
+              String? error = await applyProvider.create(
+                organization: widget.loginProvider.organization,
+                group: null,
+                number: numberController.text,
+                type: type,
+                title: titleController.text,
+                content: contentController.text,
+                price: price,
+                pickedFile: pickedFile,
+                loginUser: widget.loginProvider.user,
+              );
+              if (error != null) {
+                if (!mounted) return;
+                showMessage(context, error, false);
+                return;
+              }
+              if (!mounted) return;
+              showMessage(context, '新規申請を送信しました', true);
+              Navigator.pop(context);
+            },
+            child: const Text('送信する'),
+          ),
+        ],
+        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+      ),
+      body: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        behavior: HitTestBehavior.opaque,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: [
+                CustomTextField(
+                  controller: numberController,
+                  textInputType: TextInputType.number,
+                  maxLines: 1,
+                  label: '申請番号',
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  label: '申請種別',
+                  child: DropdownButton<String>(
+                    underline: Container(),
+                    isExpanded: true,
+                    value: type,
+                    items: kApplyTypes.map((e) {
+                      return DropdownMenuItem(
+                        value: e,
+                        child: Text('$e申請'),
                       );
-                      if (result == null) return;
+                    }).toList(),
+                    onChanged: (value) {
                       setState(() {
-                        pickedFile = File(result.files.single.path!);
+                        type = value ?? kApplyTypes.first;
                       });
                     },
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 8),
+                CustomTextField(
+                  controller: titleController,
+                  textInputType: TextInputType.text,
+                  maxLines: 1,
+                  label: '件名',
+                ),
+                const SizedBox(height: 8),
+                type == '稟議'
+                    ? CustomTextField(
+                        controller: priceController,
+                        textInputType: TextInputType.number,
+                        inputFormatters: [
+                          CurrencyTextInputFormatter.currency(
+                            locale: 'ja',
+                            decimalDigits: 0,
+                            symbol: '',
+                          ),
+                        ],
+                        maxLines: 1,
+                        label: '金額',
+                        prefix: const Text('¥ '),
+                      )
+                    : Container(),
+                const SizedBox(height: 8),
+                CustomTextField(
+                  controller: contentController,
+                  textInputType: TextInputType.multiline,
+                  maxLines: 15,
+                  label: '内容',
+                ),
+                const SizedBox(height: 8),
+                CustomFileField(
+                  value: pickedFile,
+                  defaultValue: '',
+                  onTap: () async {
+                    final result = await FilePicker.platform.pickFiles(
+                      type: FileType.any,
+                    );
+                    if (result == null) return;
+                    setState(() {
+                      pickedFile = File(result.files.single.path!);
+                    });
+                  },
+                ),
+              ],
             ),
           ),
         ),

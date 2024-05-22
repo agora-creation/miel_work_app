@@ -51,81 +51,79 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.withNoTextScaling(
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: kWhiteColor,
+      appBar: AppBar(
         backgroundColor: kWhiteColor,
-        appBar: AppBar(
-          backgroundColor: kWhiteColor,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.chevron_left,
-              color: kBlackColor,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.chevron_left,
+            color: kBlackColor,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        centerTitle: true,
+        title: Text(
+          widget.notice.title,
+          style: const TextStyle(color: kBlackColor),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () => pushScreen(
+              context,
+              NoticeModScreen(
+                loginProvider: widget.loginProvider,
+                homeProvider: widget.homeProvider,
+                notice: widget.notice,
+              ),
             ),
-            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.edit, color: kBlueColor),
           ),
-          centerTitle: true,
-          title: Text(
-            widget.notice.title,
-            style: const TextStyle(color: kBlackColor),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () => pushScreen(
-                context,
-                NoticeModScreen(
-                  loginProvider: widget.loginProvider,
-                  homeProvider: widget.homeProvider,
-                  notice: widget.notice,
+        ],
+        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  dateText('yyyy/MM/dd HH:mm', widget.notice.createdAt),
+                  style: const TextStyle(color: kGreyColor),
                 ),
               ),
-              icon: const Icon(Icons.edit, color: kBlueColor),
-            ),
-          ],
-          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    dateText('yyyy/MM/dd HH:mm', widget.notice.createdAt),
-                    style: const TextStyle(color: kGreyColor),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(widget.notice.content),
-                const SizedBox(height: 16),
-                widget.notice.file != ''
-                    ? LinkText(
-                        label: '添付ファイル',
-                        color: kBlueColor,
-                        onTap: () {
-                          String ext = widget.notice.fileExt;
-                          if (imageExtensions.contains(ext)) {
-                            showDialog(
-                              context: context,
-                              builder: (context) => ImageDialog(
-                                file: widget.notice.file,
-                              ),
-                            );
-                          }
-                          if (pdfExtensions.contains(ext)) {
-                            showDialog(
-                              context: context,
-                              builder: (context) => PdfDialog(
-                                file: widget.notice.file,
-                              ),
-                            );
-                          }
-                        },
-                      )
-                    : Container(),
-              ],
-            ),
+              const SizedBox(height: 4),
+              Text(widget.notice.content),
+              const SizedBox(height: 16),
+              widget.notice.file != ''
+                  ? LinkText(
+                      label: '添付ファイル',
+                      color: kBlueColor,
+                      onTap: () {
+                        String ext = widget.notice.fileExt;
+                        if (imageExtensions.contains(ext)) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => ImageDialog(
+                              file: widget.notice.file,
+                            ),
+                          );
+                        }
+                        if (pdfExtensions.contains(ext)) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => PdfDialog(
+                              file: widget.notice.file,
+                            ),
+                          );
+                        }
+                      },
+                    )
+                  : Container(),
+            ],
           ),
         ),
       ),

@@ -41,271 +41,269 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context);
     final homeProvider = Provider.of<HomeProvider>(context);
-    return MediaQuery.withNoTextScaling(
-      child: Scaffold(
-        backgroundColor: kHomeBackgroundColor,
-        body: Stack(
-          children: [
-            const AnimationBackground(),
-            SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomAppbar(
-                    loginProvider: loginProvider,
-                    actions: [
-                      IconButton(
-                        onPressed: () => showBottomUpScreen(
-                          context,
-                          const HowToScreen(),
-                        ),
-                        icon: const Icon(Icons.help_outline),
+    return Scaffold(
+      backgroundColor: kHomeBackgroundColor,
+      body: Stack(
+        children: [
+          const AnimationBackground(),
+          SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomAppbar(
+                  loginProvider: loginProvider,
+                  actions: [
+                    IconButton(
+                      onPressed: () => showBottomUpScreen(
+                        context,
+                        const HowToScreen(),
                       ),
-                      IconButton(
-                        onPressed: () => showBottomUpScreen(
+                      icon: const Icon(Icons.help_outline),
+                    ),
+                    IconButton(
+                      onPressed: () => showBottomUpScreen(
+                        context,
+                        UserSettingScreen(
+                          loginProvider: loginProvider,
+                          homeProvider: homeProvider,
+                        ),
+                      ),
+                      icon: const Icon(Icons.settings),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.all(8),
+                    children: [
+                      GroupSelectCard(
+                        loginProvider: loginProvider,
+                        homeProvider: homeProvider,
+                      ),
+                      GridView(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        gridDelegate: kHome2Grid,
+                        children: [
+                          StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                            stream: manualService.streamList(
+                              organizationId: loginProvider.organization?.id,
+                              searchStart: null,
+                              searchEnd: null,
+                            ),
+                            builder: (context, snapshot) {
+                              bool alert = false;
+                              if (snapshot.hasData) {
+                                alert = manualService.checkAlert(
+                                  data: snapshot.data,
+                                  currentGroup: homeProvider.currentGroup,
+                                  user: loginProvider.user,
+                                );
+                              }
+                              return CustomHomeIconCard(
+                                icon: Icons.picture_as_pdf,
+                                label: '業務マニュアル',
+                                color: kBlackColor,
+                                backgroundColor: kWhiteColor,
+                                alert: alert,
+                                onTap: () => pushScreen(
+                                  context,
+                                  ManualScreen(
+                                    loginProvider: loginProvider,
+                                    homeProvider: homeProvider,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                            stream: noticeService.streamList(
+                              organizationId: loginProvider.organization?.id,
+                              searchStart: null,
+                              searchEnd: null,
+                            ),
+                            builder: (context, snapshot) {
+                              bool alert = false;
+                              if (snapshot.hasData) {
+                                alert = manualService.checkAlert(
+                                  data: snapshot.data,
+                                  currentGroup: homeProvider.currentGroup,
+                                  user: loginProvider.user,
+                                );
+                              }
+                              return CustomHomeIconCard(
+                                icon: Icons.notifications,
+                                label: 'お知らせ',
+                                color: kBlackColor,
+                                backgroundColor: kWhiteColor,
+                                alert: alert,
+                                onTap: () => pushScreen(
+                                  context,
+                                  NoticeScreen(
+                                    loginProvider: loginProvider,
+                                    homeProvider: homeProvider,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                      CustomHomeChatCard(
+                        loginProvider: loginProvider,
+                        homeProvider: homeProvider,
+                        onTap: () => pushScreen(
                           context,
-                          UserSettingScreen(
+                          ChatScreen(
                             loginProvider: loginProvider,
                             homeProvider: homeProvider,
                           ),
                         ),
-                        icon: const Icon(Icons.settings),
                       ),
+                      CustomHomePlanCard(
+                        loginProvider: loginProvider,
+                        homeProvider: homeProvider,
+                        onTap: () => pushScreen(
+                          context,
+                          PlanScreen(
+                            loginProvider: loginProvider,
+                            homeProvider: homeProvider,
+                          ),
+                        ),
+                      ),
+                      GridView(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        gridDelegate: kHome3Grid,
+                        children: [
+                          CustomHomeIconCard(
+                            icon: Icons.view_timeline,
+                            iconSize: 40,
+                            label: 'シフト表',
+                            labelFontSize: 14,
+                            color: kBlackColor,
+                            backgroundColor: kTeal300Color,
+                            onTap: () => pushScreen(
+                              context,
+                              PlanShiftScreen(
+                                loginProvider: loginProvider,
+                                homeProvider: homeProvider,
+                              ),
+                            ),
+                          ),
+                          CustomHomeIconCard(
+                            icon: Icons.edit_note,
+                            iconSize: 40,
+                            label: '稟議申請',
+                            labelFontSize: 14,
+                            color: kBlackColor,
+                            backgroundColor: kOrange300Color,
+                            onTap: () => pushScreen(
+                              context,
+                              ApplyScreen(
+                                loginProvider: loginProvider,
+                                homeProvider: homeProvider,
+                                type: '稟議',
+                              ),
+                            ),
+                          ),
+                          CustomHomeIconCard(
+                            icon: Icons.edit_note,
+                            iconSize: 40,
+                            label: '協議・報告申請',
+                            labelFontSize: 14,
+                            color: kBlackColor,
+                            backgroundColor: kOrange300Color,
+                            onTap: () => pushScreen(
+                              context,
+                              ApplyScreen(
+                                loginProvider: loginProvider,
+                                homeProvider: homeProvider,
+                                type: '協議・報告',
+                              ),
+                            ),
+                          ),
+                          CustomHomeIconCard(
+                            icon: Icons.edit_note,
+                            iconSize: 40,
+                            label: '企画申請',
+                            labelFontSize: 14,
+                            color: kBlackColor,
+                            backgroundColor: kOrange300Color,
+                            onTap: () => pushScreen(
+                              context,
+                              ApplyScreen(
+                                loginProvider: loginProvider,
+                                homeProvider: homeProvider,
+                                type: '企画',
+                              ),
+                            ),
+                          ),
+                          CustomHomeIconCard(
+                            icon: Icons.gas_meter,
+                            iconSize: 40,
+                            label: 'メーター検針',
+                            labelFontSize: 14,
+                            color: kBlackColor,
+                            backgroundColor: kYellowColor,
+                            onTap: () async {
+                              Uri url =
+                                  Uri.parse('https://hirome.co.jp/meter/');
+                              if (!await launchUrl(url)) {
+                                throw Exception('Could not launch $url');
+                              }
+                            },
+                          ),
+                          loginProvider.user?.admin == true
+                              ? CustomHomeIconCard(
+                                  icon: Icons.category,
+                                  iconSize: 40,
+                                  label: 'グループ管理',
+                                  labelFontSize: 14,
+                                  color: kWhiteColor,
+                                  backgroundColor: kGrey600Color,
+                                  onTap: () => pushScreen(
+                                    context,
+                                    GroupScreen(
+                                      loginProvider: loginProvider,
+                                      homeProvider: homeProvider,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                          loginProvider.user?.admin == true
+                              ? CustomHomeIconCard(
+                                  icon: Icons.groups,
+                                  iconSize: 40,
+                                  label: 'スタッフ管理',
+                                  labelFontSize: 14,
+                                  color: kWhiteColor,
+                                  backgroundColor: kGrey600Color,
+                                  onTap: () => pushScreen(
+                                    context,
+                                    UserScreen(
+                                      loginProvider: loginProvider,
+                                      homeProvider: homeProvider,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
                     ],
                   ),
-                  Expanded(
-                    child: ListView(
-                      padding: const EdgeInsets.all(8),
-                      children: [
-                        GroupSelectCard(
-                          loginProvider: loginProvider,
-                          homeProvider: homeProvider,
-                        ),
-                        GridView(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          gridDelegate: kHome2Grid,
-                          children: [
-                            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                              stream: manualService.streamList(
-                                organizationId: loginProvider.organization?.id,
-                                searchStart: null,
-                                searchEnd: null,
-                              ),
-                              builder: (context, snapshot) {
-                                bool alert = false;
-                                if (snapshot.hasData) {
-                                  alert = manualService.checkAlert(
-                                    data: snapshot.data,
-                                    currentGroup: homeProvider.currentGroup,
-                                    user: loginProvider.user,
-                                  );
-                                }
-                                return CustomHomeIconCard(
-                                  icon: Icons.picture_as_pdf,
-                                  label: '業務マニュアル',
-                                  color: kBlackColor,
-                                  backgroundColor: kWhiteColor,
-                                  alert: alert,
-                                  onTap: () => pushScreen(
-                                    context,
-                                    ManualScreen(
-                                      loginProvider: loginProvider,
-                                      homeProvider: homeProvider,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                              stream: noticeService.streamList(
-                                organizationId: loginProvider.organization?.id,
-                                searchStart: null,
-                                searchEnd: null,
-                              ),
-                              builder: (context, snapshot) {
-                                bool alert = false;
-                                if (snapshot.hasData) {
-                                  alert = manualService.checkAlert(
-                                    data: snapshot.data,
-                                    currentGroup: homeProvider.currentGroup,
-                                    user: loginProvider.user,
-                                  );
-                                }
-                                return CustomHomeIconCard(
-                                  icon: Icons.notifications,
-                                  label: 'お知らせ',
-                                  color: kBlackColor,
-                                  backgroundColor: kWhiteColor,
-                                  alert: alert,
-                                  onTap: () => pushScreen(
-                                    context,
-                                    NoticeScreen(
-                                      loginProvider: loginProvider,
-                                      homeProvider: homeProvider,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                        CustomHomeChatCard(
-                          loginProvider: loginProvider,
-                          homeProvider: homeProvider,
-                          onTap: () => pushScreen(
-                            context,
-                            ChatScreen(
-                              loginProvider: loginProvider,
-                              homeProvider: homeProvider,
-                            ),
-                          ),
-                        ),
-                        CustomHomePlanCard(
-                          loginProvider: loginProvider,
-                          homeProvider: homeProvider,
-                          onTap: () => pushScreen(
-                            context,
-                            PlanScreen(
-                              loginProvider: loginProvider,
-                              homeProvider: homeProvider,
-                            ),
-                          ),
-                        ),
-                        GridView(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          gridDelegate: kHome3Grid,
-                          children: [
-                            CustomHomeIconCard(
-                              icon: Icons.view_timeline,
-                              iconSize: 40,
-                              label: 'シフト表',
-                              labelFontSize: 14,
-                              color: kBlackColor,
-                              backgroundColor: kTeal300Color,
-                              onTap: () => pushScreen(
-                                context,
-                                PlanShiftScreen(
-                                  loginProvider: loginProvider,
-                                  homeProvider: homeProvider,
-                                ),
-                              ),
-                            ),
-                            CustomHomeIconCard(
-                              icon: Icons.edit_note,
-                              iconSize: 40,
-                              label: '稟議申請',
-                              labelFontSize: 14,
-                              color: kBlackColor,
-                              backgroundColor: kOrange300Color,
-                              onTap: () => pushScreen(
-                                context,
-                                ApplyScreen(
-                                  loginProvider: loginProvider,
-                                  homeProvider: homeProvider,
-                                  type: '稟議',
-                                ),
-                              ),
-                            ),
-                            CustomHomeIconCard(
-                              icon: Icons.edit_note,
-                              iconSize: 40,
-                              label: '協議・報告申請',
-                              labelFontSize: 14,
-                              color: kBlackColor,
-                              backgroundColor: kOrange300Color,
-                              onTap: () => pushScreen(
-                                context,
-                                ApplyScreen(
-                                  loginProvider: loginProvider,
-                                  homeProvider: homeProvider,
-                                  type: '協議・報告',
-                                ),
-                              ),
-                            ),
-                            CustomHomeIconCard(
-                              icon: Icons.edit_note,
-                              iconSize: 40,
-                              label: '企画申請',
-                              labelFontSize: 14,
-                              color: kBlackColor,
-                              backgroundColor: kOrange300Color,
-                              onTap: () => pushScreen(
-                                context,
-                                ApplyScreen(
-                                  loginProvider: loginProvider,
-                                  homeProvider: homeProvider,
-                                  type: '企画',
-                                ),
-                              ),
-                            ),
-                            CustomHomeIconCard(
-                              icon: Icons.gas_meter,
-                              iconSize: 40,
-                              label: 'メーター検針',
-                              labelFontSize: 14,
-                              color: kBlackColor,
-                              backgroundColor: kYellowColor,
-                              onTap: () async {
-                                Uri url =
-                                    Uri.parse('https://hirome.co.jp/meter/');
-                                if (!await launchUrl(url)) {
-                                  throw Exception('Could not launch $url');
-                                }
-                              },
-                            ),
-                            loginProvider.user?.admin == true
-                                ? CustomHomeIconCard(
-                                    icon: Icons.category,
-                                    iconSize: 40,
-                                    label: 'グループ管理',
-                                    labelFontSize: 14,
-                                    color: kWhiteColor,
-                                    backgroundColor: kGrey600Color,
-                                    onTap: () => pushScreen(
-                                      context,
-                                      GroupScreen(
-                                        loginProvider: loginProvider,
-                                        homeProvider: homeProvider,
-                                      ),
-                                    ),
-                                  )
-                                : Container(),
-                            loginProvider.user?.admin == true
-                                ? CustomHomeIconCard(
-                                    icon: Icons.groups,
-                                    iconSize: 40,
-                                    label: 'スタッフ管理',
-                                    labelFontSize: 14,
-                                    color: kWhiteColor,
-                                    backgroundColor: kGrey600Color,
-                                    onTap: () => pushScreen(
-                                      context,
-                                      UserScreen(
-                                        loginProvider: loginProvider,
-                                        homeProvider: homeProvider,
-                                      ),
-                                    ),
-                                  )
-                                : Container(),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-        bottomNavigationBar: CustomFooter(
-          loginProvider: loginProvider,
-          homeProvider: homeProvider,
-        ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: loginProvider,
+        homeProvider: homeProvider,
       ),
     );
   }
