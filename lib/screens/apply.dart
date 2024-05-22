@@ -92,15 +92,15 @@ class _ApplyScreenState extends State<ApplyScreen> {
             tabs: [
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: Text('承認待ち'),
+                child: Text('承認待ち', style: TextStyle(fontSize: 18)),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: Text('承認済み'),
+                child: Text('承認済み', style: TextStyle(fontSize: 18)),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: Text('否決'),
+                child: Text('否決', style: TextStyle(fontSize: 18)),
               ),
             ],
             indicator: UnderlineTabIndicator(

@@ -22,18 +22,28 @@ class CustomUserList extends StatelessWidget {
         border: Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       child: ListTile(
-        title: Text(user.name),
+        title: Text(
+          user.name,
+          style: TextStyle(fontSize: 20),
+        ),
         subtitle: Row(
           children: [
             userInGroup != null
-                ? Text(userInGroup?.name ?? '')
-                : const Text('未所属'),
+                ? Text(
+                    userInGroup?.name ?? '',
+                    style: const TextStyle(fontSize: 14),
+                  )
+                : const Text(
+                    '未所属',
+                    style: TextStyle(fontSize: 14),
+                  ),
             const SizedBox(width: 4),
             user.admin
                 ? const Text(
                     '管理者',
                     style: TextStyle(
                       color: kRedColor,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
                   )

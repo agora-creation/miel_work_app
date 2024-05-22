@@ -24,6 +24,7 @@ class CustomApprovalUserList extends StatelessWidget {
           style: approvalUser.userPresident
               ? const TextStyle(
                   color: kRedColor,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 )
               : null,
@@ -32,7 +33,7 @@ class CustomApprovalUserList extends StatelessWidget {
           dateText('yyyy/MM/dd HH:mm', approvalUser.approvedAt),
           style: const TextStyle(
             color: kRedColor,
-            fontSize: 14,
+            fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),

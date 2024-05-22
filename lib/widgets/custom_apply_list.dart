@@ -20,16 +20,23 @@ class CustomApplyList extends StatelessWidget {
         border: Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       child: ListTile(
-        title: Text(apply.title),
+        title: Text(
+          apply.title,
+          style: const TextStyle(fontSize: 20),
+        ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('提出日時: ${dateText('yyyy/MM/dd HH:mm', apply.createdAt)}'),
+            Text(
+              '提出日時: ${dateText('yyyy/MM/dd HH:mm', apply.createdAt)}',
+              style: const TextStyle(fontSize: 14),
+            ),
             apply.approval == 1
                 ? Text(
                     '承認日時: ${dateText('yyyy/MM/dd HH:mm', apply.approvedAt)}',
                     style: const TextStyle(
                       color: kRedColor,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
                   )

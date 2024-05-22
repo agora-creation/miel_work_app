@@ -113,17 +113,24 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                   children: [
                     Text(
                       '申請番号: ${widget.apply.number}',
-                      style: const TextStyle(color: kGreyColor),
+                      style: const TextStyle(
+                        color: kGreyColor,
+                        fontSize: 14,
+                      ),
                     ),
                     Text(
                       '申請日時: ${dateText('yyyy/MM/dd HH:mm', widget.apply.createdAt)}',
-                      style: const TextStyle(color: kGreyColor),
+                      style: const TextStyle(
+                        color: kGreyColor,
+                        fontSize: 14,
+                      ),
                     ),
                     widget.apply.approval == 1
                         ? Text(
                             '承認日時: ${dateText('yyyy/MM/dd HH:mm', widget.apply.approvedAt)}',
                             style: const TextStyle(
                               color: kRedColor,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
                           )
@@ -133,13 +140,17 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                             '承認番号: ${widget.apply.approvalNumber}',
                             style: const TextStyle(
                               color: kRedColor,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
                           )
                         : Container(),
                     Text(
                       '申請者: ${widget.apply.createdUserName}',
-                      style: const TextStyle(color: kGreyColor),
+                      style: const TextStyle(
+                        color: kGreyColor,
+                        fontSize: 14,
+                      ),
                     ),
                   ],
                 ),
@@ -164,7 +175,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
                     widget.apply.title,
-                    style: const TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 20),
                   ),
                 ),
               ),
@@ -176,7 +187,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Text(
                           '¥ ${widget.apply.formatPrice()}',
-                          style: const TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 20),
                         ),
                       ),
                     )
@@ -186,7 +197,10 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                 label: '内容',
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(widget.apply.content),
+                  child: Text(
+                    widget.apply.content,
+                    style: const TextStyle(fontSize: 20),
+                  ),
                 ),
               ),
               const SizedBox(height: 8),

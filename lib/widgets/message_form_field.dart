@@ -36,6 +36,7 @@ class MessageFormField extends StatelessWidget {
                   icon: Icon(
                     Icons.upload_file_sharp,
                     color: enabled ? kBlueColor : kGreyColor,
+                    size: 32,
                   ),
                 ),
                 IconButton(
@@ -43,6 +44,7 @@ class MessageFormField extends StatelessWidget {
                   icon: Icon(
                     Icons.add_photo_alternate,
                     color: enabled ? kBlueColor : kGreyColor,
+                    size: 32,
                   ),
                 ),
               ],
@@ -61,10 +63,12 @@ class MessageFormField extends StatelessWidget {
                     controller: controller,
                     decoration: const InputDecoration.collapsed(
                       hintText: 'メッセージを入力...',
+                      hintStyle: TextStyle(fontSize: 20),
                     ),
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     enabled: enabled,
+                    style: const TextStyle(fontSize: 20),
                   ),
                 ),
               ),
@@ -74,7 +78,11 @@ class MessageFormField extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: IconButton(
               onPressed: enabled ? sendPressed : null,
-              icon: Icon(Icons.send, color: enabled ? kBlueColor : kGreyColor),
+              icon: Icon(
+                Icons.send,
+                color: enabled ? kBlueColor : kGreyColor,
+                size: 32,
+              ),
             ),
           ),
         ],

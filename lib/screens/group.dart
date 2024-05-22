@@ -71,7 +71,10 @@ class _GroupScreenState extends State<GroupScreen> {
                     border: Border(bottom: BorderSide(color: kGrey600Color)),
                   ),
                   child: ListTile(
-                    title: Text(group.name),
+                    title: Text(
+                      group.name,
+                      style: const TextStyle(fontSize: 20),
+                    ),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => pushScreen(
                       context,
@@ -138,7 +141,7 @@ class _AddGroupDialogState extends State<AddGroupDialog> {
       ),
       title: const Text(
         'グループを追加',
-        style: TextStyle(fontSize: 16),
+        style: TextStyle(fontSize: 18),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,

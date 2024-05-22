@@ -22,9 +22,15 @@ class CustomCategoryList extends StatelessWidget {
       child: ListTile(
         title: Text(
           category.name,
-          style: const TextStyle(color: kWhiteColor),
+          style: const TextStyle(
+            color: kWhiteColor,
+            fontSize: 18,
+          ),
         ),
-        trailing: const Icon(Icons.chevron_right),
+        trailing: const Icon(
+          Icons.chevron_right,
+          color: kWhiteColor,
+        ),
         onTap: onTap,
       ),
     );
