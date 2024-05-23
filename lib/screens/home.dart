@@ -212,6 +212,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           CustomHomeIconCard(
                             icon: Icons.edit_note,
                             iconSize: 42,
+                            label: '支払伺い申請',
+                            labelFontSize: 16,
+                            color: kBlackColor,
+                            backgroundColor: kOrange300Color,
+                            onTap: () => pushScreen(
+                              context,
+                              ApplyScreen(
+                                loginProvider: loginProvider,
+                                homeProvider: homeProvider,
+                                type: '支払伺い',
+                              ),
+                            ),
+                          ),
+                          CustomHomeIconCard(
+                            icon: Icons.edit_note,
+                            iconSize: 42,
                             label: '協議・報告申請',
                             labelFontSize: 16,
                             color: kBlackColor,

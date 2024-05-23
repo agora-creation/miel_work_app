@@ -79,7 +79,7 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
           TextButton(
             onPressed: () async {
               int price = 0;
-              if (type == '稟議') {
+              if (type == '稟議' || type == '支払伺い') {
                 String priceText = priceController.text.replaceAll(',', '');
                 price = int.parse(priceText);
               }
@@ -150,7 +150,7 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
                   label: '件名',
                 ),
                 const SizedBox(height: 8),
-                type == '稟議'
+                type == '稟議' || type == '支払伺い'
                     ? CustomTextField(
                         controller: priceController,
                         textInputType: TextInputType.number,

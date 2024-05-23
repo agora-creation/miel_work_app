@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:miel_work_app/models/approval_user.dart';
 
-const List<String> kApplyTypes = ['稟議', '協議・報告', '企画'];
+const List<String> kApplyTypes = ['稟議', '支払伺い', '協議・報告', '企画'];
 
 class ApplyModel {
   String _id = '';
