@@ -10,6 +10,7 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/chat.dart';
 import 'package:miel_work_app/models/chat_message.dart';
 import 'package:miel_work_app/models/read_user.dart';
+import 'package:miel_work_app/models/reply_source.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/chat_message.dart';
 import 'package:miel_work_app/providers/login.dart';
@@ -40,6 +41,7 @@ class ChatMessageScreen extends StatefulWidget {
 class _ChatMessageScreenState extends State<ChatMessageScreen> {
   ChatMessageService messageService = ChatMessageService();
   String searchKeyword = '';
+  ReplySourceModel? replySource;
 
   void _getKeyword() async {
     searchKeyword = await getPrefsString('keyword') ?? '';
@@ -138,6 +140,17 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                             return MessageList(
                               message: message,
                               loginUser: widget.loginProvider.user,
+                              replyAction: () {
+                                replySource = ReplySourceModel.fromMap({
+                                  'id': message.id,
+                                  'content': message.content,
+                                  'image': message.image,
+                                  'file': message.file,
+                                  'fileExt': message.fileExt,
+                                  'createdUserName': message.createdUserName,
+                                });
+                                setState(() {});
+                              },
                               copyAction: () async {
                                 final data = ClipboardData(
                                   text: message.content,
@@ -238,15 +251,23 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                       String? error = await messageProvider.send(
                         chat: widget.chat,
                         loginUser: widget.loginProvider.user,
+                        replySource: replySource,
                       );
                       if (error != null) {
                         if (!mounted) return;
                         showMessage(context, error, false);
                         return;
                       }
+                      replySource = null;
+                      setState(() {});
                     },
                     enabled: widget.chat.userIds
                         .contains(widget.loginProvider.user?.id),
+                    replySource: replySource,
+                    replyClosed: () {
+                      replySource = null;
+                      setState(() {});
+                    },
                   ),
                 ],
               ),

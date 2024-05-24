@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:miel_work_app/models/chat.dart';
 import 'package:miel_work_app/models/chat_message.dart';
+import 'package:miel_work_app/models/reply_source.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/services/chat.dart';
 import 'package:miel_work_app/services/chat_message.dart';
@@ -24,6 +25,7 @@ class ChatMessageProvider with ChangeNotifier {
   Future<String?> send({
     required ChatModel? chat,
     required UserModel? loginUser,
+    required ReplySourceModel? replySource,
   }) async {
     String? error;
     if (chat == null) return 'メッセージの送信に失敗しました';
@@ -51,6 +53,7 @@ class ChatMessageProvider with ChangeNotifier {
         'createdUserName': loginUser.name,
         'createdAt': DateTime.now(),
         'expirationAt': DateTime.now().add(const Duration(days: 365)),
+        'replySource': replySource?.toMap(),
       });
       _chatService.update({
         'id': chat.id,
@@ -122,6 +125,7 @@ class ChatMessageProvider with ChangeNotifier {
         'createdUserName': loginUser.name,
         'createdAt': DateTime.now(),
         'expirationAt': DateTime.now().add(const Duration(days: 365)),
+        'replySource': null,
       });
       _chatService.update({
         'id': chat.id,
@@ -189,6 +193,7 @@ class ChatMessageProvider with ChangeNotifier {
         'createdUserName': loginUser.name,
         'createdAt': DateTime.now(),
         'expirationAt': DateTime.now().add(const Duration(days: 365)),
+        'replySource': null,
       });
       _chatService.update({
         'id': chat.id,

@@ -10,6 +10,7 @@ import 'package:miel_work_app/widgets/popup_icon_button.dart';
 class MessageList extends StatelessWidget {
   final ChatMessageModel message;
   final UserModel? loginUser;
+  final Function() replyAction;
   final Function() copyAction;
   final Function() deleteAction;
   final Function()? onTapReadUsers;
@@ -19,6 +20,7 @@ class MessageList extends StatelessWidget {
   const MessageList({
     required this.message,
     required this.loginUser,
+    required this.replyAction,
     required this.copyAction,
     required this.deleteAction,
     required this.onTapReadUsers,
@@ -37,35 +39,41 @@ class MessageList extends StatelessWidget {
         child: Container(
           width: 280,
           color: const Color(0xFF4C4C4C),
-          child: GridView.count(
+          child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 8,
               vertical: 16,
             ),
-            crossAxisCount: 5,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 16,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              PopupIconButton(
-                icon: Icons.copy,
-                label: 'コピー',
-                onTap: () {
-                  copyAction();
-                  showMessage(context, 'コピーしました', true);
-                  menuController.hideMenu();
-                },
-              ),
-              PopupIconButton(
-                icon: Icons.delete,
-                label: '削除',
-                onTap: () {
-                  deleteAction();
-                  menuController.hideMenu();
-                },
-              ),
-            ],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                PopupIconButton(
+                  icon: Icons.reply,
+                  label: 'リプライ',
+                  onTap: () {
+                    replyAction();
+                    menuController.hideMenu();
+                  },
+                ),
+                PopupIconButton(
+                  icon: Icons.copy,
+                  label: 'コピー',
+                  onTap: () {
+                    copyAction();
+                    showMessage(context, 'コピーしました', true);
+                    menuController.hideMenu();
+                  },
+                ),
+                PopupIconButton(
+                  icon: Icons.delete,
+                  label: '削除',
+                  onTap: () {
+                    deleteAction();
+                    menuController.hideMenu();
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -93,13 +101,58 @@ class MessageList extends StatelessWidget {
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
                       color: kYellowColor,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 14,
-                        ),
-                        child: Text(message.content).urlToLink(context),
-                      ),
+                      child: message.replySource != null
+                          ? Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    horizontal: 14,
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        message.replySource?.createdUserName ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: kGrey600Color,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      Text(
+                                        message.replySource?.content ?? '',
+                                        style: const TextStyle(
+                                          color: kGrey600Color,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Divider(color: kWhiteColor, height: 1),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    horizontal: 14,
+                                  ),
+                                  child: Text(
+                                    message.content,
+                                  ).urlToLink(context),
+                                ),
+                              ],
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 14,
+                              ),
+                              child: Text(message.content).urlToLink(context),
+                            ),
                     ),
                   )
                 : Container(),
@@ -179,7 +232,7 @@ class MessageList extends StatelessWidget {
           children: [
             Text(
               message.createdUserName,
-              style: const TextStyle(fontSize: 12),
+              style: const TextStyle(fontSize: 14),
             ),
             const SizedBox(height: 2),
             message.image == '' && message.file == ''
@@ -192,13 +245,60 @@ class MessageList extends StatelessWidget {
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
                       color: kWhiteColor,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 14,
-                        ),
-                        child: Text(message.content).urlToLink(context),
-                      ),
+                      child: message.replySource != null
+                          ? Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    horizontal: 14,
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        message.replySource?.createdUserName ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: kGrey600Color,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      Text(
+                                        message.replySource?.content ?? '',
+                                        style: const TextStyle(
+                                          color: kGrey600Color,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Divider(color: kGrey200Color, height: 1),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    horizontal: 14,
+                                  ),
+                                  child: Text(
+                                    message.content,
+                                  ).urlToLink(context),
+                                ),
+                              ],
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 14,
+                              ),
+                              child: Text(
+                                message.content,
+                              ).urlToLink(context),
+                            ),
                     ),
                   )
                 : Container(),
