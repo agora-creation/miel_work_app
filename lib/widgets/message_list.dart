@@ -5,11 +5,14 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/chat_message.dart';
 import 'package:miel_work_app/models/read_user.dart';
 import 'package:miel_work_app/models/user.dart';
+import 'package:miel_work_app/widgets/favorite_icon.dart';
 import 'package:miel_work_app/widgets/popup_icon_button.dart';
 
 class MessageList extends StatelessWidget {
   final ChatMessageModel message;
   final UserModel? loginUser;
+  final CustomPopupMenuController menuController;
+  final Function() favoriteAction;
   final Function() replyAction;
   final Function() copyAction;
   final Function() deleteAction;
@@ -20,6 +23,8 @@ class MessageList extends StatelessWidget {
   const MessageList({
     required this.message,
     required this.loginUser,
+    required this.menuController,
+    required this.favoriteAction,
     required this.replyAction,
     required this.copyAction,
     required this.deleteAction,
@@ -31,8 +36,6 @@ class MessageList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CustomPopupMenuController menuController = CustomPopupMenuController();
-
     Widget buildLongPressMenu() {
       return ClipRRect(
         borderRadius: BorderRadius.circular(5),
@@ -42,35 +45,52 @@ class MessageList extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 8,
-              vertical: 16,
+              vertical: 12,
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            child: Column(
               children: [
-                PopupIconButton(
-                  icon: Icons.reply,
-                  label: 'リプライ',
-                  onTap: () {
-                    replyAction();
-                    menuController.hideMenu();
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    PopupIconButton(
+                      icon: Icons.favorite,
+                      label: 'いいね',
+                      onTap: () => favoriteAction(),
+                    ),
+                    PopupIconButton(
+                      icon: Icons.reply,
+                      label: 'リプライ',
+                      onTap: () => replyAction(),
+                    ),
+                    PopupIconButton(
+                      icon: Icons.copy,
+                      label: 'コピー',
+                      onTap: () => copyAction(),
+                    ),
+                  ],
                 ),
-                PopupIconButton(
-                  icon: Icons.copy,
-                  label: 'コピー',
-                  onTap: () {
-                    copyAction();
-                    showMessage(context, 'コピーしました', true);
-                    menuController.hideMenu();
-                  },
-                ),
-                PopupIconButton(
-                  icon: Icons.delete,
-                  label: '削除',
-                  onTap: () {
-                    deleteAction();
-                    menuController.hideMenu();
-                  },
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    PopupIconButton(
+                      icon: Icons.delete,
+                      label: '削除',
+                      onTap: () => deleteAction(),
+                    ),
+                    PopupIconButton(
+                      icon: Icons.delete,
+                      label: '削除',
+                      color: Colors.transparent,
+                      onTap: () {},
+                    ),
+                    PopupIconButton(
+                      icon: Icons.delete,
+                      label: '削除',
+                      color: Colors.transparent,
+                      onTap: () {},
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -101,58 +121,67 @@ class MessageList extends StatelessWidget {
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
                       color: kYellowColor,
-                      child: message.replySource != null
-                          ? Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          message.replySource != null
+                              ? Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 10,
+                                        horizontal: 14,
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            message.replySource
+                                                    ?.createdUserName ??
+                                                '',
+                                            style: const TextStyle(
+                                              color: kGrey600Color,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          Text(
+                                            message.replySource?.content ?? '',
+                                            style: const TextStyle(
+                                              color: kGrey600Color,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const Divider(
+                                        color: kWhiteColor, height: 1),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 10,
+                                        horizontal: 14,
+                                      ),
+                                      child: Text(
+                                        message.content,
+                                      ).urlToLink(context),
+                                    ),
+                                  ],
+                                )
+                              : Padding(
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 10,
                                     horizontal: 14,
                                   ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        message.replySource?.createdUserName ??
-                                            '',
-                                        style: const TextStyle(
-                                          color: kGrey600Color,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                      Text(
-                                        message.replySource?.content ?? '',
-                                        style: const TextStyle(
-                                          color: kGrey600Color,
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  child:
+                                      Text(message.content).urlToLink(context),
                                 ),
-                                const Divider(color: kWhiteColor, height: 1),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10,
-                                    horizontal: 14,
-                                  ),
-                                  child: Text(
-                                    message.content,
-                                  ).urlToLink(context),
-                                ),
-                              ],
-                            )
-                          : Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 10,
-                                horizontal: 14,
-                              ),
-                              child: Text(message.content).urlToLink(context),
-                            ),
+                          FavoriteIcon(message.favoriteUserIds),
+                        ],
+                      ),
                     ),
                   )
                 : Container(),
@@ -245,41 +274,57 @@ class MessageList extends StatelessWidget {
                       elevation: 4,
                       borderRadius: BorderRadius.circular(8),
                       color: kWhiteColor,
-                      child: message.replySource != null
-                          ? Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10,
-                                    horizontal: 14,
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        message.replySource?.createdUserName ??
-                                            '',
-                                        style: const TextStyle(
-                                          color: kGrey600Color,
-                                          fontSize: 12,
-                                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          message.replySource != null
+                              ? Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 10,
+                                        horizontal: 14,
                                       ),
-                                      Text(
-                                        message.replySource?.content ?? '',
-                                        style: const TextStyle(
-                                          color: kGrey600Color,
-                                          fontSize: 18,
-                                        ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            message.replySource
+                                                    ?.createdUserName ??
+                                                '',
+                                            style: const TextStyle(
+                                              color: kGrey600Color,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          Text(
+                                            message.replySource?.content ?? '',
+                                            style: const TextStyle(
+                                              color: kGrey600Color,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                const Divider(color: kGrey200Color, height: 1),
-                                Padding(
+                                    ),
+                                    const Divider(
+                                        color: kGrey200Color, height: 1),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 10,
+                                        horizontal: 14,
+                                      ),
+                                      child: Text(
+                                        message.content,
+                                      ).urlToLink(context),
+                                    ),
+                                  ],
+                                )
+                              : Padding(
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 10,
                                     horizontal: 14,
@@ -288,17 +333,9 @@ class MessageList extends StatelessWidget {
                                     message.content,
                                   ).urlToLink(context),
                                 ),
-                              ],
-                            )
-                          : Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 10,
-                                horizontal: 14,
-                              ),
-                              child: Text(
-                                message.content,
-                              ).urlToLink(context),
-                            ),
+                          FavoriteIcon(message.favoriteUserIds),
+                        ],
+                      ),
                     ),
                   )
                 : Container(),

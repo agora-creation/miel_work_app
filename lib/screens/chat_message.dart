@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -137,10 +138,28 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                           itemCount: messages.length,
                           itemBuilder: (context, index) {
                             ChatMessageModel message = messages[index];
+                            CustomPopupMenuController menuController =
+                                CustomPopupMenuController();
                             return MessageList(
                               message: message,
                               loginUser: widget.loginProvider.user,
+                              menuController: menuController,
+                              favoriteAction: () async {
+                                menuController.hideMenu();
+                                String? error = await messageProvider.favorite(
+                                  message: message,
+                                  loginUser: widget.loginProvider.user,
+                                );
+                                if (error != null) {
+                                  if (!mounted) return;
+                                  showMessage(context, error, false);
+                                  return;
+                                }
+                                if (!mounted) return;
+                                showMessage(context, 'いいねしました', true);
+                              },
                               replyAction: () {
+                                menuController.hideMenu();
                                 replySource = ReplySourceModel.fromMap({
                                   'id': message.id,
                                   'content': message.content,
@@ -152,12 +171,15 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                 setState(() {});
                               },
                               copyAction: () async {
+                                menuController.hideMenu();
                                 final data = ClipboardData(
                                   text: message.content,
                                 );
                                 await Clipboard.setData(data);
+                                showMessage(context, 'コピーしました', true);
                               },
                               deleteAction: () async {
+                                menuController.hideMenu();
                                 String? error = await messageProvider.delete(
                                   message: message,
                                 );

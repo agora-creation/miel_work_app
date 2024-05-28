@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/style.dart';
 
 class PopupIconButton extends StatelessWidget {
   final IconData icon;
   final String label;
+  final Color color;
   final Function()? onTap;
 
   const PopupIconButton({
     required this.icon,
     required this.label,
+    this.color = kWhiteColor,
     this.onTap,
     super.key,
   });
@@ -21,14 +24,17 @@ class PopupIconButton extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: 24,
-            color: Colors.white,
+            size: 20,
+            color: color,
           ),
           Container(
             margin: const EdgeInsets.only(top: 2),
             child: Text(
               label,
-              style: const TextStyle(color: Colors.white, fontSize: 14),
+              style: TextStyle(
+                color: color,
+                fontSize: 12,
+              ),
             ),
           ),
         ],

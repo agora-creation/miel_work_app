@@ -12,6 +12,7 @@ class ChatMessageModel {
   String _file = '';
   String _fileExt = '';
   List<ReadUserModel> readUsers = [];
+  List<String> favoriteUserIds = [];
   String _createdUserId = '';
   String _createdUserName = '';
   DateTime _createdAt = DateTime.now();
@@ -44,7 +45,8 @@ class ChatMessageModel {
     _image = data['image'] ?? '';
     _file = data['file'] ?? '';
     _fileExt = data['fileExt'] ?? '';
-    readUsers = _convertReadUsers(data['readUsers']);
+    readUsers = _convertReadUsers(data['readUsers'] ?? []);
+    favoriteUserIds = _convertFavoriteUserIds(data['favoriteUserIds'] ?? []);
     _createdUserId = data['createdUserId'] ?? '';
     _createdUserName = data['createdUserName'] ?? '';
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
@@ -56,6 +58,14 @@ class ChatMessageModel {
     List<ReadUserModel> converted = [];
     for (Map data in list) {
       converted.add(ReadUserModel.fromMap(data));
+    }
+    return converted;
+  }
+
+  List<String> _convertFavoriteUserIds(List list) {
+    List<String> converted = [];
+    for (String data in list) {
+      converted.add(data);
     }
     return converted;
   }
