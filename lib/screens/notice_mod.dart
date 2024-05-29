@@ -161,7 +161,7 @@ class _ManualModScreenState extends State<NoticeModScreen> {
                 CustomFileField(
                   value: pickedFile,
                   defaultValue: widget.notice.file,
-                  onTap: () async {
+                  onPressed: () async {
                     final result = await FilePicker.platform.pickFiles(
                       type: FileType.any,
                     );

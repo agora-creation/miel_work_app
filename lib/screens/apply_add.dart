@@ -39,6 +39,10 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
   TextEditingController contentController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   File? pickedFile;
+  File? pickedFile2;
+  File? pickedFile3;
+  File? pickedFile4;
+  File? pickedFile5;
 
   void _init() async {
     type = widget.type;
@@ -92,6 +96,10 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
                 content: contentController.text,
                 price: price,
                 pickedFile: pickedFile,
+                pickedFile2: pickedFile2,
+                pickedFile3: pickedFile3,
+                pickedFile4: pickedFile4,
+                pickedFile5: pickedFile5,
                 loginUser: widget.loginProvider.user,
               );
               if (error != null) {
@@ -174,19 +182,91 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
                   label: '内容',
                 ),
                 const SizedBox(height: 8),
-                CustomFileField(
-                  value: pickedFile,
-                  defaultValue: '',
-                  onTap: () async {
-                    final result = await FilePicker.platform.pickFiles(
-                      type: FileType.any,
-                    );
-                    if (result == null) return;
-                    setState(() {
-                      pickedFile = File(result.files.single.path!);
-                    });
-                  },
+                FormLabel(
+                  label: '添付ファイル',
+                  child: CustomFileField(
+                    value: pickedFile,
+                    defaultValue: '',
+                    onPressed: () async {
+                      final result = await FilePicker.platform.pickFiles(
+                        type: FileType.any,
+                      );
+                      if (result == null) return;
+                      setState(() {
+                        pickedFile = File(result.files.single.path!);
+                      });
+                    },
+                  ),
                 ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  label: '添付ファイル2',
+                  child: CustomFileField(
+                    value: pickedFile2,
+                    defaultValue: '',
+                    onPressed: () async {
+                      final result = await FilePicker.platform.pickFiles(
+                        type: FileType.any,
+                      );
+                      if (result == null) return;
+                      setState(() {
+                        pickedFile2 = File(result.files.single.path!);
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  label: '添付ファイル3',
+                  child: CustomFileField(
+                    value: pickedFile3,
+                    defaultValue: '',
+                    onPressed: () async {
+                      final result = await FilePicker.platform.pickFiles(
+                        type: FileType.any,
+                      );
+                      if (result == null) return;
+                      setState(() {
+                        pickedFile3 = File(result.files.single.path!);
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  label: '添付ファイル4',
+                  child: CustomFileField(
+                    value: pickedFile4,
+                    defaultValue: '',
+                    onPressed: () async {
+                      final result = await FilePicker.platform.pickFiles(
+                        type: FileType.any,
+                      );
+                      if (result == null) return;
+                      setState(() {
+                        pickedFile4 = File(result.files.single.path!);
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  label: '添付ファイル5',
+                  child: CustomFileField(
+                    value: pickedFile5,
+                    defaultValue: '',
+                    onPressed: () async {
+                      final result = await FilePicker.platform.pickFiles(
+                        type: FileType.any,
+                      );
+                      if (result == null) return;
+                      setState(() {
+                        pickedFile5 = File(result.files.single.path!);
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 40),
               ],
             ),
           ),

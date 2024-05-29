@@ -26,6 +26,10 @@ class ApplyProvider with ChangeNotifier {
     required String content,
     required int price,
     required File? pickedFile,
+    required File? pickedFile2,
+    required File? pickedFile3,
+    required File? pickedFile4,
+    required File? pickedFile5,
     required UserModel? loginUser,
   }) async {
     String? error;
@@ -49,6 +53,62 @@ class ApplyProvider with ChangeNotifier {
         file = await ref.getDownloadURL();
         fileExt = ext;
       }
+      String file2 = '';
+      String file2Ext = '';
+      if (pickedFile2 != null) {
+        String ext = p.extension(pickedFile2.path);
+        storage.UploadTask uploadTask;
+        storage.Reference ref = storage.FirebaseStorage.instance
+            .ref()
+            .child('apply')
+            .child('/${id}_2$ext');
+        uploadTask = ref.putData(pickedFile2.readAsBytesSync());
+        await uploadTask.whenComplete(() => null);
+        file2 = await ref.getDownloadURL();
+        file2Ext = ext;
+      }
+      String file3 = '';
+      String file3Ext = '';
+      if (pickedFile3 != null) {
+        String ext = p.extension(pickedFile3.path);
+        storage.UploadTask uploadTask;
+        storage.Reference ref = storage.FirebaseStorage.instance
+            .ref()
+            .child('apply')
+            .child('/${id}_3$ext');
+        uploadTask = ref.putData(pickedFile3.readAsBytesSync());
+        await uploadTask.whenComplete(() => null);
+        file3 = await ref.getDownloadURL();
+        file3Ext = ext;
+      }
+      String file4 = '';
+      String file4Ext = '';
+      if (pickedFile4 != null) {
+        String ext = p.extension(pickedFile4.path);
+        storage.UploadTask uploadTask;
+        storage.Reference ref = storage.FirebaseStorage.instance
+            .ref()
+            .child('apply')
+            .child('/${id}_4$ext');
+        uploadTask = ref.putData(pickedFile4.readAsBytesSync());
+        await uploadTask.whenComplete(() => null);
+        file4 = await ref.getDownloadURL();
+        file4Ext = ext;
+      }
+      String file5 = '';
+      String file5Ext = '';
+      if (pickedFile5 != null) {
+        String ext = p.extension(pickedFile5.path);
+        storage.UploadTask uploadTask;
+        storage.Reference ref = storage.FirebaseStorage.instance
+            .ref()
+            .child('apply')
+            .child('/${id}_5$ext');
+        uploadTask = ref.putData(pickedFile5.readAsBytesSync());
+        await uploadTask.whenComplete(() => null);
+        file5 = await ref.getDownloadURL();
+        file5Ext = ext;
+      }
       _applyService.create({
         'id': id,
         'organizationId': organization.id,
@@ -60,6 +120,14 @@ class ApplyProvider with ChangeNotifier {
         'price': price,
         'file': file,
         'fileExt': fileExt,
+        'file2': file2,
+        'file2Ext': file2Ext,
+        'file3': file3,
+        'file3Ext': file3Ext,
+        'file4': file4,
+        'file4Ext': file4Ext,
+        'file5': file5,
+        'file5Ext': file5Ext,
         'reason': '',
         'approval': 0,
         'approvedAt': DateTime.now(),
@@ -194,6 +262,34 @@ class ApplyProvider with ChangeNotifier {
             .ref()
             .child('apply')
             .child('/${apply.id}${apply.fileExt}')
+            .delete();
+      }
+      if (apply.file2 != '') {
+        await storage.FirebaseStorage.instance
+            .ref()
+            .child('apply')
+            .child('/${apply.id}_2${apply.file2Ext}')
+            .delete();
+      }
+      if (apply.file3 != '') {
+        await storage.FirebaseStorage.instance
+            .ref()
+            .child('apply')
+            .child('/${apply.id}_3${apply.file3Ext}')
+            .delete();
+      }
+      if (apply.file4 != '') {
+        await storage.FirebaseStorage.instance
+            .ref()
+            .child('apply')
+            .child('/${apply.id}_4${apply.file4Ext}')
+            .delete();
+      }
+      if (apply.file5 != '') {
+        await storage.FirebaseStorage.instance
+            .ref()
+            .child('apply')
+            .child('/${apply.id}_5${apply.file5Ext}')
             .delete();
       }
     } catch (e) {

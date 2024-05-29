@@ -239,6 +239,110 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                       },
                     )
                   : Container(),
+              const SizedBox(height: 8),
+              widget.apply.file2 != ''
+                  ? LinkText(
+                      label: '添付ファイル2',
+                      color: kBlueColor,
+                      onTap: () {
+                        String ext = widget.apply.file2Ext;
+                        if (imageExtensions.contains(ext)) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => ImageDialog(
+                              file: widget.apply.file2,
+                            ),
+                          );
+                        }
+                        if (pdfExtensions.contains(ext)) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => PdfDialog(
+                              file: widget.apply.file2,
+                            ),
+                          );
+                        }
+                      },
+                    )
+                  : Container(),
+              const SizedBox(height: 8),
+              widget.apply.file3 != ''
+                  ? LinkText(
+                      label: '添付ファイル3',
+                      color: kBlueColor,
+                      onTap: () {
+                        String ext = widget.apply.file3Ext;
+                        if (imageExtensions.contains(ext)) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => ImageDialog(
+                              file: widget.apply.file3,
+                            ),
+                          );
+                        }
+                        if (pdfExtensions.contains(ext)) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => PdfDialog(
+                              file: widget.apply.file3,
+                            ),
+                          );
+                        }
+                      },
+                    )
+                  : Container(),
+              const SizedBox(height: 8),
+              widget.apply.file4 != ''
+                  ? LinkText(
+                      label: '添付ファイル4',
+                      color: kBlueColor,
+                      onTap: () {
+                        String ext = widget.apply.file4Ext;
+                        if (imageExtensions.contains(ext)) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => ImageDialog(
+                              file: widget.apply.file4,
+                            ),
+                          );
+                        }
+                        if (pdfExtensions.contains(ext)) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => PdfDialog(
+                              file: widget.apply.file4,
+                            ),
+                          );
+                        }
+                      },
+                    )
+                  : Container(),
+              const SizedBox(height: 8),
+              widget.apply.file5 != ''
+                  ? LinkText(
+                      label: '添付ファイル5',
+                      color: kBlueColor,
+                      onTap: () {
+                        String ext = widget.apply.file5Ext;
+                        if (imageExtensions.contains(ext)) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => ImageDialog(
+                              file: widget.apply.file5,
+                            ),
+                          );
+                        }
+                        if (pdfExtensions.contains(ext)) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => PdfDialog(
+                              file: widget.apply.file5,
+                            ),
+                          );
+                        }
+                      },
+                    )
+                  : Container(),
               const SizedBox(height: 16),
               const Text(
                 '※『承認』は、承認状況が「承認待ち」で、作成者・既承認者以外のスタッフが実行できます。',

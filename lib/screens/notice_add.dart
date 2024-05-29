@@ -153,7 +153,7 @@ class _NoticeAddScreenState extends State<NoticeAddScreen> {
                 CustomFileField(
                   value: pickedFile,
                   defaultValue: '',
-                  onTap: () async {
+                  onPressed: () async {
                     final result = await FilePicker.platform.pickFiles(
                       type: FileType.any,
                     );
