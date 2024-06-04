@@ -27,7 +27,14 @@ class CustomCalendarTimeline extends StatelessWidget {
       cellBorderColor: kGrey600Color,
       appointmentTextStyle: const TextStyle(
         color: kWhiteColor,
-        fontSize: 10,
+        fontSize: 14,
+      ),
+      timeSlotViewSettings: sfc.TimeSlotViewSettings(
+        timeIntervalHeight: 50,
+        timelineAppointmentHeight: 50,
+        timeTextStyle: TextStyle(fontSize: 14),
+        timeInterval: Duration(minutes: 30),
+        timeFormat: 'h:mm',
       ),
     );
   }
