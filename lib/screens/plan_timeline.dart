@@ -72,9 +72,9 @@ class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
 
   @override
   void initState() {
-    super.initState();
     _searchCategoriesChange();
     _init();
+    super.initState();
   }
 
   @override

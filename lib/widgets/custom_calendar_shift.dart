@@ -15,6 +15,9 @@ class CustomCalendarShift extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return sfc.SfCalendar(
+      headerStyle: const sfc.CalendarHeaderStyle(
+        backgroundColor: kWhiteColor,
+      ),
       dataSource: dataSource,
       view: sfc.CalendarView.timelineMonth,
       showNavigationArrow: true,

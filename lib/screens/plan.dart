@@ -32,6 +32,7 @@ class PlanScreen extends StatefulWidget {
 class _PlanScreenState extends State<PlanScreen> {
   PlanService planService = PlanService();
   List<String> searchCategories = [];
+  sfc.CalendarController calendarController = sfc.CalendarController();
 
   void _init() async {
     await ConfigService().checkReview();
@@ -42,7 +43,7 @@ class _PlanScreenState extends State<PlanScreen> {
     setState(() {});
   }
 
-  void _calendarTap(sfc.CalendarTapDetails details) {
+  void _calendarTap(sfc.CalendarLongPressDetails details) {
     showBottomUpScreen(
       context,
       PlanTimelineScreen(
@@ -55,6 +56,7 @@ class _PlanScreenState extends State<PlanScreen> {
 
   @override
   void initState() {
+    calendarController.selectedDate = DateTime.now();
     super.initState();
     _init();
   }
@@ -114,7 +116,8 @@ class _PlanScreenState extends State<PlanScreen> {
             }
             return CustomCalendar(
               dataSource: _DataSource(appointments),
-              onTap: _calendarTap,
+              onLongPress: _calendarTap,
+              controller: calendarController,
             );
           },
         ),
