@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/plan.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/plan_add.dart';
 import 'package:miel_work_app/screens/plan_mod.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/plan.dart';
-import 'package:miel_work_app/widgets/custom_calendar_timeline.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart' as sfc;
+import 'package:miel_work_app/widgets/plan_list.dart';
 
 class PlanTimelineScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -38,36 +38,6 @@ class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
   void _searchCategoriesChange() async {
     searchCategories = await getPrefsList('categories') ?? [];
     setState(() {});
-  }
-
-  void _calendarTap(sfc.CalendarTapDetails details) {
-    sfc.CalendarElement element = details.targetElement;
-    switch (element) {
-      case sfc.CalendarElement.appointment:
-      case sfc.CalendarElement.agenda:
-        sfc.Appointment appointmentDetails = details.appointments![0];
-        pushScreen(
-          context,
-          PlanModScreen(
-            loginProvider: widget.loginProvider,
-            homeProvider: widget.homeProvider,
-            planId: '${appointmentDetails.id}',
-          ),
-        );
-        break;
-      case sfc.CalendarElement.calendarCell:
-        pushScreen(
-          context,
-          PlanAddScreen(
-            loginProvider: widget.loginProvider,
-            homeProvider: widget.homeProvider,
-            date: details.date ?? DateTime.now(),
-          ),
-        );
-        break;
-      default:
-        break;
-    }
   }
 
   @override
@@ -105,28 +75,60 @@ class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
             categories: searchCategories,
           ),
           builder: (context, snapshot) {
-            List<sfc.Appointment> appointments = [];
+            List<PlanModel> plans = [];
             if (snapshot.hasData) {
-              appointments = planService.generateListAppointment(
+              plans = planService.generateList(
                 data: snapshot.data,
                 currentGroup: widget.homeProvider.currentGroup,
                 date: widget.date,
               );
             }
-            return CustomCalendarTimeline(
-              initialDisplayDate: widget.date,
-              dataSource: _DataSource(appointments),
-              onTap: _calendarTap,
+            if (plans.isEmpty) {
+              return const Center(child: Text('予定はありません'));
+            }
+            return ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: plans.length,
+              itemBuilder: (context, index) {
+                PlanModel plan = plans[index];
+                return PlanList(
+                  plan: plan,
+                  groups: widget.homeProvider.groups,
+                  onTap: () => pushScreen(
+                    context,
+                    PlanModScreen(
+                      loginProvider: widget.loginProvider,
+                      homeProvider: widget.homeProvider,
+                      planId: plan.id,
+                    ),
+                  ),
+                );
+              },
             );
           },
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => pushScreen(
+          context,
+          PlanAddScreen(
+            loginProvider: widget.loginProvider,
+            homeProvider: widget.homeProvider,
+            date: widget.date,
+          ),
+        ),
+        icon: const Icon(
+          Icons.add,
+          color: kWhiteColor,
+        ),
+        label: const Text(
+          '新規追加',
+          style: TextStyle(
+            color: kWhiteColor,
+            fontSize: 18,
+          ),
+        ),
+      ),
     );
-  }
-}
-
-class _DataSource extends sfc.CalendarDataSource {
-  _DataSource(List<sfc.Appointment> source) {
-    appointments = source;
   }
 }
