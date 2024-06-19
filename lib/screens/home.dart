@@ -260,13 +260,43 @@ class _HomeScreenState extends State<HomeScreen> {
                           CustomHomeIconCard(
                             icon: Icons.gas_meter,
                             iconSize: 42,
-                            label: 'メーター検針',
+                            label: 'メーター検針入力',
                             labelFontSize: 16,
                             color: kBlackColor,
                             backgroundColor: kYellowColor,
                             onTap: () async {
                               Uri url =
                                   Uri.parse('https://hirome.co.jp/meter/');
+                              if (!await launchUrl(url)) {
+                                throw Exception('Could not launch $url');
+                              }
+                            },
+                          ),
+                          CustomHomeIconCard(
+                            icon: Icons.device_unknown,
+                            iconSize: 42,
+                            label: '落とし物確認',
+                            labelFontSize: 16,
+                            color: kBlackColor,
+                            backgroundColor: kTeal300Color,
+                            onTap: () async {
+                              Uri url = Uri.parse(
+                                  'https://hirome.co.jp/lost/list.php');
+                              if (!await launchUrl(url)) {
+                                throw Exception('Could not launch $url');
+                              }
+                            },
+                          ),
+                          CustomHomeIconCard(
+                            icon: Icons.front_hand,
+                            iconSize: 42,
+                            label: '貸出物確認',
+                            labelFontSize: 16,
+                            color: kBlackColor,
+                            backgroundColor: kTeal300Color,
+                            onTap: () async {
+                              Uri url = Uri.parse(
+                                  'https://hirome.co.jp/loan/list.php');
                               if (!await launchUrl(url)) {
                                 throw Exception('Could not launch $url');
                               }
