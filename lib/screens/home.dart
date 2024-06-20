@@ -181,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           CustomHomeIconCard(
                             icon: Icons.view_timeline,
                             iconSize: 42,
-                            label: 'シフト表',
+                            label: 'シフト表(未)',
                             labelFontSize: 16,
                             color: kBlackColor,
                             backgroundColor: kTeal300Color,
@@ -260,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           CustomHomeIconCard(
                             icon: Icons.gas_meter,
                             iconSize: 42,
-                            label: 'メーター検針入力',
+                            label: 'メーター検針',
                             labelFontSize: 16,
                             color: kBlackColor,
                             backgroundColor: kYellowColor,
@@ -275,13 +275,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           CustomHomeIconCard(
                             icon: Icons.device_unknown,
                             iconSize: 42,
-                            label: '落とし物確認',
+                            label: '落とし物',
                             labelFontSize: 16,
                             color: kBlackColor,
                             backgroundColor: kTeal300Color,
                             onTap: () async {
                               Uri url = Uri.parse(
-                                  'https://hirome.co.jp/lost/list.php');
+                                  'https://hirome.co.jp/lost/app.php');
                               if (!await launchUrl(url)) {
                                 throw Exception('Could not launch $url');
                               }
@@ -290,13 +290,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           CustomHomeIconCard(
                             icon: Icons.front_hand,
                             iconSize: 42,
-                            label: '貸出物確認',
+                            label: '貸出物',
                             labelFontSize: 16,
                             color: kBlackColor,
                             backgroundColor: kTeal300Color,
                             onTap: () async {
                               Uri url = Uri.parse(
-                                  'https://hirome.co.jp/loan/list.php');
+                                  'https://hirome.co.jp/loan/app.php');
                               if (!await launchUrl(url)) {
                                 throw Exception('Could not launch $url');
                               }
