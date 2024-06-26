@@ -56,7 +56,7 @@ class _GroupScreenState extends State<GroupScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'グループ管理',
+          'グループ一覧',
           style: TextStyle(color: kBlackColor),
         ),
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),

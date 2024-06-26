@@ -2,24 +2,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/chat_message.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/screens/apply.dart';
+import 'package:miel_work_app/screens/apply_select.dart';
 import 'package:miel_work_app/screens/chat.dart';
 import 'package:miel_work_app/screens/group.dart';
-import 'package:miel_work_app/screens/how_to.dart';
-import 'package:miel_work_app/screens/manual.dart';
 import 'package:miel_work_app/screens/notice.dart';
 import 'package:miel_work_app/screens/plan.dart';
 import 'package:miel_work_app/screens/plan_shift.dart';
 import 'package:miel_work_app/screens/user.dart';
 import 'package:miel_work_app/screens/user_setting.dart';
-import 'package:miel_work_app/services/manual.dart';
+import 'package:miel_work_app/services/chat_message.dart';
 import 'package:miel_work_app/services/notice.dart';
 import 'package:miel_work_app/widgets/animation_background.dart';
 import 'package:miel_work_app/widgets/custom_appbar.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
-import 'package:miel_work_app/widgets/custom_home_chat_card.dart';
 import 'package:miel_work_app/widgets/custom_home_icon_card.dart';
 import 'package:miel_work_app/widgets/custom_home_plan_card.dart';
 import 'package:miel_work_app/widgets/group_select_card.dart';
@@ -34,8 +32,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  ManualService manualService = ManualService();
   NoticeService noticeService = NoticeService();
+  ChatMessageService messageService = ChatMessageService();
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 CustomAppbar(
                   loginProvider: loginProvider,
                   actions: [
-                    IconButton(
-                      onPressed: () => showBottomUpScreen(
-                        context,
-                        const HowToScreen(),
-                      ),
-                      icon: const Icon(Icons.help_outline),
-                    ),
                     IconButton(
                       onPressed: () => showBottomUpScreen(
                         context,
@@ -87,37 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         gridDelegate: kHome2Grid,
                         children: [
                           StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                            stream: manualService.streamList(
-                              organizationId: loginProvider.organization?.id,
-                              searchStart: null,
-                              searchEnd: null,
-                            ),
-                            builder: (context, snapshot) {
-                              bool alert = false;
-                              if (snapshot.hasData) {
-                                alert = manualService.checkAlert(
-                                  data: snapshot.data,
-                                  currentGroup: homeProvider.currentGroup,
-                                  user: loginProvider.user,
-                                );
-                              }
-                              return CustomHomeIconCard(
-                                icon: Icons.picture_as_pdf,
-                                label: '業務マニュアル',
-                                color: kBlackColor,
-                                backgroundColor: kWhiteColor,
-                                alert: alert,
-                                onTap: () => pushScreen(
-                                  context,
-                                  ManualScreen(
-                                    loginProvider: loginProvider,
-                                    homeProvider: homeProvider,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                             stream: noticeService.streamList(
                               organizationId: loginProvider.organization?.id,
                               searchStart: null,
@@ -126,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             builder: (context, snapshot) {
                               bool alert = false;
                               if (snapshot.hasData) {
-                                alert = manualService.checkAlert(
+                                alert = noticeService.checkAlert(
                                   data: snapshot.data,
                                   currentGroup: homeProvider.currentGroup,
                                   user: loginProvider.user,
@@ -148,18 +108,40 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             },
                           ),
-                        ],
-                      ),
-                      CustomHomeChatCard(
-                        loginProvider: loginProvider,
-                        homeProvider: homeProvider,
-                        onTap: () => pushScreen(
-                          context,
-                          ChatScreen(
-                            loginProvider: loginProvider,
-                            homeProvider: homeProvider,
+                          StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                            stream: messageService.streamListUnread(
+                              organizationId: loginProvider.organization?.id,
+                            ),
+                            builder: (context, snapshot) {
+                              bool alert = false;
+                              if (snapshot.hasData) {
+                                List<ChatMessageModel> messages =
+                                    messageService.generateListUnread(
+                                  data: snapshot.data,
+                                  currentGroup: homeProvider.currentGroup,
+                                  loginUser: loginProvider.user,
+                                );
+                                if (messages.isNotEmpty) {
+                                  alert = true;
+                                }
+                              }
+                              return CustomHomeIconCard(
+                                icon: Icons.question_answer,
+                                label: 'チャット',
+                                color: kBlackColor,
+                                backgroundColor: kWhiteColor,
+                                alert: alert,
+                                onTap: () => pushScreen(
+                                  context,
+                                  ChatScreen(
+                                    loginProvider: loginProvider,
+                                    homeProvider: homeProvider,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                        ),
+                        ],
                       ),
                       CustomHomePlanCard(
                         loginProvider: loginProvider,
@@ -176,15 +158,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         padding: EdgeInsets.zero,
-                        gridDelegate: kHome3Grid,
+                        gridDelegate: kHome2Grid,
                         children: [
                           CustomHomeIconCard(
                             icon: Icons.view_timeline,
-                            iconSize: 42,
-                            label: 'シフト表(未)',
-                            labelFontSize: 16,
+                            label: 'シフト',
                             color: kBlackColor,
-                            backgroundColor: kTeal300Color,
+                            backgroundColor: kWhiteColor,
                             onTap: () => pushScreen(
                               context,
                               PlanShiftScreen(
@@ -195,75 +175,32 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           CustomHomeIconCard(
                             icon: Icons.edit_note,
-                            iconSize: 42,
-                            label: '稟議申請',
-                            labelFontSize: 16,
+                            label: '各種申請',
                             color: kBlackColor,
-                            backgroundColor: kOrange300Color,
+                            backgroundColor: kWhiteColor,
                             onTap: () => pushScreen(
                               context,
-                              ApplyScreen(
+                              ApplySelectScreen(
                                 loginProvider: loginProvider,
                                 homeProvider: homeProvider,
-                                type: '稟議',
                               ),
                             ),
                           ),
-                          CustomHomeIconCard(
-                            icon: Icons.edit_note,
-                            iconSize: 42,
-                            label: '支払伺い申請',
-                            labelFontSize: 16,
-                            color: kBlackColor,
-                            backgroundColor: kOrange300Color,
-                            onTap: () => pushScreen(
-                              context,
-                              ApplyScreen(
-                                loginProvider: loginProvider,
-                                homeProvider: homeProvider,
-                                type: '支払伺い',
-                              ),
-                            ),
-                          ),
-                          CustomHomeIconCard(
-                            icon: Icons.edit_note,
-                            iconSize: 42,
-                            label: '協議・報告申請',
-                            labelFontSize: 16,
-                            color: kBlackColor,
-                            backgroundColor: kOrange300Color,
-                            onTap: () => pushScreen(
-                              context,
-                              ApplyScreen(
-                                loginProvider: loginProvider,
-                                homeProvider: homeProvider,
-                                type: '協議・報告',
-                              ),
-                            ),
-                          ),
-                          CustomHomeIconCard(
-                            icon: Icons.edit_note,
-                            iconSize: 42,
-                            label: '企画申請',
-                            labelFontSize: 16,
-                            color: kBlackColor,
-                            backgroundColor: kOrange300Color,
-                            onTap: () => pushScreen(
-                              context,
-                              ApplyScreen(
-                                loginProvider: loginProvider,
-                                homeProvider: homeProvider,
-                                type: '企画',
-                              ),
-                            ),
-                          ),
+                        ],
+                      ),
+                      GridView(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        gridDelegate: kHome3Grid,
+                        children: [
                           CustomHomeIconCard(
                             icon: Icons.gas_meter,
                             iconSize: 42,
                             label: 'メーター検針',
                             labelFontSize: 16,
                             color: kBlackColor,
-                            backgroundColor: kYellowColor,
+                            backgroundColor: kWhiteColor,
                             onTap: () async {
                               Uri url =
                                   Uri.parse('https://hirome.co.jp/meter/');
@@ -278,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             label: '落とし物',
                             labelFontSize: 16,
                             color: kBlackColor,
-                            backgroundColor: kTeal300Color,
+                            backgroundColor: kWhiteColor,
                             onTap: () async {
                               Uri url = Uri.parse(
                                   'https://hirome.co.jp/lost/app.php');
@@ -293,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             label: '貸出物',
                             labelFontSize: 16,
                             color: kBlackColor,
-                            backgroundColor: kTeal300Color,
+                            backgroundColor: kWhiteColor,
                             onTap: () async {
                               Uri url = Uri.parse(
                                   'https://hirome.co.jp/loan/app.php');
@@ -306,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ? CustomHomeIconCard(
                                   icon: Icons.category,
                                   iconSize: 42,
-                                  label: 'グループ管理',
+                                  label: 'グループ一覧',
                                   labelFontSize: 16,
                                   color: kWhiteColor,
                                   backgroundColor: kGrey600Color,
@@ -323,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ? CustomHomeIconCard(
                                   icon: Icons.groups,
                                   iconSize: 42,
-                                  label: 'スタッフ管理',
+                                  label: 'スタッフ一覧',
                                   labelFontSize: 16,
                                   color: kWhiteColor,
                                   backgroundColor: kGrey600Color,

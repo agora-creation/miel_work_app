@@ -3,6 +3,7 @@ import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/screens/how_to.dart';
 import 'package:miel_work_app/screens/login.dart';
 import 'package:miel_work_app/widgets/custom_button_sm.dart';
 import 'package:miel_work_app/widgets/custom_setting_list.dart';
@@ -32,7 +33,7 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
         backgroundColor: kWhiteColor,
         automaticallyImplyLeading: false,
         title: const Text(
-          'スタッフ設定',
+          '設定',
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
@@ -76,6 +77,14 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
               builder: (context) => ModPasswordDialog(
                 loginProvider: widget.loginProvider,
               ),
+            ),
+          ),
+          CustomSettingList(
+            label: 'このアプリの使い方',
+            value: '',
+            onTap: () => pushScreen(
+              context,
+              const HowToScreen(),
             ),
           ),
           const SizedBox(height: 24),

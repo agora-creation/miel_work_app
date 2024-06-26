@@ -62,7 +62,7 @@ class _UserScreenState extends State<UserScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'スタッフ管理',
+          'スタッフ一覧',
           style: TextStyle(color: kBlackColor),
         ),
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),

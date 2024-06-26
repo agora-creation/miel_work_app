@@ -24,7 +24,7 @@ class CustomUserList extends StatelessWidget {
       child: ListTile(
         title: Text(
           user.name,
-          style: TextStyle(fontSize: 20),
+          style: const TextStyle(fontSize: 20),
         ),
         subtitle: Row(
           children: [

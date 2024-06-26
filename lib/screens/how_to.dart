@@ -11,20 +11,18 @@ class HowToScreen extends StatelessWidget {
       backgroundColor: kWhiteColor,
       appBar: AppBar(
         backgroundColor: kWhiteColor,
-        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.chevron_left,
+            color: kBlackColor,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        centerTitle: true,
         title: const Text(
           '使い方',
           style: TextStyle(color: kBlackColor),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.close,
-              color: kBlackColor,
-            ),
-            onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-          ),
-        ],
       ),
       body: SfPdfViewer.network('https://agora-c.com/miel-work/manual.pdf'),
     );
