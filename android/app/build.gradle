@@ -52,12 +52,14 @@ android {
         applicationId "com.agoracreation.miel_work_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        //minSdkVersion flutter.minSdkVersion
+        minSdkVersion 34
+        //targetSdkVersion flutter.targetSdkVersion
+        targetSdkVersion 34
         //versionCode flutterVersionCode.toInteger()
-        versionCode 51
+        versionCode 52
         //versionName flutterVersionName
-        versionName '1.4.11'
+        versionName '1.4.12'
         multiDexEnabled true
     }
 
