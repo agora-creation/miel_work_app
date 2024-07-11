@@ -13,6 +13,7 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/manual.dart';
 import 'package:miel_work_app/providers/notice.dart';
 import 'package:miel_work_app/providers/plan.dart';
+import 'package:miel_work_app/providers/problem.dart';
 import 'package:miel_work_app/providers/user.dart';
 import 'package:miel_work_app/screens/home.dart';
 import 'package:miel_work_app/screens/login.dart';
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: CategoryProvider()),
         ChangeNotifierProvider.value(value: UserProvider()),
         ChangeNotifierProvider.value(value: ApplyProvider()),
+        ChangeNotifierProvider.value(value: ProblemProvider()),
       ],
       child: MediaQuery.withNoTextScaling(
         child: MaterialApp(

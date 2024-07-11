@@ -11,10 +11,12 @@ import 'package:miel_work_app/screens/group.dart';
 import 'package:miel_work_app/screens/notice.dart';
 import 'package:miel_work_app/screens/plan.dart';
 import 'package:miel_work_app/screens/plan_shift.dart';
+import 'package:miel_work_app/screens/problem.dart';
 import 'package:miel_work_app/screens/user.dart';
 import 'package:miel_work_app/screens/user_setting.dart';
 import 'package:miel_work_app/services/chat_message.dart';
 import 'package:miel_work_app/services/notice.dart';
+import 'package:miel_work_app/services/problem.dart';
 import 'package:miel_work_app/widgets/animation_background.dart';
 import 'package:miel_work_app/widgets/custom_appbar.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
@@ -34,6 +36,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   NoticeService noticeService = NoticeService();
   ChatMessageService messageService = ChatMessageService();
+  ProblemService problemService = ProblemService();
 
   @override
   Widget build(BuildContext context) {
@@ -160,18 +163,35 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: EdgeInsets.zero,
                         gridDelegate: kHome2Grid,
                         children: [
-                          CustomHomeIconCard(
-                            icon: Icons.view_timeline,
-                            label: 'シフト',
-                            color: kBlackColor,
-                            backgroundColor: kWhiteColor,
-                            onTap: () => pushScreen(
-                              context,
-                              PlanShiftScreen(
-                                loginProvider: loginProvider,
-                                homeProvider: homeProvider,
-                              ),
+                          StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                            stream: problemService.streamList(
+                              organizationId: loginProvider.organization?.id,
+                              searchStart: null,
+                              searchEnd: null,
                             ),
+                            builder: (context, snapshot) {
+                              bool alert = false;
+                              if (snapshot.hasData) {
+                                alert = problemService.checkAlert(
+                                  data: snapshot.data,
+                                  user: loginProvider.user,
+                                );
+                              }
+                              return CustomHomeIconCard(
+                                icon: Icons.sentiment_very_dissatisfied_sharp,
+                                label: 'クレーム／要望',
+                                color: kBlackColor,
+                                backgroundColor: kWhiteColor,
+                                alert: alert,
+                                onTap: () => pushScreen(
+                                  context,
+                                  ProblemScreen(
+                                    loginProvider: loginProvider,
+                                    homeProvider: homeProvider,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                           CustomHomeIconCard(
                             icon: Icons.edit_note,
@@ -195,19 +215,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         gridDelegate: kHome3Grid,
                         children: [
                           CustomHomeIconCard(
-                            icon: Icons.gas_meter,
+                            icon: Icons.view_timeline,
                             iconSize: 42,
-                            label: 'メーター検針',
+                            label: 'シフト',
                             labelFontSize: 16,
                             color: kBlackColor,
                             backgroundColor: kWhiteColor,
-                            onTap: () async {
-                              Uri url =
-                                  Uri.parse('https://hirome.co.jp/meter/');
-                              if (!await launchUrl(url)) {
-                                throw Exception('Could not launch $url');
-                              }
-                            },
+                            onTap: () => pushScreen(
+                              context,
+                              PlanShiftScreen(
+                                loginProvider: loginProvider,
+                                homeProvider: homeProvider,
+                              ),
+                            ),
                           ),
                           CustomHomeIconCard(
                             icon: Icons.device_unknown,
@@ -234,6 +254,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             onTap: () async {
                               Uri url = Uri.parse(
                                   'https://hirome.co.jp/loan/app.php');
+                              if (!await launchUrl(url)) {
+                                throw Exception('Could not launch $url');
+                              }
+                            },
+                          ),
+                          CustomHomeIconCard(
+                            icon: Icons.gas_meter,
+                            iconSize: 42,
+                            label: 'メーター検針',
+                            labelFontSize: 16,
+                            color: kBlackColor,
+                            backgroundColor: kWhiteColor,
+                            onTap: () async {
+                              Uri url =
+                                  Uri.parse('https://hirome.co.jp/meter/');
                               if (!await launchUrl(url)) {
                                 throw Exception('Could not launch $url');
                               }
