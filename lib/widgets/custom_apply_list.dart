@@ -28,12 +28,26 @@ class CustomApplyList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '提出日時: ${dateText('yyyy/MM/dd HH:mm', apply.createdAt)}',
+              '申請日時: ${dateText('yyyy/MM/dd HH:mm', apply.createdAt)}',
+              style: const TextStyle(fontSize: 14),
+            ),
+            Text(
+              '申請番号: ${apply.number}',
               style: const TextStyle(fontSize: 14),
             ),
             apply.approval == 1
                 ? Text(
                     '承認日時: ${dateText('yyyy/MM/dd HH:mm', apply.approvedAt)}',
+                    style: const TextStyle(
+                      color: kRedColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                : Container(),
+            apply.approval == 1
+                ? Text(
+                    '承認番号: ${apply.approvalNumber}',
                     style: const TextStyle(
                       color: kRedColor,
                       fontSize: 14,

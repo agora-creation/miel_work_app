@@ -112,14 +112,14 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      '申請番号: ${widget.apply.number}',
+                      '申請日時: ${dateText('yyyy/MM/dd HH:mm', widget.apply.createdAt)}',
                       style: const TextStyle(
                         color: kGreyColor,
                         fontSize: 14,
                       ),
                     ),
                     Text(
-                      '申請日時: ${dateText('yyyy/MM/dd HH:mm', widget.apply.createdAt)}',
+                      '申請番号: ${widget.apply.number}',
                       style: const TextStyle(
                         color: kGreyColor,
                         fontSize: 14,
@@ -203,6 +203,16 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                   ),
                 ),
               ),
+              const SizedBox(height: 8),
+              widget.apply.approvalReason != ''
+                  ? FormLabel(
+                      label: '承認理由',
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Text(widget.apply.approvalReason),
+                      ),
+                    )
+                  : Container(),
               const SizedBox(height: 8),
               widget.apply.reason != ''
                   ? FormLabel(
@@ -642,6 +652,7 @@ class ApprovalApplyDialog extends StatefulWidget {
 
 class _ApprovalApplyDialogState extends State<ApprovalApplyDialog> {
   TextEditingController approvalNumberController = TextEditingController();
+  TextEditingController approvalReasonController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -668,6 +679,13 @@ class _ApprovalApplyDialogState extends State<ApprovalApplyDialog> {
             maxLines: 1,
             label: '承認番号',
           ),
+          const SizedBox(height: 8),
+          CustomTextField(
+            controller: approvalReasonController,
+            textInputType: TextInputType.multiline,
+            maxLines: null,
+            label: '承認理由',
+          ),
         ],
       ),
       actionsAlignment: MainAxisAlignment.spaceBetween,
@@ -687,6 +705,7 @@ class _ApprovalApplyDialogState extends State<ApprovalApplyDialog> {
               apply: widget.apply,
               loginUser: widget.loginProvider.user,
               approvalNumber: approvalNumberController.text,
+              approvalReason: approvalReasonController.text,
             );
             if (error != null) {
               if (!mounted) return;
