@@ -9,7 +9,9 @@ import 'package:miel_work_app/providers/apply.dart';
 import 'package:miel_work_app/providers/category.dart';
 import 'package:miel_work_app/providers/chat_message.dart';
 import 'package:miel_work_app/providers/home.dart';
+import 'package:miel_work_app/providers/loan.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/providers/lost.dart';
 import 'package:miel_work_app/providers/manual.dart';
 import 'package:miel_work_app/providers/notice.dart';
 import 'package:miel_work_app/providers/plan.dart';
@@ -59,6 +61,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: UserProvider()),
         ChangeNotifierProvider.value(value: ApplyProvider()),
         ChangeNotifierProvider.value(value: ProblemProvider()),
+        ChangeNotifierProvider.value(value: LostProvider()),
+        ChangeNotifierProvider.value(value: LoanProvider()),
       ],
       child: MediaQuery.withNoTextScaling(
         child: MaterialApp(
