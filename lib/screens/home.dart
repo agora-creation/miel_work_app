@@ -6,12 +6,11 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/chat_message.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/screens/apply_select.dart';
+import 'package:miel_work_app/screens/apply.dart';
 import 'package:miel_work_app/screens/chat.dart';
 import 'package:miel_work_app/screens/group.dart';
 import 'package:miel_work_app/screens/notice.dart';
 import 'package:miel_work_app/screens/plan.dart';
-import 'package:miel_work_app/screens/plan_shift.dart';
 import 'package:miel_work_app/screens/problem.dart';
 import 'package:miel_work_app/screens/user.dart';
 import 'package:miel_work_app/screens/user_setting.dart';
@@ -103,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 );
                               }
                               return HomeIconCard(
-                                icon: Icons.notifications,
+                                icon: FontAwesomeIcons.solidBell,
                                 label: 'お知らせ',
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,
@@ -136,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 }
                               }
                               return HomeIconCard(
-                                icon: Icons.question_answer,
+                                icon: FontAwesomeIcons.solidMessage,
                                 label: 'チャット',
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,
@@ -185,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 );
                               }
                               return HomeIconCard(
-                                icon: Icons.sentiment_very_dissatisfied_sharp,
+                                icon: FontAwesomeIcons.faceAngry,
                                 label: 'クレーム／要望',
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,
@@ -200,18 +199,36 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             },
                           ),
-                          HomeIconCard(
-                            icon: Icons.edit_note,
-                            label: '各種申請',
-                            color: kBlackColor,
-                            backgroundColor: kWhiteColor,
-                            onTap: () => pushScreen(
-                              context,
-                              ApplySelectScreen(
-                                loginProvider: loginProvider,
-                                homeProvider: homeProvider,
-                              ),
+                          StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                            stream: applyService.streamList(
+                              organizationId: loginProvider.organization?.id,
+                              searchApproval: [0],
+                              searchStart: null,
+                              searchEnd: null,
                             ),
+                            builder: (context, snapshot) {
+                              bool alert = false;
+                              if (snapshot.hasData) {
+                                alert = applyService.checkAlert(
+                                  data: snapshot.data,
+                                );
+                              }
+                              return HomeIconCard(
+                                icon: FontAwesomeIcons.filePen,
+                                label: '各種申請',
+                                color: kBlackColor,
+                                backgroundColor: kWhiteColor,
+                                alert: alert,
+                                alertMessage: '承認待ちあり',
+                                onTap: () => pushScreen(
+                                  context,
+                                  ApplyScreen(
+                                    loginProvider: loginProvider,
+                                    homeProvider: homeProvider,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -222,52 +239,70 @@ class _HomeScreenState extends State<HomeScreen> {
                         gridDelegate: kHome3Grid,
                         children: [
                           HomeIconCard(
-                            icon: Icons.view_timeline,
+                            icon: FontAwesomeIcons.book,
                             iconSize: 42,
-                            label: 'シフト',
+                            label: '業務日報',
                             labelFontSize: 16,
                             color: kBlackColor,
                             backgroundColor: kWhiteColor,
-                            onTap: () => pushScreen(
-                              context,
-                              PlanShiftScreen(
-                                loginProvider: loginProvider,
-                                homeProvider: homeProvider,
-                              ),
+                            onTap: () {},
+                          ),
+                          StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                            stream: lostService.streamList(
+                              organizationId: loginProvider.organization?.id,
+                              searchStart: null,
+                              searchEnd: null,
+                              searchStatus: [0],
                             ),
-                          ),
-                          HomeIconCard(
-                            icon: Icons.device_unknown,
-                            iconSize: 42,
-                            label: '落とし物',
-                            labelFontSize: 16,
-                            color: kBlackColor,
-                            backgroundColor: kWhiteColor,
-                            onTap: () async {
-                              Uri url = Uri.parse(
-                                  'https://hirome.co.jp/lost/app.php');
-                              if (!await launchUrl(url)) {
-                                throw Exception('Could not launch $url');
+                            builder: (context, snapshot) {
+                              bool alert = false;
+                              if (snapshot.hasData) {
+                                alert = lostService.checkAlert(
+                                  data: snapshot.data,
+                                );
                               }
+                              return HomeIconCard(
+                                icon: FontAwesomeIcons.personCircleQuestion,
+                                iconSize: 42,
+                                label: '落とし物',
+                                labelFontSize: 16,
+                                color: kBlackColor,
+                                backgroundColor: kWhiteColor,
+                                alert: alert,
+                                alertMessage: '保管中',
+                                onTap: () {},
+                              );
+                            },
+                          ),
+                          StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                            stream: loanService.streamList(
+                              organizationId: loginProvider.organization?.id,
+                              searchStart: null,
+                              searchEnd: null,
+                              searchStatus: [0],
+                            ),
+                            builder: (context, snapshot) {
+                              bool alert = false;
+                              if (snapshot.hasData) {
+                                alert = loanService.checkAlert(
+                                  data: snapshot.data,
+                                );
+                              }
+                              return HomeIconCard(
+                                icon: FontAwesomeIcons.handsHoldingCircle,
+                                iconSize: 42,
+                                label: '貸出物',
+                                labelFontSize: 16,
+                                color: kBlackColor,
+                                backgroundColor: kWhiteColor,
+                                alert: alert,
+                                alertMessage: '貸出中',
+                                onTap: () {},
+                              );
                             },
                           ),
                           HomeIconCard(
-                            icon: Icons.front_hand,
-                            iconSize: 42,
-                            label: '貸出物',
-                            labelFontSize: 16,
-                            color: kBlackColor,
-                            backgroundColor: kWhiteColor,
-                            onTap: () async {
-                              Uri url = Uri.parse(
-                                  'https://hirome.co.jp/loan/app.php');
-                              if (!await launchUrl(url)) {
-                                throw Exception('Could not launch $url');
-                              }
-                            },
-                          ),
-                          HomeIconCard(
-                            icon: Icons.gas_meter,
+                            icon: FontAwesomeIcons.bolt,
                             iconSize: 42,
                             label: 'メーター検針',
                             labelFontSize: 16,
@@ -283,7 +318,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           loginProvider.user?.admin == true
                               ? HomeIconCard(
-                                  icon: Icons.category,
+                                  icon: FontAwesomeIcons.users,
                                   iconSize: 42,
                                   label: 'グループ一覧',
                                   labelFontSize: 16,
@@ -300,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               : Container(),
                           loginProvider.user?.admin == true
                               ? HomeIconCard(
-                                  icon: Icons.groups,
+                                  icon: FontAwesomeIcons.users,
                                   iconSize: 42,
                                   label: 'スタッフ一覧',
                                   labelFontSize: 16,

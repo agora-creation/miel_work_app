@@ -9,7 +9,7 @@ import 'package:miel_work_app/screens/problem_add.dart';
 import 'package:miel_work_app/screens/problem_detail.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/problem.dart';
-import 'package:miel_work_app/widgets/custom_problem_list.dart';
+import 'package:miel_work_app/widgets/problem_list.dart';
 
 class ProblemScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -106,7 +106,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
             itemCount: problems.length,
             itemBuilder: (context, index) {
               ProblemModel problem = problems[index];
-              return CustomProblemList(
+              return ProblemList(
                 problem: problem,
                 user: widget.loginProvider.user,
                 onTap: () => pushScreen(
