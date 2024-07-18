@@ -25,6 +25,7 @@ import 'package:miel_work_app/widgets/custom_home_plan_card.dart';
 import 'package:miel_work_app/widgets/group_select_card.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -37,6 +38,9 @@ class _HomeScreenState extends State<HomeScreen> {
   NoticeService noticeService = NoticeService();
   ChatMessageService messageService = ChatMessageService();
   ProblemService problemService = ProblemService();
+  ApplyService applyService = ApplyService();
+  LostService lostService = LostService();
+  LoanService loanService = LoanService();
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           homeProvider: homeProvider,
                         ),
                       ),
-                      icon: const Icon(Icons.settings),
+                      icon: const FaIcon(FontAwesomeIcons.gear),
                     ),
                   ],
                 ),
