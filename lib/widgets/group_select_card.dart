@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/providers/home.dart';
@@ -68,7 +69,7 @@ class _GroupSelectCardState extends State<GroupSelectCard> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            trailing: const Icon(Icons.arrow_drop_down),
+            trailing: const FaIcon(FontAwesomeIcons.caretDown),
             tileColor: kWhiteColor,
           ),
         ),

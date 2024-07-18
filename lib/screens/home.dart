@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/chat_message.dart';
@@ -14,7 +15,10 @@ import 'package:miel_work_app/screens/plan_shift.dart';
 import 'package:miel_work_app/screens/problem.dart';
 import 'package:miel_work_app/screens/user.dart';
 import 'package:miel_work_app/screens/user_setting.dart';
+import 'package:miel_work_app/services/apply.dart';
 import 'package:miel_work_app/services/chat_message.dart';
+import 'package:miel_work_app/services/loan.dart';
+import 'package:miel_work_app/services/lost.dart';
 import 'package:miel_work_app/services/notice.dart';
 import 'package:miel_work_app/services/problem.dart';
 import 'package:miel_work_app/widgets/animation_background.dart';
@@ -25,7 +29,6 @@ import 'package:miel_work_app/widgets/custom_home_plan_card.dart';
 import 'package:miel_work_app/widgets/group_select_card.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
