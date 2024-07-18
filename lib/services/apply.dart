@@ -25,8 +25,7 @@ class ApplyService {
 
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
-    required String? searchType,
-    required int searchApproval,
+    required List<int> searchApproval,
     required DateTime? searchStart,
     required DateTime? searchEnd,
   }) {
@@ -36,19 +35,30 @@ class ApplyService {
       return FirebaseFirestore.instance
           .collection(collection)
           .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .where('type', isEqualTo: searchType)
-          .where('approval', isEqualTo: searchApproval)
+          .where('approval', whereIn: searchApproval)
           .orderBy('createdAt', descending: true)
           .startAt([endAt]).endAt([startAt]).snapshots();
     } else {
       return FirebaseFirestore.instance
           .collection(collection)
           .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .where('type', isEqualTo: searchType)
-          .where('approval', isEqualTo: searchApproval)
+          .where('approval', whereIn: searchApproval)
           .orderBy('createdAt', descending: true)
           .snapshots();
     }
+  }
+
+  bool checkAlert({
+    required QuerySnapshot<Map<String, dynamic>>? data,
+  }) {
+    bool ret = false;
+    for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
+      ApplyModel apply = ApplyModel.fromSnapshot(doc);
+      if (apply.approval == 0) {
+        ret = true;
+      }
+    }
+    return ret;
   }
 
   List<ApplyModel> generateList({

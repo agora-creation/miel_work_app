@@ -4,9 +4,10 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/home.dart';
 import 'package:miel_work_app/widgets/animation_background.dart';
-import 'package:miel_work_app/widgets/custom_button_lg.dart';
+import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_login_card.dart';
 import 'package:miel_work_app/widgets/custom_text_form_field.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool obscureText = true;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
+                        fontFamily: 'SourceHanSansJP-Bold',
                       ),
                     ),
                   ),
@@ -100,30 +103,37 @@ class _LoginScreenState extends State<LoginScreen> {
                                 },
                               ),
                               const SizedBox(height: 16),
-                              SizedBox(
-                                width: double.infinity,
-                                child: CustomButtonLg(
-                                  label: 'ログイン',
-                                  labelColor: kWhiteColor,
-                                  backgroundColor: kBlueColor,
-                                  onPressed: () async {
-                                    String? error = await loginProvider.login(
-                                      email: emailController.text,
-                                      password: passwordController.text,
-                                    );
-                                    if (error != null) {
-                                      if (!mounted) return;
-                                      showMessage(context, error, false);
-                                      return;
-                                    }
+                              CustomButton(
+                                type: ButtonSizeType.lg,
+                                label: 'ログイン',
+                                labelColor: kWhiteColor,
+                                backgroundColor: kBlueColor,
+                                onPressed: () async {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  String? error = await loginProvider.login(
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                  );
+                                  if (error != null) {
                                     if (!mounted) return;
-                                    showMessage(context, 'ログインに成功しました', true);
-                                    pushReplacementScreen(
-                                      context,
-                                      const HomeScreen(),
-                                    );
-                                  },
-                                ),
+                                    showMessage(context, error, false);
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                    return;
+                                  }
+                                  if (!mounted) return;
+                                  Navigator.pushReplacement(
+                                    context,
+                                    PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      child: const HomeScreen(),
+                                    ),
+                                  );
+                                },
+                                disabled: isLoading,
                               ),
                             ],
                           ),

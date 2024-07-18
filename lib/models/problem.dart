@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/style.dart';
 
 const List<String> kProblemTypes = ['問題行動', 'クレーム', '要望', 'その他'];
 const List<String> kProblemStates = [
@@ -71,6 +73,24 @@ class ProblemModel {
     List<String> ret = [];
     for (dynamic id in list) {
       ret.add('$id');
+    }
+    return ret;
+  }
+
+  Color typeColor() {
+    Color ret = kGrey200Color;
+    switch (_type) {
+      case '問題行動':
+        ret = kRed200Color;
+        break;
+      case 'クレーム':
+        ret = kYellowColor;
+        break;
+      case '要望':
+        ret = kCyanColor;
+        break;
+      default:
+        break;
     }
     return ret;
   }

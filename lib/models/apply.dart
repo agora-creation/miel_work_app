@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/approval_user.dart';
 
 const List<String> kApplyTypes = ['稟議', '支払伺い', '協議・報告', '企画'];
@@ -105,6 +107,27 @@ class ApplyModel {
 
   String formatPrice() {
     return NumberFormat("#,###").format(_price);
+  }
+
+  Color typeColor() {
+    Color ret = kGrey200Color;
+    switch (_type) {
+      case '稟議':
+        ret = kRed200Color;
+        break;
+      case '支払伺い':
+        ret = kYellowColor;
+        break;
+      case '協議・報告':
+        ret = kCyanColor;
+        break;
+      case '企画':
+        ret = kLightBlueColor;
+        break;
+      default:
+        break;
+    }
+    return ret;
   }
 
   String approvalText() {

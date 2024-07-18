@@ -13,6 +13,7 @@ const kGrey300Color = Color(0xFFE0E0E0);
 const kGrey200Color = Color(0xFFEEEEEE);
 const kRedColor = Color(0xFFF44336);
 const kRed400Color = Color(0xFFEF5350);
+const kRed200Color = Color(0xFFEF9A9A);
 const kRed100Color = Color(0xFFFFCDD2);
 const kBlueColor = Color(0xFF2196F3);
 const kBlue300Color = Color(0xFF64B5F6);
