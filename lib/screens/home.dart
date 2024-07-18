@@ -24,9 +24,9 @@ import 'package:miel_work_app/services/problem.dart';
 import 'package:miel_work_app/widgets/animation_background.dart';
 import 'package:miel_work_app/widgets/custom_appbar.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
-import 'package:miel_work_app/widgets/custom_home_icon_card.dart';
 import 'package:miel_work_app/widgets/custom_home_plan_card.dart';
 import 'package:miel_work_app/widgets/group_select_card.dart';
+import 'package:miel_work_app/widgets/home_icon_card.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -102,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   user: loginProvider.user,
                                 );
                               }
-                              return CustomHomeIconCard(
+                              return HomeIconCard(
                                 icon: Icons.notifications,
                                 label: 'お知らせ',
                                 color: kBlackColor,
@@ -135,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   alert = true;
                                 }
                               }
-                              return CustomHomeIconCard(
+                              return HomeIconCard(
                                 icon: Icons.question_answer,
                                 label: 'チャット',
                                 color: kBlackColor,
@@ -184,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   user: loginProvider.user,
                                 );
                               }
-                              return CustomHomeIconCard(
+                              return HomeIconCard(
                                 icon: Icons.sentiment_very_dissatisfied_sharp,
                                 label: 'クレーム／要望',
                                 color: kBlackColor,
@@ -200,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             },
                           ),
-                          CustomHomeIconCard(
+                          HomeIconCard(
                             icon: Icons.edit_note,
                             label: '各種申請',
                             color: kBlackColor,
@@ -221,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: EdgeInsets.zero,
                         gridDelegate: kHome3Grid,
                         children: [
-                          CustomHomeIconCard(
+                          HomeIconCard(
                             icon: Icons.view_timeline,
                             iconSize: 42,
                             label: 'シフト',
@@ -236,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          CustomHomeIconCard(
+                          HomeIconCard(
                             icon: Icons.device_unknown,
                             iconSize: 42,
                             label: '落とし物',
@@ -251,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               }
                             },
                           ),
-                          CustomHomeIconCard(
+                          HomeIconCard(
                             icon: Icons.front_hand,
                             iconSize: 42,
                             label: '貸出物',
@@ -266,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               }
                             },
                           ),
-                          CustomHomeIconCard(
+                          HomeIconCard(
                             icon: Icons.gas_meter,
                             iconSize: 42,
                             label: 'メーター検針',
@@ -282,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                           ),
                           loginProvider.user?.admin == true
-                              ? CustomHomeIconCard(
+                              ? HomeIconCard(
                                   icon: Icons.category,
                                   iconSize: 42,
                                   label: 'グループ一覧',
@@ -299,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 )
                               : Container(),
                           loginProvider.user?.admin == true
-                              ? CustomHomeIconCard(
+                              ? HomeIconCard(
                                   icon: Icons.groups,
                                   iconSize: 42,
                                   label: 'スタッフ一覧',

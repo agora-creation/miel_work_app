@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/style.dart';
 
-class CustomHomeIconCard extends StatelessWidget {
+class HomeIconCard extends StatelessWidget {
   final IconData icon;
   final double iconSize;
   final String label;
@@ -9,9 +10,10 @@ class CustomHomeIconCard extends StatelessWidget {
   final Color color;
   final Color backgroundColor;
   final bool alert;
+  final String alertMessage;
   final Function()? onTap;
 
-  const CustomHomeIconCard({
+  const HomeIconCard({
     required this.icon,
     this.iconSize = 60,
     required this.label,
@@ -19,6 +21,7 @@ class CustomHomeIconCard extends StatelessWidget {
     required this.color,
     required this.backgroundColor,
     this.alert = false,
+    this.alertMessage = '未読あり',
     this.onTap,
     super.key,
   });
@@ -42,7 +45,7 @@ class CustomHomeIconCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(
+            FaIcon(
               icon,
               size: iconSize,
               color: color,
@@ -54,12 +57,13 @@ class CustomHomeIconCard extends StatelessWidget {
                 color: color,
                 fontSize: labelFontSize,
                 fontWeight: FontWeight.bold,
+                fontFamily: 'SourceHanSansJP-Bold',
               ),
             ),
             alert
-                ? const Text(
-                    '未読あり',
-                    style: TextStyle(
+                ? Text(
+                    alertMessage,
+                    style: const TextStyle(
                       color: kRedColor,
                       fontSize: 12,
                     ),
