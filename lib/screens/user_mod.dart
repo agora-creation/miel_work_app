@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/organization_group.dart';
@@ -41,13 +42,13 @@ class _UserModScreenState extends State<UserModScreen> {
 
   @override
   void initState() {
-    super.initState();
     nameController.text = widget.user.name;
     emailController.text = widget.user.email;
     passwordController.text = widget.user.password;
     selectedGroup = widget.userInGroup;
     admin = widget.user.admin;
     president = widget.user.president;
+    super.initState();
   }
 
   @override
@@ -74,13 +75,13 @@ class _UserModScreenState extends State<UserModScreen> {
       appBar: AppBar(
         backgroundColor: kWhiteColor,
         leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
+          icon: const FaIcon(
+            FontAwesomeIcons.chevronLeft,
             color: kBlackColor,
+            size: 18,
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        centerTitle: true,
         title: const Text(
           'スタッフ情報の編集',
           style: TextStyle(color: kBlackColor),
@@ -115,6 +116,20 @@ class _UserModScreenState extends State<UserModScreen> {
               Navigator.pop(context);
             },
             child: const Text('保存'),
+          ),
+          IconButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => DelNoticeDialog(
+                loginProvider: widget.loginProvider,
+                homeProvider: widget.homeProvider,
+                notice: widget.notice,
+              ),
+            ),
+            icon: const FaIcon(
+              FontAwesomeIcons.trash,
+              color: kRedColor,
+            ),
           ),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),

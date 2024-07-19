@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/organization_group.dart';
@@ -35,8 +36,8 @@ class _UserAddScreenState extends State<UserAddScreen> {
 
   @override
   void initState() {
-    super.initState();
     selectedGroup = widget.homeProvider.currentGroup;
+    super.initState();
   }
 
   @override
@@ -63,78 +64,53 @@ class _UserAddScreenState extends State<UserAddScreen> {
       appBar: AppBar(
         backgroundColor: kWhiteColor,
         leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
+          icon: const FaIcon(
+            FontAwesomeIcons.chevronLeft,
             color: kBlackColor,
+            size: 18,
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        centerTitle: true,
         title: const Text(
           'スタッフを追加',
           style: TextStyle(color: kBlackColor),
         ),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              String? error = await userProvider.create(
-                organization: widget.loginProvider.organization,
-                name: nameController.text,
-                email: emailController.text,
-                password: passwordController.text,
-                group: selectedGroup,
-                admin: admin,
-                president: president,
-              );
-              if (error != null) {
-                if (!mounted) return;
-                showMessage(context, error, false);
-                return;
-              }
-              await widget.loginProvider.reload();
-              widget.homeProvider.setGroups(
-                organizationId:
-                    widget.loginProvider.organization?.id ?? 'error',
-              );
-              widget.getUsers();
-              if (!mounted) return;
-              showMessage(context, 'スタッフを追加しました', true);
-              Navigator.pop(context);
-            },
-            child: const Text('保存'),
-          ),
-        ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(16),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomTextField(
-                  controller: nameController,
-                  textInputType: TextInputType.name,
-                  maxLines: 1,
-                  label: 'スタッフ名',
+                FormLabel(
+                  'スタッフ名',
+                  child: CustomTextField(
+                    controller: nameController,
+                    textInputType: TextInputType.name,
+                    maxLines: 1,
+                  ),
                 ),
-                const SizedBox(height: 8),
-                CustomTextField(
-                  controller: emailController,
-                  textInputType: TextInputType.emailAddress,
-                  maxLines: 1,
-                  label: 'メールアドレス',
+                const SizedBox(height: 16),
+                FormLabel(
+                  'メールアドレス',
+                  child: CustomTextField(
+                    controller: emailController,
+                    textInputType: TextInputType.emailAddress,
+                    maxLines: 1,
+                  ),
                 ),
-                const SizedBox(height: 8),
-                CustomTextField(
-                  controller: passwordController,
-                  textInputType: TextInputType.visiblePassword,
-                  maxLines: 1,
-                  label: 'パスワード',
+                const SizedBox(height: 16),
+                FormLabel(
+                  'パスワード',
+                  child: CustomTextField(
+                    controller: passwordController,
+                    textInputType: TextInputType.visiblePassword,
+                    maxLines: 1,
+                  ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
                   '所属グループ',
                   child: DropdownButton<OrganizationGroupModel?>(
@@ -153,7 +129,7 @@ class _UserAddScreenState extends State<UserAddScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
                   '管理者権限',
                   child: CheckboxListTile(
@@ -163,10 +139,10 @@ class _UserAddScreenState extends State<UserAddScreen> {
                         admin = value ?? false;
                       });
                     },
-                    title: const Text('このスタッフを管理者にする'),
+                    title: const Text('管理者にする'),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
                   '社長権限',
                   child: CheckboxListTile(
@@ -176,12 +152,47 @@ class _UserAddScreenState extends State<UserAddScreen> {
                         president = value ?? false;
                       });
                     },
-                    title: const Text('このスタッフを社長にする'),
+                    title: const Text('社長にする'),
                   ),
                 ),
+                const SizedBox(height: 80),
               ],
             ),
           ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          String? error = await userProvider.create(
+            organization: widget.loginProvider.organization,
+            name: nameController.text,
+            email: emailController.text,
+            password: passwordController.text,
+            group: selectedGroup,
+            admin: admin,
+            president: president,
+          );
+          if (error != null) {
+            if (!mounted) return;
+            showMessage(context, error, false);
+            return;
+          }
+          await widget.loginProvider.reload();
+          widget.homeProvider.setGroups(
+            organizationId: widget.loginProvider.organization?.id ?? 'error',
+          );
+          widget.getUsers();
+          if (!mounted) return;
+          showMessage(context, 'スタッフが追加されました', true);
+          Navigator.pop(context);
+        },
+        icon: const FaIcon(
+          FontAwesomeIcons.floppyDisk,
+          color: kWhiteColor,
+        ),
+        label: const Text(
+          '追加する',
+          style: TextStyle(color: kWhiteColor),
         ),
       ),
     );
