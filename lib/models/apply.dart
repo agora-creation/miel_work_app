@@ -143,3 +143,24 @@ class ApplyModel {
     }
   }
 }
+
+Color generateApplyColor(String type) {
+  Color ret = kGrey200Color;
+  switch (type) {
+    case '稟議':
+      ret = kRed200Color;
+      break;
+    case '支払伺い':
+      ret = kYellowColor;
+      break;
+    case '協議・報告':
+      ret = kCyanColor;
+      break;
+    case '企画':
+      ret = kLightBlueColor;
+      break;
+    default:
+      break;
+  }
+  return ret;
+}

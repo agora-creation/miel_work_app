@@ -250,7 +250,7 @@ class _PlanDialogState extends State<PlanDialog> {
           ),
           const SizedBox(height: 8),
           FormLabel(
-            label: '公開グループ',
+            '公開グループ',
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Text(
@@ -261,7 +261,7 @@ class _PlanDialogState extends State<PlanDialog> {
           ),
           const SizedBox(height: 8),
           FormLabel(
-            label: '予定期間',
+            '予定期間',
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Text(
@@ -272,7 +272,7 @@ class _PlanDialogState extends State<PlanDialog> {
           ),
           const SizedBox(height: 8),
           FormLabel(
-            label: 'メモ',
+            'メモ',
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Text(

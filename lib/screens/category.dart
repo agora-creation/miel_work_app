@@ -1,15 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/category.dart';
 import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/providers/category.dart';
 import 'package:miel_work_app/services/category.dart';
-import 'package:miel_work_app/widgets/custom_button_sm.dart';
-import 'package:miel_work_app/widgets/custom_category_list.dart';
+import 'package:miel_work_app/widgets/category_list.dart';
+import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
+import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
+import 'package:miel_work_app/widgets/form_label.dart';
+import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -34,13 +38,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
       appBar: AppBar(
         backgroundColor: kWhiteColor,
         leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
+          icon: const FaIcon(
+            FontAwesomeIcons.chevronLeft,
             color: kBlackColor,
+            size: 18,
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        centerTitle: true,
         title: const Text(
           'カテゴリ管理',
           style: TextStyle(color: kBlackColor),
@@ -65,7 +69,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
             itemCount: categories.length,
             itemBuilder: (context, index) {
               CategoryModel category = categories[index];
-              return CustomCategoryList(
+              return CategoryList(
                 category: category,
                 onTap: () => showDialog(
                   context: context,
@@ -83,8 +87,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
             organization: widget.organization,
           ),
         ),
-        icon: const Icon(
-          Icons.add,
+        icon: const FaIcon(
+          FontAwesomeIcons.plus,
           color: kWhiteColor,
         ),
         label: const Text(
@@ -115,25 +119,18 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
   @override
   Widget build(BuildContext context) {
     final categoryProvider = Provider.of<CategoryProvider>(context);
-    return AlertDialog(
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      title: const Text(
-        'カテゴリを追加',
-        style: TextStyle(fontSize: 16),
-      ),
+    return CustomAlertDialog(
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomTextField(
-            controller: nameController,
-            textInputType: TextInputType.name,
-            maxLines: 1,
-            label: 'カテゴリ名',
+          FormLabel(
+            'カテゴリ名',
+            child: CustomTextField(
+              controller: nameController,
+              textInputType: TextInputType.name,
+              maxLines: 1,
+            ),
           ),
           const SizedBox(height: 8),
           BlockPicker(
@@ -146,15 +143,16 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
           ),
         ],
       ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: '閉じる',
           labelColor: kWhiteColor,
           backgroundColor: kGreyColor,
           onPressed: () => Navigator.pop(context),
         ),
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: '追加する',
           labelColor: kWhiteColor,
           backgroundColor: kBlueColor,
@@ -170,7 +168,7 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
               return;
             }
             if (!mounted) return;
-            showMessage(context, 'カテゴリを追加しました', true);
+            showMessage(context, 'カテゴリが追加されました', true);
             Navigator.pop(context);
           },
         ),
@@ -195,38 +193,27 @@ class _DelCategoryDialogState extends State<DelCategoryDialog> {
   @override
   Widget build(BuildContext context) {
     final categoryProvider = Provider.of<CategoryProvider>(context);
-    return AlertDialog(
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      title: const Text(
-        'カテゴリを削除',
-        style: TextStyle(fontSize: 16),
-      ),
+    return CustomAlertDialog(
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ListTile(
-            tileColor: widget.category.color,
-            title: Text(
-              widget.category.name,
-              style: const TextStyle(color: kWhiteColor),
-            ),
+          FormLabel(
+            'カテゴリ名',
+            child: FormValue(widget.category.name),
           ),
         ],
       ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: '閉じる',
           labelColor: kWhiteColor,
           backgroundColor: kGreyColor,
           onPressed: () => Navigator.pop(context),
         ),
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: '削除する',
           labelColor: kWhiteColor,
           backgroundColor: kRedColor,
@@ -240,7 +227,7 @@ class _DelCategoryDialogState extends State<DelCategoryDialog> {
               return;
             }
             if (!mounted) return;
-            showMessage(context, 'カテゴリを削除しました', true);
+            showMessage(context, 'カテゴリが削除されました', true);
             Navigator.pop(context);
           },
         ),

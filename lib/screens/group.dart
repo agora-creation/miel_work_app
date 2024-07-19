@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/group_mod.dart';
-import 'package:miel_work_app/widgets/custom_button_sm.dart';
+import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
+import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
+import 'package:miel_work_app/widgets/form_label.dart';
+import 'package:page_transition/page_transition.dart';
 
 class GroupScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -37,8 +41,8 @@ class _GroupScreenState extends State<GroupScreen> {
 
   @override
   void initState() {
-    super.initState();
     _getGroups();
+    super.initState();
   }
 
   @override
@@ -46,19 +50,21 @@ class _GroupScreenState extends State<GroupScreen> {
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: kWhiteColor,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
-            color: kBlackColor,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
         title: const Text(
           'グループ一覧',
           style: TextStyle(color: kBlackColor),
         ),
+        actions: [
+          IconButton(
+            icon: const FaIcon(
+              FontAwesomeIcons.xmark,
+              color: kBlackColor,
+            ),
+            onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+          ),
+        ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: groups.isNotEmpty
@@ -76,15 +82,20 @@ class _GroupScreenState extends State<GroupScreen> {
                       style: const TextStyle(fontSize: 20),
                     ),
                     trailing: const Icon(Icons.chevron_right),
-                    onTap: () => pushScreen(
-                      context,
-                      GroupModScreen(
-                        loginProvider: widget.loginProvider,
-                        homeProvider: widget.homeProvider,
-                        group: group,
-                        getGroups: _getGroups,
-                      ),
-                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          child: GroupModScreen(
+                            loginProvider: widget.loginProvider,
+                            homeProvider: widget.homeProvider,
+                            group: group,
+                            getGroups: _getGroups,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 );
               },
@@ -99,8 +110,8 @@ class _GroupScreenState extends State<GroupScreen> {
             getGroups: _getGroups,
           ),
         ),
-        icon: const Icon(
-          Icons.add,
+        icon: const FaIcon(
+          FontAwesomeIcons.plus,
           color: kWhiteColor,
         ),
         label: const Text(
@@ -133,37 +144,31 @@ class _AddGroupDialogState extends State<AddGroupDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      title: const Text(
-        'グループを追加',
-        style: TextStyle(fontSize: 18),
-      ),
+    return CustomAlertDialog(
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomTextField(
-            controller: nameController,
-            textInputType: TextInputType.name,
-            maxLines: 1,
-            label: 'グループ名',
+          FormLabel(
+            'グループ名',
+            child: CustomTextField(
+              controller: nameController,
+              textInputType: TextInputType.name,
+              maxLines: 1,
+            ),
           ),
         ],
       ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: '閉じる',
           labelColor: kWhiteColor,
           backgroundColor: kGreyColor,
           onPressed: () => Navigator.pop(context),
         ),
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: '追加する',
           labelColor: kWhiteColor,
           backgroundColor: kBlueColor,
@@ -179,7 +184,7 @@ class _AddGroupDialogState extends State<AddGroupDialog> {
             }
             widget.getGroups();
             if (!mounted) return;
-            showMessage(context, 'グループを追加しました', true);
+            showMessage(context, 'グループが追加されました', true);
             Navigator.pop(context);
           },
         ),

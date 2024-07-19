@@ -27,12 +27,12 @@ class LoanProvider with ChangeNotifier {
     required UserModel? loginUser,
   }) async {
     String? error;
-    if (organization == null) return '貸出の追加に失敗しました';
-    if (loanUser == '') return '貸出先を入力してください';
-    if (loanCompany == '') return '貸出先会社名を入力してください';
-    if (loanStaff == '') return '対応スタッフを入力してください';
-    if (itemName == '') return '品名を入力してください';
-    if (loginUser == null) return '貸出の追加に失敗しました';
+    if (organization == null) return '貸出物の追加に失敗しました';
+    if (loanUser == '') return '貸出先は必須入力です';
+    if (loanCompany == '') return '貸出先会社名は必須入力です';
+    if (loanStaff == '') return '対応スタッフは必須入力です';
+    if (itemName == '') return '品名は必須入力です';
+    if (loginUser == null) return '貸出物の追加に失敗しました';
     try {
       String id = _loanService.id();
       String itemImage = '';
@@ -70,13 +70,13 @@ class LoanProvider with ChangeNotifier {
           if (user.id == loginUser.id) continue;
           _fmService.send(
             token: user.token,
-            title: '貸出が追加されました',
+            title: '貸出物が追加されました',
             body: itemName,
           );
         }
       }
     } catch (e) {
-      error = '貸出の追加に失敗しました';
+      error = '貸出物の追加に失敗しました';
     }
     return error;
   }
@@ -94,12 +94,12 @@ class LoanProvider with ChangeNotifier {
     required UserModel? loginUser,
   }) async {
     String? error;
-    if (organization == null) return '貸出の編集に失敗しました';
-    if (loanUser == '') return '貸出先を入力してください';
-    if (loanCompany == '') return '貸出先会社名を入力してください';
-    if (loanStaff == '') return '対応スタッフを入力してください';
-    if (itemName == '') return '品名を入力してください';
-    if (loginUser == null) return '貸出の編集に失敗しました';
+    if (organization == null) return '貸出情報の編集に失敗しました';
+    if (loanUser == '') return '貸出先は必須入力です';
+    if (loanCompany == '') return '貸出先会社名は必須入力です';
+    if (loanStaff == '') return '対応スタッフは必須入力です';
+    if (itemName == '') return '品名は必須入力です';
+    if (loginUser == null) return '貸出情報の編集に失敗しました';
     try {
       String? itemImage;
       if (itemImageXFile != null) {
@@ -132,7 +132,7 @@ class LoanProvider with ChangeNotifier {
         });
       }
     } catch (e) {
-      error = '貸出の編集に失敗しました';
+      error = '貸出情報の編集に失敗しました';
     }
     return error;
   }
@@ -146,7 +146,7 @@ class LoanProvider with ChangeNotifier {
         'id': loan.id,
       });
     } catch (e) {
-      error = '貸出の削除に失敗しました';
+      error = '貸出情報の削除に失敗しました';
     }
     return error;
   }

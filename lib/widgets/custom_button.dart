@@ -31,13 +31,13 @@ class CustomButton extends StatelessWidget {
           style: TextButton.styleFrom(
             backgroundColor: disabled ? kGreyColor : backgroundColor,
             shape: const StadiumBorder(),
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(16),
           ),
           child: Text(
             label,
             style: TextStyle(
               color: disabled ? kWhiteColor : labelColor,
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
               fontFamily: 'SourceHanSansJP-Bold',
             ),
@@ -52,7 +52,7 @@ class CustomButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(10),
         ),
         child: Text(
           label,

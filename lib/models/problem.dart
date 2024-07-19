@@ -106,3 +106,21 @@ class ProblemModel {
     return ret;
   }
 }
+
+Color generateProblemColor(String type) {
+  Color ret = kGrey200Color;
+  switch (type) {
+    case '問題行動':
+      ret = kRed200Color;
+      break;
+    case 'クレーム':
+      ret = kYellowColor;
+      break;
+    case '要望':
+      ret = kCyanColor;
+      break;
+    default:
+      break;
+  }
+  return ret;
+}

@@ -25,9 +25,9 @@ class UserProvider with ChangeNotifier {
   }) async {
     String? error;
     if (organization == null) return 'スタッフの追加に失敗しました';
-    if (name == '') return 'スタッフ名を入力してください';
-    if (email == '') return 'メールアドレスを入力してください';
-    if (password == '') return 'パスワードを入力してください';
+    if (name == '') return 'スタッフ名は必須入力です';
+    if (email == '') return 'メールアドレスは必須入力です';
+    if (password == '') return 'パスワードは必須入力です';
     if (await _userService.emailCheck(email: email)) {
       return '他のメールアドレスを入力してください';
     }
@@ -105,9 +105,9 @@ class UserProvider with ChangeNotifier {
   }) async {
     String? error;
     if (organization == null) return 'スタッフ情報の編集に失敗しました';
-    if (name == '') return 'スタッフ名を入力してください';
-    if (email == '') return 'メールアドレスを入力してください';
-    if (password == '') return 'パスワードを入力してください';
+    if (name == '') return 'スタッフ名は必須入力です';
+    if (email == '') return 'メールアドレスは必須入力です';
+    if (password == '') return 'パスワードは必須入力です';
     if (user.email != email) {
       if (await _userService.emailCheck(email: email)) {
         return '他のメールアドレスを入力してください';
@@ -198,7 +198,7 @@ class UserProvider with ChangeNotifier {
     required OrganizationGroupModel? group,
   }) async {
     String? error;
-    if (organization == null) return 'スタッフの削除に失敗しました';
+    if (organization == null) return 'スタッフ情報の削除に失敗しました';
     try {
       _userService.delete({
         'id': user.id,
@@ -256,7 +256,7 @@ class UserProvider with ChangeNotifier {
         }
       }
     } catch (e) {
-      error = 'スタッフの削除に失敗しました';
+      error = 'スタッフ情報の削除に失敗しました';
     }
     return error;
   }

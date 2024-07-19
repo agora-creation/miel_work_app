@@ -51,8 +51,8 @@ class LoginProvider with ChangeNotifier {
     required String password,
   }) async {
     String? error;
-    if (email == '') return 'メールアドレスを入力してください';
-    if (password == '') return 'パスワードを入力してください';
+    if (email == '') return 'メールアドレスは必須入力です';
+    if (password == '') return 'パスワードは必須入力です';
     try {
       _status = AuthStatus.authenticating;
       notifyListeners();
@@ -110,7 +110,7 @@ class LoginProvider with ChangeNotifier {
     required String name,
   }) async {
     String? error;
-    if (name == '') return '名前を入力してください';
+    if (name == '') return '名前は必須入力です';
     try {
       _userService.update({
         'id': _user?.id,
@@ -126,7 +126,7 @@ class LoginProvider with ChangeNotifier {
     required String email,
   }) async {
     String? error;
-    if (email == '') return 'メールアドレスを入力してください';
+    if (email == '') return 'メールアドレスは必須入力です';
     try {
       _userService.update({
         'id': _user?.id,
@@ -143,7 +143,7 @@ class LoginProvider with ChangeNotifier {
     required String password,
   }) async {
     String? error;
-    if (password == '') return 'パスワードを入力してください';
+    if (password == '') return 'パスワードは必須入力です';
     try {
       _userService.update({
         'id': _user?.id,

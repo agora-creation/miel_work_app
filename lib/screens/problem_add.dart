@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as picker;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
@@ -13,6 +14,7 @@ import 'package:miel_work_app/providers/problem.dart';
 import 'package:miel_work_app/widgets/custom_checkbox.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
+import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:provider/provider.dart';
 
 class ProblemAddScreen extends StatefulWidget {
@@ -50,59 +52,30 @@ class _ProblemAddScreenState extends State<ProblemAddScreen> {
       appBar: AppBar(
         backgroundColor: kWhiteColor,
         leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
+          icon: const FaIcon(
+            FontAwesomeIcons.chevronLeft,
             color: kBlackColor,
+            size: 18,
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        centerTitle: true,
         title: const Text(
           'クレーム／要望を追加',
           style: TextStyle(color: kBlackColor),
         ),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              String? error = await problemProvider.create(
-                organization: widget.loginProvider.organization,
-                type: type,
-                createdAt: createdAt,
-                picName: picNameController.text,
-                targetName: targetNameController.text,
-                targetAge: targetAgeController.text,
-                targetTel: targetTelController.text,
-                targetAddress: targetAddressController.text,
-                details: detailsController.text,
-                imageXFile: imageXFile,
-                states: states,
-                count: int.parse(countController.text),
-                loginUser: widget.loginProvider.user,
-              );
-              if (error != null) {
-                if (!mounted) return;
-                showMessage(context, error, false);
-                return;
-              }
-              if (!mounted) return;
-              showMessage(context, 'クレーム／要望を追加しました', true);
-              Navigator.pop(context);
-            },
-            child: const Text('保存'),
-          ),
-        ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(16),
             child: Column(
               children: [
                 FormLabel(
-                  label: '報告日時',
-                  child: GestureDetector(
+                  '報告日時',
+                  child: FormValue(
+                    dateText('yyyy/MM/dd HH:mm', createdAt),
                     onTap: () async {
                       picker.DatePicker.showDateTimePicker(
                         context,
@@ -119,99 +92,90 @@ class _ProblemAddScreenState extends State<ProblemAddScreen> {
                         locale: picker.LocaleType.jp,
                       );
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(dateText('yyyy/MM/dd HH:mm', createdAt)),
-                          const Icon(
-                            Icons.calendar_month,
-                            color: kGreyColor,
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '対応項目',
-                  child: DropdownButton<String>(
-                    underline: Container(),
-                    isExpanded: true,
-                    value: type,
-                    items: kProblemTypes.map((e) {
-                      return DropdownMenuItem(
+                  '対応項目',
+                  child: Column(
+                    children: kProblemTypes.map((e) {
+                      return RadioListTile(
+                        title: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Chip(
+                            label: Text(e),
+                            backgroundColor: generateProblemColor(e),
+                          ),
+                        ),
                         value: e,
-                        child: Text(e),
+                        groupValue: type,
+                        onChanged: (value) {
+                          if (value == null) return;
+                          setState(() {
+                            type = value;
+                          });
+                        },
                       );
                     }).toList(),
-                    onChanged: (value) {
-                      if (value == null) return;
-                      setState(() {
-                        type = value;
-                      });
-                    },
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '対応者',
+                  '対応者',
                   child: CustomTextField(
                     controller: picNameController,
                     textInputType: TextInputType.name,
                     maxLines: 1,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '相手の名前',
+                  '相手の名前',
                   child: CustomTextField(
                     controller: targetNameController,
                     textInputType: TextInputType.name,
                     maxLines: 1,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '相手の年齢',
+                  '相手の年齢',
                   child: CustomTextField(
                     controller: targetAgeController,
                     textInputType: TextInputType.name,
                     maxLines: 1,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '相手の連絡先',
+                  '相手の連絡先',
                   child: CustomTextField(
                     controller: targetTelController,
                     textInputType: TextInputType.name,
                     maxLines: 1,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '相手の住所',
+                  '相手の住所',
                   child: CustomTextField(
                     controller: targetAddressController,
                     textInputType: TextInputType.name,
                     maxLines: 1,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '詳細',
+                  '詳細',
                   child: CustomTextField(
                     controller: detailsController,
                     textInputType: TextInputType.multiline,
                     maxLines: 15,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '添付写真',
+                  '添付写真',
                   child: GestureDetector(
                     onTap: () async {
                       final result = await ImagePicker().pickImage(
@@ -237,9 +201,9 @@ class _ProblemAddScreenState extends State<ProblemAddScreen> {
                           ),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '対応状態',
+                  '対応状態',
                   child: Column(
                     children: kProblemStates.map((e) {
                       return CustomCheckbox(
@@ -257,19 +221,54 @@ class _ProblemAddScreenState extends State<ProblemAddScreen> {
                     }).toList(),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '同じような注意(対応)をした回数',
+                  '同じような注意(対応)をした回数',
                   child: CustomTextField(
                     controller: countController,
                     textInputType: TextInputType.number,
                     maxLines: 1,
                   ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 80),
               ],
             ),
           ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          String? error = await problemProvider.create(
+            organization: widget.loginProvider.organization,
+            type: type,
+            createdAt: createdAt,
+            picName: picNameController.text,
+            targetName: targetNameController.text,
+            targetAge: targetAgeController.text,
+            targetTel: targetTelController.text,
+            targetAddress: targetAddressController.text,
+            details: detailsController.text,
+            imageXFile: imageXFile,
+            states: states,
+            count: int.parse(countController.text),
+            loginUser: widget.loginProvider.user,
+          );
+          if (error != null) {
+            if (!mounted) return;
+            showMessage(context, error, false);
+            return;
+          }
+          if (!mounted) return;
+          showMessage(context, 'クレーム／要望が追加されました', true);
+          Navigator.pop(context);
+        },
+        icon: const FaIcon(
+          FontAwesomeIcons.floppyDisk,
+          color: kWhiteColor,
+        ),
+        label: const Text(
+          '追加する',
+          style: TextStyle(color: kWhiteColor),
         ),
       ),
     );

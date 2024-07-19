@@ -149,7 +149,7 @@ class _UserModScreenState extends State<UserModScreen> {
                 ),
                 const SizedBox(height: 8),
                 FormLabel(
-                  label: '所属グループ',
+                  '所属グループ',
                   child: DropdownButton<OrganizationGroupModel?>(
                     hint: const Text(
                       '未所属',
@@ -168,7 +168,7 @@ class _UserModScreenState extends State<UserModScreen> {
                 ),
                 const SizedBox(height: 8),
                 FormLabel(
-                  label: '管理者権限',
+                  '管理者権限',
                   child: CheckboxListTile(
                     value: admin,
                     onChanged: (value) {
@@ -181,7 +181,7 @@ class _UserModScreenState extends State<UserModScreen> {
                 ),
                 const SizedBox(height: 8),
                 FormLabel(
-                  label: '社長権限',
+                  '社長権限',
                   child: CheckboxListTile(
                     value: president,
                     onChanged: (value) {

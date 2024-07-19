@@ -26,8 +26,8 @@ class NoticeProvider with ChangeNotifier {
   }) async {
     String? error;
     if (organization == null) return 'お知らせの追加に失敗しました';
-    if (title == '') return 'タイトルを入力してください';
-    if (content == '') return 'お知らせ内容を入力してください';
+    if (title == '') return 'タイトルは必須入力です';
+    if (content == '') return 'お知らせ内容は必須入力です';
     if (loginUser == null) return 'お知らせの追加に失敗しました';
     try {
       String id = _noticeService.id();
@@ -95,8 +95,8 @@ class NoticeProvider with ChangeNotifier {
   }) async {
     String? error;
     if (organization == null) return 'お知らせの編集に失敗しました';
-    if (title == '') return 'タイトルを入力してください';
-    if (content == '') return 'お知らせ内容を入力してください';
+    if (title == '') return 'タイトルは必須入力です';
+    if (content == '') return 'お知らせ内容は必須入力です';
     if (loginUser == null) return 'お知らせの編集に失敗しました';
     try {
       String? file;

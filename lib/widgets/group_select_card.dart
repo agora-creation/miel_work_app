@@ -4,6 +4,7 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_group_radio.dart';
 
 class GroupSelectCard extends StatefulWidget {
@@ -23,12 +24,12 @@ class GroupSelectCard extends StatefulWidget {
 class _GroupSelectCardState extends State<GroupSelectCard> {
   @override
   void initState() {
-    super.initState();
     widget.homeProvider.setGroups(
       organizationId: widget.loginProvider.organization?.id,
       group: widget.loginProvider.group,
       isAllGroup: widget.loginProvider.isAllGroup(),
     );
+    super.initState();
   }
 
   @override
@@ -69,7 +70,10 @@ class _GroupSelectCardState extends State<GroupSelectCard> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            trailing: const FaIcon(FontAwesomeIcons.caretDown),
+            trailing: const FaIcon(
+              FontAwesomeIcons.caretDown,
+              color: kGrey600Color,
+            ),
             tileColor: kWhiteColor,
           ),
         ),
@@ -116,13 +120,8 @@ class _GroupSelectDialogState extends State<GroupSelectDialog> {
         ));
       }
     }
-    return AlertDialog(
+    return CustomAlertDialog(
       contentPadding: EdgeInsets.zero,
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
       content: Container(
         decoration: BoxDecoration(border: Border.all(color: kGrey600Color)),
         child: SingleChildScrollView(

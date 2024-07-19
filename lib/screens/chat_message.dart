@@ -5,6 +5,7 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
@@ -18,7 +19,8 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/services/chat_message.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/user.dart';
-import 'package:miel_work_app/widgets/custom_button_sm.dart';
+import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
+import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/message_form_field.dart';
 import 'package:miel_work_app/widgets/message_list.dart';
@@ -60,9 +62,9 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
 
   @override
   void initState() {
-    super.initState();
     _init();
     _getKeyword();
+    super.initState();
   }
 
   @override
@@ -73,13 +75,13 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
       appBar: AppBar(
         backgroundColor: kWhiteColor,
         leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
+          icon: const FaIcon(
+            FontAwesomeIcons.chevronLeft,
             color: kBlackColor,
+            size: 18,
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        centerTitle: true,
         title: Text(
           widget.chat.name,
           style: const TextStyle(color: kBlackColor),
@@ -92,7 +94,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                 getKeyword: _getKeyword,
               ),
             ),
-            icon: const Icon(Icons.search),
+            icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
           ),
           IconButton(
             onPressed: () => showDialog(
@@ -101,7 +103,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                 chat: widget.chat,
               ),
             ),
-            icon: const Icon(Icons.groups),
+            icon: const FaIcon(FontAwesomeIcons.users),
           ),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
@@ -346,8 +348,8 @@ class _ImageDialogState extends State<ImageDialog> {
               color: Colors.transparent,
               child: IconButton(
                 onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(
-                  Icons.close,
+                icon: const FaIcon(
+                  FontAwesomeIcons.xmark,
                   color: kWhiteColor,
                   size: 30,
                 ),
@@ -426,8 +428,8 @@ class _PdfDialogState extends State<PdfDialog> {
               color: Colors.transparent,
               child: IconButton(
                 onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(
-                  Icons.close,
+                icon: const FaIcon(
+                  FontAwesomeIcons.xmark,
                   color: kWhiteColor,
                   size: 30,
                 ),
@@ -447,8 +449,8 @@ class _PdfDialogState extends State<PdfDialog> {
                   }
                   Navigator.of(context).pop();
                 },
-                icon: const Icon(
-                  Icons.delete,
+                icon: const FaIcon(
+                  FontAwesomeIcons.trash,
                   color: kWhiteColor,
                   size: 30,
                 ),
@@ -485,22 +487,13 @@ class _SearchKeywordDialogState extends State<SearchKeywordDialog> {
 
   @override
   void initState() {
-    super.initState();
     _getKeyword();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      title: const Text(
-        'キーワード検索',
-        style: TextStyle(fontSize: 16),
-      ),
+    return CustomAlertDialog(
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -512,15 +505,16 @@ class _SearchKeywordDialogState extends State<SearchKeywordDialog> {
           ),
         ],
       ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: '閉じる',
           labelColor: kWhiteColor,
           backgroundColor: kGreyColor,
           onPressed: () => Navigator.pop(context),
         ),
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: '検索する',
           labelColor: kWhiteColor,
           backgroundColor: kLightBlueColor,
@@ -561,24 +555,14 @@ class _ChatUsersDialogState extends State<ChatUsersDialog> {
 
   @override
   void initState() {
-    super.initState();
     _init();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return CustomAlertDialog(
       contentPadding: EdgeInsets.zero,
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      titlePadding: const EdgeInsets.all(8),
-      title: const Text(
-        '参加スタッフ',
-        style: TextStyle(fontSize: 14),
-      ),
       content: Container(
         decoration: const BoxDecoration(
           border: Border.symmetric(
@@ -619,18 +603,8 @@ class ReadUsersDialog extends StatefulWidget {
 class _ReadUsersDialogState extends State<ReadUsersDialog> {
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return CustomAlertDialog(
       contentPadding: EdgeInsets.zero,
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      titlePadding: const EdgeInsets.all(8),
-      title: const Text(
-        '既読スタッフ',
-        style: TextStyle(fontSize: 14),
-      ),
       content: Container(
         decoration: const BoxDecoration(
           border: Border.symmetric(

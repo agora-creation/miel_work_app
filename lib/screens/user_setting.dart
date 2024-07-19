@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/how_to.dart';
 import 'package:miel_work_app/screens/login.dart';
-import 'package:miel_work_app/widgets/custom_button_sm.dart';
+import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
+import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_setting_list.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
+import 'package:page_transition/page_transition.dart';
 
 class UserSettingScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -38,8 +41,8 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(
-              Icons.close,
+            icon: const FaIcon(
+              FontAwesomeIcons.xmark,
               color: kBlackColor,
             ),
             onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
@@ -82,10 +85,15 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
           CustomSettingList(
             label: 'このアプリの使い方',
             value: '',
-            onTap: () => pushScreen(
-              context,
-              const HowToScreen(),
-            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  type: PageTransitionType.rightToLeft,
+                  child: const HowToScreen(),
+                ),
+              );
+            },
           ),
           const SizedBox(height: 24),
           LinkText(
@@ -121,22 +129,13 @@ class _ModNameDialogState extends State<ModNameDialog> {
 
   @override
   void initState() {
-    super.initState();
     nameController.text = widget.loginProvider.user?.name ?? '';
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      title: const Text(
-        '名前を変更',
-        style: TextStyle(fontSize: 18),
-      ),
+    return CustomAlertDialog(
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,16 +148,17 @@ class _ModNameDialogState extends State<ModNameDialog> {
           ),
         ],
       ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: '閉じる',
           labelColor: kWhiteColor,
           backgroundColor: kGreyColor,
           onPressed: () => Navigator.pop(context),
         ),
-        CustomButtonSm(
-          label: '入力内容を保存',
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '保存する',
           labelColor: kWhiteColor,
           backgroundColor: kBlueColor,
           onPressed: () async {
@@ -172,7 +172,7 @@ class _ModNameDialogState extends State<ModNameDialog> {
             }
             widget.loginProvider.reload();
             if (!mounted) return;
-            showMessage(context, '名前を変更しました', true);
+            showMessage(context, '名前が変更されました', true);
             Navigator.pop(context);
           },
         ),
@@ -198,22 +198,13 @@ class _ModEmailDialogState extends State<ModEmailDialog> {
 
   @override
   void initState() {
-    super.initState();
     emailController.text = widget.loginProvider.user?.email ?? '';
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      title: const Text(
-        'メールアドレスを変更',
-        style: TextStyle(fontSize: 18),
-      ),
+    return CustomAlertDialog(
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,16 +217,17 @@ class _ModEmailDialogState extends State<ModEmailDialog> {
           ),
         ],
       ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: '閉じる',
           labelColor: kWhiteColor,
           backgroundColor: kGreyColor,
           onPressed: () => Navigator.pop(context),
         ),
-        CustomButtonSm(
-          label: '入力内容を保存',
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '保存する',
           labelColor: kWhiteColor,
           backgroundColor: kBlueColor,
           onPressed: () async {
@@ -249,7 +241,7 @@ class _ModEmailDialogState extends State<ModEmailDialog> {
             }
             widget.loginProvider.reload();
             if (!mounted) return;
-            showMessage(context, 'メールアドレスを変更しました', true);
+            showMessage(context, 'メールアドレスが変更されました', true);
             Navigator.pop(context);
           },
         ),
@@ -275,16 +267,7 @@ class _ModPasswordDialogState extends State<ModPasswordDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      title: const Text(
-        'パスワードを変更',
-        style: TextStyle(fontSize: 18),
-      ),
+    return CustomAlertDialog(
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -297,16 +280,17 @@ class _ModPasswordDialogState extends State<ModPasswordDialog> {
           ),
         ],
       ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: '閉じる',
           labelColor: kWhiteColor,
           backgroundColor: kGreyColor,
           onPressed: () => Navigator.pop(context),
         ),
-        CustomButtonSm(
-          label: '入力内容を保存',
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '保存する',
           labelColor: kWhiteColor,
           backgroundColor: kBlueColor,
           onPressed: () async {
@@ -320,7 +304,7 @@ class _ModPasswordDialogState extends State<ModPasswordDialog> {
             }
             widget.loginProvider.reload();
             if (!mounted) return;
-            showMessage(context, 'パスワードを変更しました', true);
+            showMessage(context, 'パスワードが変更されました', true);
             Navigator.pop(context);
           },
         ),
@@ -344,12 +328,7 @@ class LogoutDialog extends StatefulWidget {
 class _LogoutDialogState extends State<LogoutDialog> {
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
+    return CustomAlertDialog(
       content: const Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -358,28 +337,35 @@ class _LogoutDialogState extends State<LogoutDialog> {
           Text(
             '本当にログアウトしますか？',
             style: TextStyle(
-              color: kBlackColor,
+              color: kRedColor,
               fontSize: 16,
             ),
           ),
         ],
       ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: 'キャンセル',
           labelColor: kWhiteColor,
           backgroundColor: kGreyColor,
           onPressed: () => Navigator.pop(context),
         ),
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: 'ログアウト',
           labelColor: kWhiteColor,
           backgroundColor: kRedColor,
           onPressed: () async {
             await widget.loginProvider.logout();
             if (!mounted) return;
-            pushReplacementScreen(context, const LoginScreen());
+            Navigator.pushReplacement(
+              context,
+              PageTransition(
+                type: PageTransitionType.topToBottom,
+                child: const LoginScreen(),
+              ),
+            );
           },
         ),
       ],

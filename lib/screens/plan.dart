@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/category.dart';
@@ -10,9 +11,11 @@ import 'package:miel_work_app/screens/plan_timeline.dart';
 import 'package:miel_work_app/services/category.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/plan.dart';
-import 'package:miel_work_app/widgets/custom_button_sm.dart';
+import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
+import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_calendar.dart';
 import 'package:miel_work_app/widgets/custom_checkbox.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart' as sfc;
 
 class PlanScreen extends StatefulWidget {
@@ -57,8 +60,8 @@ class _PlanScreenState extends State<PlanScreen> {
   @override
   void initState() {
     calendarController.selectedDate = DateTime.now();
-    super.initState();
     _init();
+    super.initState();
   }
 
   @override
@@ -66,21 +69,18 @@ class _PlanScreenState extends State<PlanScreen> {
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: kWhiteColor,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
-            color: kBlackColor,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
         title: const Text(
           'スケジュール',
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
           IconButton(
+            icon: const FaIcon(
+              FontAwesomeIcons.magnifyingGlass,
+              color: kBlackColor,
+            ),
             onPressed: () => showDialog(
               context: context,
               builder: (context) => SearchCategoryDialog(
@@ -88,14 +88,30 @@ class _PlanScreenState extends State<PlanScreen> {
                 searchCategoriesChange: _searchCategoriesChange,
               ),
             ),
-            icon: const Icon(Icons.search),
           ),
           IconButton(
-            onPressed: () => pushScreen(
-              context,
-              CategoryScreen(organization: widget.loginProvider.organization),
+            icon: const FaIcon(
+              FontAwesomeIcons.tag,
+              color: kBlackColor,
             ),
-            icon: const Icon(Icons.list),
+            onPressed: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  type: PageTransitionType.rightToLeft,
+                  child: CategoryScreen(
+                    organization: widget.loginProvider.organization,
+                  ),
+                ),
+              );
+            },
+          ),
+          IconButton(
+            icon: const FaIcon(
+              FontAwesomeIcons.xmark,
+              color: kBlackColor,
+            ),
+            onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
           ),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
@@ -161,22 +177,13 @@ class _SearchCategoryDialogState extends State<SearchCategoryDialog> {
 
   @override
   void initState() {
-    super.initState();
     _init();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      title: const Text(
-        'カテゴリ検索',
-        style: TextStyle(fontSize: 16),
-      ),
+    return CustomAlertDialog(
       content: Container(
         decoration: BoxDecoration(border: Border.all(color: kGrey600Color)),
         child: SingleChildScrollView(
@@ -202,15 +209,16 @@ class _SearchCategoryDialogState extends State<SearchCategoryDialog> {
           ),
         ),
       ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: '閉じる',
           labelColor: kWhiteColor,
           backgroundColor: kGreyColor,
           onPressed: () => Navigator.pop(context),
         ),
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: '検索する',
           labelColor: kWhiteColor,
           backgroundColor: kLightBlueColor,

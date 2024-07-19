@@ -3,36 +3,29 @@ import 'package:miel_work_app/common/style.dart';
 
 class FormLabel extends StatelessWidget {
   final String label;
-  final Color color;
   final Widget child;
 
-  const FormLabel({
-    required this.label,
-    this.color = kGrey600Color,
+  const FormLabel(
+    this.label, {
     required this.child,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: color)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              color: color,
-              fontSize: 12,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            color: kGrey600Color,
+            fontSize: 16,
           ),
-          child,
-        ],
-      ),
+        ),
+        const SizedBox(height: 2),
+        child,
+      ],
     );
   }
 }

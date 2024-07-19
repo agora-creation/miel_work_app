@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/plan.dart';
@@ -10,6 +11,7 @@ import 'package:miel_work_app/screens/plan_mod.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/plan.dart';
 import 'package:miel_work_app/widgets/plan_list.dart';
+import 'package:page_transition/page_transition.dart';
 
 class PlanTimelineScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -52,16 +54,16 @@ class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
-        backgroundColor: kWhiteColor,
         automaticallyImplyLeading: false,
+        backgroundColor: kWhiteColor,
         title: Text(
-          dateText('yyyy年MM月dd日(E)', widget.date),
+          dateText('yyyy年MM月dd日(E)の予定', widget.date),
           style: const TextStyle(color: kBlackColor),
         ),
         actions: [
           IconButton(
-            icon: const Icon(
-              Icons.close,
+            icon: const FaIcon(
+              FontAwesomeIcons.xmark,
               color: kBlackColor,
             ),
             onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
@@ -94,14 +96,19 @@ class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
                 return PlanList(
                   plan: plan,
                   groups: widget.homeProvider.groups,
-                  onTap: () => pushScreen(
-                    context,
-                    PlanModScreen(
-                      loginProvider: widget.loginProvider,
-                      homeProvider: widget.homeProvider,
-                      planId: plan.id,
-                    ),
-                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        type: PageTransitionType.rightToLeft,
+                        child: PlanModScreen(
+                          loginProvider: widget.loginProvider,
+                          homeProvider: widget.homeProvider,
+                          planId: plan.id,
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             );
@@ -109,16 +116,21 @@ class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => pushScreen(
-          context,
-          PlanAddScreen(
-            loginProvider: widget.loginProvider,
-            homeProvider: widget.homeProvider,
-            date: widget.date,
-          ),
-        ),
-        icon: const Icon(
-          Icons.add,
+        onPressed: () {
+          Navigator.push(
+            context,
+            PageTransition(
+              type: PageTransitionType.rightToLeft,
+              child: PlanAddScreen(
+                loginProvider: widget.loginProvider,
+                homeProvider: widget.homeProvider,
+                date: widget.date,
+              ),
+            ),
+          );
+        },
+        icon: const FaIcon(
+          FontAwesomeIcons.plus,
           color: kWhiteColor,
         ),
         label: const Text(

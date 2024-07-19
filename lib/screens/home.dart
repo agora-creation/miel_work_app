@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,
                                 alert: alert,
-                                onTap: () => pushScreen(
+                                onTap: () => showBottomUpScreen(
                                   context,
                                   NoticeScreen(
                                     loginProvider: loginProvider,
@@ -140,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,
                                 alert: alert,
-                                onTap: () => pushScreen(
+                                onTap: () => showBottomUpScreen(
                                   context,
                                   ChatScreen(
                                     loginProvider: loginProvider,
@@ -155,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       CustomHomePlanCard(
                         loginProvider: loginProvider,
                         homeProvider: homeProvider,
-                        onTap: () => pushScreen(
+                        onTap: () => showBottomUpScreen(
                           context,
                           PlanScreen(
                             loginProvider: loginProvider,
@@ -189,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,
                                 alert: alert,
-                                onTap: () => pushScreen(
+                                onTap: () => showBottomUpScreen(
                                   context,
                                   ProblemScreen(
                                     loginProvider: loginProvider,
@@ -220,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 backgroundColor: kWhiteColor,
                                 alert: alert,
                                 alertMessage: '承認待ちあり',
-                                onTap: () => pushScreen(
+                                onTap: () => showBottomUpScreen(
                                   context,
                                   ApplyScreen(
                                     loginProvider: loginProvider,
@@ -291,7 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               return HomeIconCard(
                                 icon: FontAwesomeIcons.handsHoldingCircle,
                                 iconSize: 42,
-                                label: '貸出物',
+                                label: '貸出／返却',
                                 labelFontSize: 16,
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,
@@ -318,13 +318,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           loginProvider.user?.admin == true
                               ? HomeIconCard(
-                                  icon: FontAwesomeIcons.users,
+                                  icon: FontAwesomeIcons.usersRectangle,
                                   iconSize: 42,
                                   label: 'グループ一覧',
                                   labelFontSize: 16,
                                   color: kWhiteColor,
                                   backgroundColor: kGrey600Color,
-                                  onTap: () => pushScreen(
+                                  onTap: () => showBottomUpScreen(
                                     context,
                                     GroupScreen(
                                       loginProvider: loginProvider,
@@ -341,7 +341,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   labelFontSize: 16,
                                   color: kWhiteColor,
                                   backgroundColor: kGrey600Color,
-                                  onTap: () => pushScreen(
+                                  onTap: () => showBottomUpScreen(
                                     context,
                                     UserScreen(
                                       loginProvider: loginProvider,
@@ -352,7 +352,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               : Container(),
                         ],
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 80),
                     ],
                   ),
                 ),

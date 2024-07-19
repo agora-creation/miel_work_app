@@ -3,12 +3,12 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/user.dart';
 
-class CustomUserList extends StatelessWidget {
+class UserList extends StatelessWidget {
   final UserModel user;
   final OrganizationGroupModel? userInGroup;
   final Function()? onTap;
 
-  const CustomUserList({
+  const UserList({
     required this.user,
     required this.userInGroup,
     this.onTap,

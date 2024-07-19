@@ -44,34 +44,28 @@ class ProblemList extends StatelessWidget {
                   Chip(
                     label: Text(
                       problem.type,
-                      style: const TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     backgroundColor: problem.typeColor(),
                   ),
                   Text(
-                    '報告日時: ${dateText('yyyy/MM/dd HH:mm', problem.createdAt)}',
+                    problem.details,
+                    style: const TextStyle(fontSize: 16),
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
                   Text(
-                    '対応者: ${problem.picName}',
-                    softWrap: false,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                    dateText('yyyy/MM/dd HH:mm', problem.createdAt),
+                    style: const TextStyle(fontSize: 14),
                   ),
-                  problem.targetName != ''
-                      ? Text(
-                          '相手の名前: ${problem.targetName}',
-                          softWrap: false,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        )
-                      : Container(),
                   problem.stateText() != ''
                       ? Text(
                           problem.stateText(),
-                          style: const TextStyle(color: kRedColor),
+                          style: const TextStyle(
+                            color: kRedColor,
+                            fontSize: 16,
+                          ),
                           softWrap: false,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
@@ -82,6 +76,7 @@ class ProblemList extends StatelessWidget {
               const FaIcon(
                 FontAwesomeIcons.chevronRight,
                 color: kGrey600Color,
+                size: 16,
               ),
             ],
           ),

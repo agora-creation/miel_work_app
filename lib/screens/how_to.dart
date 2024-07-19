@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
@@ -12,13 +13,13 @@ class HowToScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: kWhiteColor,
         leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
+          icon: const FaIcon(
+            FontAwesomeIcons.chevronLeft,
             color: kBlackColor,
+            size: 18,
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        centerTitle: true,
         title: const Text(
           '使い方',
           style: TextStyle(color: kBlackColor),

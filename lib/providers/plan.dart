@@ -24,8 +24,8 @@ class PlanProvider with ChangeNotifier {
   }) async {
     String? error;
     if (organization == null) return '予定の追加に失敗しました';
-    if (category == null) return 'カテゴリを選択してください';
-    if (subject == '') return '件名を入力してください';
+    if (category == null) return 'カテゴリは必須選択です';
+    if (subject == '') return '件名は必須入力です';
     if (startedAt.millisecondsSinceEpoch > endedAt.millisecondsSinceEpoch) {
       return '日時を正しく選択してください';
     }
@@ -82,8 +82,8 @@ class PlanProvider with ChangeNotifier {
   }) async {
     String? error;
     if (organization == null) return '予定の編集に失敗しました';
-    if (category == null) return 'カテゴリを選択してください';
-    if (subject == '') return '件名を入力してください';
+    if (category == null) return 'カテゴリは必須選択です';
+    if (subject == '') return '件名は必須入力です';
     if (startedAt.millisecondsSinceEpoch > endedAt.millisecondsSinceEpoch) {
       return '日時を正しく選択してください';
     }

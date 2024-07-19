@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:miel_work_app/common/functions.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/user.dart';
@@ -8,7 +8,8 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/user_add.dart';
 import 'package:miel_work_app/screens/user_mod.dart';
 import 'package:miel_work_app/services/user.dart';
-import 'package:miel_work_app/widgets/custom_user_list.dart';
+import 'package:miel_work_app/widgets/user_list.dart';
+import 'package:page_transition/page_transition.dart';
 
 class UserScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -43,8 +44,8 @@ class _UserScreenState extends State<UserScreen> {
 
   @override
   void initState() {
-    super.initState();
     _getUsers();
+    super.initState();
   }
 
   @override
@@ -52,19 +53,21 @@ class _UserScreenState extends State<UserScreen> {
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: kWhiteColor,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
-            color: kBlackColor,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
         title: const Text(
           'スタッフ一覧',
           style: TextStyle(color: kBlackColor),
         ),
+        actions: [
+          IconButton(
+            icon: const FaIcon(
+              FontAwesomeIcons.xmark,
+              color: kBlackColor,
+            ),
+            onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+          ),
+        ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: users.isNotEmpty
@@ -81,34 +84,44 @@ class _UserScreenState extends State<UserScreen> {
                     }
                   }
                 }
-                return CustomUserList(
+                return UserList(
                   user: user,
                   userInGroup: userInGroup,
-                  onTap: () => pushScreen(
-                    context,
-                    UserModScreen(
-                      loginProvider: widget.loginProvider,
-                      homeProvider: widget.homeProvider,
-                      user: user,
-                      userInGroup: userInGroup,
-                      getUsers: _getUsers,
-                    ),
-                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        type: PageTransitionType.rightToLeft,
+                        child: UserModScreen(
+                          loginProvider: widget.loginProvider,
+                          homeProvider: widget.homeProvider,
+                          user: user,
+                          userInGroup: userInGroup,
+                          getUsers: _getUsers,
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             )
           : const Center(child: Text('スタッフはいません')),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => pushScreen(
-          context,
-          UserAddScreen(
-            loginProvider: widget.loginProvider,
-            homeProvider: widget.homeProvider,
-            getUsers: _getUsers,
-          ),
-        ),
-        icon: const Icon(
-          Icons.add,
+        onPressed: () {
+          Navigator.push(
+            context,
+            PageTransition(
+              type: PageTransitionType.rightToLeft,
+              child: UserAddScreen(
+                loginProvider: widget.loginProvider,
+                homeProvider: widget.homeProvider,
+                getUsers: _getUsers,
+              ),
+            ),
+          );
+        },
+        icon: const FaIcon(
+          FontAwesomeIcons.plus,
           color: kWhiteColor,
         ),
         label: const Text(

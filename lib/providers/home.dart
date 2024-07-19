@@ -43,7 +43,7 @@ class HomeProvider with ChangeNotifier {
   }) async {
     String? error;
     if (organization == null) return 'グループの追加に失敗しました';
-    if (name == '') return 'グループ名を入力してください';
+    if (name == '') return 'グループ名は必須入力です';
     try {
       String groupId = _groupService.id(organizationId: organization.id);
       _groupService.create({
@@ -94,7 +94,7 @@ class HomeProvider with ChangeNotifier {
     String? error;
     if (organization == null) return 'グループ名の変更に失敗しました';
     if (group == null) return 'グループ名の変更に失敗しました';
-    if (name == '') return 'グループ名を入力してください';
+    if (name == '') return 'グループ名は必須入力です';
     try {
       _groupService.update({
         'id': group.id,

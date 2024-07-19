@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/notice.dart';
 import 'package:miel_work_app/models/user.dart';
 
-class CustomNoticeList extends StatelessWidget {
+class NoticeList extends StatelessWidget {
   final NoticeModel notice;
   final UserModel? user;
   final Function()? onTap;
 
-  const CustomNoticeList({
+  const NoticeList({
     required this.notice,
     required this.user,
     this.onTap,
@@ -27,15 +28,16 @@ class CustomNoticeList extends StatelessWidget {
       child: ListTile(
         title: Text(
           notice.title,
-          style: const TextStyle(fontSize: 18),
+          style: const TextStyle(fontSize: 20),
         ),
         subtitle: Text(
           dateText('yyyy/MM/dd HH:mm', notice.createdAt),
           style: const TextStyle(fontSize: 14),
         ),
-        trailing: const Icon(
-          Icons.chevron_right,
+        trailing: const FaIcon(
+          FontAwesomeIcons.chevronRight,
           color: kGreyColor,
+          size: 16,
         ),
         tileColor:
             !notice.readUserIds.contains(user?.id) ? kRed100Color : kWhiteColor,

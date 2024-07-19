@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/category.dart';
 
-class CustomCategoryList extends StatelessWidget {
+class CategoryList extends StatelessWidget {
   final CategoryModel category;
   final Function()? onTap;
 
-  const CustomCategoryList({
+  const CategoryList({
     required this.category,
     this.onTap,
     super.key,
@@ -27,9 +28,10 @@ class CustomCategoryList extends StatelessWidget {
             fontSize: 18,
           ),
         ),
-        trailing: const Icon(
-          Icons.chevron_right,
+        trailing: const FaIcon(
+          FontAwesomeIcons.chevronRight,
           color: kWhiteColor,
+          size: 16,
         ),
         onTap: onTap,
       ),

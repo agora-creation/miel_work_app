@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/notice.dart';
@@ -9,7 +10,10 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/notice_mod.dart';
 import 'package:miel_work_app/services/notice.dart';
+import 'package:miel_work_app/widgets/form_label.dart';
+import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class NoticeDetailScreen extends StatefulWidget {
@@ -45,8 +49,8 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
 
   @override
   void initState() {
-    super.initState();
     _init();
+    super.initState();
   }
 
   @override
@@ -56,79 +60,93 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
       appBar: AppBar(
         backgroundColor: kWhiteColor,
         leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
+          icon: const FaIcon(
+            FontAwesomeIcons.chevronLeft,
             color: kBlackColor,
+            size: 18,
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        centerTitle: true,
-        title: Text(
-          widget.notice.title,
-          style: const TextStyle(color: kBlackColor),
+        title: const Text(
+          'お知らせ詳細',
+          style: TextStyle(color: kBlackColor),
         ),
         actions: [
           IconButton(
-            onPressed: () => pushScreen(
-              context,
-              NoticeModScreen(
-                loginProvider: widget.loginProvider,
-                homeProvider: widget.homeProvider,
-                notice: widget.notice,
-              ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  type: PageTransitionType.rightToLeft,
+                  child: NoticeModScreen(
+                    loginProvider: widget.loginProvider,
+                    homeProvider: widget.homeProvider,
+                    notice: widget.notice,
+                  ),
+                ),
+              );
+            },
+            icon: const FaIcon(
+              FontAwesomeIcons.pen,
+              color: kBlueColor,
             ),
-            icon: const Icon(Icons.edit, color: kBlueColor),
           ),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  dateText('yyyy/MM/dd HH:mm', widget.notice.createdAt),
-                  style: const TextStyle(
-                    color: kGreyColor,
-                    fontSize: 14,
-                  ),
+              Text(
+                dateText('yyyy/MM/dd HH:mm', widget.notice.createdAt),
+                style: const TextStyle(
+                  color: kGreyColor,
+                  fontSize: 14,
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
-                widget.notice.content,
-                style: const TextStyle(fontSize: 18),
+              FormLabel(
+                'タイトル',
+                child: FormValue(widget.notice.title),
               ),
-              const SizedBox(height: 16),
-              widget.notice.file != ''
-                  ? LinkText(
-                      label: '添付ファイル',
-                      color: kBlueColor,
-                      onTap: () {
-                        String ext = widget.notice.fileExt;
-                        if (imageExtensions.contains(ext)) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => ImageDialog(
-                              file: widget.notice.file,
-                            ),
-                          );
-                        }
-                        if (pdfExtensions.contains(ext)) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => PdfDialog(
-                              file: widget.notice.file,
-                            ),
-                          );
-                        }
-                      },
-                    )
-                  : Container(),
+              const SizedBox(height: 8),
+              FormLabel(
+                'お知らせ内容',
+                child: FormValue(widget.notice.content),
+              ),
+              const SizedBox(height: 8),
+              FormLabel(
+                '添付ファイル',
+                child: widget.notice.file != ''
+                    ? LinkText(
+                        label: '確認する',
+                        color: kBlueColor,
+                        onTap: () {
+                          String ext = widget.notice.fileExt;
+                          if (imageExtensions.contains(ext)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => ImageDialog(
+                                file: widget.notice.file,
+                              ),
+                            );
+                          }
+                          if (pdfExtensions.contains(ext)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => PdfDialog(
+                                file: widget.notice.file,
+                              ),
+                            );
+                          }
+                        },
+                      )
+                    : Container(),
+              ),
+              const SizedBox(height: 80),
             ],
           ),
         ),
@@ -169,8 +187,8 @@ class ImageDialog extends StatelessWidget {
               color: Colors.transparent,
               child: IconButton(
                 onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(
-                  Icons.close,
+                icon: const FaIcon(
+                  FontAwesomeIcons.xmark,
                   color: kWhiteColor,
                   size: 30,
                 ),
@@ -215,8 +233,8 @@ class PdfDialog extends StatelessWidget {
               color: Colors.transparent,
               child: IconButton(
                 onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(
-                  Icons.close,
+                icon: const FaIcon(
+                  FontAwesomeIcons.xmark,
                   color: kWhiteColor,
                   size: 30,
                 ),

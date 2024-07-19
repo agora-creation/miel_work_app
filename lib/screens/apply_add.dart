@@ -132,7 +132,7 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
                 ),
                 const SizedBox(height: 8),
                 FormLabel(
-                  label: '申請種別',
+                  '申請種別',
                   child: DropdownButton<String>(
                     underline: Container(),
                     isExpanded: true,
@@ -183,7 +183,7 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
                 ),
                 const SizedBox(height: 8),
                 FormLabel(
-                  label: '添付ファイル',
+                  '添付ファイル',
                   child: CustomFileField(
                     value: pickedFile,
                     defaultValue: '',
@@ -200,7 +200,7 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
                 ),
                 const SizedBox(height: 8),
                 FormLabel(
-                  label: '添付ファイル2',
+                  '添付ファイル2',
                   child: CustomFileField(
                     value: pickedFile2,
                     defaultValue: '',
@@ -217,7 +217,7 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
                 ),
                 const SizedBox(height: 8),
                 FormLabel(
-                  label: '添付ファイル3',
+                  '添付ファイル3',
                   child: CustomFileField(
                     value: pickedFile3,
                     defaultValue: '',
@@ -234,7 +234,7 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
                 ),
                 const SizedBox(height: 8),
                 FormLabel(
-                  label: '添付ファイル4',
+                  '添付ファイル4',
                   child: CustomFileField(
                     value: pickedFile4,
                     defaultValue: '',
@@ -251,7 +251,7 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
                 ),
                 const SizedBox(height: 8),
                 FormLabel(
-                  label: '添付ファイル5',
+                  '添付ファイル5',
                   child: CustomFileField(
                     value: pickedFile5,
                     defaultValue: '',

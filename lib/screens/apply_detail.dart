@@ -158,7 +158,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
               const SizedBox(height: 4),
               reApprovalUsers.isNotEmpty
                   ? FormLabel(
-                      label: '承認者一覧',
+                      '承認者一覧',
                       child: Column(
                         children: reApprovalUsers.map((approvalUser) {
                           return CustomApprovalUserList(
@@ -170,7 +170,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                   : Container(),
               const SizedBox(height: 8),
               FormLabel(
-                label: '件名',
+                '件名',
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
@@ -182,7 +182,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
               const SizedBox(height: 8),
               widget.apply.type == '稟議' || widget.apply.type == '支払伺い'
                   ? FormLabel(
-                      label: '金額',
+                      '金額',
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Text(
@@ -194,7 +194,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                   : Container(),
               const SizedBox(height: 8),
               FormLabel(
-                label: '内容',
+                '内容',
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
@@ -206,7 +206,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
               const SizedBox(height: 8),
               widget.apply.approvalReason != ''
                   ? FormLabel(
-                      label: '承認理由',
+                      '承認理由',
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Text(widget.apply.approvalReason),
@@ -216,7 +216,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
               const SizedBox(height: 8),
               widget.apply.reason != ''
                   ? FormLabel(
-                      label: '否決理由',
+                      '否決理由',
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Text(widget.apply.reason),

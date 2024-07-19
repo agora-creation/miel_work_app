@@ -32,8 +32,8 @@ class ProblemProvider with ChangeNotifier {
   }) async {
     String? error;
     if (organization == null) return 'クレーム／要望の追加に失敗しました';
-    if (type == '') return '対応項目を選択してください';
-    if (picName == '') return '対応者を入力してください';
+    if (type == '') return '対応項目は必須選択です';
+    if (picName == '') return '対応者は必須入力です';
     if (loginUser == null) return 'クレーム／要望の追加に失敗しました';
     try {
       String id = _problemService.id();
@@ -63,19 +63,19 @@ class ProblemProvider with ChangeNotifier {
         'expirationAt': createdAt.add(const Duration(days: 365)),
       });
       //通知
-      List<UserModel> sendUsers = await _userService.selectList(
-        userIds: organization.userIds,
-      );
-      if (sendUsers.isNotEmpty) {
-        for (UserModel user in sendUsers) {
-          if (user.id == loginUser.id) continue;
-          _fmService.send(
-            token: user.token,
-            title: 'クレーム／要望が報告されました',
-            body: details,
-          );
-        }
-      }
+      // List<UserModel> sendUsers = await _userService.selectList(
+      //   userIds: organization.userIds,
+      // );
+      // if (sendUsers.isNotEmpty) {
+      //   for (UserModel user in sendUsers) {
+      //     if (user.id == loginUser.id) continue;
+      //     _fmService.send(
+      //       token: user.token,
+      //       title: 'クレーム／要望が報告されました',
+      //       body: details,
+      //     );
+      //   }
+      // }
     } catch (e) {
       error = 'クレーム／要望の追加に失敗しました';
     }
@@ -99,10 +99,10 @@ class ProblemProvider with ChangeNotifier {
     required UserModel? loginUser,
   }) async {
     String? error;
-    if (organization == null) return 'クレーム／要望の編集に失敗しました';
-    if (type == '') return '対応項目を選択してください';
-    if (picName == '') return '対応者を入力してください';
-    if (loginUser == null) return 'クレーム／要望の編集に失敗しました';
+    if (organization == null) return 'クレーム／要望情報の編集に失敗しました';
+    if (type == '') return '対応項目は必須選択です';
+    if (picName == '') return '対応者は必須入力です';
+    if (loginUser == null) return 'クレーム／要望情報の編集に失敗しました';
     try {
       String? image;
       if (imageXFile != null) {
@@ -145,7 +145,7 @@ class ProblemProvider with ChangeNotifier {
         });
       }
     } catch (e) {
-      error = 'クレーム／要望の編集に失敗しました';
+      error = 'クレーム／要望情報の編集に失敗しました';
     }
     return error;
   }
@@ -159,7 +159,7 @@ class ProblemProvider with ChangeNotifier {
         'id': problem.id,
       });
     } catch (e) {
-      error = 'クレーム／要望の削除に失敗しました';
+      error = 'クレーム／要望情報の削除に失敗しました';
     }
     return error;
   }

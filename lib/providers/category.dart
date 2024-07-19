@@ -13,7 +13,7 @@ class CategoryProvider with ChangeNotifier {
   }) async {
     String? error;
     if (organization == null) return 'カテゴリの追加に失敗しました';
-    if (name == '') return 'カテゴリ名を入力してください';
+    if (name == '') return 'カテゴリ名は必須入力です';
     try {
       String id = _categoryService.id();
       _categoryService.create({

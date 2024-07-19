@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as picker;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
@@ -10,9 +11,12 @@ import 'package:miel_work_app/models/problem.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/problem.dart';
+import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
+import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_checkbox.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
+import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:provider/provider.dart';
 
 class ProblemModScreen extends StatefulWidget {
@@ -46,7 +50,6 @@ class _ProblemModScreenState extends State<ProblemModScreen> {
 
   @override
   void initState() {
-    super.initState();
     type = widget.problem.type;
     createdAt = widget.problem.createdAt;
     picNameController.text = widget.problem.picName;
@@ -57,6 +60,7 @@ class _ProblemModScreenState extends State<ProblemModScreen> {
     detailsController.text = widget.problem.details;
     states = widget.problem.states;
     countController.text = widget.problem.count.toString();
+    super.initState();
   }
 
   @override
@@ -67,46 +71,32 @@ class _ProblemModScreenState extends State<ProblemModScreen> {
       appBar: AppBar(
         backgroundColor: kWhiteColor,
         leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
+          icon: const FaIcon(
+            FontAwesomeIcons.chevronLeft,
             color: kBlackColor,
+            size: 18,
           ),
           onPressed: () => Navigator.pop(context),
         ),
         centerTitle: true,
         title: const Text(
-          'クレーム／要望の編集',
+          'クレーム／要望情報の編集',
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
-          TextButton(
-            onPressed: () async {
-              String? error = await problemProvider.update(
-                organization: widget.loginProvider.organization,
+          IconButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => DelProblemDialog(
+                loginProvider: widget.loginProvider,
+                homeProvider: widget.homeProvider,
                 problem: widget.problem,
-                type: type,
-                createdAt: createdAt,
-                picName: picNameController.text,
-                targetName: targetNameController.text,
-                targetAge: targetAgeController.text,
-                targetTel: targetTelController.text,
-                targetAddress: targetAddressController.text,
-                details: detailsController.text,
-                imageXFile: imageXFile,
-                states: states,
-                count: int.parse(countController.text),
-                loginUser: widget.loginProvider.user,
-              );
-              if (error != null) {
-                if (!mounted) return;
-                showMessage(context, error, false);
-                return;
-              }
-              if (!mounted) return;
-              showMessage(context, 'クレーム／要望を変更しました', true);
-              Navigator.pop(context);
-            },
-            child: const Text('保存'),
+              ),
+            ),
+            icon: const FaIcon(
+              FontAwesomeIcons.trash,
+              color: kRedColor,
+            ),
           ),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
@@ -115,13 +105,13 @@ class _ProblemModScreenState extends State<ProblemModScreen> {
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(16),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 FormLabel(
-                  label: '報告日時',
-                  child: GestureDetector(
+                  '報告日時',
+                  child: FormValue(
+                    dateText('yyyy/MM/dd HH:mm', createdAt),
                     onTap: () async {
                       picker.DatePicker.showDateTimePicker(
                         context,
@@ -138,99 +128,90 @@ class _ProblemModScreenState extends State<ProblemModScreen> {
                         locale: picker.LocaleType.jp,
                       );
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(dateText('yyyy/MM/dd HH:mm', createdAt)),
-                          const Icon(
-                            Icons.calendar_month,
-                            color: kGreyColor,
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '対応項目',
-                  child: DropdownButton<String>(
-                    underline: Container(),
-                    isExpanded: true,
-                    value: type,
-                    items: kProblemTypes.map((e) {
-                      return DropdownMenuItem(
+                  '対応項目',
+                  child: Column(
+                    children: kProblemTypes.map((e) {
+                      return RadioListTile(
+                        title: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Chip(
+                            label: Text(e),
+                            backgroundColor: generateProblemColor(e),
+                          ),
+                        ),
                         value: e,
-                        child: Text(e),
+                        groupValue: type,
+                        onChanged: (value) {
+                          if (value == null) return;
+                          setState(() {
+                            type = value;
+                          });
+                        },
                       );
                     }).toList(),
-                    onChanged: (value) {
-                      if (value == null) return;
-                      setState(() {
-                        type = value;
-                      });
-                    },
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '対応者',
+                  '対応者',
                   child: CustomTextField(
                     controller: picNameController,
                     textInputType: TextInputType.name,
                     maxLines: 1,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '相手の名前',
+                  '相手の名前',
                   child: CustomTextField(
                     controller: targetNameController,
                     textInputType: TextInputType.name,
                     maxLines: 1,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '相手の年齢',
+                  '相手の年齢',
                   child: CustomTextField(
                     controller: targetAgeController,
                     textInputType: TextInputType.name,
                     maxLines: 1,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '相手の連絡先',
+                  '相手の連絡先',
                   child: CustomTextField(
                     controller: targetTelController,
                     textInputType: TextInputType.name,
                     maxLines: 1,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '相手の住所',
+                  '相手の住所',
                   child: CustomTextField(
                     controller: targetAddressController,
                     textInputType: TextInputType.name,
                     maxLines: 1,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '詳細',
+                  '詳細',
                   child: CustomTextField(
                     controller: detailsController,
                     textInputType: TextInputType.multiline,
                     maxLines: 15,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '添付写真',
+                  '添付写真',
                   child: GestureDetector(
                     onTap: () async {
                       final result = await ImagePicker().pickImage(
@@ -246,25 +227,19 @@ class _ProblemModScreenState extends State<ProblemModScreen> {
                             fit: BoxFit.cover,
                             width: double.infinity,
                           )
-                        : widget.problem.image != ''
-                            ? Image.network(
-                                widget.problem.image,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                              )
-                            : Container(
-                                color: kGrey300Color,
-                                width: double.infinity,
-                                height: 100,
-                                child: const Center(
-                                  child: Text('写真が選択されていません'),
-                                ),
-                              ),
+                        : Container(
+                            color: kGrey300Color,
+                            width: double.infinity,
+                            height: 100,
+                            child: const Center(
+                              child: Text('写真が選択されていません'),
+                            ),
+                          ),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '対応状態',
+                  '対応状態',
                   child: Column(
                     children: kProblemStates.map((e) {
                       return CustomCheckbox(
@@ -282,21 +257,124 @@ class _ProblemModScreenState extends State<ProblemModScreen> {
                     }).toList(),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
-                  label: '同じような注意(対応)をした回数',
+                  '同じような注意(対応)をした回数',
                   child: CustomTextField(
                     controller: countController,
                     textInputType: TextInputType.number,
                     maxLines: 1,
                   ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 80),
               ],
             ),
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          String? error = await problemProvider.update(
+            organization: widget.loginProvider.organization,
+            problem: widget.problem,
+            type: type,
+            createdAt: createdAt,
+            picName: picNameController.text,
+            targetName: targetNameController.text,
+            targetAge: targetAgeController.text,
+            targetTel: targetTelController.text,
+            targetAddress: targetAddressController.text,
+            details: detailsController.text,
+            imageXFile: imageXFile,
+            states: states,
+            count: int.parse(countController.text),
+            loginUser: widget.loginProvider.user,
+          );
+          if (error != null) {
+            if (!mounted) return;
+            showMessage(context, error, false);
+            return;
+          }
+          if (!mounted) return;
+          showMessage(context, 'クレーム／要望情報が変更されました', true);
+          Navigator.pop(context);
+        },
+        icon: const FaIcon(
+          FontAwesomeIcons.floppyDisk,
+          color: kWhiteColor,
+        ),
+        label: const Text(
+          '保存する',
+          style: TextStyle(color: kWhiteColor),
+        ),
+      ),
+    );
+  }
+}
+
+class DelProblemDialog extends StatefulWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final ProblemModel problem;
+
+  const DelProblemDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.problem,
+    super.key,
+  });
+
+  @override
+  State<DelProblemDialog> createState() => _DelProblemDialogState();
+}
+
+class _DelProblemDialogState extends State<DelProblemDialog> {
+  @override
+  Widget build(BuildContext context) {
+    final problemProvider = Provider.of<ProblemProvider>(context);
+    return CustomAlertDialog(
+      content: const SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 8),
+            Text(
+              '本当に削除しますか？',
+              style: TextStyle(color: kRedColor),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '削除する',
+          labelColor: kWhiteColor,
+          backgroundColor: kRedColor,
+          onPressed: () async {
+            String? error = await problemProvider.delete(
+              problem: widget.problem,
+            );
+            if (error != null) {
+              if (!mounted) return;
+              showMessage(context, error, false);
+              return;
+            }
+            if (!mounted) return;
+            showMessage(context, 'クレーム／要望が削除されました', true);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }

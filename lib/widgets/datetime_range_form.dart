@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 
@@ -50,10 +51,10 @@ class DatetimeRangeForm extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Icon(
-                  Icons.arrow_forward_ios,
+                const FaIcon(
+                  FontAwesomeIcons.arrowRight,
                   color: kGrey600Color,
-                  size: 16,
+                  size: 18,
                 ),
                 GestureDetector(
                   onTap: endedOnTap,

@@ -30,7 +30,7 @@ class ChatMessageProvider with ChangeNotifier {
     String? error;
     if (chat == null) return 'メッセージの送信に失敗しました';
     if (loginUser == null) return 'メッセージの送信に失敗しました';
-    if (contentController.text == '') return 'メッセージを入力してください';
+    if (contentController.text == '') return 'メッセージは必須入力です';
     try {
       String id = _messageService.id();
       List<Map> readUsers = [];
@@ -95,14 +95,6 @@ class ChatMessageProvider with ChangeNotifier {
       String id = _messageService.id();
       String content = '画像を送信しました';
       File imageFile = File(imageXFile.path);
-      // //画像圧縮
-      // var imageFileCompress = await FlutterImageCompress.compressWithFile(
-      //   imageFile.path,
-      //   quality: 80,
-      // );
-      // if (imageFileCompress != null) {
-      //   imageFile = File.fromRawPath(imageFileCompress);
-      // }
       FirebaseStorage storage = FirebaseStorage.instance;
       String storagePath = 'chat/${chat.id}/$id';
       final task = await storage.ref(storagePath).putFile(imageFile);

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/notice.dart';
@@ -9,7 +10,8 @@ import 'package:miel_work_app/screens/notice_add.dart';
 import 'package:miel_work_app/screens/notice_detail.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/notice.dart';
-import 'package:miel_work_app/widgets/custom_notice_list.dart';
+import 'package:miel_work_app/widgets/notice_list.dart';
+import 'package:page_transition/page_transition.dart';
 
 class NoticeScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -36,8 +38,8 @@ class _NoticeScreenState extends State<NoticeScreen> {
 
   @override
   void initState() {
-    super.initState();
     _init();
+    super.initState();
   }
 
   @override
@@ -51,15 +53,8 @@ class _NoticeScreenState extends State<NoticeScreen> {
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: kWhiteColor,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
-            color: kBlackColor,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        centerTitle: true,
         title: Text(
           appBarTitle,
           style: const TextStyle(color: kBlackColor),
@@ -87,7 +82,17 @@ class _NoticeScreenState extends State<NoticeScreen> {
                 setState(() {});
               }
             },
-            icon: const Icon(Icons.date_range, color: kBlueColor),
+            icon: const FaIcon(
+              FontAwesomeIcons.calendar,
+              color: kBlueColor,
+            ),
+          ),
+          IconButton(
+            icon: const FaIcon(
+              FontAwesomeIcons.xmark,
+              color: kBlackColor,
+            ),
+            onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
           ),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
@@ -113,32 +118,42 @@ class _NoticeScreenState extends State<NoticeScreen> {
             itemCount: notices.length,
             itemBuilder: (context, index) {
               NoticeModel notice = notices[index];
-              return CustomNoticeList(
+              return NoticeList(
                 notice: notice,
                 user: widget.loginProvider.user,
-                onTap: () => pushScreen(
-                  context,
-                  NoticeDetailScreen(
-                    loginProvider: widget.loginProvider,
-                    homeProvider: widget.homeProvider,
-                    notice: notice,
-                  ),
-                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                      type: PageTransitionType.rightToLeft,
+                      child: NoticeDetailScreen(
+                        loginProvider: widget.loginProvider,
+                        homeProvider: widget.homeProvider,
+                        notice: notice,
+                      ),
+                    ),
+                  );
+                },
               );
             },
           );
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => pushScreen(
-          context,
-          NoticeAddScreen(
-            loginProvider: widget.loginProvider,
-            homeProvider: widget.homeProvider,
-          ),
-        ),
-        icon: const Icon(
-          Icons.add,
+        onPressed: () {
+          Navigator.push(
+            context,
+            PageTransition(
+              type: PageTransitionType.rightToLeft,
+              child: NoticeAddScreen(
+                loginProvider: widget.loginProvider,
+                homeProvider: widget.homeProvider,
+              ),
+            ),
+          );
+        },
+        icon: const FaIcon(
+          FontAwesomeIcons.plus,
           color: kWhiteColor,
         ),
         label: const Text(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/chat.dart';
 import 'package:miel_work_app/widgets/alert_chip.dart';
@@ -37,9 +38,10 @@ class ChatList extends StatelessWidget {
         ),
         trailing: unreadCount > 0
             ? AlertChip(unreadCount.toString())
-            : const Icon(
-                Icons.chevron_right,
+            : const FaIcon(
+                FontAwesomeIcons.chevronRight,
                 color: kGreyColor,
+                size: 16,
               ),
         onTap: onTap,
       ),

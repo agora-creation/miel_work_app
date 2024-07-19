@@ -67,12 +67,12 @@ class _CustomFooterState extends State<CustomFooter>
 
   @override
   void initState() {
-    super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {});
     FlutterAppBadger.removeBadge();
     _nowCheck();
     _versionCheck();
+    super.initState();
   }
 
   @override

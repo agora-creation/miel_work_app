@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/plan.dart';
@@ -73,8 +74,8 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-        icon: const Icon(
-          Icons.home,
+        icon: const FaIcon(
+          FontAwesomeIcons.downLong,
           color: kWhiteColor,
         ),
         label: const Text(
