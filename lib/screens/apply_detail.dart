@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/apply.dart';
@@ -8,12 +9,15 @@ import 'package:miel_work_app/models/approval_user.dart';
 import 'package:miel_work_app/providers/apply.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/screens/apply_add.dart';
+import 'package:miel_work_app/screens/apply_mod.dart';
+import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_approval_user_list.dart';
-import 'package:miel_work_app/widgets/custom_button_sm.dart';
+import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
+import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
@@ -38,14 +42,10 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
   Widget build(BuildContext context) {
     bool isApproval = true;
     bool isReject = true;
-    bool isApply = false;
     bool isDelete = true;
     if (widget.apply.createdUserId == widget.loginProvider.user?.id) {
       isApproval = false;
       isReject = false;
-      if (widget.apply.approval == 9) {
-        isApply = true;
-      }
     } else {
       isDelete = false;
     }
@@ -69,40 +69,43 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
       appBar: AppBar(
         backgroundColor: kWhiteColor,
         leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
+          icon: const FaIcon(
+            FontAwesomeIcons.chevronLeft,
             color: kBlackColor,
+            size: 18,
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        centerTitle: true,
-        title: Text(
-          '${widget.apply.type}申請詳細',
-          style: const TextStyle(color: kBlackColor),
+        title: const Text(
+          '申請詳細',
+          style: TextStyle(color: kBlackColor),
         ),
         actions: [
-          isDelete
-              ? TextButton(
-                  onPressed: () => showDialog(
-                    context: context,
-                    builder: (context) => DelApplyDialog(
-                      loginProvider: widget.loginProvider,
-                      homeProvider: widget.homeProvider,
-                      apply: widget.apply,
-                    ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  type: PageTransitionType.rightToLeft,
+                  child: ApplyModScreen(
+                    loginProvider: widget.loginProvider,
+                    homeProvider: widget.homeProvider,
+                    apply: widget.apply,
                   ),
-                  child: const Text(
-                    '削除する',
-                    style: TextStyle(color: kRedColor),
-                  ),
-                )
-              : Container(),
+                ),
+              );
+            },
+            icon: const FaIcon(
+              FontAwesomeIcons.pen,
+              color: kBlueColor,
+            ),
+          ),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -120,6 +123,13 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                     ),
                     Text(
                       '申請番号: ${widget.apply.number}',
+                      style: const TextStyle(
+                        color: kGreyColor,
+                        fontSize: 14,
+                      ),
+                    ),
+                    Text(
+                      '申請者: ${widget.apply.createdUserName}',
                       style: const TextStyle(
                         color: kGreyColor,
                         fontSize: 14,
@@ -145,214 +155,210 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                             ),
                           )
                         : Container(),
-                    Text(
-                      '申請者: ${widget.apply.createdUserName}',
-                      style: const TextStyle(
-                        color: kGreyColor,
-                        fontSize: 14,
-                      ),
-                    ),
                   ],
                 ),
               ),
               const SizedBox(height: 4),
-              reApprovalUsers.isNotEmpty
-                  ? FormLabel(
-                      '承認者一覧',
-                      child: Column(
-                        children: reApprovalUsers.map((approvalUser) {
-                          return CustomApprovalUserList(
-                            approvalUser: approvalUser,
-                          );
-                        }).toList(),
-                      ),
-                    )
-                  : Container(),
+              FormLabel(
+                '承認者一覧',
+                child: Column(
+                  children: reApprovalUsers.map((approvalUser) {
+                    return CustomApprovalUserList(
+                      approvalUser: approvalUser,
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(height: 8),
+              FormLabel(
+                '申請種別',
+                child: Chip(
+                  label: Text('${widget.apply.type}申請'),
+                  backgroundColor: widget.apply.typeColor(),
+                ),
+              ),
               const SizedBox(height: 8),
               FormLabel(
                 '件名',
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(
-                    widget.apply.title,
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                ),
+                child: FormValue(widget.apply.title),
               ),
               const SizedBox(height: 8),
               widget.apply.type == '稟議' || widget.apply.type == '支払伺い'
-                  ? FormLabel(
-                      '金額',
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Text(
-                          '¥ ${widget.apply.formatPrice()}',
-                          style: const TextStyle(fontSize: 20),
-                        ),
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: FormLabel(
+                        '金額',
+                        child: FormValue('¥ ${widget.apply.formatPrice()}'),
                       ),
                     )
                   : Container(),
-              const SizedBox(height: 8),
               FormLabel(
                 '内容',
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(
-                    widget.apply.content,
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                ),
+                child: FormValue(widget.apply.content),
               ),
               const SizedBox(height: 8),
               widget.apply.approvalReason != ''
-                  ? FormLabel(
-                      '承認理由',
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Text(widget.apply.approvalReason),
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: FormLabel(
+                        '承認理由',
+                        child: FormValue(widget.apply.approvalReason),
                       ),
                     )
                   : Container(),
-              const SizedBox(height: 8),
               widget.apply.reason != ''
-                  ? FormLabel(
-                      '否決理由',
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Text(widget.apply.reason),
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: FormLabel(
+                        '否決理由',
+                        child: FormValue(widget.apply.reason),
                       ),
                     )
                   : Container(),
-              const SizedBox(height: 16),
-              widget.apply.file != ''
-                  ? LinkText(
-                      label: '添付ファイル',
-                      color: kBlueColor,
-                      onTap: () {
-                        String ext = widget.apply.fileExt;
-                        if (imageExtensions.contains(ext)) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => ImageDialog(
-                              file: widget.apply.file,
-                            ),
-                          );
-                        }
-                        if (pdfExtensions.contains(ext)) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => PdfDialog(
-                              file: widget.apply.file,
-                            ),
-                          );
-                        }
-                      },
-                    )
-                  : Container(),
+              FormLabel(
+                '添付ファイル',
+                child: widget.apply.file != ''
+                    ? LinkText(
+                        label: '確認する',
+                        color: kBlueColor,
+                        onTap: () {
+                          String ext = widget.apply.fileExt;
+                          if (imageExtensions.contains(ext)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => ImageDialog(
+                                file: widget.apply.file,
+                              ),
+                            );
+                          }
+                          if (pdfExtensions.contains(ext)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => PdfDialog(
+                                file: widget.apply.file,
+                              ),
+                            );
+                          }
+                        },
+                      )
+                    : Container(),
+              ),
               const SizedBox(height: 8),
-              widget.apply.file2 != ''
-                  ? LinkText(
-                      label: '添付ファイル2',
-                      color: kBlueColor,
-                      onTap: () {
-                        String ext = widget.apply.file2Ext;
-                        if (imageExtensions.contains(ext)) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => ImageDialog(
-                              file: widget.apply.file2,
-                            ),
-                          );
-                        }
-                        if (pdfExtensions.contains(ext)) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => PdfDialog(
-                              file: widget.apply.file2,
-                            ),
-                          );
-                        }
-                      },
-                    )
-                  : Container(),
+              FormLabel(
+                '添付ファイル2',
+                child: widget.apply.file2 != ''
+                    ? LinkText(
+                        label: '確認する',
+                        color: kBlueColor,
+                        onTap: () {
+                          String ext = widget.apply.file2Ext;
+                          if (imageExtensions.contains(ext)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => ImageDialog(
+                                file: widget.apply.file2,
+                              ),
+                            );
+                          }
+                          if (pdfExtensions.contains(ext)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => PdfDialog(
+                                file: widget.apply.file2,
+                              ),
+                            );
+                          }
+                        },
+                      )
+                    : Container(),
+              ),
               const SizedBox(height: 8),
-              widget.apply.file3 != ''
-                  ? LinkText(
-                      label: '添付ファイル3',
-                      color: kBlueColor,
-                      onTap: () {
-                        String ext = widget.apply.file3Ext;
-                        if (imageExtensions.contains(ext)) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => ImageDialog(
-                              file: widget.apply.file3,
-                            ),
-                          );
-                        }
-                        if (pdfExtensions.contains(ext)) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => PdfDialog(
-                              file: widget.apply.file3,
-                            ),
-                          );
-                        }
-                      },
-                    )
-                  : Container(),
+              FormLabel(
+                '添付ファイル3',
+                child: widget.apply.file3 != ''
+                    ? LinkText(
+                        label: '確認する',
+                        color: kBlueColor,
+                        onTap: () {
+                          String ext = widget.apply.file3Ext;
+                          if (imageExtensions.contains(ext)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => ImageDialog(
+                                file: widget.apply.file3,
+                              ),
+                            );
+                          }
+                          if (pdfExtensions.contains(ext)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => PdfDialog(
+                                file: widget.apply.file3,
+                              ),
+                            );
+                          }
+                        },
+                      )
+                    : Container(),
+              ),
               const SizedBox(height: 8),
-              widget.apply.file4 != ''
-                  ? LinkText(
-                      label: '添付ファイル4',
-                      color: kBlueColor,
-                      onTap: () {
-                        String ext = widget.apply.file4Ext;
-                        if (imageExtensions.contains(ext)) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => ImageDialog(
-                              file: widget.apply.file4,
-                            ),
-                          );
-                        }
-                        if (pdfExtensions.contains(ext)) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => PdfDialog(
-                              file: widget.apply.file4,
-                            ),
-                          );
-                        }
-                      },
-                    )
-                  : Container(),
+              FormLabel(
+                '添付ファイル4',
+                child: widget.apply.file4 != ''
+                    ? LinkText(
+                        label: '確認する',
+                        color: kBlueColor,
+                        onTap: () {
+                          String ext = widget.apply.file4Ext;
+                          if (imageExtensions.contains(ext)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => ImageDialog(
+                                file: widget.apply.file4,
+                              ),
+                            );
+                          }
+                          if (pdfExtensions.contains(ext)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => PdfDialog(
+                                file: widget.apply.file4,
+                              ),
+                            );
+                          }
+                        },
+                      )
+                    : Container(),
+              ),
               const SizedBox(height: 8),
-              widget.apply.file5 != ''
-                  ? LinkText(
-                      label: '添付ファイル5',
-                      color: kBlueColor,
-                      onTap: () {
-                        String ext = widget.apply.file5Ext;
-                        if (imageExtensions.contains(ext)) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => ImageDialog(
-                              file: widget.apply.file5,
-                            ),
-                          );
-                        }
-                        if (pdfExtensions.contains(ext)) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => PdfDialog(
-                              file: widget.apply.file5,
-                            ),
-                          );
-                        }
-                      },
-                    )
-                  : Container(),
+              FormLabel(
+                '添付ファイル5',
+                child: widget.apply.file5 != ''
+                    ? LinkText(
+                        label: '確認する',
+                        color: kBlueColor,
+                        onTap: () {
+                          String ext = widget.apply.file5Ext;
+                          if (imageExtensions.contains(ext)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => ImageDialog(
+                                file: widget.apply.file5,
+                              ),
+                            );
+                          }
+                          if (pdfExtensions.contains(ext)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => PdfDialog(
+                                file: widget.apply.file5,
+                              ),
+                            );
+                          }
+                        },
+                      )
+                    : Container(),
+              ),
               const SizedBox(height: 16),
               const Text(
                 '※『承認』は、承認状況が「承認待ち」で、作成者・既承認者以外のスタッフが実行できます。',
@@ -389,7 +395,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                   fontSize: 12,
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 80),
             ],
           ),
         ),
@@ -443,30 +449,6 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                   ),
                 )
               : Container(),
-          const SizedBox(height: 8),
-          isApply
-              ? FloatingActionButton.extended(
-                  heroTag: 'add',
-                  onPressed: () => pushScreen(
-                    context,
-                    ApplyAddScreen(
-                      loginProvider: widget.loginProvider,
-                      homeProvider: widget.homeProvider,
-                      type: widget.apply.type,
-                      apply: widget.apply,
-                    ),
-                  ),
-                  backgroundColor: kBlueColor,
-                  icon: const Icon(
-                    Icons.add,
-                    color: kWhiteColor,
-                  ),
-                  label: const Text(
-                    '再申請する',
-                    style: TextStyle(color: kWhiteColor),
-                  ),
-                )
-              : Container(),
         ],
       ),
     );
@@ -505,8 +487,8 @@ class ImageDialog extends StatelessWidget {
               color: Colors.transparent,
               child: IconButton(
                 onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(
-                  Icons.close,
+                icon: const FaIcon(
+                  FontAwesomeIcons.xmark,
                   color: kWhiteColor,
                   size: 30,
                 ),
@@ -551,83 +533,14 @@ class PdfDialog extends StatelessWidget {
               color: Colors.transparent,
               child: IconButton(
                 onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(
-                  Icons.close,
+                icon: const FaIcon(
+                  FontAwesomeIcons.xmark,
                   color: kWhiteColor,
                   size: 30,
                 ),
               ),
             ),
           ],
-        ),
-      ],
-    );
-  }
-}
-
-class DelApplyDialog extends StatefulWidget {
-  final LoginProvider loginProvider;
-  final HomeProvider homeProvider;
-  final ApplyModel apply;
-
-  const DelApplyDialog({
-    required this.loginProvider,
-    required this.homeProvider,
-    required this.apply,
-    super.key,
-  });
-
-  @override
-  State<DelApplyDialog> createState() => _DelApplyDialogState();
-}
-
-class _DelApplyDialogState extends State<DelApplyDialog> {
-  @override
-  Widget build(BuildContext context) {
-    final applyProvider = Provider.of<ApplyProvider>(context);
-    return AlertDialog(
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      content: const Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(height: 8),
-          Text(
-            '本当に削除しますか？',
-            style: TextStyle(color: kBlackColor),
-          ),
-        ],
-      ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
-      actions: [
-        CustomButtonSm(
-          label: 'キャンセル',
-          labelColor: kWhiteColor,
-          backgroundColor: kGreyColor,
-          onPressed: () => Navigator.pop(context),
-        ),
-        CustomButtonSm(
-          label: '削除する',
-          labelColor: kWhiteColor,
-          backgroundColor: kRedColor,
-          onPressed: () async {
-            String? error = await applyProvider.delete(
-              apply: widget.apply,
-            );
-            if (error != null) {
-              if (!mounted) return;
-              showMessage(context, error, false);
-              return;
-            }
-            if (!mounted) return;
-            showMessage(context, '申請を削除しました', true);
-            Navigator.pop(context);
-            Navigator.pop(context);
-          },
         ),
       ],
     );
@@ -657,12 +570,7 @@ class _ApprovalApplyDialogState extends State<ApprovalApplyDialog> {
   @override
   Widget build(BuildContext context) {
     final applyProvider = Provider.of<ApplyProvider>(context);
-    return AlertDialog(
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
+    return CustomAlertDialog(
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -670,33 +578,38 @@ class _ApprovalApplyDialogState extends State<ApprovalApplyDialog> {
           const SizedBox(height: 8),
           const Text(
             '本当に承認しますか？',
-            style: TextStyle(color: kBlackColor),
+            style: TextStyle(color: kRedColor),
           ),
           const SizedBox(height: 8),
-          CustomTextField(
-            controller: approvalNumberController,
-            textInputType: TextInputType.number,
-            maxLines: 1,
-            label: '承認番号',
+          FormLabel(
+            '承認番号',
+            child: CustomTextField(
+              controller: approvalNumberController,
+              textInputType: TextInputType.number,
+              maxLines: 1,
+            ),
           ),
           const SizedBox(height: 8),
-          CustomTextField(
-            controller: approvalReasonController,
-            textInputType: TextInputType.multiline,
-            maxLines: null,
-            label: '承認理由',
+          FormLabel(
+            '承認理由',
+            child: CustomTextField(
+              controller: approvalReasonController,
+              textInputType: TextInputType.multiline,
+              maxLines: 5,
+            ),
           ),
         ],
       ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: 'キャンセル',
           labelColor: kWhiteColor,
           backgroundColor: kGreyColor,
           onPressed: () => Navigator.pop(context),
         ),
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: '承認する',
           labelColor: kWhiteColor,
           backgroundColor: kRedColor,
@@ -745,12 +658,7 @@ class _RejectApplyDialogState extends State<RejectApplyDialog> {
   @override
   Widget build(BuildContext context) {
     final applyProvider = Provider.of<ApplyProvider>(context);
-    return AlertDialog(
-      backgroundColor: kWhiteColor,
-      surfaceTintColor: kWhiteColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
+    return CustomAlertDialog(
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -758,26 +666,29 @@ class _RejectApplyDialogState extends State<RejectApplyDialog> {
           const SizedBox(height: 8),
           const Text(
             '本当に否決しますか？',
-            style: TextStyle(color: kBlackColor),
+            style: TextStyle(color: kRedColor),
           ),
           const SizedBox(height: 8),
-          CustomTextField(
-            controller: reasonController,
-            textInputType: TextInputType.multiline,
-            maxLines: null,
-            label: '否決理由',
+          FormLabel(
+            '否決理由',
+            child: CustomTextField(
+              controller: reasonController,
+              textInputType: TextInputType.multiline,
+              maxLines: 5,
+            ),
           ),
         ],
       ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: 'キャンセル',
           labelColor: kWhiteColor,
           backgroundColor: kGreyColor,
           onPressed: () => Navigator.pop(context),
         ),
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: '否決する',
           labelColor: kRedColor,
           backgroundColor: kRed100Color,

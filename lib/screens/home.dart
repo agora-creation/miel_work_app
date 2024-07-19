@@ -9,6 +9,8 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/apply.dart';
 import 'package:miel_work_app/screens/chat.dart';
 import 'package:miel_work_app/screens/group.dart';
+import 'package:miel_work_app/screens/loan.dart';
+import 'package:miel_work_app/screens/lost.dart';
 import 'package:miel_work_app/screens/notice.dart';
 import 'package:miel_work_app/screens/plan.dart';
 import 'package:miel_work_app/screens/problem.dart';
@@ -270,7 +272,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 backgroundColor: kWhiteColor,
                                 alert: alert,
                                 alertMessage: '保管中',
-                                onTap: () {},
+                                onTap: () => showBottomUpScreen(
+                                  context,
+                                  LostScreen(
+                                    loginProvider: loginProvider,
+                                    homeProvider: homeProvider,
+                                  ),
+                                ),
                               );
                             },
                           ),
@@ -297,7 +305,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 backgroundColor: kWhiteColor,
                                 alert: alert,
                                 alertMessage: '貸出中',
-                                onTap: () {},
+                                onTap: () => showBottomUpScreen(
+                                  context,
+                                  LoanScreen(
+                                    loginProvider: loginProvider,
+                                    homeProvider: homeProvider,
+                                  ),
+                                ),
                               );
                             },
                           ),

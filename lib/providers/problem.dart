@@ -63,19 +63,19 @@ class ProblemProvider with ChangeNotifier {
         'expirationAt': createdAt.add(const Duration(days: 365)),
       });
       //通知
-      // List<UserModel> sendUsers = await _userService.selectList(
-      //   userIds: organization.userIds,
-      // );
-      // if (sendUsers.isNotEmpty) {
-      //   for (UserModel user in sendUsers) {
-      //     if (user.id == loginUser.id) continue;
-      //     _fmService.send(
-      //       token: user.token,
-      //       title: 'クレーム／要望が報告されました',
-      //       body: details,
-      //     );
-      //   }
-      // }
+      List<UserModel> sendUsers = await _userService.selectList(
+        userIds: organization.userIds,
+      );
+      if (sendUsers.isNotEmpty) {
+        for (UserModel user in sendUsers) {
+          if (user.id == loginUser.id) continue;
+          _fmService.send(
+            token: user.token,
+            title: 'クレーム／要望が報告されました',
+            body: details,
+          );
+        }
+      }
     } catch (e) {
       error = 'クレーム／要望の追加に失敗しました';
     }

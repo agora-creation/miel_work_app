@@ -28,26 +28,31 @@ class ApplyList extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Chip(
-                  label: Text('${apply.type}申請'),
-                  backgroundColor: apply.typeColor(),
-                ),
-                Text(
-                  apply.title,
-                  style: const TextStyle(fontSize: 18),
-                ),
-                Text(
-                  '申請日時: ${dateText('yyyy/MM/dd HH:mm', apply.createdAt)}',
-                  style: const TextStyle(fontSize: 14),
-                ),
-                Text(
-                  '申請番号: ${apply.number}',
-                  style: const TextStyle(fontSize: 14),
-                ),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Chip(
+                    label: Text('${apply.type}申請'),
+                    backgroundColor: apply.typeColor(),
+                  ),
+                  Text(
+                    apply.title,
+                    style: const TextStyle(fontSize: 18),
+                    softWrap: false,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  Text(
+                    '申請日時: ${dateText('yyyy/MM/dd HH:mm', apply.createdAt)}',
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  Text(
+                    '申請番号: ${apply.number}',
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
             ),
             const FaIcon(
               FontAwesomeIcons.chevronRight,

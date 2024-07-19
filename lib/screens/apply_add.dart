@@ -3,27 +3,26 @@ import 'dart:io';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/apply.dart';
 import 'package:miel_work_app/providers/apply.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/widgets/custom_file_field.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
+import 'package:miel_work_app/widgets/file_picker_button.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:provider/provider.dart';
 
 class ApplyAddScreen extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
-  final String type;
   final ApplyModel? apply;
 
   const ApplyAddScreen({
     required this.loginProvider,
     required this.homeProvider,
-    required this.type,
     this.apply,
     super.key,
   });
@@ -37,7 +36,7 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
   String type = kApplyTypes.first;
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
-  TextEditingController priceController = TextEditingController();
+  TextEditingController priceController = TextEditingController(text: '0');
   File? pickedFile;
   File? pickedFile2;
   File? pickedFile3;
@@ -45,7 +44,6 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
   File? pickedFile5;
 
   void _init() async {
-    type = widget.type;
     if (widget.apply == null) return;
     numberController.text = widget.apply?.number ?? '';
     titleController.text = widget.apply?.title ?? '';
@@ -56,8 +54,8 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
 
   @override
   void initState() {
-    super.initState();
     _init();
+    super.initState();
   }
 
   @override
@@ -68,52 +66,17 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
       appBar: AppBar(
         backgroundColor: kWhiteColor,
         leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left,
+          icon: const FaIcon(
+            FontAwesomeIcons.chevronLeft,
             color: kBlackColor,
+            size: 18,
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        centerTitle: true,
         title: const Text(
           '新規申請',
           style: TextStyle(color: kBlackColor),
         ),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              int price = 0;
-              if (type == '稟議' || type == '支払伺い') {
-                String priceText = priceController.text.replaceAll(',', '');
-                price = int.parse(priceText);
-              }
-              String? error = await applyProvider.create(
-                organization: widget.loginProvider.organization,
-                group: null,
-                number: numberController.text,
-                type: type,
-                title: titleController.text,
-                content: contentController.text,
-                price: price,
-                pickedFile: pickedFile,
-                pickedFile2: pickedFile2,
-                pickedFile3: pickedFile3,
-                pickedFile4: pickedFile4,
-                pickedFile5: pickedFile5,
-                loginUser: widget.loginProvider.user,
-              );
-              if (error != null) {
-                if (!mounted) return;
-                showMessage(context, error, false);
-                return;
-              }
-              if (!mounted) return;
-              showMessage(context, '新規申請を送信しました', true);
-              Navigator.pop(context);
-            },
-            child: const Text('送信する'),
-          ),
-        ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
       body: GestureDetector(
@@ -121,70 +84,85 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
         behavior: HitTestBehavior.opaque,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                CustomTextField(
-                  controller: numberController,
-                  textInputType: TextInputType.number,
-                  maxLines: 1,
-                  label: '申請番号',
-                ),
-                const SizedBox(height: 8),
                 FormLabel(
-                  '申請種別',
-                  child: DropdownButton<String>(
-                    underline: Container(),
-                    isExpanded: true,
-                    value: type,
-                    items: kApplyTypes.map((e) {
-                      return DropdownMenuItem(
-                        value: e,
-                        child: Text('$e申請'),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        type = value ?? kApplyTypes.first;
-                      });
-                    },
+                  '申請番号',
+                  child: CustomTextField(
+                    controller: numberController,
+                    textInputType: TextInputType.number,
+                    maxLines: 1,
                   ),
                 ),
-                const SizedBox(height: 8),
-                CustomTextField(
-                  controller: titleController,
-                  textInputType: TextInputType.text,
-                  maxLines: 1,
-                  label: '件名',
-                ),
-                const SizedBox(height: 8),
-                type == '稟議' || type == '支払伺い'
-                    ? CustomTextField(
-                        controller: priceController,
-                        textInputType: TextInputType.number,
-                        inputFormatters: [
-                          CurrencyTextInputFormatter.currency(
-                            locale: 'ja',
-                            decimalDigits: 0,
-                            symbol: '',
+                const SizedBox(height: 16),
+                FormLabel(
+                  '申請種別',
+                  child: Column(
+                    children: kApplyTypes.map((e) {
+                      return RadioListTile(
+                        title: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Chip(
+                            label: Text('$e申請'),
+                            backgroundColor: generateApplyColor(e),
                           ),
-                        ],
-                        maxLines: 1,
-                        label: '金額',
-                        prefix: const Text('¥ '),
+                        ),
+                        value: e,
+                        groupValue: type,
+                        onChanged: (value) {
+                          if (value == null) return;
+                          setState(() {
+                            type = value;
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                FormLabel(
+                  '件名',
+                  child: CustomTextField(
+                    controller: titleController,
+                    textInputType: TextInputType.text,
+                    maxLines: 1,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                type == '稟議' || type == '支払伺い'
+                    ? Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: FormLabel(
+                          '金額',
+                          child: CustomTextField(
+                            controller: priceController,
+                            textInputType: TextInputType.number,
+                            inputFormatters: [
+                              CurrencyTextInputFormatter.currency(
+                                locale: 'ja',
+                                decimalDigits: 0,
+                                symbol: '',
+                              ),
+                            ],
+                            maxLines: 1,
+                            prefix: const Text('¥ '),
+                          ),
+                        ),
                       )
                     : Container(),
-                const SizedBox(height: 8),
-                CustomTextField(
-                  controller: contentController,
-                  textInputType: TextInputType.multiline,
-                  maxLines: 15,
-                  label: '内容',
+                FormLabel(
+                  '内容',
+                  child: CustomTextField(
+                    controller: contentController,
+                    textInputType: TextInputType.multiline,
+                    maxLines: 15,
+                  ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
                   '添付ファイル',
-                  child: CustomFileField(
+                  child: FilePickerButton(
                     value: pickedFile,
                     defaultValue: '',
                     onPressed: () async {
@@ -198,10 +176,10 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
                   '添付ファイル2',
-                  child: CustomFileField(
+                  child: FilePickerButton(
                     value: pickedFile2,
                     defaultValue: '',
                     onPressed: () async {
@@ -215,10 +193,10 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
                   '添付ファイル3',
-                  child: CustomFileField(
+                  child: FilePickerButton(
                     value: pickedFile3,
                     defaultValue: '',
                     onPressed: () async {
@@ -232,10 +210,10 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
                   '添付ファイル4',
-                  child: CustomFileField(
+                  child: FilePickerButton(
                     value: pickedFile4,
                     defaultValue: '',
                     onPressed: () async {
@@ -249,10 +227,10 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 FormLabel(
                   '添付ファイル5',
-                  child: CustomFileField(
+                  child: FilePickerButton(
                     value: pickedFile5,
                     defaultValue: '',
                     onPressed: () async {
@@ -266,10 +244,50 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 80),
               ],
             ),
           ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          int price = 0;
+          if (type == '稟議' || type == '支払伺い') {
+            String priceText = priceController.text.replaceAll(',', '');
+            price = int.parse(priceText);
+          }
+          String? error = await applyProvider.create(
+            organization: widget.loginProvider.organization,
+            group: null,
+            number: numberController.text,
+            type: type,
+            title: titleController.text,
+            content: contentController.text,
+            price: price,
+            pickedFile: pickedFile,
+            pickedFile2: pickedFile2,
+            pickedFile3: pickedFile3,
+            pickedFile4: pickedFile4,
+            pickedFile5: pickedFile5,
+            loginUser: widget.loginProvider.user,
+          );
+          if (error != null) {
+            if (!mounted) return;
+            showMessage(context, error, false);
+            return;
+          }
+          if (!mounted) return;
+          showMessage(context, '新規申請を送信しました', true);
+          Navigator.pop(context);
+        },
+        icon: const FaIcon(
+          FontAwesomeIcons.floppyDisk,
+          color: kWhiteColor,
+        ),
+        label: const Text(
+          '申請する',
+          style: TextStyle(color: kWhiteColor),
         ),
       ),
     );

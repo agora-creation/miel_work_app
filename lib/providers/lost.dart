@@ -59,19 +59,19 @@ class LostProvider with ChangeNotifier {
         'expirationAt': DateTime.now().add(const Duration(days: 365)),
       });
       //通知
-      List<UserModel> sendUsers = await _userService.selectList(
-        userIds: organization.userIds,
-      );
-      if (sendUsers.isNotEmpty) {
-        for (UserModel user in sendUsers) {
-          if (user.id == loginUser.id) continue;
-          _fmService.send(
-            token: user.token,
-            title: '落とし物がありました',
-            body: itemName,
-          );
-        }
-      }
+      // List<UserModel> sendUsers = await _userService.selectList(
+      //   userIds: organization.userIds,
+      // );
+      // if (sendUsers.isNotEmpty) {
+      //   for (UserModel user in sendUsers) {
+      //     if (user.id == loginUser.id) continue;
+      //     _fmService.send(
+      //       token: user.token,
+      //       title: '落とし物がありました',
+      //       body: itemName,
+      //     );
+      //   }
+      // }
     } catch (e) {
       error = '落とし物の追加に失敗しました';
     }
