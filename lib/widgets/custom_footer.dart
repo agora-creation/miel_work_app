@@ -8,7 +8,7 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/plan_now.dart';
 import 'package:miel_work_app/services/config.dart';
-import 'package:miel_work_app/widgets/custom_button_sm.dart';
+import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomFooter extends StatefulWidget {
@@ -119,13 +119,15 @@ class VersionUpDialog extends StatelessWidget {
       ),
       actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: '閉じる',
           labelColor: kWhiteColor,
           backgroundColor: kGreyColor,
           onPressed: () => Navigator.pop(context),
         ),
-        CustomButtonSm(
+        CustomButton(
+          type: ButtonSizeType.sm,
           label: '更新する',
           labelColor: kWhiteColor,
           backgroundColor: kDeepOrangeColor,

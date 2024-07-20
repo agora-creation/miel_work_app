@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:path/path.dart' as p;
 
-class CustomPdfField extends StatelessWidget {
+class PdfField extends StatelessWidget {
   final File? value;
   final String defaultValue;
   final Function()? onTap;
 
-  const CustomPdfField({
+  const PdfField({
     required this.value,
     required this.defaultValue,
     required this.onTap,

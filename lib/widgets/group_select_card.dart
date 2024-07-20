@@ -5,7 +5,7 @@ import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
-import 'package:miel_work_app/widgets/custom_group_radio.dart';
+import 'package:miel_work_app/widgets/group_radio.dart';
 
 class GroupSelectCard extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -101,7 +101,7 @@ class _GroupSelectDialogState extends State<GroupSelectDialog> {
   Widget build(BuildContext context) {
     List<Widget> groupChildren = [];
     if (widget.homeProvider.groups.isNotEmpty) {
-      groupChildren.add(CustomGroupRadio(
+      groupChildren.add(GroupRadio(
         group: null,
         value: widget.homeProvider.currentGroup,
         onChanged: (value) {
@@ -110,7 +110,7 @@ class _GroupSelectDialogState extends State<GroupSelectDialog> {
         },
       ));
       for (OrganizationGroupModel group in widget.homeProvider.groups) {
-        groupChildren.add(CustomGroupRadio(
+        groupChildren.add(GroupRadio(
           group: group,
           value: widget.homeProvider.currentGroup,
           onChanged: (value) {

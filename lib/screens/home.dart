@@ -14,6 +14,7 @@ import 'package:miel_work_app/screens/lost.dart';
 import 'package:miel_work_app/screens/notice.dart';
 import 'package:miel_work_app/screens/plan.dart';
 import 'package:miel_work_app/screens/problem.dart';
+import 'package:miel_work_app/screens/report.dart';
 import 'package:miel_work_app/screens/user.dart';
 import 'package:miel_work_app/screens/user_setting.dart';
 import 'package:miel_work_app/services/apply.dart';
@@ -25,9 +26,9 @@ import 'package:miel_work_app/services/problem.dart';
 import 'package:miel_work_app/widgets/animation_background.dart';
 import 'package:miel_work_app/widgets/custom_appbar.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
-import 'package:miel_work_app/widgets/custom_home_plan_card.dart';
 import 'package:miel_work_app/widgets/group_select_card.dart';
 import 'package:miel_work_app/widgets/home_icon_card.dart';
+import 'package:miel_work_app/widgets/home_plan_card.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -154,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      CustomHomePlanCard(
+                      HomePlanCard(
                         loginProvider: loginProvider,
                         homeProvider: homeProvider,
                         onTap: () => showBottomUpScreen(
@@ -247,7 +248,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             labelFontSize: 16,
                             color: kBlackColor,
                             backgroundColor: kWhiteColor,
-                            onTap: () {},
+                            onTap: () => showBottomUpScreen(
+                              context,
+                              ReportScreen(
+                                loginProvider: loginProvider,
+                                homeProvider: homeProvider,
+                              ),
+                            ),
                           ),
                           StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                             stream: lostService.streamList(

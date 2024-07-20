@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/style.dart';
 
-class CustomLoginCard extends StatelessWidget {
+class LoginCard extends StatelessWidget {
   final List<Widget> children;
 
-  const CustomLoginCard({
+  const LoginCard({
     required this.children,
     super.key,
   });

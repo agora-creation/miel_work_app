@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 
-class CustomGroupRadio extends StatelessWidget {
+class GroupRadio extends StatelessWidget {
   final OrganizationGroupModel? group;
   final OrganizationGroupModel? value;
   final void Function(OrganizationGroupModel?)? onChanged;
 
-  const CustomGroupRadio({
+  const GroupRadio({
     required this.group,
     required this.value,
     required this.onChanged,

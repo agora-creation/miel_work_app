@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/style.dart';
 
-class CustomSettingList extends StatelessWidget {
+class SettingList extends StatelessWidget {
   final String label;
   final String value;
   final Function()? onTap;
 
-  const CustomSettingList({
+  const SettingList({
     required this.label,
     required this.value,
     this.onTap,

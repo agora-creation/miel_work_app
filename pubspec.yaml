@@ -3,7 +3,7 @@ description: "A new Flutter project."
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.4.16+1
+version: 1.4.17+1
 
 environment:
   sdk: '>=3.2.6 <4.0.0'
@@ -33,6 +33,7 @@ dependencies:
   pdf: ^3.10.8
   universal_html: ^2.2.4
   common_utils: ^2.1.0
+  month_picker_dialog: ^4.0.0
   multiple_stream_builder: ^3.0.2
   image_picker: ^1.0.7
   url_launcher: ^6.2.5

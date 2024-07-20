@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/user.dart';
@@ -50,7 +51,11 @@ class UserList extends StatelessWidget {
                 : Container(),
           ],
         ),
-        trailing: const Icon(Icons.chevron_right),
+        trailing: const FaIcon(
+          FontAwesomeIcons.chevronRight,
+          color: kGreyColor,
+          size: 16,
+        ),
         onTap: onTap,
       ),
     );

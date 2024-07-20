@@ -7,12 +7,12 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/services/plan.dart';
 import 'package:miel_work_app/widgets/now_plan_list.dart';
 
-class CustomHomePlanCard extends StatefulWidget {
+class HomePlanCard extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
   final Function()? onTap;
 
-  const CustomHomePlanCard({
+  const HomePlanCard({
     required this.loginProvider,
     required this.homeProvider,
     this.onTap,
@@ -20,10 +20,10 @@ class CustomHomePlanCard extends StatefulWidget {
   });
 
   @override
-  State<CustomHomePlanCard> createState() => _CustomHomePlanCardState();
+  State<HomePlanCard> createState() => _HomePlanCardState();
 }
 
-class _CustomHomePlanCardState extends State<CustomHomePlanCard> {
+class _HomePlanCardState extends State<HomePlanCard> {
   PlanService planService = PlanService();
 
   @override

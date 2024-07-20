@@ -20,26 +20,6 @@ void showMessage(BuildContext context, String msg, bool success) {
   );
 }
 
-void pushScreen(BuildContext context, Widget widget) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => widget,
-      fullscreenDialog: true,
-    ),
-  );
-}
-
-void pushReplacementScreen(BuildContext context, Widget widget) {
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(
-      builder: (context) => widget,
-      fullscreenDialog: true,
-    ),
-  );
-}
-
 Future showBottomUpScreen(BuildContext context, Widget widget) async {
   await showMaterialModalBottomSheet(
     expand: true,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/reply_source.dart';
 
@@ -35,7 +36,7 @@ class ReplySourceList extends StatelessWidget {
         ),
         trailing: GestureDetector(
           onTap: onTap,
-          child: const Icon(Icons.close),
+          child: const FaIcon(FontAwesomeIcons.xmark),
         ),
       ),
     );

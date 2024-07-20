@@ -8,9 +8,9 @@ import 'package:miel_work_app/screens/how_to.dart';
 import 'package:miel_work_app/screens/login.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
-import 'package:miel_work_app/widgets/custom_setting_list.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
+import 'package:miel_work_app/widgets/setting_list.dart';
 import 'package:page_transition/page_transition.dart';
 
 class UserSettingScreen extends StatefulWidget {
@@ -52,7 +52,7 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
       ),
       body: Column(
         children: [
-          CustomSettingList(
+          SettingList(
             label: '名前',
             value: widget.loginProvider.user?.name ?? '',
             onTap: () => showDialog(
@@ -62,7 +62,7 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
               ),
             ),
           ),
-          CustomSettingList(
+          SettingList(
             label: 'メールアドレス',
             value: widget.loginProvider.user?.email ?? '',
             onTap: () => showDialog(
@@ -72,7 +72,7 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
               ),
             ),
           ),
-          CustomSettingList(
+          SettingList(
             label: 'パスワード',
             value: '********',
             onTap: () => showDialog(
@@ -82,7 +82,7 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
               ),
             ),
           ),
-          CustomSettingList(
+          SettingList(
             label: 'このアプリの使い方',
             value: '',
             onTap: () {

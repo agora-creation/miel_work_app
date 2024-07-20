@@ -5,8 +5,8 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/home.dart';
 import 'package:miel_work_app/widgets/animation_background.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
-import 'package:miel_work_app/widgets/custom_login_card.dart';
 import 'package:miel_work_app/widgets/custom_text_form_field.dart';
+import 'package:miel_work_app/widgets/login_card.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ],
                             ),
                           ),
-                          CustomLoginCard(
+                          LoginCard(
                             children: [
                               CustomTextFormField(
                                 controller: emailController,
