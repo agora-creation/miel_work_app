@@ -30,6 +30,7 @@ class NonReadMessageList extends StatelessWidget {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
+              fontFamily: 'SourceHanSansJP-Bold',
             ),
             softWrap: false,
             overflow: TextOverflow.ellipsis,

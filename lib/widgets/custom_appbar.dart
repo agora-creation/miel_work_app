@@ -33,6 +33,7 @@ class CustomAppbar extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'SourceHanSansJP-Bold',
                 ),
               ),
               Row(
@@ -49,6 +50,7 @@ class CustomAppbar extends StatelessWidget {
                             color: kRedColor,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
+                            fontFamily: 'SourceHanSansJP-Bold',
                           ),
                         )
                       : Container(),

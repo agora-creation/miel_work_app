@@ -72,6 +72,7 @@ class PlanList extends StatelessWidget {
                   color: kWhiteColor,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'SourceHanSansJP-Bold',
                 ),
               ),
             ],

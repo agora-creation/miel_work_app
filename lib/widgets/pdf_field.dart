@@ -35,6 +35,7 @@ class PdfField extends StatelessWidget {
                 style: TextStyle(
                   color: kWhiteColor,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'SourceHanSansJP-Bold',
                 ),
               ),
               value != null

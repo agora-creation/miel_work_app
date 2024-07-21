@@ -46,6 +46,7 @@ class UserList extends StatelessWidget {
                       color: kRedColor,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
+                      fontFamily: 'SourceHanSansJP-Bold',
                     ),
                   )
                 : Container(),

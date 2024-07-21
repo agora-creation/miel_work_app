@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/report.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/report_add.dart';
+import 'package:miel_work_app/screens/report_mod.dart';
 import 'package:miel_work_app/services/report.dart';
 import 'package:miel_work_app/widgets/month_picker_button.dart';
 import 'package:miel_work_app/widgets/report_list.dart';
@@ -90,28 +92,60 @@ class _ReportScreenState extends State<ReportScreen> {
             child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: reportService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
-                searchStart: null,
-                searchEnd: null,
+                searchMonth: searchMonth,
               ),
               builder: (context, snapshot) {
+                List<ReportModel> reports = [];
+                if (snapshot.hasData) {
+                  reports = reportService.generateList(
+                    data: snapshot.data,
+                  );
+                }
                 return ListView.builder(
                   itemCount: days.length,
                   itemBuilder: (context, index) {
                     DateTime day = days[index];
+                    ReportModel? report;
+                    if (reports.isNotEmpty) {
+                      for (ReportModel tmpReport in reports) {
+                        String dayKey = dateText(
+                          'yyyy-MM-dd',
+                          tmpReport.createdAt,
+                        );
+                        if (day == DateTime.parse(dayKey)) {
+                          report = tmpReport;
+                        }
+                      }
+                    }
                     return ReportList(
                       day: day,
+                      isReport: report != null,
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: ReportAddScreen(
-                              loginProvider: widget.loginProvider,
-                              homeProvider: widget.homeProvider,
-                              day: day,
+                        if (report != null) {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: ReportModScreen(
+                                loginProvider: widget.loginProvider,
+                                homeProvider: widget.homeProvider,
+                                report: report,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: ReportAddScreen(
+                                loginProvider: widget.loginProvider,
+                                homeProvider: widget.homeProvider,
+                                day: day,
+                              ),
+                            ),
+                          );
+                        }
                       },
                     );
                   },

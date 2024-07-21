@@ -56,6 +56,7 @@ class _HomePlanCardState extends State<HomePlanCard> {
                     color: kBlackColor,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'SourceHanSansJP-Bold',
                   ),
                 ),
               ),

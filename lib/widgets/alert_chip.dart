@@ -15,6 +15,7 @@ class AlertChip extends StatelessWidget {
           color: kWhiteColor,
           fontSize: 14,
           fontWeight: FontWeight.bold,
+          fontFamily: 'SourceHanSansJP-Bold',
         ),
       ),
       padding: const EdgeInsets.all(4),

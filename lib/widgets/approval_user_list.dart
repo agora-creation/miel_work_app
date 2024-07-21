@@ -26,6 +26,7 @@ class CustomApprovalUserList extends StatelessWidget {
                   color: kRedColor,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'SourceHanSansJP-Bold',
                 )
               : null,
         ),
@@ -35,6 +36,7 @@ class CustomApprovalUserList extends StatelessWidget {
             color: kRedColor,
             fontSize: 16,
             fontWeight: FontWeight.bold,
+            fontFamily: 'SourceHanSansJP-Bold',
           ),
         ),
       ),

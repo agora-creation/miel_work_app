@@ -5,10 +5,12 @@ import 'package:miel_work_app/common/style.dart';
 
 class ReportList extends StatelessWidget {
   final DateTime day;
+  final bool isReport;
   final Function()? onTap;
 
   const ReportList({
     required this.day,
+    this.isReport = false,
     this.onTap,
     super.key,
   });
@@ -43,15 +45,30 @@ class ReportList extends StatelessWidget {
                 ),
               ),
             ),
-            const Expanded(
-              child: ListTile(
-                title: Text('記録済み'),
-                trailing: FaIcon(
-                  FontAwesomeIcons.chevronRight,
-                  color: kGreyColor,
-                  size: 18,
-                ),
-              ),
+            Expanded(
+              child: isReport
+                  ? const ListTile(
+                      title: Text(
+                        '記録済み',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'SourceHanSansJP-Bold',
+                        ),
+                      ),
+                      trailing: FaIcon(
+                        FontAwesomeIcons.chevronRight,
+                        color: kGreyColor,
+                        size: 18,
+                      ),
+                    )
+                  : const ListTile(
+                      trailing: FaIcon(
+                        FontAwesomeIcons.pen,
+                        color: kBlueColor,
+                        size: 18,
+                      ),
+                    ),
             ),
           ],
         ),

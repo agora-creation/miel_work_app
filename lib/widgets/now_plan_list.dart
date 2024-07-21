@@ -68,6 +68,7 @@ class NowPlanList extends StatelessWidget {
                 color: kWhiteColor,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
+                fontFamily: 'SourceHanSansJP-Bold',
               ),
               softWrap: false,
               overflow: TextOverflow.ellipsis,

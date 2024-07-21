@@ -70,6 +70,7 @@ class DatetimeRangeForm extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
+                          fontFamily: 'SourceHanSansJP-Bold',
                         ),
                       ),
                     ],

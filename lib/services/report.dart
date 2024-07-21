@@ -24,24 +24,19 @@ class ReportService {
 
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
-    required DateTime? searchStart,
-    required DateTime? searchEnd,
+    required DateTime searchMonth,
   }) {
-    if (searchStart != null && searchEnd != null) {
-      Timestamp startAt = convertTimestamp(searchStart, false);
-      Timestamp endAt = convertTimestamp(searchEnd, true);
-      return FirebaseFirestore.instance
-          .collection(collection)
-          .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .orderBy('createdAt', descending: true)
-          .startAt([endAt]).endAt([startAt]).snapshots();
-    } else {
-      return FirebaseFirestore.instance
-          .collection(collection)
-          .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .orderBy('createdAt', descending: true)
-          .snapshots();
-    }
+    DateTime monthS = DateTime(searchMonth.year, searchMonth.month, 1);
+    DateTime monthE = DateTime(searchMonth.year, searchMonth.month + 1, 1).add(
+      const Duration(days: -1),
+    );
+    Timestamp startAt = convertTimestamp(monthS, false);
+    Timestamp endAt = convertTimestamp(monthE, true);
+    return FirebaseFirestore.instance
+        .collection(collection)
+        .where('organizationId', isEqualTo: organizationId ?? 'error')
+        .orderBy('createdAt', descending: false)
+        .startAt([startAt]).endAt([endAt]).snapshots();
   }
 
   List<ReportModel> generateList({
