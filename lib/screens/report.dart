@@ -5,10 +5,12 @@ import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/screens/report_add.dart';
 import 'package:miel_work_app/services/report.dart';
 import 'package:miel_work_app/widgets/month_picker_button.dart';
 import 'package:miel_work_app/widgets/report_list.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:page_transition/page_transition.dart';
 
 class ReportScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -96,7 +98,22 @@ class _ReportScreenState extends State<ReportScreen> {
                   itemCount: days.length,
                   itemBuilder: (context, index) {
                     DateTime day = days[index];
-                    return ReportList(day: day);
+                    return ReportList(
+                      day: day,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.rightToLeft,
+                            child: ReportAddScreen(
+                              loginProvider: widget.loginProvider,
+                              homeProvider: widget.homeProvider,
+                              day: day,
+                            ),
+                          ),
+                        );
+                      },
+                    );
                   },
                 );
               },
