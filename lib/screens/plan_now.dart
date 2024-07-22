@@ -35,7 +35,7 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
         backgroundColor: kWhiteColor,
         automaticallyImplyLeading: false,
         title: Text(
-          dateText('yyyy年MM月dd日(E)の予定', now),
+          '${dateText('MM月dd日(E)', now)}の予定',
           style: const TextStyle(
             color: kBlackColor,
             fontSize: 24,

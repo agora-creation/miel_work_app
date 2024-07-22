@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/report.dart';
 
 class ReportList extends StatelessWidget {
   final DateTime day;
-  final bool isReport;
+  final ReportModel? report;
   final Function()? onTap;
 
   const ReportList({
     required this.day,
-    this.isReport = false,
+    this.report,
     this.onTap,
     super.key,
   });
@@ -46,9 +47,10 @@ class ReportList extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: isReport
-                  ? const ListTile(
-                      title: Text(
+              child: report != null
+                  ? ListTile(
+                      tileColor: kGrey300Color,
+                      title: const Text(
                         '記録済み',
                         style: TextStyle(
                           fontSize: 18,
@@ -56,7 +58,16 @@ class ReportList extends StatelessWidget {
                           fontFamily: 'SourceHanSansJP-Bold',
                         ),
                       ),
-                      trailing: FaIcon(
+                      subtitle: report?.approval == 1
+                          ? const Text(
+                              '承認済み',
+                              style: TextStyle(color: kRedColor),
+                            )
+                          : const Text(
+                              '承認待ち',
+                              style: TextStyle(color: kGreyColor),
+                            ),
+                      trailing: const FaIcon(
                         FontAwesomeIcons.chevronRight,
                         color: kGreyColor,
                         size: 18,

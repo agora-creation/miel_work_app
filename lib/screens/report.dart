@@ -80,9 +80,7 @@ class _ReportScreenState extends State<ReportScreen> {
               DateTime? selected = await showMonthPicker(
                 context: context,
                 initialDate: searchMonth,
-                locale: const Locale(
-                  'ja',
-                ),
+                locale: const Locale('ja'),
               );
               if (selected == null) return;
               _changeMonth(selected);
@@ -119,7 +117,7 @@ class _ReportScreenState extends State<ReportScreen> {
                     }
                     return ReportList(
                       day: day,
-                      isReport: report != null,
+                      report: report,
                       onTap: () {
                         if (report != null) {
                           Navigator.push(

@@ -57,7 +57,7 @@ class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: kWhiteColor,
         title: Text(
-          dateText('yyyy年MM月dd日(E)の予定', widget.date),
+          '${dateText('MM月dd日(E)', widget.date)}の予定',
           style: const TextStyle(color: kBlackColor),
         ),
         actions: [
