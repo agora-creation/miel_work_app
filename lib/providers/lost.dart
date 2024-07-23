@@ -20,6 +20,7 @@ class LostProvider with ChangeNotifier {
     required DateTime discoveryAt,
     required String discoveryPlace,
     required String discoveryUser,
+    required String itemNumber,
     required String itemName,
     required XFile? itemImageXFile,
     required String remarks,
@@ -47,6 +48,7 @@ class LostProvider with ChangeNotifier {
         'discoveryAt': discoveryAt,
         'discoveryPlace': discoveryPlace,
         'discoveryUser': discoveryUser,
+        'itemNumber': itemNumber,
         'itemName': itemName,
         'itemImage': itemImage,
         'remarks': remarks,
@@ -59,19 +61,19 @@ class LostProvider with ChangeNotifier {
         'expirationAt': DateTime.now().add(const Duration(days: 365)),
       });
       //通知
-      // List<UserModel> sendUsers = await _userService.selectList(
-      //   userIds: organization.userIds,
-      // );
-      // if (sendUsers.isNotEmpty) {
-      //   for (UserModel user in sendUsers) {
-      //     if (user.id == loginUser.id) continue;
-      //     _fmService.send(
-      //       token: user.token,
-      //       title: '落とし物がありました',
-      //       body: itemName,
-      //     );
-      //   }
-      // }
+      List<UserModel> sendUsers = await _userService.selectList(
+        userIds: organization.userIds,
+      );
+      if (sendUsers.isNotEmpty) {
+        for (UserModel user in sendUsers) {
+          if (user.id == loginUser.id) continue;
+          _fmService.send(
+            token: user.token,
+            title: '落とし物がありました',
+            body: itemName,
+          );
+        }
+      }
     } catch (e) {
       error = '落とし物の追加に失敗しました';
     }
@@ -84,6 +86,7 @@ class LostProvider with ChangeNotifier {
     required DateTime discoveryAt,
     required String discoveryPlace,
     required String discoveryUser,
+    required String itemNumber,
     required String itemName,
     required XFile? itemImageXFile,
     required String remarks,
@@ -110,6 +113,7 @@ class LostProvider with ChangeNotifier {
           'discoveryAt': discoveryAt,
           'discoveryPlace': discoveryPlace,
           'discoveryUser': discoveryUser,
+          'itemNumber': itemNumber,
           'itemName': itemName,
           'itemImage': itemImage,
           'remarks': remarks,
@@ -120,6 +124,7 @@ class LostProvider with ChangeNotifier {
           'discoveryAt': discoveryAt,
           'discoveryPlace': discoveryPlace,
           'discoveryUser': discoveryUser,
+          'itemNumber': itemNumber,
           'itemName': itemName,
           'remarks': remarks,
         });

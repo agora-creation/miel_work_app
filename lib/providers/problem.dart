@@ -18,6 +18,7 @@ class ProblemProvider with ChangeNotifier {
   Future<String?> create({
     required OrganizationModel? organization,
     required String type,
+    required String title,
     required DateTime createdAt,
     required String picName,
     required String targetName,
@@ -49,6 +50,7 @@ class ProblemProvider with ChangeNotifier {
         'id': id,
         'organizationId': organization.id,
         'type': type,
+        'title': title,
         'picName': picName,
         'targetName': targetName,
         'targetAge': targetAge,
@@ -86,6 +88,7 @@ class ProblemProvider with ChangeNotifier {
     required OrganizationModel? organization,
     required ProblemModel problem,
     required String type,
+    required String title,
     required DateTime createdAt,
     required String picName,
     required String targetName,
@@ -116,6 +119,7 @@ class ProblemProvider with ChangeNotifier {
         _problemService.update({
           'id': problem.id,
           'type': type,
+          'title': title,
           'picName': picName,
           'targetName': targetName,
           'targetAge': targetAge,
@@ -132,6 +136,7 @@ class ProblemProvider with ChangeNotifier {
         _problemService.update({
           'id': problem.id,
           'type': type,
+          'title': title,
           'picName': picName,
           'targetName': targetName,
           'targetAge': targetAge,

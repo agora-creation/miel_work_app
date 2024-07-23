@@ -6,6 +6,7 @@ class LostModel {
   DateTime _discoveryAt = DateTime.now();
   String _discoveryPlace = '';
   String _discoveryUser = '';
+  String _itemNumber = '';
   String _itemName = '';
   String _itemImage = '';
   String _remarks = '';
@@ -22,6 +23,7 @@ class LostModel {
   DateTime get discoveryAt => _discoveryAt;
   String get discoveryPlace => _discoveryPlace;
   String get discoveryUser => _discoveryUser;
+  String get itemNumber => _itemNumber;
   String get itemName => _itemName;
   String get itemImage => _itemImage;
   String get remarks => _remarks;
@@ -40,6 +42,7 @@ class LostModel {
     _discoveryAt = data['discoveryAt'].toDate() ?? DateTime.now();
     _discoveryPlace = data['discoveryPlace'] ?? '';
     _discoveryUser = data['discoveryUser'] ?? '';
+    _itemNumber = data['itemNumber'] ?? '';
     _itemName = data['itemName'] ?? '';
     _itemImage = data['itemImage'] ?? '';
     _remarks = data['remarks'] ?? '';

@@ -41,12 +41,24 @@ class ProblemList extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Chip(
-                    label: Text(
-                      problem.type,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    backgroundColor: problem.typeColor(),
+                  Row(
+                    children: [
+                      Chip(
+                        label: Text(
+                          problem.type,
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        backgroundColor: problem.typeColor(),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        problem.title,
+                        style: const TextStyle(fontSize: 16),
+                        softWrap: false,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ],
                   ),
                   Text(
                     problem.details,

@@ -111,6 +111,11 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
               ),
               const SizedBox(height: 8),
               FormLabel(
+                'タイトル',
+                child: FormValue(widget.problem.title),
+              ),
+              const SizedBox(height: 8),
+              FormLabel(
                 '対応者',
                 child: FormValue(widget.problem.picName),
               ),

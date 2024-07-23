@@ -14,6 +14,7 @@ class ProblemModel {
   String _id = '';
   String _organizationId = '';
   String _type = '';
+  String _title = '';
   String _picName = '';
   String _targetName = '';
   String _targetAge = '';
@@ -30,6 +31,7 @@ class ProblemModel {
   String get id => _id;
   String get organizationId => _organizationId;
   String get type => _type;
+  String get title => _title;
   String get picName => _picName;
   String get targetName => _targetName;
   String get targetAge => _targetAge;
@@ -47,6 +49,7 @@ class ProblemModel {
     _id = data['id'] ?? '';
     _organizationId = data['organizationId'] ?? '';
     _type = data['type'] ?? '';
+    _title = data['title'] ?? '';
     _picName = data['picName'] ?? '';
     _targetName = data['targetName'] ?? '';
     _targetAge = data['targetAge'] ?? '';

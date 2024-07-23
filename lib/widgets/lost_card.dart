@@ -54,6 +54,23 @@ class LostCard extends StatelessWidget {
                         children: [
                           const Padding(
                             padding: EdgeInsets.all(4),
+                            child: Text('落とし物No'),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: Text(
+                              lost.itemNumber,
+                              softWrap: false,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.all(4),
                             child: Text('品名'),
                           ),
                           Padding(
