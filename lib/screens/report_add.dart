@@ -239,7 +239,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1240,10 +1240,6 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                         ReportTableTh('最終店舗終了'),
                         ReportTableTh('食器センター終了'),
                         ReportTableTh('排気'),
-                        ReportTableTh('天井扇'),
-                        ReportTableTh('空調'),
-                        ReportTableTh('トイレ'),
-                        ReportTableTh('ベビーコーナー'),
                       ],
                     ),
                     TableRow(
@@ -1290,6 +1286,23 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                             },
                           ),
                         ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Table(
+                  border: TableBorder.all(color: kGreyColor),
+                  children: [
+                    const TableRow(
+                      children: [
+                        ReportTableTh('天井扇'),
+                        ReportTableTh('空調'),
+                        ReportTableTh('トイレ'),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
                         ReportConfirmButton(
                           confirm: lastConfirmRoof,
                           confirmTime: dateText('HH:mm', lastConfirmRoofAt),
@@ -1326,6 +1339,23 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                             },
                           ),
                         ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Table(
+                  border: TableBorder.all(color: kGreyColor),
+                  children: [
+                    const TableRow(
+                      children: [
+                        ReportTableTh('ベビーコーナー'),
+                        ReportTableTh('PC／ゴミ'),
+                        ReportTableTh('留守電'),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
                         ReportConfirmButton(
                           confirm: lastConfirmBaby,
                           confirmTime: dateText('HH:mm', lastConfirmBabyAt),
@@ -1338,27 +1368,6 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                             },
                           ),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Table(
-                  border: TableBorder.all(color: kGreyColor),
-                  children: [
-                    const TableRow(
-                      children: [
-                        ReportTableTh('PC／ゴミ'),
-                        ReportTableTh('留守電'),
-                        ReportTableTh('クーポン券'),
-                        ReportTableTh('日付確認'),
-                        ReportTableTh('両替'),
-                        ReportTableTh('施錠'),
-                        ReportTableTh('日報最終確認'),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
                         ReportConfirmButton(
                           confirm: lastConfirmPC,
                           confirmTime: dateText('HH:mm', lastConfirmPCAt),
@@ -1383,6 +1392,23 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                             },
                           ),
                         ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Table(
+                  border: TableBorder.all(color: kGreyColor),
+                  children: [
+                    const TableRow(
+                      children: [
+                        ReportTableTh('クーポン券'),
+                        ReportTableTh('日付確認'),
+                        ReportTableTh('両替'),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
                         ReportConfirmButton(
                           confirm: lastConfirmCoupon,
                           confirmTime: dateText('HH:mm', lastConfirmCouponAt),
@@ -1419,6 +1445,23 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                             },
                           ),
                         ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Table(
+                  border: TableBorder.all(color: kGreyColor),
+                  children: [
+                    const TableRow(
+                      children: [
+                        ReportTableTh('施錠'),
+                        ReportTableTh('日報最終確認'),
+                        ReportTableTh(''),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
                         ReportConfirmButton(
                           confirm: lastConfirmLock,
                           confirmTime: dateText('HH:mm', lastConfirmLockAt),
@@ -1449,6 +1492,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                             },
                           ),
                         ),
+                        Container(),
                       ],
                     ),
                   ],
