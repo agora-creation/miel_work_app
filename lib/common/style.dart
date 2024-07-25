@@ -17,6 +17,7 @@ const kRed200Color = Color(0xFFEF9A9A);
 const kRed100Color = Color(0xFFFFCDD2);
 const kBlueColor = Color(0xFF2196F3);
 const kBlue300Color = Color(0xFF64B5F6);
+const kBlue100Color = Color(0xFFBBDEFB);
 const kLightBlueColor = Color(0xFF03A9F4);
 const kLightBlue800Color = Color(0xFF0277BD);
 const kCyanColor = Color(0xFF00BCD4);
@@ -92,6 +93,12 @@ const kDatePickerTheme = picker.DatePickerTheme(
     color: kBlueColor,
     fontSize: 16,
   ),
+);
+
+const kReportHeaderStyle = TextStyle(
+  fontSize: 18,
+  fontWeight: FontWeight.bold,
+  fontFamily: 'SourceHanSansJP-Bold',
 );
 
 const List<String> imageExtensions = [
