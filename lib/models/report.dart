@@ -129,7 +129,7 @@ class ReportModel {
     _passportCount = data['passportCount'] ?? 0;
     _remarks = data['remarks'] ?? '';
     _agenda = data['agenda'] ?? '';
-    _lastConfirmShop = data['_lastConfirmShop'] ?? false;
+    _lastConfirmShop = data['lastConfirmShop'] ?? false;
     _lastConfirmShopAt = data['lastConfirmShopAt'].toDate() ?? DateTime.now();
     _lastConfirmShopName = data['lastConfirmShopName'] ?? '';
     _lastConfirmCenter = data['lastConfirmCenter'] ?? false;
