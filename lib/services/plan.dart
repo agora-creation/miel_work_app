@@ -39,6 +39,42 @@ class PlanService {
     return ret;
   }
 
+  Future<List<PlanModel>> selectList({
+    required String? organizationId,
+    required DateTime date,
+  }) async {
+    List<PlanModel> ret = [];
+    await firestore
+        .collection(collection)
+        .where('organizationId', isEqualTo: organizationId ?? 'error')
+        .orderBy('startedAt', descending: false)
+        .get()
+        .then((value) {
+      for (DocumentSnapshot<Map<String, dynamic>> map in value.docs) {
+        PlanModel plan = PlanModel.fromSnapshot(map);
+        bool listIn = false;
+        var dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
+        var dateE = DateTime(date.year, date.month, date.day, 23, 59, 59);
+        if (plan.startedAt.millisecondsSinceEpoch <=
+                dateS.millisecondsSinceEpoch &&
+            dateS.millisecondsSinceEpoch <=
+                plan.endedAt.millisecondsSinceEpoch) {
+          listIn = true;
+        } else if (dateS.millisecondsSinceEpoch <=
+                plan.startedAt.millisecondsSinceEpoch &&
+            plan.endedAt.millisecondsSinceEpoch <=
+                dateE.millisecondsSinceEpoch) {
+          listIn = true;
+        }
+
+        if (listIn) {
+          ret.add(plan);
+        }
+      }
+    });
+    return ret;
+  }
+
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
     required List<String> categories,

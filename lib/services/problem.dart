@@ -23,6 +23,30 @@ class ProblemService {
     firestore.collection(collection).doc(values['id']).delete();
   }
 
+  Future<List<ProblemModel>> selectList({
+    required String? organizationId,
+    required DateTime date,
+  }) async {
+    List<ProblemModel> ret = [];
+    var dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
+    var dateE = DateTime(date.year, date.month, date.day, 23, 59, 59);
+    Timestamp startAt = convertTimestamp(dateS, false);
+    Timestamp endAt = convertTimestamp(dateE, true);
+    await firestore
+        .collection(collection)
+        .where('organizationId', isEqualTo: organizationId ?? 'error')
+        .orderBy('createdAt', descending: true)
+        .startAt([endAt])
+        .endAt([startAt])
+        .get()
+        .then((value) {
+          for (DocumentSnapshot<Map<String, dynamic>> map in value.docs) {
+            ret.add(ProblemModel.fromSnapshot(map));
+          }
+        });
+    return ret;
+  }
+
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
     required DateTime? searchStart,
