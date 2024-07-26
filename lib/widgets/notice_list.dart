@@ -19,29 +19,47 @@ class NoticeList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: kGrey600Color),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: !notice.readUserIds.contains(user?.id)
+              ? kRed100Color
+              : kWhiteColor,
+          border: const Border(
+            bottom: BorderSide(color: kGrey600Color),
+          ),
         ),
-      ),
-      child: ListTile(
-        title: Text(
-          notice.title,
-          style: const TextStyle(fontSize: 20),
+        padding: const EdgeInsets.all(8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  notice.title,
+                  style: const TextStyle(fontSize: 18),
+                ),
+                Text(
+                  dateText('yyyy/MM/dd HH:mm', notice.createdAt),
+                  style: const TextStyle(fontSize: 14),
+                ),
+                notice.file != ''
+                    ? const Chip(
+                        label: Text('添付あり'),
+                        backgroundColor: kBlue100Color,
+                      )
+                    : Container(),
+              ],
+            ),
+            const FaIcon(
+              FontAwesomeIcons.chevronRight,
+              color: kGreyColor,
+              size: 16,
+            ),
+          ],
         ),
-        subtitle: Text(
-          dateText('yyyy/MM/dd HH:mm', notice.createdAt),
-          style: const TextStyle(fontSize: 14),
-        ),
-        trailing: const FaIcon(
-          FontAwesomeIcons.chevronRight,
-          color: kGreyColor,
-          size: 16,
-        ),
-        tileColor:
-            !notice.readUserIds.contains(user?.id) ? kRed100Color : kWhiteColor,
-        onTap: onTap,
       ),
     );
   }
