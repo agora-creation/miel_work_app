@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 }
                               }
                               return HomeIconCard(
-                                icon: FontAwesomeIcons.solidMessage,
+                                icon: FontAwesomeIcons.solidComments,
                                 label: 'チャット',
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,
@@ -187,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 );
                               }
                               return HomeIconCard(
-                                icon: FontAwesomeIcons.faceAngry,
+                                icon: FontAwesomeIcons.triangleExclamation,
                                 label: 'クレーム／要望',
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,
@@ -242,7 +242,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         gridDelegate: kHome3Grid,
                         children: [
                           HomeIconCard(
-                            icon: FontAwesomeIcons.book,
+                            icon: FontAwesomeIcons.businessTime,
+                            iconSize: 42,
+                            label: '勤怠打刻',
+                            labelFontSize: 16,
+                            color: kGrey600Color,
+                            backgroundColor: kGrey300Color,
+                            onTap: () {},
+                          ),
+                          HomeIconCard(
+                            icon: FontAwesomeIcons.clipboardCheck,
                             iconSize: 42,
                             label: '業務日報',
                             labelFontSize: 16,
@@ -304,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 );
                               }
                               return HomeIconCard(
-                                icon: FontAwesomeIcons.handsHoldingCircle,
+                                icon: FontAwesomeIcons.rightLeft,
                                 iconSize: 42,
                                 label: '貸出／返却',
                                 labelFontSize: 16,
