@@ -14,6 +14,7 @@ import 'package:miel_work_app/services/category.dart';
 import 'package:miel_work_app/services/plan.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/datetime_range_form.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
@@ -358,6 +359,10 @@ class _PlanModScreenState extends State<PlanModScreen> {
           '保存する',
           style: TextStyle(color: kWhiteColor),
         ),
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
       ),
     );
   }

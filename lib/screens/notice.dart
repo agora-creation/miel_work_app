@@ -10,6 +10,7 @@ import 'package:miel_work_app/screens/notice_add.dart';
 import 'package:miel_work_app/screens/notice_detail.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/notice.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/notice_list.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -160,6 +161,10 @@ class _NoticeScreenState extends State<NoticeScreen> {
           '新規追加',
           style: TextStyle(color: kWhiteColor),
         ),
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
       ),
     );
   }

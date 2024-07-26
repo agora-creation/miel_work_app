@@ -6,6 +6,7 @@ import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/user.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:provider/provider.dart';
@@ -194,6 +195,10 @@ class _UserAddScreenState extends State<UserAddScreen> {
           '追加する',
           style: TextStyle(color: kWhiteColor),
         ),
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
       ),
     );
   }

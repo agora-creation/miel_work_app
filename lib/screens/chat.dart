@@ -11,6 +11,7 @@ import 'package:miel_work_app/services/chat.dart';
 import 'package:miel_work_app/services/chat_message.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/widgets/chat_list.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:page_transition/page_transition.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -96,6 +97,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       type: PageTransitionType.rightToLeft,
                       child: ChatMessageScreen(
                         loginProvider: widget.loginProvider,
+                        homeProvider: widget.homeProvider,
                         chat: chat,
                       ),
                     ),
@@ -105,6 +107,10 @@ class _ChatScreenState extends State<ChatScreen> {
             },
           );
         },
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
       ),
     );
   }

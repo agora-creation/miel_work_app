@@ -9,6 +9,7 @@ import 'package:miel_work_app/screens/loan_add.dart';
 import 'package:miel_work_app/screens/loan_mod.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/loan.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/loan_card.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -132,6 +133,10 @@ class _LoanScreenState extends State<LoanScreen> {
           '新規追加',
           style: TextStyle(color: kWhiteColor),
         ),
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
       ),
     );
   }

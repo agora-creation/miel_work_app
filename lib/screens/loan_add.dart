@@ -10,6 +10,7 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/loan.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
@@ -211,6 +212,10 @@ class _LostAddScreenState extends State<LoanAddScreen> {
           '追加する',
           style: TextStyle(color: kWhiteColor),
         ),
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
       ),
     );
   }

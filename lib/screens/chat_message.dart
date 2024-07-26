@@ -15,12 +15,14 @@ import 'package:miel_work_app/models/read_user.dart';
 import 'package:miel_work_app/models/reply_source.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/chat_message.dart';
+import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/services/chat_message.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/user.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/message_form_field.dart';
 import 'package:miel_work_app/widgets/message_list.dart';
@@ -29,10 +31,12 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class ChatMessageScreen extends StatefulWidget {
   final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
   final ChatModel chat;
 
   const ChatMessageScreen({
     required this.loginProvider,
+    required this.homeProvider,
     required this.chat,
     super.key,
   });
@@ -298,6 +302,10 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
             ),
           ),
         ),
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
       ),
     );
   }

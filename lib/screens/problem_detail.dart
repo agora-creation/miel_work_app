@@ -8,6 +8,7 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/problem_mod.dart';
 import 'package:miel_work_app/services/problem.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:page_transition/page_transition.dart';
@@ -169,6 +170,10 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
       ),
     );
   }

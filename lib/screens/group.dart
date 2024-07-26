@@ -8,6 +8,7 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/group_mod.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:page_transition/page_transition.dart';
@@ -118,6 +119,10 @@ class _GroupScreenState extends State<GroupScreen> {
           '新規追加',
           style: TextStyle(color: kWhiteColor),
         ),
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
       ),
     );
   }

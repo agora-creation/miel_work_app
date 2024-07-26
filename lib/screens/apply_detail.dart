@@ -13,6 +13,7 @@ import 'package:miel_work_app/screens/apply_mod.dart';
 import 'package:miel_work_app/widgets/approval_user_list.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
@@ -450,6 +451,10 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                 )
               : Container(),
         ],
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
       ),
     );
   }

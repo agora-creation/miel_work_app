@@ -11,6 +11,7 @@ import 'package:miel_work_app/screens/apply_detail.dart';
 import 'package:miel_work_app/services/apply.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/widgets/apply_list.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:page_transition/page_transition.dart';
 
 class ApplyScreen extends StatefulWidget {
@@ -264,6 +265,10 @@ class _ApplyScreenState extends State<ApplyScreen> {
             '新規申請',
             style: TextStyle(color: kWhiteColor),
           ),
+        ),
+        bottomNavigationBar: CustomFooter(
+          loginProvider: widget.loginProvider,
+          homeProvider: widget.homeProvider,
         ),
       ),
     );

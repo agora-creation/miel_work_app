@@ -15,6 +15,7 @@ import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_calendar.dart';
 import 'package:miel_work_app/widgets/custom_checkbox.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart' as sfc;
 
@@ -100,6 +101,8 @@ class _PlanScreenState extends State<PlanScreen> {
                 PageTransition(
                   type: PageTransitionType.rightToLeft,
                   child: CategoryScreen(
+                    loginProvider: widget.loginProvider,
+                    homeProvider: widget.homeProvider,
                     organization: widget.loginProvider.organization,
                   ),
                 ),
@@ -137,6 +140,10 @@ class _PlanScreenState extends State<PlanScreen> {
             );
           },
         ),
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
       ),
     );
   }

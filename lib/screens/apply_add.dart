@@ -10,6 +10,7 @@ import 'package:miel_work_app/models/apply.dart';
 import 'package:miel_work_app/providers/apply.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/file_picker_button.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
@@ -289,6 +290,10 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
           '申請する',
           style: TextStyle(color: kWhiteColor),
         ),
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
       ),
     );
   }

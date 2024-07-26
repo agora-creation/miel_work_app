@@ -8,6 +8,7 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/user_add.dart';
 import 'package:miel_work_app/screens/user_mod.dart';
 import 'package:miel_work_app/services/user.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/user_list.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -128,6 +129,10 @@ class _UserScreenState extends State<UserScreen> {
           '新規追加',
           style: TextStyle(color: kWhiteColor),
         ),
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
       ),
     );
   }

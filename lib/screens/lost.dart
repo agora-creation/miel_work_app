@@ -9,6 +9,7 @@ import 'package:miel_work_app/screens/lost_add.dart';
 import 'package:miel_work_app/screens/lost_mod.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/lost.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/lost_card.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -132,6 +133,10 @@ class _LostScreenState extends State<LostScreen> {
           '新規追加',
           style: TextStyle(color: kWhiteColor),
         ),
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
       ),
     );
   }

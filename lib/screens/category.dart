@@ -7,19 +7,26 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/category.dart';
 import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/providers/category.dart';
+import 'package:miel_work_app/providers/home.dart';
+import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/services/category.dart';
 import 'package:miel_work_app/widgets/category_list.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatefulWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
   final OrganizationModel? organization;
 
   const CategoryScreen({
+    required this.loginProvider,
+    required this.homeProvider,
     required this.organization,
     super.key,
   });
@@ -95,6 +102,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
           '新規追加',
           style: TextStyle(color: kWhiteColor),
         ),
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
       ),
     );
   }

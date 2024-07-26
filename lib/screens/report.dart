@@ -9,6 +9,7 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/report_add.dart';
 import 'package:miel_work_app/screens/report_mod.dart';
 import 'package:miel_work_app/services/report.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/month_picker_button.dart';
 import 'package:miel_work_app/widgets/report_list.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
@@ -152,6 +153,10 @@ class _ReportScreenState extends State<ReportScreen> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
       ),
     );
   }

@@ -10,6 +10,7 @@ import 'package:miel_work_app/screens/plan_add.dart';
 import 'package:miel_work_app/screens/plan_mod.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/plan.dart';
+import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/plan_list.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -140,6 +141,10 @@ class _PlanTimelineScreenState extends State<PlanTimelineScreen> {
             fontSize: 18,
           ),
         ),
+      ),
+      bottomNavigationBar: CustomFooter(
+        loginProvider: widget.loginProvider,
+        homeProvider: widget.homeProvider,
       ),
     );
   }
