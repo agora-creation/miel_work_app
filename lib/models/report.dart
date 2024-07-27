@@ -9,8 +9,6 @@ import 'package:miel_work_app/models/report_repair.dart';
 import 'package:miel_work_app/models/report_visitor.dart';
 import 'package:miel_work_app/models/report_worker.dart';
 
-
-
 class ReportModel {
   String _id = '';
   String _organizationId = '';
@@ -114,17 +112,17 @@ class ReportModel {
     if (data == null) return;
     _id = data['id'] ?? '';
     _organizationId = data['organizationId'] ?? '';
-    reportWorkers = _convertReportWorkers(data['reportWorkers']);
-    reportVisitor = ReportVisitorModel.fromMap(data['reportVisitor']);
-    reportLocker = ReportLockerModel.fromMap(data['reportLocker']);
-    reportPlans = _convertReportPlans(data['reportPlans']);
-    reportCheck = ReportCheckModel.fromMap(data['reportCheck']);
+    reportWorkers = _convertReportWorkers(data['reportWorkers'] ?? []);
+    reportVisitor = ReportVisitorModel.fromMap(data['reportVisitor'] ?? []);
+    reportLocker = ReportLockerModel.fromMap(data['reportLocker'] ?? []);
+    reportPlans = _convertReportPlans(data['reportPlans'] ?? []);
+    reportCheck = ReportCheckModel.fromMap(data['reportCheck'] ?? []);
     _advancePayment1 = data['advancePayment1'] ?? 0;
     _advancePayment2 = data['advancePayment2'] ?? 0;
-    reportRepairs = _convertReportRepairs(data['reportRepairs']);
-    reportProblems = _convertReportProblems(data['reportProblems']);
-    reportPamphlets = _convertReportPamphlets(data['reportPamphlets']);
-    reportEquipments = _convertReportEquipments(data['reportEquipments']);
+    reportRepairs = _convertReportRepairs(data['reportRepairs'] ?? []);
+    reportProblems = _convertReportProblems(data['reportProblems'] ?? []);
+    reportPamphlets = _convertReportPamphlets(data['reportPamphlets'] ?? []);
+    reportEquipments = _convertReportEquipments(data['reportEquipments'] ?? []);
     _passport = data['passport'] ?? '';
     _passportCount = data['passportCount'] ?? 0;
     _remarks = data['remarks'] ?? '';

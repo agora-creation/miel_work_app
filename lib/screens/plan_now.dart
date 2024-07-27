@@ -7,7 +7,6 @@ import 'package:miel_work_app/models/plan.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/services/plan.dart';
-import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/now_plan_list.dart';
 
 class PlanNowScreen extends StatefulWidget {
@@ -86,10 +85,6 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
             fontSize: 18,
           ),
         ),
-      ),
-      bottomNavigationBar: CustomFooter(
-        loginProvider: widget.loginProvider,
-        homeProvider: widget.homeProvider,
       ),
     );
   }
