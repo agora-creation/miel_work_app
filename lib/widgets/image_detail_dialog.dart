@@ -17,6 +17,7 @@ class ImageDetailDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      fit: StackFit.expand,
       alignment: Alignment.topCenter,
       children: [
         Column(
@@ -31,40 +32,47 @@ class ImageDetailDialog extends StatelessWidget {
             ),
           ],
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            onPressedDelete != null
-                ? Material(
-                    elevation: 8,
-                    borderRadius: BorderRadius.circular(100),
-                    color: kWhiteColor,
-                    child: IconButton(
-                      onPressed: onPressedDelete,
-                      icon: const FaIcon(
-                        FontAwesomeIcons.trash,
-                        color: kRedColor,
-                        size: 30,
-                      ),
-                    ),
-                  )
-                : Container(),
-            onPressedClose != null
-                ? Material(
-                    elevation: 8,
-                    borderRadius: BorderRadius.circular(100),
-                    color: kWhiteColor,
-                    child: IconButton(
-                      onPressed: onPressedClose,
-                      icon: const FaIcon(
-                        FontAwesomeIcons.xmark,
-                        color: kBlackColor,
-                        size: 30,
-                      ),
-                    ),
-                  )
-                : Container(),
-          ],
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  onPressedDelete != null
+                      ? Material(
+                          elevation: 8,
+                          borderRadius: BorderRadius.circular(100),
+                          color: kWhiteColor,
+                          child: IconButton(
+                            onPressed: onPressedDelete,
+                            icon: const FaIcon(
+                              FontAwesomeIcons.trash,
+                              color: kRedColor,
+                              size: 30,
+                            ),
+                          ),
+                        )
+                      : Container(),
+                  onPressedClose != null
+                      ? Material(
+                          elevation: 8,
+                          borderRadius: BorderRadius.circular(100),
+                          color: kWhiteColor,
+                          child: IconButton(
+                            onPressed: onPressedClose,
+                            icon: const FaIcon(
+                              FontAwesomeIcons.xmark,
+                              color: kBlackColor,
+                              size: 30,
+                            ),
+                          ),
+                        )
+                      : Container(),
+                ],
+              ),
+            ],
+          ),
         ),
       ],
     );

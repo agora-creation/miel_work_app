@@ -73,25 +73,27 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                PageTransition(
-                  type: PageTransitionType.rightToLeft,
-                  child: ProblemModScreen(
-                    loginProvider: widget.loginProvider,
-                    homeProvider: widget.homeProvider,
-                    problem: widget.problem,
+          !widget.problem.processed
+              ? IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        type: PageTransitionType.rightToLeft,
+                        child: ProblemModScreen(
+                          loginProvider: widget.loginProvider,
+                          homeProvider: widget.homeProvider,
+                          problem: widget.problem,
+                        ),
+                      ),
+                    );
+                  },
+                  icon: const FaIcon(
+                    FontAwesomeIcons.pen,
+                    color: kBlueColor,
                   ),
-                ),
-              );
-            },
-            icon: const FaIcon(
-              FontAwesomeIcons.pen,
-              color: kBlueColor,
-            ),
-          ),
+                )
+              : Container(),
         ],
         shape: const Border(bottom: BorderSide(color: kGrey600Color)),
       ),
@@ -174,30 +176,32 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          String? error = await problemProvider.process(
-            problem: widget.problem,
-          );
-          if (error != null) {
-            if (!mounted) return;
-            showMessage(context, error, false);
-            return;
-          }
-          if (!mounted) return;
-          showMessage(context, 'クレーム／要望の処理済にしました', true);
-          Navigator.pop(context);
-        },
-        backgroundColor: kGreenColor,
-        icon: const FaIcon(
-          FontAwesomeIcons.check,
-          color: kWhiteColor,
-        ),
-        label: const Text(
-          '処理済みにする',
-          style: TextStyle(color: kWhiteColor),
-        ),
-      ),
+      floatingActionButton: !widget.problem.processed
+          ? FloatingActionButton.extended(
+              onPressed: () async {
+                String? error = await problemProvider.process(
+                  problem: widget.problem,
+                );
+                if (error != null) {
+                  if (!mounted) return;
+                  showMessage(context, error, false);
+                  return;
+                }
+                if (!mounted) return;
+                showMessage(context, 'クレーム／要望の処理済にしました', true);
+                Navigator.pop(context);
+              },
+              backgroundColor: kGreenColor,
+              icon: const FaIcon(
+                FontAwesomeIcons.check,
+                color: kWhiteColor,
+              ),
+              label: const Text(
+                '処理済みにする',
+                style: TextStyle(color: kWhiteColor),
+              ),
+            )
+          : Container(),
       bottomNavigationBar: CustomFooter(
         loginProvider: widget.loginProvider,
         homeProvider: widget.homeProvider,

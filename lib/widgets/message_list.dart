@@ -73,13 +73,13 @@ class MessageList extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    PopupIconButton(
-                      icon: Icons.delete,
-                      label: '削除',
-                      onTap: message.createdUserId == loginUser?.id
-                          ? () => deleteAction()
-                          : () {},
-                    ),
+                    message.createdUserId == loginUser?.id
+                        ? PopupIconButton(
+                            icon: Icons.delete,
+                            label: '削除',
+                            onTap: () => deleteAction(),
+                          )
+                        : Container(),
                     PopupIconButton(
                       icon: Icons.delete,
                       label: '削除',
