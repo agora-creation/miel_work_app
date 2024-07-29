@@ -47,6 +47,7 @@ dependencies:
   version: ^3.0.2
   in_app_review: ^2.0.9
   custom_pop_up_menu: ^1.2.4
+  signature: ^5.5.0
   connectivity_plus: ^6.0.3
 
   firebase_core: ^2.31.0

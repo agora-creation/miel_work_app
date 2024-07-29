@@ -6,12 +6,14 @@ import 'package:miel_work_app/models/problem.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/providers/problem.dart';
 import 'package:miel_work_app/screens/problem_mod.dart';
 import 'package:miel_work_app/services/problem.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 class ProblemDetailScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -52,6 +54,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final problemProvider = Provider.of<ProblemProvider>(context);
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
@@ -169,6 +172,30 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
               const SizedBox(height: 80),
             ],
           ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          String? error = await problemProvider.process(
+            problem: widget.problem,
+          );
+          if (error != null) {
+            if (!mounted) return;
+            showMessage(context, error, false);
+            return;
+          }
+          if (!mounted) return;
+          showMessage(context, 'クレーム／要望の処理済にしました', true);
+          Navigator.pop(context);
+        },
+        backgroundColor: kGreenColor,
+        icon: const FaIcon(
+          FontAwesomeIcons.check,
+          color: kWhiteColor,
+        ),
+        label: const Text(
+          '処理済みにする',
+          style: TextStyle(color: kWhiteColor),
         ),
       ),
       bottomNavigationBar: CustomFooter(
