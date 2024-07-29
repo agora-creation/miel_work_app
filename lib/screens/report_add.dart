@@ -199,7 +199,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
       reportProblems.clear();
       for (ProblemModel problem in problems) {
         reportProblems.add(ReportProblemModel.fromMap({
-          'title': '[${problem.type}]${problem.type}',
+          'title': '[${problem.type}]${problem.title}',
           'deal': '',
         }));
       }
