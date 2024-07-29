@@ -76,7 +76,9 @@ class MessageList extends StatelessWidget {
                     PopupIconButton(
                       icon: Icons.delete,
                       label: '削除',
-                      onTap: () => deleteAction(),
+                      onTap: message.createdUserId == loginUser?.id
+                          ? () => deleteAction()
+                          : () {},
                     ),
                     PopupIconButton(
                       icon: Icons.delete,

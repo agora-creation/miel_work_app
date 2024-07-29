@@ -177,6 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               organizationId: loginProvider.organization?.id,
                               searchStart: null,
                               searchEnd: null,
+                              processed: false,
                             ),
                             builder: (context, snapshot) {
                               bool alert = false;

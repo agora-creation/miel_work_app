@@ -51,6 +51,7 @@ class ProblemService {
     required String? organizationId,
     required DateTime? searchStart,
     required DateTime? searchEnd,
+    required bool processed,
   }) {
     if (searchStart != null && searchEnd != null) {
       Timestamp startAt = convertTimestamp(searchStart, false);
@@ -58,12 +59,14 @@ class ProblemService {
       return FirebaseFirestore.instance
           .collection(collection)
           .where('organizationId', isEqualTo: organizationId ?? 'error')
+          .where('processed', isEqualTo: processed)
           .orderBy('createdAt', descending: true)
           .startAt([endAt]).endAt([startAt]).snapshots();
     } else {
       return FirebaseFirestore.instance
           .collection(collection)
           .where('organizationId', isEqualTo: organizationId ?? 'error')
+          .where('processed', isEqualTo: processed)
           .orderBy('createdAt', descending: true)
           .snapshots();
     }

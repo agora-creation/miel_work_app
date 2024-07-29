@@ -97,6 +97,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
           organizationId: widget.loginProvider.organization?.id,
           searchStart: searchStart,
           searchEnd: searchEnd,
+          processed: false,
         ),
         builder: (context, snapshot) {
           List<ProblemModel> problems = [];

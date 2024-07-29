@@ -60,6 +60,7 @@ class ProblemProvider with ChangeNotifier {
         'image': image,
         'states': states,
         'count': count,
+        'processed': false,
         'readUserIds': [loginUser.id],
         'createdAt': createdAt,
         'expirationAt': createdAt.add(const Duration(days: 365)),
@@ -151,6 +152,21 @@ class ProblemProvider with ChangeNotifier {
       }
     } catch (e) {
       error = 'クレーム／要望情報の編集に失敗しました';
+    }
+    return error;
+  }
+
+  Future<String?> process({
+    required ProblemModel problem,
+  }) async {
+    String? error;
+    try {
+      _problemService.update({
+        'id': problem.id,
+        'processed': true,
+      });
+    } catch (e) {
+      error = 'クレーム／要望情報の処理に失敗しました';
     }
     return error;
   }
