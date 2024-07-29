@@ -24,10 +24,11 @@ import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
+import 'package:miel_work_app/widgets/image_detail_dialog.dart';
 import 'package:miel_work_app/widgets/message_form_field.dart';
 import 'package:miel_work_app/widgets/message_list.dart';
+import 'package:miel_work_app/widgets/pdf_detail_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class ChatMessageScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -207,9 +208,9 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                 barrierDismissible: true,
                                 barrierLabel: '閉じる',
                                 context: context,
-                                builder: (context) => ImageDialog(
-                                  messageProvider: messageProvider,
-                                  message: message,
+                                builder: (context) => ImageDetailDialog(
+                                  File(message.image).path,
+                                  onPressedClose: () => Navigator.pop(context),
                                 ),
                               ),
                               onTapFile: () {
@@ -217,20 +218,20 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                 if (imageExtensions.contains(ext)) {
                                   showDialog(
                                     context: context,
-                                    builder: (context) => ImageDialog(
-                                      messageProvider: messageProvider,
-                                      message: message,
-                                      file: message.file,
+                                    builder: (context) => ImageDetailDialog(
+                                      File(message.file).path,
+                                      onPressedClose: () =>
+                                          Navigator.pop(context),
                                     ),
                                   );
                                 }
                                 if (pdfExtensions.contains(ext)) {
                                   showDialog(
                                     context: context,
-                                    builder: (context) => PdfDialog(
-                                      messageProvider: messageProvider,
-                                      message: message,
-                                      file: message.file,
+                                    builder: (context) => PdfDetailDialog(
+                                      File(message.file).path,
+                                      onPressedClose: () =>
+                                          Navigator.pop(context),
                                     ),
                                   );
                                 }
@@ -311,165 +312,173 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
   }
 }
 
-class ImageDialog extends StatefulWidget {
-  final ChatMessageProvider messageProvider;
-  final ChatMessageModel message;
-  final String file;
-
-  const ImageDialog({
-    required this.messageProvider,
-    required this.message,
-    this.file = '',
-    super.key,
-  });
-
-  @override
-  State<ImageDialog> createState() => _ImageDialogState();
-}
-
-class _ImageDialogState extends State<ImageDialog> {
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.topCenter,
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: InteractiveViewer(
-                minScale: 0.1,
-                maxScale: 5,
-                child: Image.network(
-                  widget.file == ''
-                      ? widget.message.image
-                      : File(widget.file).path,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Material(
-              color: Colors.transparent,
-              child: IconButton(
-                onPressed: () => Navigator.of(context).pop(),
-                icon: const FaIcon(
-                  FontAwesomeIcons.xmark,
-                  color: kWhiteColor,
-                  size: 30,
-                ),
-              ),
-            ),
-            Material(
-              color: Colors.transparent,
-              child: IconButton(
-                onPressed: () async {
-                  String? error = await widget.messageProvider.delete(
-                    message: widget.message,
-                  );
-                  if (error != null) {
-                    if (!mounted) return;
-                    showMessage(context, error, false);
-                    return;
-                  }
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(
-                  Icons.delete,
-                  color: kWhiteColor,
-                  size: 30,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class PdfDialog extends StatefulWidget {
-  final ChatMessageProvider messageProvider;
-  final ChatMessageModel message;
-  final String file;
-
-  const PdfDialog({
-    required this.messageProvider,
-    required this.message,
-    this.file = '',
-    super.key,
-  });
-
-  @override
-  State<PdfDialog> createState() => _PdfDialogState();
-}
-
-class _PdfDialogState extends State<PdfDialog> {
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.topCenter,
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: InteractiveViewer(
-                minScale: 0.1,
-                maxScale: 5,
-                child: SfPdfViewer.network(
-                  widget.file == ''
-                      ? widget.message.image
-                      : File(widget.file).path,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Material(
-              color: Colors.transparent,
-              child: IconButton(
-                onPressed: () => Navigator.of(context).pop(),
-                icon: const FaIcon(
-                  FontAwesomeIcons.xmark,
-                  color: kWhiteColor,
-                  size: 30,
-                ),
-              ),
-            ),
-            Material(
-              color: Colors.transparent,
-              child: IconButton(
-                onPressed: () async {
-                  String? error = await widget.messageProvider.delete(
-                    message: widget.message,
-                  );
-                  if (error != null) {
-                    if (!mounted) return;
-                    showMessage(context, error, false);
-                    return;
-                  }
-                  Navigator.of(context).pop();
-                },
-                icon: const FaIcon(
-                  FontAwesomeIcons.trash,
-                  color: kWhiteColor,
-                  size: 30,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
+// class ImageDialog extends StatefulWidget {
+//   final ChatMessageProvider messageProvider;
+//   final ChatMessageModel message;
+//   final String file;
+//
+//   const ImageDialog({
+//     required this.messageProvider,
+//     required this.message,
+//     this.file = '',
+//     super.key,
+//   });
+//
+//   @override
+//   State<ImageDialog> createState() => _ImageDialogState();
+// }
+//
+// class _ImageDialogState extends State<ImageDialog> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Stack(
+//       alignment: Alignment.topCenter,
+//       children: [
+//         Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             Expanded(
+//               child: InteractiveViewer(
+//                 minScale: 0.1,
+//                 maxScale: 5,
+//                 child: Image.network(
+//                   widget.file == ''
+//                       ? widget.message.image
+//                       : File(widget.file).path,
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             Material(
+//               elevation: 8,
+//               borderRadius: BorderRadius.circular(100),
+//               color: kWhiteColor,
+//               child: IconButton(
+//                 onPressed: () => Navigator.of(context).pop(),
+//                 icon: const FaIcon(
+//                   FontAwesomeIcons.xmark,
+//                   color: kBlackColor,
+//                   size: 30,
+//                 ),
+//               ),
+//             ),
+//             Material(
+//               elevation: 8,
+//               borderRadius: BorderRadius.circular(100),
+//               color: kWhiteColor,
+//               child: IconButton(
+//                 onPressed: () async {
+//                   String? error = await widget.messageProvider.delete(
+//                     message: widget.message,
+//                   );
+//                   if (error != null) {
+//                     if (!mounted) return;
+//                     showMessage(context, error, false);
+//                     return;
+//                   }
+//                   Navigator.of(context).pop();
+//                 },
+//                 icon: const Icon(
+//                   Icons.delete,
+//                   color: kRedColor,
+//                   size: 30,
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ],
+//     );
+//   }
+// }
+//
+// class PdfDialog extends StatefulWidget {
+//   final ChatMessageProvider messageProvider;
+//   final ChatMessageModel message;
+//   final String file;
+//
+//   const PdfDialog({
+//     required this.messageProvider,
+//     required this.message,
+//     this.file = '',
+//     super.key,
+//   });
+//
+//   @override
+//   State<PdfDialog> createState() => _PdfDialogState();
+// }
+//
+// class _PdfDialogState extends State<PdfDialog> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Stack(
+//       alignment: Alignment.topCenter,
+//       children: [
+//         Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             Expanded(
+//               child: InteractiveViewer(
+//                 minScale: 0.1,
+//                 maxScale: 5,
+//                 child: SfPdfViewer.network(
+//                   widget.file == ''
+//                       ? widget.message.image
+//                       : File(widget.file).path,
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             Material(
+//               elevation: 8,
+//               borderRadius: BorderRadius.circular(100),
+//               color: kWhiteColor,
+//               child: IconButton(
+//                 onPressed: () => Navigator.of(context).pop(),
+//                 icon: const FaIcon(
+//                   FontAwesomeIcons.xmark,
+//                   color: kBlackColor,
+//                   size: 30,
+//                 ),
+//               ),
+//             ),
+//             Material(
+//               elevation: 8,
+//               borderRadius: BorderRadius.circular(100),
+//               color: kWhiteColor,
+//               child: IconButton(
+//                 onPressed: () async {
+//                   String? error = await widget.messageProvider.delete(
+//                     message: widget.message,
+//                   );
+//                   if (error != null) {
+//                     if (!mounted) return;
+//                     showMessage(context, error, false);
+//                     return;
+//                   }
+//                   Navigator.of(context).pop();
+//                 },
+//                 icon: const FaIcon(
+//                   FontAwesomeIcons.trash,
+//                   color: kRedColor,
+//                   size: 30,
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 class SearchKeywordDialog extends StatefulWidget {
   final Function() getKeyword;

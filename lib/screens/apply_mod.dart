@@ -14,9 +14,10 @@ import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
+import 'package:miel_work_app/widgets/image_detail_dialog.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
+import 'package:miel_work_app/widgets/pdf_detail_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class ApplyModScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -180,16 +181,18 @@ class _ApplyModScreenState extends State<ApplyModScreen> {
                             if (imageExtensions.contains(ext)) {
                               showDialog(
                                 context: context,
-                                builder: (context) => ImageDialog(
-                                  file: widget.apply.file,
+                                builder: (context) => ImageDetailDialog(
+                                  File(widget.apply.file).path,
+                                  onPressedClose: () => Navigator.pop(context),
                                 ),
                               );
                             }
                             if (pdfExtensions.contains(ext)) {
                               showDialog(
                                 context: context,
-                                builder: (context) => PdfDialog(
-                                  file: widget.apply.file,
+                                builder: (context) => PdfDetailDialog(
+                                  File(widget.apply.file).path,
+                                  onPressedClose: () => Navigator.pop(context),
                                 ),
                               );
                             }
@@ -209,16 +212,18 @@ class _ApplyModScreenState extends State<ApplyModScreen> {
                             if (imageExtensions.contains(ext)) {
                               showDialog(
                                 context: context,
-                                builder: (context) => ImageDialog(
-                                  file: widget.apply.file2,
+                                builder: (context) => ImageDetailDialog(
+                                  File(widget.apply.file2).path,
+                                  onPressedClose: () => Navigator.pop(context),
                                 ),
                               );
                             }
                             if (pdfExtensions.contains(ext)) {
                               showDialog(
                                 context: context,
-                                builder: (context) => PdfDialog(
-                                  file: widget.apply.file2,
+                                builder: (context) => PdfDetailDialog(
+                                  File(widget.apply.file2).path,
+                                  onPressedClose: () => Navigator.pop(context),
                                 ),
                               );
                             }
@@ -238,16 +243,18 @@ class _ApplyModScreenState extends State<ApplyModScreen> {
                             if (imageExtensions.contains(ext)) {
                               showDialog(
                                 context: context,
-                                builder: (context) => ImageDialog(
-                                  file: widget.apply.file3,
+                                builder: (context) => ImageDetailDialog(
+                                  File(widget.apply.file3).path,
+                                  onPressedClose: () => Navigator.pop(context),
                                 ),
                               );
                             }
                             if (pdfExtensions.contains(ext)) {
                               showDialog(
                                 context: context,
-                                builder: (context) => PdfDialog(
-                                  file: widget.apply.file3,
+                                builder: (context) => PdfDetailDialog(
+                                  File(widget.apply.file3).path,
+                                  onPressedClose: () => Navigator.pop(context),
                                 ),
                               );
                             }
@@ -267,16 +274,18 @@ class _ApplyModScreenState extends State<ApplyModScreen> {
                             if (imageExtensions.contains(ext)) {
                               showDialog(
                                 context: context,
-                                builder: (context) => ImageDialog(
-                                  file: widget.apply.file4,
+                                builder: (context) => ImageDetailDialog(
+                                  File(widget.apply.file4).path,
+                                  onPressedClose: () => Navigator.pop(context),
                                 ),
                               );
                             }
                             if (pdfExtensions.contains(ext)) {
                               showDialog(
                                 context: context,
-                                builder: (context) => PdfDialog(
-                                  file: widget.apply.file4,
+                                builder: (context) => PdfDetailDialog(
+                                  File(widget.apply.file4).path,
+                                  onPressedClose: () => Navigator.pop(context),
                                 ),
                               );
                             }
@@ -296,16 +305,18 @@ class _ApplyModScreenState extends State<ApplyModScreen> {
                             if (imageExtensions.contains(ext)) {
                               showDialog(
                                 context: context,
-                                builder: (context) => ImageDialog(
-                                  file: widget.apply.file5,
+                                builder: (context) => ImageDetailDialog(
+                                  File(widget.apply.file5).path,
+                                  onPressedClose: () => Navigator.pop(context),
                                 ),
                               );
                             }
                             if (pdfExtensions.contains(ext)) {
                               showDialog(
                                 context: context,
-                                builder: (context) => PdfDialog(
-                                  file: widget.apply.file5,
+                                builder: (context) => PdfDetailDialog(
+                                  File(widget.apply.file5).path,
+                                  onPressedClose: () => Navigator.pop(context),
                                 ),
                               );
                             }
@@ -357,98 +368,6 @@ class _ApplyModScreenState extends State<ApplyModScreen> {
         loginProvider: widget.loginProvider,
         homeProvider: widget.homeProvider,
       ),
-    );
-  }
-}
-
-class ImageDialog extends StatelessWidget {
-  final String file;
-
-  const ImageDialog({
-    required this.file,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.topCenter,
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: InteractiveViewer(
-                minScale: 0.1,
-                maxScale: 5,
-                child: Image.network(File(file).path),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Material(
-              color: Colors.transparent,
-              child: IconButton(
-                onPressed: () => Navigator.of(context).pop(),
-                icon: const FaIcon(
-                  FontAwesomeIcons.xmark,
-                  color: kWhiteColor,
-                  size: 30,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class PdfDialog extends StatelessWidget {
-  final String file;
-
-  const PdfDialog({
-    required this.file,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.topCenter,
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: InteractiveViewer(
-                minScale: 0.1,
-                maxScale: 5,
-                child: SfPdfViewer.network(File(file).path),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Material(
-              color: Colors.transparent,
-              child: IconButton(
-                onPressed: () => Navigator.of(context).pop(),
-                icon: const FaIcon(
-                  FontAwesomeIcons.xmark,
-                  color: kWhiteColor,
-                  size: 30,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

@@ -69,10 +69,10 @@ packages:
     dependency: "direct main"
     description:
       name: calendar_date_picker2
-      sha256: efa732f9643b8aa771e0b4f67a2bdfdc6ed2c8ba5f0bba8e433b077f81c761b7
+      sha256: c7684d1a6bae19dc78c0b59101b272b47d78713d4aa0fcca55e55cf2dde9e3e4
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.6"
+    version: "1.1.5"
   characters:
     dependency: transitive
     description:
@@ -245,10 +245,10 @@ packages:
     dependency: transitive
     description:
       name: device_info_plus
-      sha256: "77f757b789ff68e4eaf9c56d1752309bd9f7ad557cb105b938a7f8eb89e59110"
+      sha256: eead12d1a1ed83d8283ab4c2f3fca23ac4082f29f25f29dff0f758f57d06ec91
       url: "https://pub.dev"
     source: hosted
-    version: "9.1.2"
+    version: "10.1.0"
   device_info_plus_platform_interface:
     dependency: transitive
     description:
@@ -285,10 +285,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: "1bbf65dd997458a08b531042ec3794112a6c39c07c37ff22113d2e7e4f81d4e4"
+      sha256: "824f5b9f389bfc4dddac3dea76cd70c51092d9dff0b2ece7ef4f53db8547d258"
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.1"
+    version: "8.0.6"
   file_selector:
     dependency: "direct main"
     description:
@@ -586,10 +586,10 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: "761a297c042deedc1ffbb156d6e2af13886bb305c2a343a4d972504cd67dd938"
+      sha256: b9c29a161230ee03d3ccf545097fccd9b87a5264228c5d348202e0f0c28f9010
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.1"
+    version: "1.2.2"
   http_parser:
     dependency: transitive
     description:
@@ -610,10 +610,10 @@ packages:
     dependency: "direct main"
     description:
       name: image_picker
-      sha256: "33974eca2e87e8b4e3727f1b94fa3abcb25afe80b6bc2c4d449a0e150aedf720"
+      sha256: "021834d9c0c3de46bf0fe40341fa07168407f694d9b2bb18d532dc1261867f7a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.2"
   image_picker_android:
     dependency: transitive
     description:
@@ -882,10 +882,10 @@ packages:
     dependency: "direct main"
     description:
       name: pdf
-      sha256: "243f05342fc0bdf140eba5b069398985cdbdd3dbb1d776cf43d5ea29cc570ba6"
+      sha256: "81d5522bddc1ef5c28e8f0ee40b71708761753c163e0c93a40df56fd515ea0f0"
       url: "https://pub.dev"
     source: hosted
-    version: "3.10.8"
+    version: "3.11.0"
   petitparser:
     dependency: transitive
     description:
@@ -1039,90 +1039,90 @@ packages:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_calendar
-      sha256: bc96dbc3089d4172ef259a3ae3f254bdb07e71ef6ce3f8a3532a9b575490e45e
+      sha256: "95982ffb0886487374f565b37f090b77474c7330f3925f1e778c28bbb864c1d8"
       url: "https://pub.dev"
     source: hosted
-    version: "25.2.4"
+    version: "26.2.5"
   syncfusion_flutter_core:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
-      sha256: "9e8bac2367d03bd902844f59e866c0e7b1e10b0b8fa5a6a926c0d8ae8c344533"
+      sha256: "5de7df5e372ad476c144327f06503190b940b84d5bcfa407ee49b24f1c42e14d"
       url: "https://pub.dev"
     source: hosted
-    version: "25.2.4"
+    version: "26.2.5"
   syncfusion_flutter_datepicker:
     dependency: transitive
     description:
       name: syncfusion_flutter_datepicker
-      sha256: "88ef2e85f5ccc7cb521c5784e646b5c5d4aecf2d9373e543719a14d7bcfaae4a"
+      sha256: "34664d4af4d3f649e5e47adf1613b00ce63e61b49f7292fa55ca2b7173dd2dc0"
       url: "https://pub.dev"
     source: hosted
-    version: "25.2.4"
+    version: "26.2.5"
   syncfusion_flutter_pdf:
     dependency: transitive
     description:
       name: syncfusion_flutter_pdf
-      sha256: b62aa400fa151b86f9c36397678192c852b7ea8cdcb2d1a6e225cb6c67402b8f
+      sha256: "1e432e7e693ba1fe841af0f792f64a21bee077d41a87c0dd362c2bdf6ba71a1b"
       url: "https://pub.dev"
     source: hosted
-    version: "25.2.4"
+    version: "26.2.5"
   syncfusion_flutter_pdfviewer:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_pdfviewer
-      sha256: d45a65b1862ebb779330e8e14f0f3859bb6cff81f4d0e880d626ec129b2bd156
+      sha256: "5f05ef857480dab24deda34dd8f0d85cae06516658bddee68c9fbb2cea2381f4"
       url: "https://pub.dev"
     source: hosted
-    version: "25.2.4"
+    version: "26.2.5"
   syncfusion_flutter_signaturepad:
     dependency: transitive
     description:
       name: syncfusion_flutter_signaturepad
-      sha256: f6f60efae09c0cd53fe0215a3e6c094da865e0dc2ca0688eb10eed12a0ea8acf
+      sha256: "132a33062b0bbacc177baba174161556bcc17648595793ecbf51d55fd27dd253"
       url: "https://pub.dev"
     source: hosted
-    version: "25.2.4"
+    version: "26.2.5"
   syncfusion_localizations:
     dependency: "direct main"
     description:
       name: syncfusion_localizations
-      sha256: ed76f8b406dbd2e43a1da9403b73263dd1814daba8bbeac31b1b43c045255b69
+      sha256: a1bb75566e3c052fefa26bbc0e33a757fe16ebe6772fbeb60c740a69446c50aa
       url: "https://pub.dev"
     source: hosted
-    version: "25.2.4"
+    version: "26.2.5"
   syncfusion_pdfviewer_macos:
     dependency: transitive
     description:
       name: syncfusion_pdfviewer_macos
-      sha256: "82fd3935258522f6920c4048708e448b20969fb6f7ad5abf96a32dfb938decba"
+      sha256: "257275d86adc6c6abd93aeba781e48ba105494207faf8ab5e70dbfcc0cadc4bc"
       url: "https://pub.dev"
     source: hosted
-    version: "25.2.4"
+    version: "26.2.5"
   syncfusion_pdfviewer_platform_interface:
     dependency: transitive
     description:
       name: syncfusion_pdfviewer_platform_interface
-      sha256: "64327f15fedcb737ccfee2791f2d7b6479c043e532a180a099e9eb50ef225468"
+      sha256: fc179505e5e158e4dda416ffc5cf4c118febbb3fe9c8c6300f000a67680f4cb7
       url: "https://pub.dev"
     source: hosted
-    version: "25.2.4"
+    version: "26.2.5"
   syncfusion_pdfviewer_web:
     dependency: transitive
     description:
       name: syncfusion_pdfviewer_web
-      sha256: "031d1cd1dc13f8a7c844c6ccb82385b8ccb7f453f736af88c20cbaadc2864948"
+      sha256: e38433a9f35c18372a3d266f8f77193c79752bd81a3ab943a31044d9039b5db7
       url: "https://pub.dev"
     source: hosted
-    version: "25.2.4"
+    version: "26.2.5"
   syncfusion_pdfviewer_windows:
     dependency: transitive
     description:
       name: syncfusion_pdfviewer_windows
-      sha256: "6132aa8361661dbc0c80fabc1c59a1ae32959074d5ec4193adf468c9160ea62b"
+      sha256: "55ffde944000dd35928c04124494ada1db98230e69aa4f993842cb5ef0ff5d78"
       url: "https://pub.dev"
     source: hosted
-    version: "25.2.4"
+    version: "26.2.5"
   term_glyph:
     dependency: transitive
     description:
@@ -1175,10 +1175,10 @@ packages:
     dependency: "direct main"
     description:
       name: url_launcher
-      sha256: "6ce1e04375be4eed30548f10a315826fd933c1e493206eab82eed01f438c8d2e"
+      sha256: "21b704ce5fa560ea9f3b525b43601c678728ba46725bab9b01187b4831377ed3"
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.6"
+    version: "6.3.0"
   url_launcher_android:
     dependency: transitive
     description:

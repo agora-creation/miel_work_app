@@ -42,101 +42,228 @@ class _LostScreenState extends State<LostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kWhiteColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
         backgroundColor: kWhiteColor,
-        title: const Text(
-          '落とし物',
-          style: TextStyle(color: kBlackColor),
-        ),
-        actions: [
-          IconButton(
-            icon: const FaIcon(
-              FontAwesomeIcons.xmark,
-              color: kBlackColor,
-            ),
-            onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: kWhiteColor,
+          title: const Text(
+            '落とし物',
+            style: TextStyle(color: kBlackColor),
           ),
-        ],
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
-      ),
-      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: lostService.streamList(
-          organizationId: widget.loginProvider.organization?.id,
-          searchStart: null,
-          searchEnd: null,
-          searchStatus: [0],
-        ),
-        builder: (context, snapshot) {
-          List<LostModel> losts = [];
-          if (snapshot.hasData) {
-            losts = lostService.generateList(
-              data: snapshot.data,
-            );
-          }
-          if (losts.isEmpty) {
-            return const Center(child: Text('落とし物はありません'));
-          }
-          return GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 1,
-              childAspectRatio: 1,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-            ),
-            padding: const EdgeInsets.all(8),
-            itemCount: losts.length,
-            itemBuilder: (context, index) {
-              LostModel lost = losts[index];
-              return LostCard(
-                lost: lost,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      type: PageTransitionType.rightToLeft,
-                      child: LostModScreen(
-                        loginProvider: widget.loginProvider,
-                        homeProvider: widget.homeProvider,
-                        lost: lost,
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-            context,
-            PageTransition(
-              type: PageTransitionType.rightToLeft,
-              child: LostAddScreen(
-                loginProvider: widget.loginProvider,
-                homeProvider: widget.homeProvider,
+          actions: [
+            IconButton(
+              icon: const FaIcon(
+                FontAwesomeIcons.xmark,
+                color: kBlackColor,
               ),
+              onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
             ),
-          );
-        },
-        icon: const FaIcon(
-          FontAwesomeIcons.plus,
-          color: kWhiteColor,
+          ],
+          bottom: const TabBar(
+            tabs: [
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text('保管中', style: TextStyle(fontSize: 18)),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text('返却済', style: TextStyle(fontSize: 18)),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text('破棄', style: TextStyle(fontSize: 18)),
+              ),
+            ],
+            indicator: UnderlineTabIndicator(
+              borderSide: BorderSide(width: 5, color: kBlueColor),
+            ),
+            indicatorSize: TabBarIndicatorSize.tab,
+          ),
+          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
         ),
-        label: const Text(
-          '新規追加',
-          style: TextStyle(color: kWhiteColor),
+        body: TabBarView(
+          children: [
+            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream: lostService.streamList(
+                organizationId: widget.loginProvider.organization?.id,
+                searchStart: null,
+                searchEnd: null,
+                searchStatus: [0],
+              ),
+              builder: (context, snapshot) {
+                List<LostModel> losts = [];
+                if (snapshot.hasData) {
+                  losts = lostService.generateList(
+                    data: snapshot.data,
+                  );
+                }
+                if (losts.isEmpty) {
+                  return const Center(child: Text('落とし物はありません'));
+                }
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
+                    childAspectRatio: 1,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                  ),
+                  padding: const EdgeInsets.all(8),
+                  itemCount: losts.length,
+                  itemBuilder: (context, index) {
+                    LostModel lost = losts[index];
+                    return LostCard(
+                      lost: lost,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.rightToLeft,
+                            child: LostModScreen(
+                              loginProvider: widget.loginProvider,
+                              homeProvider: widget.homeProvider,
+                              lost: lost,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream: lostService.streamList(
+                organizationId: widget.loginProvider.organization?.id,
+                searchStart: null,
+                searchEnd: null,
+                searchStatus: [1],
+              ),
+              builder: (context, snapshot) {
+                List<LostModel> losts = [];
+                if (snapshot.hasData) {
+                  losts = lostService.generateList(
+                    data: snapshot.data,
+                  );
+                }
+                if (losts.isEmpty) {
+                  return const Center(child: Text('落とし物はありません'));
+                }
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
+                    childAspectRatio: 1,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                  ),
+                  padding: const EdgeInsets.all(8),
+                  itemCount: losts.length,
+                  itemBuilder: (context, index) {
+                    LostModel lost = losts[index];
+                    return LostCard(
+                      lost: lost,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.rightToLeft,
+                            child: LostModScreen(
+                              loginProvider: widget.loginProvider,
+                              homeProvider: widget.homeProvider,
+                              lost: lost,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream: lostService.streamList(
+                organizationId: widget.loginProvider.organization?.id,
+                searchStart: null,
+                searchEnd: null,
+                searchStatus: [9],
+              ),
+              builder: (context, snapshot) {
+                List<LostModel> losts = [];
+                if (snapshot.hasData) {
+                  losts = lostService.generateList(
+                    data: snapshot.data,
+                  );
+                }
+                if (losts.isEmpty) {
+                  return const Center(child: Text('落とし物はありません'));
+                }
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
+                    childAspectRatio: 1,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                  ),
+                  padding: const EdgeInsets.all(8),
+                  itemCount: losts.length,
+                  itemBuilder: (context, index) {
+                    LostModel lost = losts[index];
+                    return LostCard(
+                      lost: lost,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.rightToLeft,
+                            child: LostModScreen(
+                              loginProvider: widget.loginProvider,
+                              homeProvider: widget.homeProvider,
+                              lost: lost,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+          ],
         ),
-      ),
-      bottomNavigationBar: CustomFooter(
-        loginProvider: widget.loginProvider,
-        homeProvider: widget.homeProvider,
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.push(
+              context,
+              PageTransition(
+                type: PageTransitionType.rightToLeft,
+                child: LostAddScreen(
+                  loginProvider: widget.loginProvider,
+                  homeProvider: widget.homeProvider,
+                ),
+              ),
+            );
+          },
+          icon: const FaIcon(
+            FontAwesomeIcons.plus,
+            color: kWhiteColor,
+          ),
+          label: const Text(
+            '新規追加',
+            style: TextStyle(color: kWhiteColor),
+          ),
+        ),
+        bottomNavigationBar: CustomFooter(
+          loginProvider: widget.loginProvider,
+          homeProvider: widget.homeProvider,
+        ),
       ),
     );
   }

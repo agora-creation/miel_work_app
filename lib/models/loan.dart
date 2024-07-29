@@ -67,7 +67,7 @@ class LoanModel {
     String ret = '';
     switch (status) {
       case 0:
-        ret = '保管中';
+        ret = '貸出中';
         break;
       case 1:
         ret = '返却済';
