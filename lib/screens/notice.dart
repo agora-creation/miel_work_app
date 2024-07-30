@@ -84,8 +84,8 @@ class _NoticeScreenState extends State<NoticeScreen> {
               }
             },
             icon: const FaIcon(
-              FontAwesomeIcons.calendar,
-              color: kBlueColor,
+              FontAwesomeIcons.calendarDays,
+              color: kBlackColor,
             ),
           ),
           IconButton(

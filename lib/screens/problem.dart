@@ -80,8 +80,8 @@ class _ProblemScreenState extends State<ProblemScreen> {
                 }
               },
               icon: const FaIcon(
-                FontAwesomeIcons.calendar,
-                color: kBlueColor,
+                FontAwesomeIcons.calendarDays,
+                color: kBlackColor,
               ),
             ),
             IconButton(

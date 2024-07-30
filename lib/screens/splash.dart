@@ -8,29 +8,24 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Stack(
         children: [
-          const AnimationBackground(),
+          AnimationBackground(),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    border: Border(bottom: BorderSide(color: kBlackColor)),
-                  ),
-                  child: const Text(
-                    'ひろめWORK',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'SourceHanSansJP-Bold',
-                      letterSpacing: 2,
-                    ),
+                Text(
+                  'ひろめWORK',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'SourceHanSansJP-Bold',
+                    letterSpacing: 2,
                   ),
                 ),
-                const SpinKitCubeGrid(
+                SpinKitCubeGrid(
                   color: kBlackColor,
                 ),
               ],

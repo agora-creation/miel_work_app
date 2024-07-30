@@ -80,8 +80,8 @@ class _ApplyScreenState extends State<ApplyScreen> {
                 }
               },
               icon: const FaIcon(
-                FontAwesomeIcons.calendar,
-                color: kBlueColor,
+                FontAwesomeIcons.calendarDays,
+                color: kBlackColor,
               ),
             ),
             IconButton(
