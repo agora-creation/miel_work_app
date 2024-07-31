@@ -119,9 +119,9 @@ class _ApplyScreenState extends State<ApplyScreen> {
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: applyService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
-                searchApproval: [0],
                 searchStart: searchStart,
                 searchEnd: searchEnd,
+                approval: [0],
               ),
               builder: (context, snapshot) {
                 List<ApplyModel> applies = [];
@@ -161,9 +161,9 @@ class _ApplyScreenState extends State<ApplyScreen> {
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: applyService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
-                searchApproval: [1],
                 searchStart: searchStart,
                 searchEnd: searchEnd,
+                approval: [1],
               ),
               builder: (context, snapshot) {
                 List<ApplyModel> applies = [];
@@ -203,9 +203,9 @@ class _ApplyScreenState extends State<ApplyScreen> {
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: applyService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
-                searchApproval: [9],
                 searchStart: searchStart,
                 searchEnd: searchEnd,
+                approval: [9],
               ),
               builder: (context, snapshot) {
                 List<ApplyModel> applies = [];

@@ -144,7 +144,7 @@ class _LostAddScreenState extends State<LostAddScreen> {
                             width: double.infinity,
                           )
                         : Container(
-                            color: kGrey300Color,
+                            color: kGreyColor.withOpacity(0.3),
                             width: double.infinity,
                             height: 100,
                             child: const Center(

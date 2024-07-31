@@ -69,7 +69,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'クレーム／要望詳細',
+          'クレーム／要望情報の詳細',
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
@@ -105,7 +105,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
             children: <Widget>[
               Text(
                 '報告日時: ${dateText('yyyy/MM/dd HH:mm', widget.problem.createdAt)}',
-                style: const TextStyle(color: kGrey600Color),
+                style: const TextStyle(color: kDisabledColor),
               ),
               const SizedBox(height: 4),
               FormLabel(
@@ -191,7 +191,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                 showMessage(context, 'クレーム／要望の処理済にしました', true);
                 Navigator.pop(context);
               },
-              backgroundColor: kGreenColor,
+              backgroundColor: kCheckColor,
               icon: const FaIcon(
                 FontAwesomeIcons.check,
                 color: kWhiteColor,

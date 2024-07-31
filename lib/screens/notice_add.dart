@@ -179,7 +179,7 @@ class _NoticeAddScreenState extends State<NoticeAddScreen> {
           color: kWhiteColor,
         ),
         label: const Text(
-          '追加する',
+          '保存する',
           style: TextStyle(color: kWhiteColor),
         ),
       ),

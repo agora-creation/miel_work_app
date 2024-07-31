@@ -427,14 +427,14 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                       apply: widget.apply,
                     ),
                   ),
-                  backgroundColor: kRed100Color,
+                  backgroundColor: kRejectColor,
                   icon: const Icon(
                     Icons.error_outline,
-                    color: kRedColor,
+                    color: kWhiteColor,
                   ),
                   label: const Text(
                     '否決する',
-                    style: TextStyle(color: kRedColor),
+                    style: TextStyle(color: kWhiteColor),
                   ),
                 )
               : Container(),
@@ -614,8 +614,8 @@ class _RejectApplyDialogState extends State<RejectApplyDialog> {
         CustomButton(
           type: ButtonSizeType.sm,
           label: '否決する',
-          labelColor: kRedColor,
-          backgroundColor: kRed100Color,
+          labelColor: kWhiteColor,
+          backgroundColor: kRejectColor,
           onPressed: () async {
             String? error = await applyProvider.reject(
               apply: widget.apply,

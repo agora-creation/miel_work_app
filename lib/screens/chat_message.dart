@@ -119,7 +119,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
           child: GestureDetector(
             onTap: messageProvider.contentFocusNode.requestFocus,
             child: Container(
-              color: kGrey200Color,
+              color: kGreyColor.withOpacity(0.3),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -581,9 +581,9 @@ class _ChatUsersDialogState extends State<ChatUsersDialog> {
     return CustomAlertDialog(
       contentPadding: EdgeInsets.zero,
       content: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border.symmetric(
-            horizontal: BorderSide(color: kGrey600Color),
+            horizontal: BorderSide(color: kBorderColor),
           ),
         ),
         child: SingleChildScrollView(
@@ -592,8 +592,8 @@ class _ChatUsersDialogState extends State<ChatUsersDialog> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: users.map((user) {
               return Container(
-                decoration: const BoxDecoration(
-                  border: Border(bottom: BorderSide(color: kGrey600Color)),
+                decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(color: kBorderColor)),
                 ),
                 child: ListTile(title: Text(user.name)),
               );
@@ -623,9 +623,9 @@ class _ReadUsersDialogState extends State<ReadUsersDialog> {
     return CustomAlertDialog(
       contentPadding: EdgeInsets.zero,
       content: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border.symmetric(
-            horizontal: BorderSide(color: kGrey600Color),
+            horizontal: BorderSide(color: kBorderColor),
           ),
         ),
         child: SingleChildScrollView(
@@ -634,8 +634,8 @@ class _ReadUsersDialogState extends State<ReadUsersDialog> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: widget.readUsers.map((readUser) {
               return Container(
-                decoration: const BoxDecoration(
-                  border: Border(bottom: BorderSide(color: kGrey600Color)),
+                decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(color: kBorderColor)),
                 ),
                 child: ListTile(
                   title: Text(readUser.userName),

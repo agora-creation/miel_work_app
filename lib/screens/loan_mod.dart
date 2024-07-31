@@ -200,7 +200,7 @@ class _LoanModScreenState extends State<LoanModScreen> {
                             width: double.infinity,
                           )
                         : Container(
-                            color: kGrey300Color,
+                            color: kGreyColor.withOpacity(0.3),
                             width: double.infinity,
                             height: 100,
                             child: const Center(

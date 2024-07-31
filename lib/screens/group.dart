@@ -74,8 +74,8 @@ class _GroupScreenState extends State<GroupScreen> {
               itemBuilder: (context, index) {
                 OrganizationGroupModel group = groups[index];
                 return Container(
-                  decoration: const BoxDecoration(
-                    border: Border(bottom: BorderSide(color: kGrey600Color)),
+                  decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(color: kBorderColor)),
                   ),
                   child: ListTile(
                     title: Text(

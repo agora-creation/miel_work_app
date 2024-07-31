@@ -70,7 +70,7 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          'お知らせ詳細',
+          'お知らせ情報の詳細',
           style: TextStyle(color: kBlackColor),
         ),
         actions: [

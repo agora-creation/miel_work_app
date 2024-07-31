@@ -216,7 +216,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
             color: kWhiteColor,
           ),
           label: const Text(
-            '新規追加',
+            '追加する',
             style: TextStyle(color: kWhiteColor),
           ),
         ),

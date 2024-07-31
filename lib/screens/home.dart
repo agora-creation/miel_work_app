@@ -206,9 +206,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                             stream: applyService.streamList(
                               organizationId: loginProvider.organization?.id,
-                              searchApproval: [0],
                               searchStart: null,
                               searchEnd: null,
+                              approval: [0],
                             ),
                             builder: (context, snapshot) {
                               bool alert = false;
@@ -247,8 +247,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             iconSize: 42,
                             label: '勤怠打刻',
                             labelFontSize: 16,
-                            color: kGrey600Color,
-                            backgroundColor: kGrey300Color,
+                            color: kBlackColor,
+                            backgroundColor: kWhiteColor,
                             onTap: () {},
                           ),
                           HomeIconCard(
@@ -354,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   label: 'グループ一覧',
                                   labelFontSize: 16,
                                   color: kWhiteColor,
-                                  backgroundColor: kGrey600Color,
+                                  backgroundColor: kDisabledColor,
                                   onTap: () => showBottomUpScreen(
                                     context,
                                     GroupScreen(
@@ -371,7 +371,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   label: 'スタッフ一覧',
                                   labelFontSize: 16,
                                   color: kWhiteColor,
-                                  backgroundColor: kGrey600Color,
+                                  backgroundColor: kDisabledColor,
                                   onTap: () => showBottomUpScreen(
                                     context,
                                     UserScreen(
