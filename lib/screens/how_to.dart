@@ -24,6 +24,7 @@ class HowToScreen extends StatelessWidget {
           '使い方',
           style: TextStyle(color: kBlackColor),
         ),
+        shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: SfPdfViewer.network('https://agora-c.com/miel-work/manual.pdf'),
     );

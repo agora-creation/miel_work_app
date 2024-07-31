@@ -65,7 +65,7 @@ class CustomTextFormField extends StatelessWidget {
         ),
         labelStyle: TextStyle(color: color),
         focusColor: color,
-        fillColor: kGrey200Color,
+        fillColor: kGreyColor.withOpacity(0.3),
         enabled: enabled,
       ),
     );

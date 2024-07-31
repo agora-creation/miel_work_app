@@ -103,7 +103,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
             ),
           ),
         ],
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: SingleChildScrollView(
         child: Padding(

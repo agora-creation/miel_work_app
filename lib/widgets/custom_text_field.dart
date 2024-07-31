@@ -38,7 +38,7 @@ class CustomTextField extends StatelessWidget {
         hintText: hintText,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         filled: true,
-        fillColor: kGrey200Color,
+        fillColor: kGreyColor.withOpacity(0.3),
         prefix: prefix,
         enabled: enabled,
       ),

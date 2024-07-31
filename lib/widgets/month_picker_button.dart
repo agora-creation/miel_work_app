@@ -18,9 +18,9 @@ class MonthPickerButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        decoration: const BoxDecoration(
-          color: kGrey300Color,
-          border: Border(bottom: BorderSide(color: kGreyColor)),
+        decoration: BoxDecoration(
+          color: kGreyColor.withOpacity(0.3),
+          border: Border(bottom: BorderSide(color: kBorderColor)),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -31,7 +31,7 @@ class MonthPickerButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(dateText('yyyy年MM月', value)),
-              const FaIcon(FontAwesomeIcons.calendar, color: kGrey600Color),
+              const FaIcon(FontAwesomeIcons.calendar, color: kDisabledColor),
             ],
           ),
         ),

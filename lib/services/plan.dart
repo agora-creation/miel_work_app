@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/plan.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart' as sfc;
 
 class PlanService {
   String collection = 'plan';
@@ -41,7 +40,8 @@ class PlanService {
 
   Future<List<PlanModel>> selectList({
     required String? organizationId,
-    required DateTime date,
+    required DateTime? searchStart,
+    required DateTime? searchEnd,
   }) async {
     List<PlanModel> ret = [];
     await firestore
@@ -53,20 +53,19 @@ class PlanService {
       for (DocumentSnapshot<Map<String, dynamic>> map in value.docs) {
         PlanModel plan = PlanModel.fromSnapshot(map);
         bool listIn = false;
-        var dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
-        var dateE = DateTime(date.year, date.month, date.day, 23, 59, 59);
-        if (plan.startedAt.millisecondsSinceEpoch <=
-                dateS.millisecondsSinceEpoch &&
-            dateS.millisecondsSinceEpoch <=
-                plan.endedAt.millisecondsSinceEpoch) {
-          listIn = true;
-        } else if (dateS.millisecondsSinceEpoch <=
-                plan.startedAt.millisecondsSinceEpoch &&
-            plan.endedAt.millisecondsSinceEpoch <=
-                dateE.millisecondsSinceEpoch) {
-          listIn = true;
+        if (searchStart != null && searchEnd != null) {
+          if (plan.startedAt.millisecondsSinceEpoch <=
+                  searchStart.millisecondsSinceEpoch &&
+              searchStart.millisecondsSinceEpoch <=
+                  plan.endedAt.millisecondsSinceEpoch) {
+            listIn = true;
+          } else if (searchStart.millisecondsSinceEpoch <=
+                  plan.startedAt.millisecondsSinceEpoch &&
+              plan.endedAt.millisecondsSinceEpoch <=
+                  searchEnd.millisecondsSinceEpoch) {
+            listIn = true;
+          }
         }
-
         if (listIn) {
           ret.add(plan);
         }
@@ -77,12 +76,13 @@ class PlanService {
 
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
-    required List<String> categories,
+    required List<String> searchCategories,
   }) {
     return FirebaseFirestore.instance
         .collection(collection)
         .where('organizationId', isEqualTo: organizationId ?? 'error')
-        .where('category', whereIn: categories.isNotEmpty ? categories : null)
+        .where('category',
+            whereIn: searchCategories.isNotEmpty ? searchCategories : null)
         .orderBy('startedAt', descending: true)
         .snapshots();
   }
@@ -90,7 +90,8 @@ class PlanService {
   List<PlanModel> generateList({
     required QuerySnapshot<Map<String, dynamic>>? data,
     required OrganizationGroupModel? currentGroup,
-    DateTime? date,
+    required DateTime? searchStart,
+    required DateTime? searchEnd,
     bool shift = false,
   }) {
     List<PlanModel> ret = [];
@@ -98,18 +99,16 @@ class PlanService {
       PlanModel plan = PlanModel.fromSnapshot(doc);
       bool listIn = false;
       if (currentGroup == null) {
-        if (date != null) {
-          var dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
-          var dateE = DateTime(date.year, date.month, date.day, 23, 59, 59);
+        if (searchStart != null && searchEnd != null) {
           if (plan.startedAt.millisecondsSinceEpoch <=
-                  dateS.millisecondsSinceEpoch &&
-              dateS.millisecondsSinceEpoch <=
+                  searchStart.millisecondsSinceEpoch &&
+              searchStart.millisecondsSinceEpoch <=
                   plan.endedAt.millisecondsSinceEpoch) {
             listIn = true;
-          } else if (dateS.millisecondsSinceEpoch <=
+          } else if (searchStart.millisecondsSinceEpoch <=
                   plan.startedAt.millisecondsSinceEpoch &&
               plan.endedAt.millisecondsSinceEpoch <=
-                  dateE.millisecondsSinceEpoch) {
+                  searchEnd.millisecondsSinceEpoch) {
             listIn = true;
           }
         } else {
@@ -117,18 +116,16 @@ class PlanService {
         }
       } else {
         if (currentGroup.id == plan.groupId || plan.groupId == '') {
-          if (date != null) {
-            var dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
-            var dateE = DateTime(date.year, date.month, date.day, 23, 59, 59);
+          if (searchStart != null && searchEnd != null) {
             if (plan.startedAt.millisecondsSinceEpoch <=
-                    dateS.millisecondsSinceEpoch &&
-                dateS.millisecondsSinceEpoch <=
+                    searchStart.millisecondsSinceEpoch &&
+                searchStart.millisecondsSinceEpoch <=
                     plan.endedAt.millisecondsSinceEpoch) {
               listIn = true;
-            } else if (dateS.millisecondsSinceEpoch <=
+            } else if (searchStart.millisecondsSinceEpoch <=
                     plan.startedAt.millisecondsSinceEpoch &&
                 plan.endedAt.millisecondsSinceEpoch <=
-                    dateE.millisecondsSinceEpoch) {
+                    searchEnd.millisecondsSinceEpoch) {
               listIn = true;
             }
           } else {
@@ -138,73 +135,6 @@ class PlanService {
       }
       if (listIn) {
         ret.add(plan);
-      }
-    }
-    return ret;
-  }
-
-  List<sfc.Appointment> generateListAppointment({
-    required QuerySnapshot<Map<String, dynamic>>? data,
-    required OrganizationGroupModel? currentGroup,
-    DateTime? date,
-    bool shift = false,
-  }) {
-    List<sfc.Appointment> ret = [];
-    for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
-      PlanModel plan = PlanModel.fromSnapshot(doc);
-      bool listIn = false;
-      if (currentGroup == null) {
-        if (date != null) {
-          var dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
-          var dateE = DateTime(date.year, date.month, date.day, 23, 59, 59);
-          if (plan.startedAt.millisecondsSinceEpoch <=
-                  dateS.millisecondsSinceEpoch &&
-              dateS.millisecondsSinceEpoch <=
-                  plan.endedAt.millisecondsSinceEpoch) {
-            listIn = true;
-          } else if (dateS.millisecondsSinceEpoch <=
-                  plan.startedAt.millisecondsSinceEpoch &&
-              plan.endedAt.millisecondsSinceEpoch <=
-                  dateE.millisecondsSinceEpoch) {
-            listIn = true;
-          }
-        } else {
-          listIn = true;
-        }
-      } else {
-        if (currentGroup.id == plan.groupId || plan.groupId == '') {
-          if (date != null) {
-            var dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
-            var dateE = DateTime(date.year, date.month, date.day, 23, 59, 59);
-            if (plan.startedAt.millisecondsSinceEpoch <=
-                    dateS.millisecondsSinceEpoch &&
-                dateS.millisecondsSinceEpoch <=
-                    plan.endedAt.millisecondsSinceEpoch) {
-              listIn = true;
-            } else if (dateS.millisecondsSinceEpoch <=
-                    plan.startedAt.millisecondsSinceEpoch &&
-                plan.endedAt.millisecondsSinceEpoch <=
-                    dateE.millisecondsSinceEpoch) {
-              listIn = true;
-            }
-          } else {
-            listIn = true;
-          }
-        }
-      }
-      if (listIn) {
-        ret.add(sfc.Appointment(
-          id: plan.id,
-          resourceIds: plan.userIds,
-          subject: '[${plan.category}]${plan.subject}',
-          startTime: plan.startedAt,
-          endTime: plan.endedAt,
-          isAllDay: plan.allDay,
-          color:
-              shift ? plan.categoryColor.withOpacity(0.3) : plan.categoryColor,
-          notes: 'plan',
-          recurrenceRule: plan.getRepeatRule(),
-        ));
       }
     }
     return ret;

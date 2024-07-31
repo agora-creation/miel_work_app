@@ -73,13 +73,16 @@ class MessageList extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    message.createdUserId == loginUser?.id
-                        ? PopupIconButton(
-                            icon: Icons.delete,
-                            label: '削除',
-                            onTap: () => deleteAction(),
-                          )
-                        : Container(),
+                    PopupIconButton(
+                      icon: Icons.delete,
+                      label: '削除',
+                      color: message.createdUserId == loginUser?.id
+                          ? kWhiteColor
+                          : kDisabledColor,
+                      onTap: message.createdUserId == loginUser?.id
+                          ? () => deleteAction()
+                          : () {},
+                    ),
                     PopupIconButton(
                       icon: Icons.delete,
                       label: '削除',
@@ -146,14 +149,14 @@ class MessageList extends StatelessWidget {
                                                     ?.createdUserName ??
                                                 '',
                                             style: const TextStyle(
-                                              color: kGrey600Color,
+                                              color: kDisabledColor,
                                               fontSize: 12,
                                             ),
                                           ),
                                           Text(
                                             message.replySource?.content ?? '',
                                             style: const TextStyle(
-                                              color: kGrey600Color,
+                                              color: kDisabledColor,
                                               fontSize: 18,
                                             ),
                                           ),
@@ -236,7 +239,7 @@ class MessageList extends StatelessWidget {
             Text(
               dateText('MM/dd HH:mm', message.createdAt),
               style: const TextStyle(
-                color: kGreyColor,
+                color: kDisabledColor,
                 fontSize: 12,
               ),
             ),
@@ -246,7 +249,7 @@ class MessageList extends StatelessWidget {
                     child: Text(
                       '既読 ${readUsers.length}',
                       style: const TextStyle(
-                        color: kGrey600Color,
+                        color: kDisabledColor,
                         fontSize: 12,
                       ),
                     ),
@@ -299,22 +302,21 @@ class MessageList extends StatelessWidget {
                                                     ?.createdUserName ??
                                                 '',
                                             style: const TextStyle(
-                                              color: kGrey600Color,
+                                              color: kDisabledColor,
                                               fontSize: 12,
                                             ),
                                           ),
                                           Text(
                                             message.replySource?.content ?? '',
                                             style: const TextStyle(
-                                              color: kGrey600Color,
+                                              color: kDisabledColor,
                                               fontSize: 18,
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                    const Divider(
-                                        color: kGrey200Color, height: 1),
+                                    Divider(color: kBorderColor, height: 1),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
                                         vertical: 10,
@@ -390,7 +392,7 @@ class MessageList extends StatelessWidget {
             Text(
               dateText('MM/dd HH:mm', message.createdAt),
               style: const TextStyle(
-                color: kGreyColor,
+                color: kDisabledColor,
                 fontSize: 12,
               ),
             ),
@@ -400,7 +402,7 @@ class MessageList extends StatelessWidget {
                     child: Text(
                       '既読 ${readUsers.length}',
                       style: const TextStyle(
-                        color: kGrey600Color,
+                        color: kDisabledColor,
                         fontSize: 12,
                       ),
                     ),

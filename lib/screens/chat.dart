@@ -68,7 +68,7 @@ class _ChatScreenState extends State<ChatScreen> {
             onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
           ),
         ],
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: ListView.builder(
         itemCount: chats.length,

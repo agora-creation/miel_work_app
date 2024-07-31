@@ -1051,27 +1051,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  syncfusion_flutter_calendar:
-    dependency: "direct main"
-    description:
-      name: syncfusion_flutter_calendar
-      sha256: "95982ffb0886487374f565b37f090b77474c7330f3925f1e778c28bbb864c1d8"
-      url: "https://pub.dev"
-    source: hosted
-    version: "26.2.5"
   syncfusion_flutter_core:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
       sha256: "5de7df5e372ad476c144327f06503190b940b84d5bcfa407ee49b24f1c42e14d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "26.2.5"
-  syncfusion_flutter_datepicker:
-    dependency: transitive
-    description:
-      name: syncfusion_flutter_datepicker
-      sha256: "34664d4af4d3f649e5e47adf1613b00ce63e61b49f7292fa55ca2b7173dd2dc0"
       url: "https://pub.dev"
     source: hosted
     version: "26.2.5"

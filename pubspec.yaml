@@ -27,7 +27,6 @@ dependencies:
   alert_banner: ^1.0.1
   syncfusion_localizations: ^26.2.5
   syncfusion_flutter_pdfviewer: ^26.2.5
-  syncfusion_flutter_calendar: ^26.2.5
   file_picker: ^8.0.6
   file_selector: ^1.0.3
   pdf: ^3.11.0

@@ -29,7 +29,7 @@ class CustomButton extends StatelessWidget {
         child: TextButton(
           onPressed: disabled ? null : onPressed,
           style: TextButton.styleFrom(
-            backgroundColor: disabled ? kGreyColor : backgroundColor,
+            backgroundColor: disabled ? kDisabledColor : backgroundColor,
             shape: const StadiumBorder(),
             padding: const EdgeInsets.all(16),
           ),
@@ -48,7 +48,7 @@ class CustomButton extends StatelessWidget {
       return TextButton(
         onPressed: disabled ? null : onPressed,
         style: TextButton.styleFrom(
-          backgroundColor: disabled ? kGreyColor : backgroundColor,
+          backgroundColor: disabled ? kDisabledColor : backgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),

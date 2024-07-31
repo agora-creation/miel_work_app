@@ -25,25 +25,37 @@ class ProblemService {
 
   Future<List<ProblemModel>> selectList({
     required String? organizationId,
-    required DateTime date,
+    required DateTime? searchStart,
+    required DateTime? searchEnd,
   }) async {
     List<ProblemModel> ret = [];
-    var dateS = DateTime(date.year, date.month, date.day, 0, 0, 0);
-    var dateE = DateTime(date.year, date.month, date.day, 23, 59, 59);
-    Timestamp startAt = convertTimestamp(dateS, false);
-    Timestamp endAt = convertTimestamp(dateE, true);
-    await firestore
-        .collection(collection)
-        .where('organizationId', isEqualTo: organizationId ?? 'error')
-        .orderBy('createdAt', descending: true)
-        .startAt([endAt])
-        .endAt([startAt])
-        .get()
-        .then((value) {
-          for (DocumentSnapshot<Map<String, dynamic>> map in value.docs) {
-            ret.add(ProblemModel.fromSnapshot(map));
-          }
-        });
+    if (searchStart != null && searchEnd != null) {
+      Timestamp startAt = convertTimestamp(searchStart, false);
+      Timestamp endAt = convertTimestamp(searchEnd, true);
+      await firestore
+          .collection(collection)
+          .where('organizationId', isEqualTo: organizationId ?? 'error')
+          .orderBy('createdAt', descending: true)
+          .startAt([endAt])
+          .endAt([startAt])
+          .get()
+          .then((value) {
+            for (DocumentSnapshot<Map<String, dynamic>> map in value.docs) {
+              ret.add(ProblemModel.fromSnapshot(map));
+            }
+          });
+    } else {
+      await firestore
+          .collection(collection)
+          .where('organizationId', isEqualTo: organizationId ?? 'error')
+          .orderBy('createdAt', descending: true)
+          .get()
+          .then((value) {
+        for (DocumentSnapshot<Map<String, dynamic>> map in value.docs) {
+          ret.add(ProblemModel.fromSnapshot(map));
+        }
+      });
+    }
     return ret;
   }
 

@@ -25,9 +25,7 @@ class SplashScreen extends StatelessWidget {
                     letterSpacing: 2,
                   ),
                 ),
-                SpinKitCubeGrid(
-                  color: kBlackColor,
-                ),
+                SpinKitCubeGrid(color: kBlackColor),
               ],
             ),
           ),

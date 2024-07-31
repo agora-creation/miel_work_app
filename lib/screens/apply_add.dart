@@ -78,7 +78,7 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
           '新規申請',
           style: TextStyle(color: kBlackColor),
         ),
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),

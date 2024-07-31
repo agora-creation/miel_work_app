@@ -26,9 +26,9 @@ class MessageFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: kWhiteColor,
-        border: Border(top: BorderSide(color: kGreyColor)),
+        border: Border(top: BorderSide(color: kBorderColor)),
       ),
       child: Column(
         children: [
@@ -50,7 +50,7 @@ class MessageFormField extends StatelessWidget {
                             onPressed: enabled ? filePressed : null,
                             icon: Icon(
                               Icons.upload_file_sharp,
-                              color: enabled ? kBlueColor : kGreyColor,
+                              color: enabled ? kBlueColor : kDisabledColor,
                               size: 32,
                             ),
                           ),
@@ -58,7 +58,7 @@ class MessageFormField extends StatelessWidget {
                             onPressed: enabled ? galleryPressed : null,
                             icon: Icon(
                               Icons.add_photo_alternate,
-                              color: enabled ? kBlueColor : kGreyColor,
+                              color: enabled ? kBlueColor : kDisabledColor,
                               size: 32,
                             ),
                           ),
@@ -69,7 +69,7 @@ class MessageFormField extends StatelessWidget {
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: kGrey200Color),
+                    border: Border.all(color: kBorderColor),
                   ),
                   child: Padding(
                     padding:
@@ -99,7 +99,7 @@ class MessageFormField extends StatelessWidget {
                   onPressed: enabled ? sendPressed : null,
                   icon: Icon(
                     Icons.send,
-                    color: enabled ? kBlueColor : kGreyColor,
+                    color: enabled ? kBlueColor : kDisabledColor,
                     size: 32,
                   ),
                 ),

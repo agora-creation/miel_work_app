@@ -24,7 +24,7 @@ class DatetimeRangeForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(border: Border.all(color: kGrey600Color)),
+      decoration: BoxDecoration(border: Border.all(color: kBorderColor)),
       child: Column(
         children: [
           Padding(
@@ -53,7 +53,7 @@ class DatetimeRangeForm extends StatelessWidget {
                 ),
                 const FaIcon(
                   FontAwesomeIcons.arrowRight,
-                  color: kGrey600Color,
+                  color: kDisabledColor,
                   size: 18,
                 ),
                 GestureDetector(
@@ -80,8 +80,8 @@ class DatetimeRangeForm extends StatelessWidget {
             ),
           ),
           Container(
-            decoration: const BoxDecoration(
-              border: Border(top: BorderSide(color: kGrey600Color)),
+            decoration: BoxDecoration(
+              border: Border(top: BorderSide(color: kBorderColor)),
             ),
             child: CheckboxListTile(
               value: allDay,

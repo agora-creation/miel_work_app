@@ -22,7 +22,7 @@ class CustomCheckbox extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: backgroundColor,
-        border: const Border(bottom: BorderSide(color: kGrey600Color)),
+        border: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       child: CheckboxListTile(
         title: Text(

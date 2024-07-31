@@ -66,7 +66,7 @@ class _GroupScreenState extends State<GroupScreen> {
             onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
           ),
         ],
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: groups.isNotEmpty
           ? ListView.builder(

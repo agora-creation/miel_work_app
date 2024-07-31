@@ -47,8 +47,8 @@ class _HomePlanCardState extends State<HomePlanCard> {
             children: [
               Container(
                 width: double.infinity,
-                decoration: const BoxDecoration(
-                  border: Border(bottom: BorderSide(color: kGrey600Color)),
+                decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(color: kBorderColor)),
                 ),
                 child: const Text(
                   'スケジュール',
@@ -65,15 +65,31 @@ class _HomePlanCardState extends State<HomePlanCard> {
                 child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                   stream: planService.streamList(
                     organizationId: widget.loginProvider.organization?.id,
-                    categories: [],
+                    searchCategories: [],
                   ),
                   builder: (context, snapshot) {
                     List<PlanModel> plans = [];
+                    DateTime now = DateTime.now();
                     if (snapshot.hasData) {
                       plans = planService.generateList(
                         data: snapshot.data,
                         currentGroup: widget.homeProvider.currentGroup,
-                        date: DateTime.now(),
+                        searchStart: DateTime(
+                          now.year,
+                          now.month,
+                          now.day,
+                          0,
+                          0,
+                          0,
+                        ),
+                        searchEnd: DateTime(
+                          now.year,
+                          now.month,
+                          now.day,
+                          23,
+                          59,
+                          59,
+                        ),
                       );
                     }
                     if (plans.isEmpty) {

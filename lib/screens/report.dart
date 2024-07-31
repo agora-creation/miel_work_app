@@ -10,6 +10,7 @@ import 'package:miel_work_app/screens/report_add.dart';
 import 'package:miel_work_app/screens/report_mod.dart';
 import 'package:miel_work_app/services/report.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
+import 'package:miel_work_app/widgets/day_list.dart';
 import 'package:miel_work_app/widgets/month_picker_button.dart';
 import 'package:miel_work_app/widgets/report_list.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
@@ -71,7 +72,7 @@ class _ReportScreenState extends State<ReportScreen> {
             onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
           ),
         ],
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: Column(
         children: [
@@ -91,7 +92,18 @@ class _ReportScreenState extends State<ReportScreen> {
             child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: reportService.streamList(
                 organizationId: widget.loginProvider.organization?.id,
-                searchMonth: searchMonth,
+                searchStart: DateTime(
+                  searchMonth.year,
+                  searchMonth.month,
+                  1,
+                ),
+                searchEnd: DateTime(
+                  searchMonth.year,
+                  searchMonth.month + 1,
+                  1,
+                ).add(
+                  const Duration(days: -1),
+                ),
               ),
               builder: (context, snapshot) {
                 List<ReportModel> reports = [];
@@ -116,11 +128,12 @@ class _ReportScreenState extends State<ReportScreen> {
                         }
                       }
                     }
-                    return ReportList(
-                      day: day,
-                      report: report,
-                      onTap: () {
-                        if (report != null) {
+                    return DayList(
+                      day,
+                      child: ReportList(
+                        report: report,
+                        onTap: () {
+                          if (report == null) return;
                           Navigator.push(
                             context,
                             PageTransition(
@@ -132,20 +145,8 @@ class _ReportScreenState extends State<ReportScreen> {
                               ),
                             ),
                           );
-                        } else {
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                              type: PageTransitionType.rightToLeft,
-                              child: ReportAddScreen(
-                                loginProvider: widget.loginProvider,
-                                homeProvider: widget.homeProvider,
-                                day: day,
-                              ),
-                            ),
-                          );
-                        }
-                      },
+                        },
+                      ),
                     );
                   },
                 );
@@ -153,6 +154,29 @@ class _ReportScreenState extends State<ReportScreen> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            PageTransition(
+              type: PageTransitionType.rightToLeft,
+              child: ReportAddScreen(
+                loginProvider: widget.loginProvider,
+                homeProvider: widget.homeProvider,
+                date: DateTime.now(),
+              ),
+            ),
+          );
+        },
+        icon: const FaIcon(
+          FontAwesomeIcons.pen,
+          color: kWhiteColor,
+        ),
+        label: const Text(
+          '作成する',
+          style: TextStyle(color: kWhiteColor),
+        ),
       ),
       bottomNavigationBar: CustomFooter(
         loginProvider: widget.loginProvider,

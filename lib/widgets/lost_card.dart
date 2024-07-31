@@ -35,7 +35,7 @@ class LostCard extends StatelessWidget {
                             fit: BoxFit.cover,
                           )
                         : Container(
-                            color: kGrey300Color,
+                            color: kGreyColor.withOpacity(0.3),
                             width: double.infinity,
                             height: 150,
                             child: const Center(
@@ -44,7 +44,7 @@ class LostCard extends StatelessWidget {
                           ),
                   ),
                   Table(
-                    border: TableBorder.all(color: kGreyColor),
+                    border: TableBorder.all(color: kBorderColor),
                     columnWidths: const {
                       0: IntrinsicColumnWidth(),
                       1: FlexColumnWidth(2),

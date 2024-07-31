@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as picker;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
@@ -31,12 +33,12 @@ import 'package:provider/provider.dart';
 class ReportAddScreen extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
-  final DateTime day;
+  final DateTime date;
 
   const ReportAddScreen({
     required this.loginProvider,
     required this.homeProvider,
-    required this.day,
+    required this.date,
     super.key,
   });
 
@@ -162,7 +164,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
             type: ButtonSizeType.sm,
             label: 'はい',
             labelColor: kWhiteColor,
-            backgroundColor: kCyanColor,
+            backgroundColor: kCheckColor,
             onPressed: () {
               yesAction();
               Navigator.pop(context);
@@ -178,7 +180,22 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
     reportWorkers.add(ReportWorkerModel.fromMap({}));
     List<PlanModel> plans = await planService.selectList(
       organizationId: widget.loginProvider.organization?.id,
-      date: widget.day,
+      searchStart: DateTime(
+        widget.day.year,
+        widget.day.month,
+        widget.day.day,
+        0,
+        0,
+        0,
+      ),
+      searchEnd: DateTime(
+        widget.day.year,
+        widget.day.month,
+        widget.day.day,
+        23,
+        59,
+        59,
+      ),
     );
     if (plans.isNotEmpty) {
       for (PlanModel plan in plans) {
@@ -193,7 +210,10 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
     reportProblems.add(ReportProblemModel.fromMap({}));
     List<ProblemModel> problems = await problemService.selectList(
       organizationId: widget.loginProvider.organization?.id,
-      date: widget.day,
+      searchStart:
+          DateTime(widget.day.year, widget.day.month, widget.day.day, 0, 0, 0),
+      searchEnd: DateTime(
+          widget.day.year, widget.day.month, widget.day.day, 23, 59, 59),
     );
     if (problems.isNotEmpty) {
       reportProblems.clear();
@@ -230,11 +250,11 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          '${dateText('MM月dd日(E)', widget.day)}の日報',
-          style: const TextStyle(color: kBlackColor),
+        title: const Text(
+          '日報を作成',
+          style: TextStyle(color: kBlackColor),
         ),
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -245,11 +265,44 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  '出勤者',
+                  '作成日',
                   style: kReportHeaderStyle,
                 ),
                 Table(
                   border: TableBorder.all(color: kGreyColor),
+                  children: [
+                    TableRow(
+                      children: [
+                        FormValue(
+                          dateText('yyyy/MM/dd', createdAt),
+                          onTap: () async {
+                            picker.DatePicker.showDateTimePicker(
+                              context,
+                              showTitleActions: true,
+                              minTime: kFirstDate,
+                              maxTime: kLastDate,
+                              theme: kDatePickerTheme,
+                              onConfirm: (value) {
+                                setState(() {
+                                  createdAt = value;
+                                });
+                              },
+                              currentTime: createdAt,
+                              locale: picker.LocaleType.jp,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  '出勤者',
+                  style: kReportHeaderStyle,
+                ),
+                Table(
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: FlexColumnWidth(1),
                     1: FlexColumnWidth(2),
@@ -294,7 +347,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   children: [
                     ReportTableButton(
                       label: '削除',
-                      color: kRed100Color,
+                      color: kRedColor.withOpacity(0.3),
                       onPressed: () {
                         reportWorkers.removeLast();
                         setState(() {});
@@ -303,7 +356,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                     const SizedBox(width: 4),
                     ReportTableButton(
                       label: '追加',
-                      color: kBlue100Color,
+                      color: kBlueColor.withOpacity(0.3),
                       onPressed: () {
                         reportWorkers.add(ReportWorkerModel.fromMap({}));
                         setState(() {});
@@ -317,7 +370,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: IntrinsicColumnWidth(),
                     1: FlexColumnWidth(1),
@@ -503,7 +556,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: IntrinsicColumnWidth(),
                     1: FlexColumnWidth(1),
@@ -522,7 +575,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                             setState(() {});
                           },
                           controlAffinity: ListTileControlAffinity.leading,
-                          tileColor: kGrey300Color,
+                          tileColor: kGreyColor.withOpacity(0.3),
                         ),
                         const ReportTableTh('忘れ物'),
                         CheckboxListTile(
@@ -533,7 +586,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                             setState(() {});
                           },
                           controlAffinity: ListTileControlAffinity.leading,
-                          tileColor: kGrey300Color,
+                          tileColor: kGreyColor.withOpacity(0.3),
                         ),
                       ],
                     ),
@@ -541,7 +594,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                 ),
                 const SizedBox(height: 4),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: IntrinsicColumnWidth(),
                     1: FlexColumnWidth(1),
@@ -571,7 +624,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: FlexColumnWidth(1),
                     1: IntrinsicColumnWidth(),
@@ -599,7 +652,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: IntrinsicColumnWidth(),
                     1: FlexColumnWidth(1),
@@ -676,7 +729,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                 ),
                 const Text('19:45～'),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: IntrinsicColumnWidth(),
                     1: FlexColumnWidth(1),
@@ -717,7 +770,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                 const SizedBox(height: 4),
                 const Text('23:00～'),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: IntrinsicColumnWidth(),
                     1: FlexColumnWidth(1),
@@ -761,7 +814,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: IntrinsicColumnWidth(),
                     1: FlexColumnWidth(1),
@@ -813,7 +866,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [
@@ -856,7 +909,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   children: [
                     ReportTableButton(
                       label: '削除',
-                      color: kRed100Color,
+                      color: kRedColor.withOpacity(0.3),
                       onPressed: () {
                         reportRepairs.removeLast();
                         setState(() {});
@@ -865,7 +918,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                     const SizedBox(width: 4),
                     ReportTableButton(
                       label: '追加',
-                      color: kBlue100Color,
+                      color: kBlueColor.withOpacity(0.3),
                       onPressed: () {
                         reportRepairs.add(ReportRepairModel.fromMap({}));
                         setState(() {});
@@ -879,7 +932,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [
@@ -922,7 +975,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   children: [
                     ReportTableButton(
                       label: '削除',
-                      color: kRed100Color,
+                      color: kRedColor.withOpacity(0.3),
                       onPressed: () {
                         reportProblems.removeLast();
                         setState(() {});
@@ -931,7 +984,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                     const SizedBox(width: 4),
                     ReportTableButton(
                       label: '追加',
-                      color: kBlue100Color,
+                      color: kBlueColor.withOpacity(0.3),
                       onPressed: () {
                         reportProblems.add(ReportProblemModel.fromMap({}));
                         setState(() {});
@@ -945,7 +998,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [
@@ -997,7 +1050,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   children: [
                     ReportTableButton(
                       label: '削除',
-                      color: kRed100Color,
+                      color: kRedColor.withOpacity(0.3),
                       onPressed: () {
                         reportPamphlets.removeLast();
                         setState(() {});
@@ -1006,7 +1059,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                     const SizedBox(width: 4),
                     ReportTableButton(
                       label: '追加',
-                      color: kBlue100Color,
+                      color: kBlueColor.withOpacity(0.3),
                       onPressed: () {
                         reportPamphlets.add(ReportPamphletModel.fromMap({}));
                         setState(() {});
@@ -1020,7 +1073,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [
@@ -1105,7 +1158,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   children: [
                     ReportTableButton(
                       label: '削除',
-                      color: kRed100Color,
+                      color: kRedColor.withOpacity(0.3),
                       onPressed: () {
                         reportEquipments.removeLast();
                         setState(() {});
@@ -1114,7 +1167,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                     const SizedBox(width: 4),
                     ReportTableButton(
                       label: '追加',
-                      color: kBlue100Color,
+                      color: kBlueColor.withOpacity(0.3),
                       onPressed: () {
                         reportEquipments.add(ReportEquipmentModel.fromMap({}));
                         setState(() {});
@@ -1128,7 +1181,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     TableRow(
                       children: [
@@ -1149,7 +1202,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                 ),
                 const SizedBox(height: 4),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: IntrinsicColumnWidth(),
                     1: FlexColumnWidth(1),
@@ -1184,7 +1237,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     TableRow(
                       children: [
@@ -1209,7 +1262,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     TableRow(
                       children: [
@@ -1234,7 +1287,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [
@@ -1293,7 +1346,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                 ),
                 const SizedBox(height: 4),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [
@@ -1346,7 +1399,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                 ),
                 const SizedBox(height: 4),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [
@@ -1399,7 +1452,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                 ),
                 const SizedBox(height: 4),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [
@@ -1452,7 +1505,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                 ),
                 const SizedBox(height: 4),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [

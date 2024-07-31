@@ -30,7 +30,7 @@ class LinkText extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
-            color: enabled ? color : kGreyColor,
+            color: enabled ? color : kDisabledColor,
             fontSize: 16,
             decoration: enabled ? null : TextDecoration.lineThrough,
           ),

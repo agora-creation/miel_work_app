@@ -27,7 +27,7 @@ class FilePickerButton extends StatelessWidget {
         CustomIconTextButton(
           label: 'ファイルを選択してください',
           labelColor: kBlackColor,
-          backgroundColor: kGrey300Color,
+          backgroundColor: kGreyColor.withOpacity(0.3),
           leftIcon: FontAwesomeIcons.file,
           onPressed: onPressed,
         ),

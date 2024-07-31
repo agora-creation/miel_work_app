@@ -14,11 +14,11 @@ class CustomApprovalUserList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: kGrey600Color)),
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       child: ListTile(
-        tileColor: kRed100Color,
+        tileColor: kRedColor.withOpacity(0.3),
         title: Text(
           approvalUser.userName,
           style: approvalUser.userPresident

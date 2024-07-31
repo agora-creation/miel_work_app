@@ -72,7 +72,7 @@ class _GroupSelectCardState extends State<GroupSelectCard> {
             ),
             trailing: const FaIcon(
               FontAwesomeIcons.caretDown,
-              color: kGrey600Color,
+              color: kDisabledColor,
             ),
             tileColor: kWhiteColor,
           ),
@@ -123,7 +123,7 @@ class _GroupSelectDialogState extends State<GroupSelectDialog> {
     return CustomAlertDialog(
       contentPadding: EdgeInsets.zero,
       content: Container(
-        decoration: BoxDecoration(border: Border.all(color: kGrey600Color)),
+        decoration: BoxDecoration(border: Border.all(color: kBorderColor)),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,

@@ -110,19 +110,19 @@ class ApplyModel {
   }
 
   Color typeColor() {
-    Color ret = kGrey200Color;
+    Color ret = kGreyColor.withOpacity(0.3);
     switch (_type) {
       case '稟議':
-        ret = kRed200Color;
+        ret = kRedColor.withOpacity(0.3);
         break;
       case '支払伺い':
-        ret = kYellowColor;
+        ret = kYellowColor.withOpacity(0.3);
         break;
       case '協議・報告':
-        ret = kCyanColor;
+        ret = kCyanColor.withOpacity(0.3);
         break;
       case '企画':
-        ret = kLightBlueColor;
+        ret = kLightBlueColor.withOpacity(0.3);
         break;
       default:
         break;
@@ -145,19 +145,19 @@ class ApplyModel {
 }
 
 Color generateApplyColor(String type) {
-  Color ret = kGrey200Color;
+  Color ret = kGreyColor.withOpacity(0.3);
   switch (type) {
     case '稟議':
-      ret = kRed200Color;
+      ret = kRedColor.withOpacity(0.3);
       break;
     case '支払伺い':
-      ret = kYellowColor;
+      ret = kYellowColor.withOpacity(0.3);
       break;
     case '協議・報告':
-      ret = kCyanColor;
+      ret = kCyanColor.withOpacity(0.3);
       break;
     case '企画':
-      ret = kLightBlueColor;
+      ret = kLightBlueColor.withOpacity(0.3);
       break;
     default:
       break;

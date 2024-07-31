@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/models/category.dart';
 import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/organization_group.dart';
+import 'package:miel_work_app/models/plan.dart';
 import 'package:miel_work_app/services/plan.dart';
 
 class PlanProvider with ChangeNotifier {
@@ -65,7 +66,7 @@ class PlanProvider with ChangeNotifier {
   }
 
   Future<String?> update({
-    required String planId,
+    required PlanModel plan,
     required OrganizationModel? organization,
     required OrganizationGroupModel? group,
     required CategoryModel? category,
@@ -95,7 +96,7 @@ class PlanProvider with ChangeNotifier {
         userIds = organization.userIds;
       }
       _planService.update({
-        'id': planId,
+        'id': plan.id,
         'organizationId': organization.id,
         'groupId': group?.id ?? '',
         'userIds': userIds,
@@ -121,12 +122,12 @@ class PlanProvider with ChangeNotifier {
   }
 
   Future<String?> delete({
-    required String planId,
+    required PlanModel plan,
   }) async {
     String? error;
     try {
       _planService.delete({
-        'id': planId,
+        'id': plan.id,
       });
     } catch (e) {
       error = '予定の削除に失敗しました';

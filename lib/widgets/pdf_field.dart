@@ -21,7 +21,7 @@ class PdfField extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        color: kRed400Color,
+        color: kPdfColor,
         width: double.infinity,
         height: 200,
         child: Padding(

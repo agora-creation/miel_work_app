@@ -16,8 +16,8 @@ class ReplySourceList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: kGrey200Color)),
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       child: ListTile(
         title: Text(

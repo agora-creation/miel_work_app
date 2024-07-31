@@ -18,10 +18,8 @@ class SettingList extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(color: kGrey600Color),
-          ),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: kBorderColor)),
         ),
         padding: const EdgeInsets.all(16),
         child: Row(
@@ -30,7 +28,7 @@ class SettingList extends StatelessWidget {
             Text(
               label,
               style: const TextStyle(
-                color: kGrey600Color,
+                color: kDisabledColor,
                 fontSize: 18,
               ),
             ),

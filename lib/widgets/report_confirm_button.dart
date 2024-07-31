@@ -26,7 +26,8 @@ class ReportConfirmButton extends StatelessWidget {
             onPressed: onPressed,
             icon: const FaIcon(FontAwesomeIcons.check),
             style: IconButton.styleFrom(
-              backgroundColor: confirm ? kGreyColor : kCyanColor,
+              backgroundColor:
+                  confirm ? kCheckColor : kGreyColor.withOpacity(0.3),
             ),
             color: kWhiteColor,
           ),

@@ -15,8 +15,8 @@ class NonReadMessageList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: kGrey600Color)),
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       padding: const EdgeInsets.symmetric(
         vertical: 8,

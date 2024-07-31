@@ -76,7 +76,7 @@ class _UserAddScreenState extends State<UserAddScreen> {
           'スタッフを追加',
           style: TextStyle(color: kBlackColor),
         ),
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -192,7 +192,7 @@ class _UserAddScreenState extends State<UserAddScreen> {
           color: kWhiteColor,
         ),
         label: const Text(
-          '追加する',
+          '保存する',
           style: TextStyle(color: kWhiteColor),
         ),
       ),

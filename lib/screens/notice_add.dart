@@ -87,7 +87,7 @@ class _NoticeAddScreenState extends State<NoticeAddScreen> {
           'お知らせを追加',
           style: TextStyle(color: kBlackColor),
         ),
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),

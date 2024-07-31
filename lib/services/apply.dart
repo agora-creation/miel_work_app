@@ -25,9 +25,9 @@ class ApplyService {
 
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
-    required List<int> searchApproval,
     required DateTime? searchStart,
     required DateTime? searchEnd,
+    required List<int> approval,
   }) {
     if (searchStart != null && searchEnd != null) {
       Timestamp startAt = convertTimestamp(searchStart, false);
@@ -35,14 +35,14 @@ class ApplyService {
       return FirebaseFirestore.instance
           .collection(collection)
           .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .where('approval', whereIn: searchApproval)
+          .where('approval', whereIn: approval)
           .orderBy('createdAt', descending: true)
           .startAt([endAt]).endAt([startAt]).snapshots();
     } else {
       return FirebaseFirestore.instance
           .collection(collection)
           .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .where('approval', whereIn: searchApproval)
+          .where('approval', whereIn: approval)
           .orderBy('createdAt', descending: true)
           .snapshots();
     }

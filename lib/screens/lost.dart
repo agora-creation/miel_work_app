@@ -112,7 +112,7 @@ class _LostScreenState extends State<LostScreen> {
             ),
             indicatorSize: TabBarIndicatorSize.tab,
           ),
-          shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+          shape: Border(bottom: BorderSide(color: kBorderColor)),
         ),
         body: TabBarView(
           children: [

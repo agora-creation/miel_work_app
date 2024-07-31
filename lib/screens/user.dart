@@ -69,7 +69,7 @@ class _UserScreenState extends State<UserScreen> {
             onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
           ),
         ],
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: users.isNotEmpty
           ? ListView.builder(
@@ -126,7 +126,7 @@ class _UserScreenState extends State<UserScreen> {
           color: kWhiteColor,
         ),
         label: const Text(
-          '新規追加',
+          '追加する',
           style: TextStyle(color: kWhiteColor),
         ),
       ),

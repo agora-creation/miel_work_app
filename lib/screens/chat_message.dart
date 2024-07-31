@@ -111,7 +111,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
             icon: const FaIcon(FontAwesomeIcons.users),
           ),
         ],
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: SafeArea(
         child: Focus(

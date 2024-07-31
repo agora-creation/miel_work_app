@@ -84,16 +84,16 @@ class ProblemModel {
   }
 
   Color typeColor() {
-    Color ret = kGrey200Color;
+    Color ret = kGreyColor.withOpacity(0.3);
     switch (_type) {
       case '問題行動':
-        ret = kRed200Color;
+        ret = kRedColor.withOpacity(0.3);
         break;
       case 'クレーム':
-        ret = kYellowColor;
+        ret = kYellowColor.withOpacity(0.3);
         break;
       case '要望':
-        ret = kCyanColor;
+        ret = kCyanColor.withOpacity(0.3);
         break;
       default:
         break;
@@ -114,16 +114,16 @@ class ProblemModel {
 }
 
 Color generateProblemColor(String type) {
-  Color ret = kGrey200Color;
+  Color ret = kGreyColor.withOpacity(0.3);
   switch (type) {
     case '問題行動':
-      ret = kRed200Color;
+      ret = kRedColor.withOpacity(0.3);
       break;
     case 'クレーム':
-      ret = kYellowColor;
+      ret = kYellowColor.withOpacity(0.3);
       break;
     case '要望':
-      ret = kCyanColor;
+      ret = kCyanColor.withOpacity(0.3);
       break;
     default:
       break;

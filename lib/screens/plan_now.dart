@@ -41,6 +41,7 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
             fontSize: 24,
           ),
         ),
+        shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: planService.streamList(

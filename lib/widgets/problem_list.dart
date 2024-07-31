@@ -24,11 +24,9 @@ class ProblemList extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: !problem.readUserIds.contains(user?.id)
-              ? kRed100Color
+              ? kRedColor.withOpacity(0.3)
               : kWhiteColor,
-          border: const Border(
-            bottom: BorderSide(color: kGrey600Color),
-          ),
+          border: Border(bottom: BorderSide(color: kBorderColor)),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -94,7 +92,7 @@ class ProblemList extends StatelessWidget {
               ),
               const FaIcon(
                 FontAwesomeIcons.chevronRight,
-                color: kGrey600Color,
+                color: kDisabledColor,
                 size: 16,
               ),
             ],

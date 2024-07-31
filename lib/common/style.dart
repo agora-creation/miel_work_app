@@ -4,30 +4,30 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as picker;
 
 const kBackgroundColor = Color(0xFFFFD54F);
-const kHomeBackgroundColor = Color(0xFFFFECB3);
 const kWhiteColor = Color(0xFFFFFFFF);
 const kBlackColor = Color(0xFF333333);
 const kGreyColor = Color(0xFF9E9E9E);
-const kGrey600Color = Color(0xFF757575);
-const kGrey300Color = Color(0xFFE0E0E0);
-const kGrey200Color = Color(0xFFEEEEEE);
 const kRedColor = Color(0xFFF44336);
-const kRed400Color = Color(0xFFEF5350);
-const kRed200Color = Color(0xFFEF9A9A);
-const kRed100Color = Color(0xFFFFCDD2);
 const kBlueColor = Color(0xFF2196F3);
-const kBlue300Color = Color(0xFF64B5F6);
-const kBlue100Color = Color(0xFFBBDEFB);
 const kLightBlueColor = Color(0xFF03A9F4);
-const kLightBlue800Color = Color(0xFF0277BD);
 const kCyanColor = Color(0xFF00BCD4);
-const kTealColor = Color(0xFF009688);
-const kTeal300Color = Color(0xFF4DD0E1);
 const kOrangeColor = Color(0xFFFF9800);
-const kOrange300Color = Color(0xFFFFB74D);
 const kDeepOrangeColor = Color(0xFFFF5722);
 const kYellowColor = Color(0xFFFFEB3B);
 const kGreenColor = Color(0xFF4CAF50);
+const kLightGreenColor = Color(0xFF8BC34A);
+const kAmberColor = Color(0xFFFFC107);
+
+const kSearchColor = Color(0xFF4FC3F7);
+const kSaturdayColor = Color(0xFF03A9F4);
+const kSundayColor = Color(0xFFFF5722);
+const kDisabledColor = Color(0xFF757575);
+const kCheckColor = Color(0xFF8BC34A);
+const kApprovalColor = Color(0xFF009688);
+const kRejectColor = Color(0xFFFF5722);
+const kReturnColor = Color(0xFF00ACC1);
+const kPdfColor = Color(0xFFFF5252);
+Color kBorderColor = const Color(0xFF9E9E9E).withOpacity(0.5);
 
 ThemeData customTheme() {
   return ThemeData(

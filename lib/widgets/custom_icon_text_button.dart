@@ -27,7 +27,7 @@ class CustomIconTextButton extends StatelessWidget {
     return TextButton(
       onPressed: disabled ? null : onPressed,
       style: TextButton.styleFrom(
-        backgroundColor: disabled ? kGreyColor : backgroundColor,
+        backgroundColor: disabled ? kDisabledColor : backgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),

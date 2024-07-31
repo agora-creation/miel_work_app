@@ -156,7 +156,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
             type: ButtonSizeType.sm,
             label: 'はい',
             labelColor: kWhiteColor,
-            backgroundColor: kCyanColor,
+            backgroundColor: kCheckColor,
             onPressed: () {
               yesAction();
               Navigator.pop(context);
@@ -257,7 +257,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
             ),
           ),
         ],
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -272,7 +272,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: FlexColumnWidth(1),
                     1: FlexColumnWidth(2),
@@ -317,7 +317,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   children: [
                     ReportTableButton(
                       label: '削除',
-                      color: kRed100Color,
+                      color: kRedColor.withOpacity(0.3),
                       onPressed: () {
                         reportWorkers.removeLast();
                         setState(() {});
@@ -326,7 +326,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                     const SizedBox(width: 4),
                     ReportTableButton(
                       label: '追加',
-                      color: kBlue100Color,
+                      color: kBlueColor.withOpacity(0.3),
                       onPressed: () {
                         reportWorkers.add(ReportWorkerModel.fromMap({}));
                         setState(() {});
@@ -340,7 +340,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: IntrinsicColumnWidth(),
                     1: FlexColumnWidth(1),
@@ -526,7 +526,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: IntrinsicColumnWidth(),
                     1: FlexColumnWidth(1),
@@ -545,7 +545,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                             setState(() {});
                           },
                           controlAffinity: ListTileControlAffinity.leading,
-                          tileColor: kGrey300Color,
+                          tileColor: kGreyColor.withOpacity(0.3),
                         ),
                         const ReportTableTh('忘れ物'),
                         CheckboxListTile(
@@ -556,7 +556,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                             setState(() {});
                           },
                           controlAffinity: ListTileControlAffinity.leading,
-                          tileColor: kGrey300Color,
+                          tileColor: kGreyColor.withOpacity(0.3),
                         ),
                       ],
                     ),
@@ -564,7 +564,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                 ),
                 const SizedBox(height: 4),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: IntrinsicColumnWidth(),
                     1: FlexColumnWidth(1),
@@ -594,7 +594,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: FlexColumnWidth(1),
                     1: IntrinsicColumnWidth(),
@@ -622,7 +622,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: IntrinsicColumnWidth(),
                     1: FlexColumnWidth(1),
@@ -699,7 +699,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                 ),
                 const Text('19:45～'),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: IntrinsicColumnWidth(),
                     1: FlexColumnWidth(1),
@@ -740,7 +740,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                 const SizedBox(height: 4),
                 const Text('23:00～'),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: IntrinsicColumnWidth(),
                     1: FlexColumnWidth(1),
@@ -784,7 +784,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: IntrinsicColumnWidth(),
                     1: FlexColumnWidth(1),
@@ -836,7 +836,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [
@@ -879,7 +879,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   children: [
                     ReportTableButton(
                       label: '削除',
-                      color: kRed100Color,
+                      color: kRedColor.withOpacity(0.3),
                       onPressed: () {
                         reportRepairs.removeLast();
                         setState(() {});
@@ -888,7 +888,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                     const SizedBox(width: 4),
                     ReportTableButton(
                       label: '追加',
-                      color: kBlue100Color,
+                      color: kBlueColor.withOpacity(0.3),
                       onPressed: () {
                         reportRepairs.add(ReportRepairModel.fromMap({}));
                         setState(() {});
@@ -902,7 +902,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [
@@ -945,7 +945,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   children: [
                     ReportTableButton(
                       label: '削除',
-                      color: kRed100Color,
+                      color: kRedColor.withOpacity(0.3),
                       onPressed: () {
                         reportProblems.removeLast();
                         setState(() {});
@@ -954,7 +954,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                     const SizedBox(width: 4),
                     ReportTableButton(
                       label: '追加',
-                      color: kBlue100Color,
+                      color: kBlueColor.withOpacity(0.3),
                       onPressed: () {
                         reportProblems.add(ReportProblemModel.fromMap({}));
                         setState(() {});
@@ -968,7 +968,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [
@@ -1020,7 +1020,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   children: [
                     ReportTableButton(
                       label: '削除',
-                      color: kRed100Color,
+                      color: kRedColor.withOpacity(0.3),
                       onPressed: () {
                         reportPamphlets.removeLast();
                         setState(() {});
@@ -1029,7 +1029,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                     const SizedBox(width: 4),
                     ReportTableButton(
                       label: '追加',
-                      color: kBlue100Color,
+                      color: kBlueColor.withOpacity(0.3),
                       onPressed: () {
                         reportPamphlets.add(ReportPamphletModel.fromMap({}));
                         setState(() {});
@@ -1043,7 +1043,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [
@@ -1128,7 +1128,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   children: [
                     ReportTableButton(
                       label: '削除',
-                      color: kRed100Color,
+                      color: kRedColor.withOpacity(0.3),
                       onPressed: () {
                         reportEquipments.removeLast();
                         setState(() {});
@@ -1137,7 +1137,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                     const SizedBox(width: 4),
                     ReportTableButton(
                       label: '追加',
-                      color: kBlue100Color,
+                      color: kBlueColor.withOpacity(0.3),
                       onPressed: () {
                         reportEquipments.add(ReportEquipmentModel.fromMap({}));
                         setState(() {});
@@ -1151,7 +1151,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     TableRow(
                       children: [
@@ -1172,7 +1172,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                 ),
                 const SizedBox(height: 4),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {
                     0: IntrinsicColumnWidth(),
                     1: FlexColumnWidth(1),
@@ -1207,7 +1207,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     TableRow(
                       children: [
@@ -1232,7 +1232,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     TableRow(
                       children: [
@@ -1257,7 +1257,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                   style: kReportHeaderStyle,
                 ),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [
@@ -1316,7 +1316,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                 ),
                 const SizedBox(height: 4),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [
@@ -1369,7 +1369,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                 ),
                 const SizedBox(height: 4),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [
@@ -1422,7 +1422,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                 ),
                 const SizedBox(height: 4),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [
@@ -1475,7 +1475,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                 ),
                 const SizedBox(height: 4),
                 Table(
-                  border: TableBorder.all(color: kGreyColor),
+                  border: TableBorder.all(color: kBorderColor),
                   children: [
                     const TableRow(
                       children: [
@@ -1542,7 +1542,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                       report: widget.report,
                     ),
                   ),
-                  backgroundColor: kDeepOrangeColor,
+                  backgroundColor: kApprovalColor,
                   icon: const Icon(
                     Icons.check,
                     color: kWhiteColor,
@@ -1744,7 +1744,7 @@ class _ApprovalReportDialogState extends State<ApprovalReportDialog> {
           type: ButtonSizeType.sm,
           label: '承認する',
           labelColor: kWhiteColor,
-          backgroundColor: kDeepOrangeColor,
+          backgroundColor: kApprovalColor,
           onPressed: () async {
             String? error = await reportProvider.approval(
               report: widget.report,

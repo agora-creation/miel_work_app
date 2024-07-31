@@ -24,11 +24,9 @@ class NoticeList extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: !notice.readUserIds.contains(user?.id)
-              ? kRed100Color
+              ? kRedColor.withOpacity(0.3)
               : kWhiteColor,
-          border: const Border(
-            bottom: BorderSide(color: kGrey600Color),
-          ),
+          border: Border(bottom: BorderSide(color: kBorderColor)),
         ),
         padding: const EdgeInsets.all(8),
         child: Row(
@@ -48,14 +46,14 @@ class NoticeList extends StatelessWidget {
                 notice.file != ''
                     ? const Chip(
                         label: Text('添付あり'),
-                        backgroundColor: kBlue100Color,
+                        backgroundColor: kCyanColor,
                       )
                     : Container(),
               ],
             ),
             const FaIcon(
               FontAwesomeIcons.chevronRight,
-              color: kGreyColor,
+              color: kDisabledColor,
               size: 16,
             ),
           ],

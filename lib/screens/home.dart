@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final loginProvider = Provider.of<LoginProvider>(context);
     final homeProvider = Provider.of<HomeProvider>(context);
     return Scaffold(
-      backgroundColor: kHomeBackgroundColor,
+      backgroundColor: kBackgroundColor,
       body: Stack(
         children: [
           const AnimationBackground(),

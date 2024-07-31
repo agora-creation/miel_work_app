@@ -94,7 +94,7 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
             ),
           ),
         ],
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: SingleChildScrollView(
         child: Padding(

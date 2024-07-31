@@ -56,7 +56,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
           'カテゴリ管理',
           style: TextStyle(color: kBlackColor),
         ),
-        shape: const Border(bottom: BorderSide(color: kGrey600Color)),
+        shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: categoryService.streamList(
