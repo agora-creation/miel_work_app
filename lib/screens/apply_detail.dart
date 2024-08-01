@@ -464,7 +464,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                       apply: widget.apply,
                     ),
                   ),
-                  backgroundColor: kRedColor,
+                  backgroundColor: kApprovalColor,
                   icon: const Icon(
                     Icons.check,
                     color: kWhiteColor,
@@ -617,7 +617,7 @@ class _ApprovalApplyDialogState extends State<ApprovalApplyDialog> {
           type: ButtonSizeType.sm,
           label: '承認する',
           labelColor: kWhiteColor,
-          backgroundColor: kRedColor,
+          backgroundColor: kApprovalColor,
           onPressed: () async {
             String? error = await applyProvider.approval(
               apply: widget.apply,

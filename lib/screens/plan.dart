@@ -9,7 +9,7 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/category.dart';
 import 'package:miel_work_app/screens/plan_add.dart';
-import 'package:miel_work_app/screens/plan_mod.dart';
+import 'package:miel_work_app/screens/plan_detail.dart';
 import 'package:miel_work_app/services/category.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/plan.dart';
@@ -190,7 +190,7 @@ class _PlanScreenState extends State<PlanScreen> {
                                   context,
                                   PageTransition(
                                     type: PageTransitionType.rightToLeft,
-                                    child: PlanModScreen(
+                                    child: PlanDetailScreen(
                                       loginProvider: widget.loginProvider,
                                       homeProvider: widget.homeProvider,
                                       plan: dayPlan,

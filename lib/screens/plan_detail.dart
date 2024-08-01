@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/category.dart';
+import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/plan.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/plan.dart';
 import 'package:miel_work_app/screens/plan_mod.dart';
+import 'package:miel_work_app/services/category.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
+import 'package:miel_work_app/widgets/form_label.dart';
+import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +35,35 @@ class PlanDetailScreen extends StatefulWidget {
 }
 
 class _PlanDetailScreenState extends State<PlanDetailScreen> {
+  CategoryService categoryService = CategoryService();
+  OrganizationGroupModel? selectedGroup;
+  List<CategoryModel> categories = [];
+  CategoryModel? selectedCategory;
+
+  void _init() async {
+    if (widget.loginProvider.isAllGroup()) {
+      for (OrganizationGroupModel group in widget.homeProvider.groups) {
+        if (group.id == widget.plan.groupId) {
+          selectedGroup = group;
+        }
+      }
+    } else {
+      selectedGroup = widget.loginProvider.group;
+    }
+    categories = await categoryService.selectList(
+      organizationId: widget.loginProvider.organization?.id,
+    );
+    selectedCategory =
+        categories.firstWhere((e) => e.name == widget.plan.category);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    _init();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,13 +119,59 @@ class _PlanDetailScreenState extends State<PlanDetailScreen> {
         ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 80),
+              FormLabel(
+                '公開グループ',
+                child: FormValue('${selectedGroup?.name}'),
+              ),
+              const SizedBox(height: 16),
+              FormLabel(
+                'カテゴリ',
+                child: FormValue('${selectedCategory?.name}'),
+              ),
+              const SizedBox(height: 16),
+              FormLabel(
+                '件名',
+                child: FormValue(widget.plan.subject),
+              ),
+              const SizedBox(height: 16),
+              FormLabel(
+                '開始日時～終了日時',
+                child: FormValue(
+                  '${dateText('yyyy/MM/dd HH:mm', widget.plan.startedAt)}～${dateText('yyyy/MM/dd HH:mm', widget.plan.endedAt)}',
+                ),
+              ),
+              const SizedBox(height: 16),
+              FormLabel(
+                'メモ',
+                child: FormValue(widget.plan.memo),
+              ),
+              const SizedBox(height: 16),
+              FormLabel(
+                '事前アラート通知',
+                child: FormValue('${widget.plan.alertMinute}'),
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                '※『公開グループ』が未選択の場合、全てのスタッフが対象になります。',
+                style: TextStyle(
+                  color: kRedColor,
+                  fontSize: 14,
+                ),
+              ),
+              const Text(
+                '※『公開グループ』を指定した場合、そのグループのスタッフのみ閲覧が可能になります。',
+                style: TextStyle(
+                  color: kRedColor,
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 80),
             ],
           ),
         ),

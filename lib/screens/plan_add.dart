@@ -238,7 +238,7 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
                   allDay: allDay,
                   allDayOnChanged: _allDayChange,
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 16),
                 FormLabel(
                   'メモ',
                   child: CustomTextField(
