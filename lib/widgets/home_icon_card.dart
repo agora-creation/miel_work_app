@@ -38,8 +38,8 @@ class HomeIconCard extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(8),
         ),
-        color: alert ? Colors.red.shade300 : backgroundColor,
-        surfaceTintColor: alert ? Colors.red.shade300 : backgroundColor,
+        color: alert ? Colors.red.shade100 : backgroundColor,
+        surfaceTintColor: alert ? Colors.red.shade100 : backgroundColor,
         elevation: 8,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

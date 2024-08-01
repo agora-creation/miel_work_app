@@ -32,24 +32,29 @@ class NoticeList extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  notice.title,
-                  style: const TextStyle(fontSize: 18),
-                ),
-                Text(
-                  dateText('yyyy/MM/dd HH:mm', notice.createdAt),
-                  style: const TextStyle(fontSize: 14),
-                ),
-                notice.file != ''
-                    ? const Chip(
-                        label: Text('添付あり'),
-                        backgroundColor: kCyanColor,
-                      )
-                    : Container(),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    notice.title,
+                    style: const TextStyle(fontSize: 18),
+                    softWrap: false,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  Text(
+                    dateText('yyyy/MM/dd HH:mm', notice.createdAt),
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  notice.file != ''
+                      ? const Chip(
+                          label: Text('添付あり'),
+                          backgroundColor: kCyanColor,
+                        )
+                      : Container(),
+                ],
+              ),
             ),
             const FaIcon(
               FontAwesomeIcons.chevronRight,

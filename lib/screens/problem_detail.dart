@@ -9,6 +9,8 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/problem.dart';
 import 'package:miel_work_app/screens/problem_mod.dart';
 import 'package:miel_work_app/services/problem.dart';
+import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
+import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
@@ -73,6 +75,22 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
+          !widget.problem.processed
+              ? IconButton(
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (context) => DelProblemDialog(
+                      loginProvider: widget.loginProvider,
+                      homeProvider: widget.homeProvider,
+                      problem: widget.problem,
+                    ),
+                  ),
+                  icon: const FaIcon(
+                    FontAwesomeIcons.trash,
+                    color: kRedColor,
+                  ),
+                )
+              : Container(),
           !widget.problem.processed
               ? IconButton(
                   onPressed: () {
@@ -206,6 +224,73 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
         loginProvider: widget.loginProvider,
         homeProvider: widget.homeProvider,
       ),
+    );
+  }
+}
+
+class DelProblemDialog extends StatefulWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final ProblemModel problem;
+
+  const DelProblemDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.problem,
+    super.key,
+  });
+
+  @override
+  State<DelProblemDialog> createState() => _DelProblemDialogState();
+}
+
+class _DelProblemDialogState extends State<DelProblemDialog> {
+  @override
+  Widget build(BuildContext context) {
+    final problemProvider = Provider.of<ProblemProvider>(context);
+    return CustomAlertDialog(
+      content: const SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 8),
+            Text(
+              '本当に削除しますか？',
+              style: TextStyle(color: kRedColor),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '削除する',
+          labelColor: kWhiteColor,
+          backgroundColor: kRedColor,
+          onPressed: () async {
+            String? error = await problemProvider.delete(
+              problem: widget.problem,
+            );
+            if (error != null) {
+              if (!mounted) return;
+              showMessage(context, error, false);
+              return;
+            }
+            if (!mounted) return;
+            showMessage(context, 'クレーム／要望が削除されました', true);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }

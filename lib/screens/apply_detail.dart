@@ -84,6 +84,20 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
         ),
         actions: [
           IconButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => DelApplyDialog(
+                loginProvider: widget.loginProvider,
+                homeProvider: widget.homeProvider,
+                apply: widget.apply,
+              ),
+            ),
+            icon: const FaIcon(
+              FontAwesomeIcons.trash,
+              color: kRedColor,
+            ),
+          ),
+          IconButton(
             onPressed: () {
               Navigator.push(
                 context,
@@ -467,6 +481,73 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
         loginProvider: widget.loginProvider,
         homeProvider: widget.homeProvider,
       ),
+    );
+  }
+}
+
+class DelApplyDialog extends StatefulWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final ApplyModel apply;
+
+  const DelApplyDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.apply,
+    super.key,
+  });
+
+  @override
+  State<DelApplyDialog> createState() => _DelApplyDialogState();
+}
+
+class _DelApplyDialogState extends State<DelApplyDialog> {
+  @override
+  Widget build(BuildContext context) {
+    final applyProvider = Provider.of<ApplyProvider>(context);
+    return CustomAlertDialog(
+      content: const SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 8),
+            Text(
+              '本当に削除しますか？',
+              style: TextStyle(color: kRedColor),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '削除する',
+          labelColor: kWhiteColor,
+          backgroundColor: kRedColor,
+          onPressed: () async {
+            String? error = await applyProvider.delete(
+              apply: widget.apply,
+            );
+            if (error != null) {
+              if (!mounted) return;
+              showMessage(context, error, false);
+              return;
+            }
+            if (!mounted) return;
+            showMessage(context, '申請を削除しました', true);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }

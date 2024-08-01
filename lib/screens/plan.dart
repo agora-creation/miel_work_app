@@ -56,6 +56,8 @@ class _PlanScreenState extends State<PlanScreen> {
 
   void _init() async {
     await ConfigService().checkReview();
+    days = generateDays(searchMonth);
+    setState(() {});
   }
 
   @override

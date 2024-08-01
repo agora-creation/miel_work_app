@@ -8,8 +8,11 @@ import 'package:miel_work_app/models/notice.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
+import 'package:miel_work_app/providers/notice.dart';
 import 'package:miel_work_app/screens/notice_mod.dart';
 import 'package:miel_work_app/services/notice.dart';
+import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
+import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
@@ -17,6 +20,7 @@ import 'package:miel_work_app/widgets/image_detail_dialog.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
 import 'package:miel_work_app/widgets/pdf_detail_dialog.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 class NoticeDetailScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -74,6 +78,20 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
+          IconButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => DelNoticeDialog(
+                loginProvider: widget.loginProvider,
+                homeProvider: widget.homeProvider,
+                notice: widget.notice,
+              ),
+            ),
+            icon: const FaIcon(
+              FontAwesomeIcons.trash,
+              color: kRedColor,
+            ),
+          ),
           IconButton(
             onPressed: () {
               Navigator.push(
@@ -159,6 +177,73 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
         loginProvider: widget.loginProvider,
         homeProvider: widget.homeProvider,
       ),
+    );
+  }
+}
+
+class DelNoticeDialog extends StatefulWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final NoticeModel notice;
+
+  const DelNoticeDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.notice,
+    super.key,
+  });
+
+  @override
+  State<DelNoticeDialog> createState() => _DelNoticeDialogState();
+}
+
+class _DelNoticeDialogState extends State<DelNoticeDialog> {
+  @override
+  Widget build(BuildContext context) {
+    final noticeProvider = Provider.of<NoticeProvider>(context);
+    return CustomAlertDialog(
+      content: const SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 8),
+            Text(
+              '本当に削除しますか？',
+              style: TextStyle(color: kRedColor),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '削除する',
+          labelColor: kWhiteColor,
+          backgroundColor: kRedColor,
+          onPressed: () async {
+            String? error = await noticeProvider.delete(
+              notice: widget.notice,
+            );
+            if (error != null) {
+              if (!mounted) return;
+              showMessage(context, error, false);
+              return;
+            }
+            if (!mounted) return;
+            showMessage(context, 'お知らせが削除されました', true);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }

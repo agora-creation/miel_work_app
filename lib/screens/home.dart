@@ -17,6 +17,7 @@ import 'package:miel_work_app/screens/problem.dart';
 import 'package:miel_work_app/screens/report.dart';
 import 'package:miel_work_app/screens/user.dart';
 import 'package:miel_work_app/screens/user_setting.dart';
+import 'package:miel_work_app/screens/work.dart';
 import 'package:miel_work_app/services/apply.dart';
 import 'package:miel_work_app/services/chat_message.dart';
 import 'package:miel_work_app/services/loan.dart';
@@ -24,6 +25,7 @@ import 'package:miel_work_app/services/lost.dart';
 import 'package:miel_work_app/services/notice.dart';
 import 'package:miel_work_app/services/problem.dart';
 import 'package:miel_work_app/widgets/animation_background.dart';
+import 'package:miel_work_app/widgets/connection_card.dart';
 import 'package:miel_work_app/widgets/custom_appbar.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/group_select_card.dart';
@@ -79,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: ListView(
                     padding: const EdgeInsets.all(8),
                     children: [
+                      const ConnectionCard(),
                       GroupSelectCard(
                         loginProvider: loginProvider,
                         homeProvider: homeProvider,
@@ -249,7 +252,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             labelFontSize: 16,
                             color: kBlackColor,
                             backgroundColor: kWhiteColor,
-                            onTap: () {},
+                            onTap: () => showBottomUpScreen(
+                              context,
+                              WorkScreen(
+                                loginProvider: loginProvider,
+                                homeProvider: homeProvider,
+                              ),
+                            ),
                           ),
                           HomeIconCard(
                             icon: FontAwesomeIcons.clipboardCheck,

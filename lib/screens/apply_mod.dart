@@ -9,8 +9,6 @@ import 'package:miel_work_app/models/apply.dart';
 import 'package:miel_work_app/providers/apply.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
-import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
@@ -71,22 +69,6 @@ class _ApplyModScreenState extends State<ApplyModScreen> {
           '申請情報の編集',
           style: TextStyle(color: kBlackColor),
         ),
-        actions: [
-          IconButton(
-            onPressed: () => showDialog(
-              context: context,
-              builder: (context) => DelApplyDialog(
-                loginProvider: widget.loginProvider,
-                homeProvider: widget.homeProvider,
-                apply: widget.apply,
-              ),
-            ),
-            icon: const FaIcon(
-              FontAwesomeIcons.trash,
-              color: kRedColor,
-            ),
-          ),
-        ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: GestureDetector(
@@ -368,73 +350,6 @@ class _ApplyModScreenState extends State<ApplyModScreen> {
         loginProvider: widget.loginProvider,
         homeProvider: widget.homeProvider,
       ),
-    );
-  }
-}
-
-class DelApplyDialog extends StatefulWidget {
-  final LoginProvider loginProvider;
-  final HomeProvider homeProvider;
-  final ApplyModel apply;
-
-  const DelApplyDialog({
-    required this.loginProvider,
-    required this.homeProvider,
-    required this.apply,
-    super.key,
-  });
-
-  @override
-  State<DelApplyDialog> createState() => _DelApplyDialogState();
-}
-
-class _DelApplyDialogState extends State<DelApplyDialog> {
-  @override
-  Widget build(BuildContext context) {
-    final applyProvider = Provider.of<ApplyProvider>(context);
-    return CustomAlertDialog(
-      content: const SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: 8),
-            Text(
-              '本当に削除しますか？',
-              style: TextStyle(color: kRedColor),
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        CustomButton(
-          type: ButtonSizeType.sm,
-          label: 'キャンセル',
-          labelColor: kWhiteColor,
-          backgroundColor: kGreyColor,
-          onPressed: () => Navigator.pop(context),
-        ),
-        CustomButton(
-          type: ButtonSizeType.sm,
-          label: '削除する',
-          labelColor: kWhiteColor,
-          backgroundColor: kRedColor,
-          onPressed: () async {
-            String? error = await applyProvider.delete(
-              apply: widget.apply,
-            );
-            if (error != null) {
-              if (!mounted) return;
-              showMessage(context, error, false);
-              return;
-            }
-            if (!mounted) return;
-            showMessage(context, '申請を削除しました', true);
-            Navigator.pop(context);
-            Navigator.pop(context);
-          },
-        ),
-      ],
     );
   }
 }
