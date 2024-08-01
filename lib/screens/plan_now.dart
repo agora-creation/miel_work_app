@@ -7,7 +7,7 @@ import 'package:miel_work_app/models/plan.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/services/plan.dart';
-import 'package:miel_work_app/widgets/now_plan_list.dart';
+import 'package:miel_work_app/widgets/plan_list.dart';
 
 class PlanNowScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -46,7 +46,7 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: planService.streamList(
           organizationId: widget.loginProvider.organization?.id,
-          categories: [],
+          searchCategories: [],
         ),
         builder: (context, snapshot) {
           List<PlanModel> plans = [];
@@ -54,7 +54,22 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
             plans = planService.generateList(
               data: snapshot.data,
               currentGroup: widget.homeProvider.currentGroup,
-              date: now,
+              searchStart: DateTime(
+                now.year,
+                now.month,
+                now.day,
+                0,
+                0,
+                0,
+              ),
+              searchEnd: DateTime(
+                now.year,
+                now.month,
+                now.day,
+                23,
+                59,
+                59,
+              ),
             );
           }
           if (plans.isEmpty) {
@@ -65,7 +80,7 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
             itemCount: plans.length,
             itemBuilder: (context, index) {
               PlanModel plan = plans[index];
-              return NowPlanList(
+              return PlanList(
                 plan: plan,
                 groups: widget.homeProvider.groups,
               );

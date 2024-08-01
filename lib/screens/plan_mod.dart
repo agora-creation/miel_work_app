@@ -11,7 +11,6 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/plan.dart';
 import 'package:miel_work_app/services/category.dart';
-import 'package:miel_work_app/services/plan.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
@@ -23,12 +22,12 @@ import 'package:provider/provider.dart';
 class PlanModScreen extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
-  final String planId;
+  final PlanModel plan;
 
   const PlanModScreen({
     required this.loginProvider,
     required this.homeProvider,
-    required this.planId,
+    required this.plan,
     super.key,
   });
 
@@ -37,7 +36,6 @@ class PlanModScreen extends StatefulWidget {
 }
 
 class _PlanModScreenState extends State<PlanModScreen> {
-  PlanService planService = PlanService();
   CategoryService categoryService = CategoryService();
   OrganizationGroupModel? selectedGroup;
   List<CategoryModel> categories = [];
@@ -50,16 +48,9 @@ class _PlanModScreenState extends State<PlanModScreen> {
   int alertMinute = 0;
 
   void _init() async {
-    PlanModel? plan = await planService.selectData(id: widget.planId);
-    if (plan == null) {
-      if (!mounted) return;
-      showMessage(context, '予定データの取得に失敗しました', false);
-      Navigator.pop(context);
-      return;
-    }
     if (widget.loginProvider.isAllGroup()) {
       for (OrganizationGroupModel group in widget.homeProvider.groups) {
-        if (group.id == plan.groupId) {
+        if (group.id == widget.plan.groupId) {
           selectedGroup = group;
         }
       }
@@ -69,13 +60,14 @@ class _PlanModScreenState extends State<PlanModScreen> {
     categories = await categoryService.selectList(
       organizationId: widget.loginProvider.organization?.id,
     );
-    selectedCategory = categories.firstWhere((e) => e.name == plan.category);
-    subjectController.text = plan.subject;
-    startedAt = plan.startedAt;
-    endedAt = plan.endedAt;
-    allDay = plan.allDay;
-    memoController.text = plan.memo;
-    alertMinute = plan.alertMinute;
+    selectedCategory =
+        categories.firstWhere((e) => e.name == widget.plan.category);
+    subjectController.text = widget.plan.subject;
+    startedAt = widget.plan.startedAt;
+    endedAt = widget.plan.endedAt;
+    allDay = widget.plan.allDay;
+    memoController.text = widget.plan.memo;
+    alertMinute = widget.plan.alertMinute;
     setState(() {});
   }
 
@@ -147,7 +139,7 @@ class _PlanModScreenState extends State<PlanModScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          '予定の編集',
+          '予定を編集',
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
@@ -157,7 +149,7 @@ class _PlanModScreenState extends State<PlanModScreen> {
               builder: (context) => DelPlanDialog(
                 loginProvider: widget.loginProvider,
                 homeProvider: widget.homeProvider,
-                planId: widget.planId,
+                plan: widget.plan,
               ),
             ),
             icon: const FaIcon(
@@ -327,7 +319,7 @@ class _PlanModScreenState extends State<PlanModScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           String? error = await planProvider.update(
-            planId: widget.planId,
+            plan: widget.plan,
             organization: widget.loginProvider.organization,
             group: selectedGroup,
             category: selectedCategory,
@@ -371,12 +363,12 @@ class _PlanModScreenState extends State<PlanModScreen> {
 class DelPlanDialog extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
-  final String planId;
+  final PlanModel plan;
 
   const DelPlanDialog({
     required this.loginProvider,
     required this.homeProvider,
-    required this.planId,
+    required this.plan,
     super.key,
   });
 
@@ -417,7 +409,7 @@ class _DelPlanDialogState extends State<DelPlanDialog> {
           backgroundColor: kRedColor,
           onPressed: () async {
             String? error = await planProvider.delete(
-              planId: widget.planId,
+              plan: widget.plan,
             );
             if (error != null) {
               if (!mounted) return;

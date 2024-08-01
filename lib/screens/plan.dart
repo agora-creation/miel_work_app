@@ -4,20 +4,24 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/category.dart';
+import 'package:miel_work_app/models/plan.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/category.dart';
-import 'package:miel_work_app/screens/plan_timeline.dart';
+import 'package:miel_work_app/screens/plan_add.dart';
+import 'package:miel_work_app/screens/plan_mod.dart';
 import 'package:miel_work_app/services/category.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/plan.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
-import 'package:miel_work_app/widgets/custom_calendar.dart';
 import 'package:miel_work_app/widgets/custom_checkbox.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
+import 'package:miel_work_app/widgets/day_list.dart';
+import 'package:miel_work_app/widgets/month_picker_button.dart';
+import 'package:miel_work_app/widgets/plan_list.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart' as sfc;
 
 class PlanScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -36,10 +40,13 @@ class PlanScreen extends StatefulWidget {
 class _PlanScreenState extends State<PlanScreen> {
   PlanService planService = PlanService();
   List<String> searchCategories = [];
-  sfc.CalendarController calendarController = sfc.CalendarController();
+  DateTime searchMonth = DateTime.now();
+  List<DateTime> days = [];
 
-  void _init() async {
-    await ConfigService().checkReview();
+  void _changeMonth(DateTime value) {
+    searchMonth = value;
+    days = generateDays(value);
+    setState(() {});
   }
 
   void _searchCategoriesChange() async {
@@ -47,20 +54,12 @@ class _PlanScreenState extends State<PlanScreen> {
     setState(() {});
   }
 
-  void _calendarTap(sfc.CalendarLongPressDetails details) {
-    showBottomUpScreen(
-      context,
-      PlanTimelineScreen(
-        loginProvider: widget.loginProvider,
-        homeProvider: widget.homeProvider,
-        date: details.date ?? DateTime.now(),
-      ),
-    );
+  void _init() async {
+    await ConfigService().checkReview();
   }
 
   @override
   void initState() {
-    calendarController.selectedDate = DateTime.now();
     _init();
     super.initState();
   }
@@ -119,26 +118,117 @@ class _PlanScreenState extends State<PlanScreen> {
         ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: SafeArea(
-        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: planService.streamList(
-            organizationId: widget.loginProvider.organization?.id,
-            categories: searchCategories,
-          ),
-          builder: (context, snapshot) {
-            List<sfc.Appointment> appointments = [];
-            if (snapshot.hasData) {
-              appointments = planService.generateListAppointment(
-                data: snapshot.data,
-                currentGroup: widget.homeProvider.currentGroup,
+      body: Column(
+        children: [
+          MonthPickerButton(
+            value: searchMonth,
+            onTap: () async {
+              DateTime? selected = await showMonthPicker(
+                context: context,
+                initialDate: searchMonth,
+                locale: const Locale('ja'),
               );
-            }
-            return CustomCalendar(
-              dataSource: _DataSource(appointments),
-              onLongPress: _calendarTap,
-              controller: calendarController,
-            );
-          },
+              if (selected == null) return;
+              _changeMonth(selected);
+            },
+          ),
+          Expanded(
+            child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream: planService.streamList(
+                organizationId: widget.loginProvider.organization?.id,
+                searchCategories: searchCategories,
+              ),
+              builder: (context, snapshot) {
+                List<PlanModel> plans = [];
+                if (snapshot.hasData) {
+                  plans = planService.generateList(
+                    data: snapshot.data,
+                    currentGroup: widget.homeProvider.currentGroup,
+                    searchStart: DateTime(
+                      searchMonth.year,
+                      searchMonth.month,
+                      1,
+                    ),
+                    searchEnd: DateTime(
+                      searchMonth.year,
+                      searchMonth.month + 1,
+                      1,
+                    ).add(
+                      const Duration(days: -1),
+                    ),
+                  );
+                }
+                return ListView.builder(
+                  itemCount: days.length,
+                  itemBuilder: (context, index) {
+                    DateTime day = days[index];
+                    List<PlanModel> dayPlans = [];
+                    if (plans.isNotEmpty) {
+                      for (PlanModel plan in plans) {
+                        String dayKey = dateText(
+                          'yyyy-MM-dd',
+                          plan.startedAt,
+                        );
+                        if (day == DateTime.parse(dayKey)) {
+                          dayPlans.add(plan);
+                        }
+                      }
+                    }
+                    return DayList(
+                      day,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          children: dayPlans.map((dayPlan) {
+                            return PlanList(
+                              plan: dayPlan,
+                              groups: widget.homeProvider.groups,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  PageTransition(
+                                    type: PageTransitionType.rightToLeft,
+                                    child: PlanModScreen(
+                                      loginProvider: widget.loginProvider,
+                                      homeProvider: widget.homeProvider,
+                                      plan: dayPlan,
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            PageTransition(
+              type: PageTransitionType.rightToLeft,
+              child: PlanAddScreen(
+                loginProvider: widget.loginProvider,
+                homeProvider: widget.homeProvider,
+                date: DateTime.now(),
+              ),
+            ),
+          );
+        },
+        icon: const FaIcon(
+          FontAwesomeIcons.pen,
+          color: kWhiteColor,
+        ),
+        label: const Text(
+          '追加する',
+          style: TextStyle(color: kWhiteColor),
         ),
       ),
       bottomNavigationBar: CustomFooter(
@@ -146,12 +236,6 @@ class _PlanScreenState extends State<PlanScreen> {
         homeProvider: widget.homeProvider,
       ),
     );
-  }
-}
-
-class _DataSource extends sfc.CalendarDataSource {
-  _DataSource(List<sfc.Appointment> source) {
-    appointments = source;
   }
 }
 
@@ -192,7 +276,7 @@ class _SearchCategoryDialogState extends State<SearchCategoryDialog> {
   Widget build(BuildContext context) {
     return CustomAlertDialog(
       content: Container(
-        decoration: BoxDecoration(border: Border.all(color: kGrey600Color)),
+        decoration: BoxDecoration(border: Border.all(color: kBorderColor)),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -228,7 +312,7 @@ class _SearchCategoryDialogState extends State<SearchCategoryDialog> {
           type: ButtonSizeType.sm,
           label: '検索する',
           labelColor: kWhiteColor,
-          backgroundColor: kLightBlueColor,
+          backgroundColor: kSearchColor,
           onPressed: () async {
             await setPrefsList('categories', searchCategories);
             widget.searchCategoriesChange();

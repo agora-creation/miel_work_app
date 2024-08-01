@@ -5,7 +5,7 @@ import 'package:miel_work_app/models/plan.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/services/plan.dart';
-import 'package:miel_work_app/widgets/now_plan_list.dart';
+import 'package:miel_work_app/widgets/plan_list.dart';
 
 class HomePlanCard extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -97,7 +97,7 @@ class _HomePlanCardState extends State<HomePlanCard> {
                     }
                     return Column(
                       children: plans.map((plan) {
-                        return NowPlanList(
+                        return PlanList(
                           plan: plan,
                           groups: widget.homeProvider.groups,
                         );
