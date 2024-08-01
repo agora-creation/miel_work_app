@@ -55,7 +55,7 @@ class _LostAddScreenState extends State<LostAddScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          '落とし物を追加',
+          '落とし物情報を追加',
           style: TextStyle(color: kBlackColor),
         ),
         shape: Border(bottom: BorderSide(color: kBorderColor)),
@@ -187,7 +187,7 @@ class _LostAddScreenState extends State<LostAddScreen> {
             return;
           }
           if (!mounted) return;
-          showMessage(context, '落とし物が追加されました', true);
+          showMessage(context, '落とし物情報が追加されました', true);
           Navigator.pop(context);
         },
         icon: const FaIcon(

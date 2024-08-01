@@ -55,7 +55,7 @@ class _LostAddScreenState extends State<LoanAddScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          '貸出物を追加',
+          '貸出情報を追加',
           style: TextStyle(color: kBlackColor),
         ),
         shape: Border(bottom: BorderSide(color: kBorderColor)),
@@ -201,7 +201,7 @@ class _LostAddScreenState extends State<LoanAddScreen> {
             return;
           }
           if (!mounted) return;
-          showMessage(context, '貸出物が追加されました', true);
+          showMessage(context, '貸出情報が追加されました', true);
           Navigator.pop(context);
         },
         icon: const FaIcon(

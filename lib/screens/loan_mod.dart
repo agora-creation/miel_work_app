@@ -11,8 +11,6 @@ import 'package:miel_work_app/models/loan.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/loan.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
-import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
@@ -75,22 +73,6 @@ class _LoanModScreenState extends State<LoanModScreen> {
           '貸出情報の編集',
           style: TextStyle(color: kBlackColor),
         ),
-        actions: [
-          IconButton(
-            onPressed: () => showDialog(
-              context: context,
-              builder: (context) => DelLoanDialog(
-                loginProvider: widget.loginProvider,
-                homeProvider: widget.homeProvider,
-                loan: widget.loan,
-              ),
-            ),
-            icon: const FaIcon(
-              FontAwesomeIcons.trash,
-              color: kRedColor,
-            ),
-          ),
-        ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: GestureDetector(
@@ -235,7 +217,7 @@ class _LoanModScreenState extends State<LoanModScreen> {
             return;
           }
           if (!mounted) return;
-          showMessage(context, '貸出物情報が変更されました', true);
+          showMessage(context, '貸出情報が変更されました', true);
           Navigator.pop(context);
         },
         icon: const FaIcon(
@@ -251,73 +233,6 @@ class _LoanModScreenState extends State<LoanModScreen> {
         loginProvider: widget.loginProvider,
         homeProvider: widget.homeProvider,
       ),
-    );
-  }
-}
-
-class DelLoanDialog extends StatefulWidget {
-  final LoginProvider loginProvider;
-  final HomeProvider homeProvider;
-  final LoanModel loan;
-
-  const DelLoanDialog({
-    required this.loginProvider,
-    required this.homeProvider,
-    required this.loan,
-    super.key,
-  });
-
-  @override
-  State<DelLoanDialog> createState() => _DelLoanDialogState();
-}
-
-class _DelLoanDialogState extends State<DelLoanDialog> {
-  @override
-  Widget build(BuildContext context) {
-    final loanProvider = Provider.of<LoanProvider>(context);
-    return CustomAlertDialog(
-      content: const SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: 8),
-            Text(
-              '本当に削除しますか？',
-              style: TextStyle(color: kRedColor),
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        CustomButton(
-          type: ButtonSizeType.sm,
-          label: 'キャンセル',
-          labelColor: kWhiteColor,
-          backgroundColor: kGreyColor,
-          onPressed: () => Navigator.pop(context),
-        ),
-        CustomButton(
-          type: ButtonSizeType.sm,
-          label: '削除する',
-          labelColor: kWhiteColor,
-          backgroundColor: kRedColor,
-          onPressed: () async {
-            String? error = await loanProvider.delete(
-              loan: widget.loan,
-            );
-            if (error != null) {
-              if (!mounted) return;
-              showMessage(context, error, false);
-              return;
-            }
-            if (!mounted) return;
-            showMessage(context, '貸出物が削除されました', true);
-            Navigator.pop(context);
-            Navigator.pop(context);
-          },
-        ),
-      ],
     );
   }
 }
