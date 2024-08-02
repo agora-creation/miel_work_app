@@ -10,6 +10,8 @@ import 'package:miel_work_app/screens/loan_mod.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
+import 'package:miel_work_app/widgets/form_label.dart';
+import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -85,13 +87,51 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
         ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 80),
+              FormLabel(
+                '貸出日',
+                child: FormValue(
+                  dateText('yyyy/MM/dd HH:mm', widget.loan.loanAt),
+                ),
+              ),
+              const SizedBox(height: 16),
+              FormLabel(
+                '貸出先',
+                child: FormValue(widget.loan.loanUser),
+              ),
+              const SizedBox(height: 16),
+              FormLabel(
+                '貸出先(会社)',
+                child: FormValue(widget.loan.loanCompany),
+              ),
+              const SizedBox(height: 16),
+              FormLabel(
+                '対応スタッフ',
+                child: FormValue(widget.loan.loanStaff),
+              ),
+              const SizedBox(height: 16),
+              FormLabel(
+                '返却予定日',
+                child: FormValue(
+                  dateText('yyyy/MM/dd HH:mm', widget.loan.returnPlanAt),
+                ),
+              ),
+              const SizedBox(height: 16),
+              FormLabel(
+                '品名',
+                child: FormValue(widget.loan.itemName),
+              ),
+              const SizedBox(height: 16),
+              FormLabel(
+                '添付写真',
+                child: Container(),
+              ),
+              const SizedBox(height: 80),
             ],
           ),
         ),

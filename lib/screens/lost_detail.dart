@@ -10,6 +10,8 @@ import 'package:miel_work_app/screens/lost_mod.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
+import 'package:miel_work_app/widgets/form_label.dart';
+import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -85,13 +87,49 @@ class _LostDetailScreenState extends State<LostDetailScreen> {
         ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 80),
+              FormLabel(
+                '発見日',
+                child: FormValue(
+                  dateText('yyyy/MM/dd HH:mm', widget.lost.discoveryAt),
+                ),
+              ),
+              const SizedBox(height: 16),
+              FormLabel(
+                '発見場所',
+                child: FormValue(widget.lost.discoveryPlace),
+              ),
+              const SizedBox(height: 16),
+              FormLabel(
+                '発見者',
+                child: FormValue(widget.lost.discoveryUser),
+              ),
+              const SizedBox(height: 16),
+              FormLabel(
+                '落とし物No',
+                child: FormValue(widget.lost.itemNumber),
+              ),
+              const SizedBox(height: 16),
+              FormLabel(
+                '品名',
+                child: FormValue(widget.lost.itemName),
+              ),
+              const SizedBox(height: 16),
+              FormLabel(
+                '添付写真',
+                child: Container(),
+              ),
+              const SizedBox(height: 16),
+              FormLabel(
+                '備考',
+                child: FormValue(widget.lost.remarks),
+              ),
+              const SizedBox(height: 80),
             ],
           ),
         ),

@@ -7,6 +7,7 @@ import 'package:miel_work_app/models/loan.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/loan_add.dart';
+import 'package:miel_work_app/screens/loan_detail.dart';
 import 'package:miel_work_app/screens/loan_mod.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/loan.dart';
@@ -253,7 +254,7 @@ class _LoanScreenState extends State<LoanScreen> {
                           context,
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
-                            child: LoanModScreen(
+                            child: LoanDetailScreen(
                               loginProvider: widget.loginProvider,
                               homeProvider: widget.homeProvider,
                               loan: loan,

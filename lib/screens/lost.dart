@@ -7,6 +7,7 @@ import 'package:miel_work_app/models/lost.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/lost_add.dart';
+import 'package:miel_work_app/screens/lost_detail.dart';
 import 'package:miel_work_app/screens/lost_mod.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/lost.dart';
@@ -253,7 +254,7 @@ class _LostScreenState extends State<LostScreen> {
                           context,
                           PageTransition(
                             type: PageTransitionType.rightToLeft,
-                            child: LostModScreen(
+                            child: LostDetailScreen(
                               loginProvider: widget.loginProvider,
                               homeProvider: widget.homeProvider,
                               lost: lost,
