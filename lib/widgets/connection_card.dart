@@ -19,7 +19,7 @@ class ConnectionCard extends StatelessWidget {
             padding: const EdgeInsets.only(
               left: 4,
               right: 4,
-              bottom: 4,
+              bottom: 8,
             ),
             child: Material(
               elevation: 8,
