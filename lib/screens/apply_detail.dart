@@ -394,6 +394,8 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                 child: FormValue(
                   widget.apply.memo,
                   onTap: () {
+                    TextEditingController memoController =
+                        TextEditingController(text: widget.apply.memo);
                     showDialog(
                       context: context,
                       builder: (context) => CustomAlertDialog(
@@ -402,16 +404,19 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             CustomTextField(
-                              controller: TextEditingController(
-                                  text: widget.apply.memo),
+                              controller: memoController,
                               textInputType: TextInputType.multiline,
                               maxLines: null,
-                              onChanged: (value) {},
                             ),
                           ],
                         ),
                       ),
-                    ).then((value) async {});
+                    ).then((value) async {
+                      applyService.update({
+                        'id': widget.apply.id,
+                        'memo': memoController.text,
+                      });
+                    });
                   },
                 ),
               ),
