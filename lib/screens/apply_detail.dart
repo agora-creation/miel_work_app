@@ -10,6 +10,7 @@ import 'package:miel_work_app/providers/apply.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/apply_mod.dart';
+import 'package:miel_work_app/services/apply.dart';
 import 'package:miel_work_app/widgets/approval_user_list.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
@@ -40,6 +41,8 @@ class ApplyDetailScreen extends StatefulWidget {
 }
 
 class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
+  ApplyService applyService = ApplyService();
+
   @override
   Widget build(BuildContext context) {
     bool isApproval = true;
@@ -384,6 +387,33 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                         },
                       )
                     : Container(),
+              ),
+              const SizedBox(height: 8),
+              FormLabel(
+                'メモ',
+                child: FormValue(
+                  widget.apply.memo,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => CustomAlertDialog(
+                        contentPadding: const EdgeInsets.all(16),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CustomTextField(
+                              controller: TextEditingController(
+                                  text: widget.apply.memo),
+                              textInputType: TextInputType.multiline,
+                              maxLines: null,
+                              onChanged: (value) {},
+                            ),
+                          ],
+                        ),
+                      ),
+                    ).then((value) async {});
+                  },
+                ),
               ),
               const SizedBox(height: 16),
               const Text(
