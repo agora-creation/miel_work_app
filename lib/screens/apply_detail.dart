@@ -421,7 +421,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                   fontSize: 12,
                 ),
               ),
-              const SizedBox(height: 80),
+              const SizedBox(height: 100),
             ],
           ),
         ),
