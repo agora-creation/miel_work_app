@@ -306,7 +306,7 @@ class _ApplyModScreenState extends State<ApplyModScreen> {
                         )
                       : Container(),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 100),
               ],
             ),
           ),

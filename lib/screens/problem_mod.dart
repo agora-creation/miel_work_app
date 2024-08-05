@@ -260,7 +260,7 @@ class _ProblemModScreenState extends State<ProblemModScreen> {
                     maxLines: 1,
                   ),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 100),
               ],
             ),
           ),

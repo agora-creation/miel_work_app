@@ -49,6 +49,26 @@ class ApplyList extends StatelessWidget {
                     '申請番号: ${apply.number}',
                     style: const TextStyle(fontSize: 14),
                   ),
+                  apply.approval == 1
+                      ? Text(
+                          '承認日時: ${dateText('yyyy/MM/dd HH:mm', apply.approvedAt)}',
+                          style: const TextStyle(
+                            color: kRedColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : Container(),
+                  apply.approval == 1
+                      ? Text(
+                          '承認番号: ${apply.approvalNumber}',
+                          style: const TextStyle(
+                            color: kRedColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
             ),

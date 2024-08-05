@@ -90,7 +90,7 @@ class _GroupModScreenState extends State<GroupModScreen> {
                     maxLines: 1,
                   ),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 100),
               ],
             ),
           ),

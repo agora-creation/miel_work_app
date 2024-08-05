@@ -189,7 +189,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                 '同じような注意(対応)をした回数',
                 child: FormValue(widget.problem.count.toString()),
               ),
-              const SizedBox(height: 80),
+              const SizedBox(height: 100),
             ],
           ),
         ),

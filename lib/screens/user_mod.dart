@@ -186,7 +186,7 @@ class _UserModScreenState extends State<UserModScreen> {
                     title: const Text('社長にする'),
                   ),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 100),
               ],
             ),
           ),

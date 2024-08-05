@@ -154,7 +154,7 @@ class _ManualModScreenState extends State<NoticeModScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 100),
               ],
             ),
           ),

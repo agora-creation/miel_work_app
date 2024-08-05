@@ -282,7 +282,7 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
                     fontSize: 14,
                   ),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 100),
               ],
             ),
           ),

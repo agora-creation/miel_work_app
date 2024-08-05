@@ -1521,7 +1521,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 100),
               ],
             ),
           ),

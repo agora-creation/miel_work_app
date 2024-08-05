@@ -162,7 +162,7 @@ class _LostAddScreenState extends State<LostAddScreen> {
                     maxLines: 10,
                   ),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 100),
               ],
             ),
           ),

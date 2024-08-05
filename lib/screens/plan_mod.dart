@@ -292,7 +292,7 @@ class _PlanModScreenState extends State<PlanModScreen> {
                     fontSize: 14,
                   ),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 100),
               ],
             ),
           ),

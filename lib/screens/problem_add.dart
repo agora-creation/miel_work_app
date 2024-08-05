@@ -241,7 +241,7 @@ class _ProblemAddScreenState extends State<ProblemAddScreen> {
                     maxLines: 1,
                   ),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 100),
               ],
             ),
           ),

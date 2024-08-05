@@ -129,7 +129,7 @@ class _LostDetailScreenState extends State<LostDetailScreen> {
                 '備考',
                 child: FormValue(widget.lost.remarks),
               ),
-              const SizedBox(height: 80),
+              const SizedBox(height: 100),
             ],
           ),
         ),

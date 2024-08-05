@@ -176,7 +176,7 @@ class _LostAddScreenState extends State<LoanAddScreen> {
                           ),
                   ),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 100),
               ],
             ),
           ),

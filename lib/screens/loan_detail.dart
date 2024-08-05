@@ -131,7 +131,7 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
                 '添付写真',
                 child: Container(),
               ),
-              const SizedBox(height: 80),
+              const SizedBox(height: 100),
             ],
           ),
         ),

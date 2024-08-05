@@ -156,7 +156,7 @@ class _UserAddScreenState extends State<UserAddScreen> {
                     title: const Text('社長にする'),
                   ),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 100),
               ],
             ),
           ),

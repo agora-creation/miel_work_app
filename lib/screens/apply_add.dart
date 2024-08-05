@@ -245,7 +245,7 @@ class _ApplyAddScreenState extends State<ApplyAddScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 100),
               ],
             ),
           ),

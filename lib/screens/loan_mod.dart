@@ -191,7 +191,7 @@ class _LoanModScreenState extends State<LoanModScreen> {
                           ),
                   ),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 100),
               ],
             ),
           ),

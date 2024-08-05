@@ -177,7 +177,7 @@ class _LostModScreenState extends State<LostModScreen> {
                     maxLines: 10,
                   ),
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 100),
               ],
             ),
           ),

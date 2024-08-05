@@ -1563,7 +1563,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 100),
               ],
             ),
           ),

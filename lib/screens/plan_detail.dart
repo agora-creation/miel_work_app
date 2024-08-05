@@ -171,7 +171,7 @@ class _PlanDetailScreenState extends State<PlanDetailScreen> {
                   fontSize: 14,
                 ),
               ),
-              const SizedBox(height: 80),
+              const SizedBox(height: 100),
             ],
           ),
         ),
