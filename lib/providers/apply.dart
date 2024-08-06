@@ -30,6 +30,7 @@ class ApplyProvider with ChangeNotifier {
     required File? pickedFile3,
     required File? pickedFile4,
     required File? pickedFile5,
+    required String memo,
     required UserModel? loginUser,
   }) async {
     String? error;
@@ -134,6 +135,7 @@ class ApplyProvider with ChangeNotifier {
         'approvalUsers': [],
         'approvalNumber': '',
         'approvalReason': '',
+        'memo': memo,
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
         'createdAt': DateTime.now(),
@@ -167,6 +169,7 @@ class ApplyProvider with ChangeNotifier {
     required String title,
     required String content,
     required int price,
+    required String memo,
     required UserModel? loginUser,
   }) async {
     String? error;
@@ -181,6 +184,7 @@ class ApplyProvider with ChangeNotifier {
         'title': title,
         'content': content,
         'price': price,
+        'memo': memo,
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
       });

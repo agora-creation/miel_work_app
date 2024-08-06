@@ -187,7 +187,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               if (snapshot.hasData) {
                                 alert = problemService.checkAlert(
                                   data: snapshot.data,
-                                  user: loginProvider.user,
                                 );
                               }
                               return HomeIconCard(
@@ -196,6 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,
                                 alert: alert,
+                                alertMessage: '処理待ちあり',
                                 onTap: () => showBottomUpScreen(
                                   context,
                                   ProblemScreen(

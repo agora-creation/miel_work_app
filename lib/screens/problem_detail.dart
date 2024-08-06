@@ -3,12 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/problem.dart';
-import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/problem.dart';
 import 'package:miel_work_app/screens/problem_mod.dart';
-import 'package:miel_work_app/services/problem.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
@@ -34,26 +32,6 @@ class ProblemDetailScreen extends StatefulWidget {
 }
 
 class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
-  ProblemService problemService = ProblemService();
-
-  void _init() async {
-    UserModel? user = widget.loginProvider.user;
-    List<String> readUserIds = widget.problem.readUserIds;
-    if (!readUserIds.contains(user?.id)) {
-      readUserIds.add(user?.id ?? '');
-      problemService.update({
-        'id': widget.problem.id,
-        'readUserIds': readUserIds,
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    _init();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final problemProvider = Provider.of<ProblemProvider>(context);

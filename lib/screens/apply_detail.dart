@@ -41,8 +41,6 @@ class ApplyDetailScreen extends StatefulWidget {
 }
 
 class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
-  ApplyService applyService = ApplyService();
-
   @override
   Widget build(BuildContext context) {
     bool isApproval = true;
@@ -412,10 +410,12 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                         ),
                       ),
                     ).then((value) async {
-                      applyService.update({
+                      widget.apply.memo = memoController.text;
+                      ApplyService().update({
                         'id': widget.apply.id,
                         'memo': memoController.text,
                       });
+                      setState(() {});
                     });
                   },
                 ),

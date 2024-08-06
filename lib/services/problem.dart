@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/problem.dart';
-import 'package:miel_work_app/models/user.dart';
 
 class ProblemService {
   String collection = 'problem';
@@ -86,14 +85,12 @@ class ProblemService {
 
   bool checkAlert({
     required QuerySnapshot<Map<String, dynamic>>? data,
-    required UserModel? user,
   }) {
     bool ret = false;
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
       ProblemModel problem = ProblemModel.fromSnapshot(doc);
-      ret = !problem.readUserIds.contains(user?.id);
-      if (ret) {
-        return ret;
+      if (!problem.processed) {
+        ret = true;
       }
     }
     return ret;
