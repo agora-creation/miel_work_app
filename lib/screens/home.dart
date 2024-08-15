@@ -31,6 +31,7 @@ import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/group_select_card.dart';
 import 'package:miel_work_app/widgets/home_icon_card.dart';
 import 'package:miel_work_app/widgets/home_plan_card.dart';
+import 'package:miel_work_app/widgets/home_problem_card.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -169,6 +170,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
+                      HomeProblemCard(
+                        loginProvider: loginProvider,
+                        homeProvider: homeProvider,
+                        onTap: () => showBottomUpScreen(
+                          context,
+                          ProblemScreen(
+                            loginProvider: loginProvider,
+                            homeProvider: homeProvider,
+                          ),
+                        ),
+                      ),
                       GridView(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -176,29 +188,29 @@ class _HomeScreenState extends State<HomeScreen> {
                         gridDelegate: kHome2Grid,
                         children: [
                           StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                            stream: problemService.streamList(
+                            stream: lostService.streamList(
                               organizationId: loginProvider.organization?.id,
                               searchStart: null,
                               searchEnd: null,
-                              processed: false,
+                              searchStatus: [0],
                             ),
                             builder: (context, snapshot) {
                               bool alert = false;
                               if (snapshot.hasData) {
-                                alert = problemService.checkAlert(
+                                alert = lostService.checkAlert(
                                   data: snapshot.data,
                                 );
                               }
                               return HomeIconCard(
-                                icon: FontAwesomeIcons.triangleExclamation,
-                                label: 'クレーム／要望',
+                                icon: FontAwesomeIcons.personCircleQuestion,
+                                label: '落とし物',
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,
                                 alert: alert,
-                                alertMessage: '処理待ちあり',
+                                alertMessage: '保管中',
                                 onTap: () => showBottomUpScreen(
                                   context,
-                                  ProblemScreen(
+                                  LostScreen(
                                     loginProvider: loginProvider,
                                     homeProvider: homeProvider,
                                   ),
@@ -274,39 +286,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 homeProvider: homeProvider,
                               ),
                             ),
-                          ),
-                          StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                            stream: lostService.streamList(
-                              organizationId: loginProvider.organization?.id,
-                              searchStart: null,
-                              searchEnd: null,
-                              searchStatus: [0],
-                            ),
-                            builder: (context, snapshot) {
-                              bool alert = false;
-                              if (snapshot.hasData) {
-                                alert = lostService.checkAlert(
-                                  data: snapshot.data,
-                                );
-                              }
-                              return HomeIconCard(
-                                icon: FontAwesomeIcons.personCircleQuestion,
-                                iconSize: 42,
-                                label: '落とし物',
-                                labelFontSize: 16,
-                                color: kBlackColor,
-                                backgroundColor: kWhiteColor,
-                                alert: alert,
-                                alertMessage: '保管中',
-                                onTap: () => showBottomUpScreen(
-                                  context,
-                                  LostScreen(
-                                    loginProvider: loginProvider,
-                                    homeProvider: homeProvider,
-                                  ),
-                                ),
-                              );
-                            },
                           ),
                           StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                             stream: loanService.streamList(

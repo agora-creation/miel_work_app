@@ -130,12 +130,12 @@ class _ProblemScreenState extends State<ProblemScreen> {
                   return const Center(child: Text('クレーム／要望はありません'));
                 }
                 return ListView.builder(
+                  padding: const EdgeInsets.all(8),
                   itemCount: problems.length,
                   itemBuilder: (context, index) {
                     ProblemModel problem = problems[index];
                     return ProblemList(
                       problem: problem,
-                      user: widget.loginProvider.user,
                       onTap: () {
                         Navigator.push(
                           context,
@@ -172,12 +172,12 @@ class _ProblemScreenState extends State<ProblemScreen> {
                   return const Center(child: Text('クレーム／要望はありません'));
                 }
                 return ListView.builder(
+                  padding: const EdgeInsets.all(8),
                   itemCount: problems.length,
                   itemBuilder: (context, index) {
                     ProblemModel problem = problems[index];
                     return ProblemList(
                       problem: problem,
-                      user: widget.loginProvider.user,
                       onTap: () {
                         Navigator.push(
                           context,

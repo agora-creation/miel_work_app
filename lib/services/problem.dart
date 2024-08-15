@@ -83,19 +83,6 @@ class ProblemService {
     }
   }
 
-  bool checkAlert({
-    required QuerySnapshot<Map<String, dynamic>>? data,
-  }) {
-    bool ret = false;
-    for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
-      ProblemModel problem = ProblemModel.fromSnapshot(doc);
-      if (!problem.processed) {
-        ret = true;
-      }
-    }
-    return ret;
-  }
-
   List<ProblemModel> generateList({
     required QuerySnapshot<Map<String, dynamic>>? data,
   }) {

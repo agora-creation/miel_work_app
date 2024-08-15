@@ -3,7 +3,7 @@ description: "A new Flutter project."
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.5.7+1
+version: 1.5.8+1
 
 environment:
   sdk: '>=3.2.6 <4.0.0'
@@ -54,7 +54,7 @@ dependencies:
   cloud_firestore: ^4.17.3
   firebase_storage: ^11.7.5
   firebase_messaging: ^14.9.2
-  flutter_local_notifications: ^17.1.2
+  flutter_local_notifications: ^17.2.2
 
 dependency_overrides:
   flutter_colorpicker:
