@@ -9,6 +9,8 @@ class NoticeModel {
   String _file = '';
   String _fileExt = '';
   List<String> readUserIds = [];
+  String _createdUserId = '';
+  String _createdUserName = '';
   DateTime _createdAt = DateTime.now();
   DateTime _expirationAt = DateTime.now();
 
@@ -19,6 +21,8 @@ class NoticeModel {
   String get content => _content;
   String get file => _file;
   String get fileExt => _fileExt;
+  String get createdUserId => _createdUserId;
+  String get createdUserName => _createdUserName;
   DateTime get createdAt => _createdAt;
   DateTime get expirationAt => _expirationAt;
 
@@ -33,6 +37,8 @@ class NoticeModel {
     _file = data['file'] ?? '';
     _fileExt = data['fileExt'] ?? '';
     readUserIds = _convertReadUserIds(data['readUserIds']);
+    _createdUserId = data['createdUserId'] ?? '';
+    _createdUserName = data['createdUserName'] ?? '';
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
     _expirationAt = data['expirationAt'].toDate() ?? DateTime.now();
   }

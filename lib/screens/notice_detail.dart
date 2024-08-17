@@ -127,6 +127,13 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
                   fontSize: 14,
                 ),
               ),
+              Text(
+                widget.notice.createdUserName,
+                style: const TextStyle(
+                  color: kGreyColor,
+                  fontSize: 14,
+                ),
+              ),
               const SizedBox(height: 4),
               FormLabel(
                 'タイトル',

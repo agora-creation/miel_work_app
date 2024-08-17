@@ -164,14 +164,38 @@ class _PlanScreenState extends State<PlanScreen> {
                   itemCount: days.length,
                   itemBuilder: (context, index) {
                     DateTime day = days[index];
+                    DateTime dayStart = DateTime(
+                      day.year,
+                      day.month,
+                      day.day,
+                      0,
+                      0,
+                      0,
+                    );
+                    DateTime dayEnd = DateTime(
+                      day.year,
+                      day.month,
+                      day.day,
+                      23,
+                      59,
+                      59,
+                    );
                     List<PlanModel> dayPlans = [];
                     if (plans.isNotEmpty) {
                       for (PlanModel plan in plans) {
-                        String dayKey = dateText(
-                          'yyyy-MM-dd',
-                          plan.startedAt,
-                        );
-                        if (day == DateTime.parse(dayKey)) {
+                        bool listIn = false;
+                        if (plan.startedAt.millisecondsSinceEpoch <=
+                                dayStart.millisecondsSinceEpoch &&
+                            dayStart.millisecondsSinceEpoch <=
+                                plan.endedAt.millisecondsSinceEpoch) {
+                          listIn = true;
+                        } else if (dayStart.millisecondsSinceEpoch <=
+                                plan.startedAt.millisecondsSinceEpoch &&
+                            plan.endedAt.millisecondsSinceEpoch <=
+                                dayEnd.millisecondsSinceEpoch) {
+                          listIn = true;
+                        }
+                        if (listIn) {
                           dayPlans.add(plan);
                         }
                       }

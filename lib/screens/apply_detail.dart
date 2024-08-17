@@ -49,6 +49,10 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
     if (widget.apply.createdUserId == widget.loginProvider.user?.id) {
       isApproval = false;
       isReject = false;
+      if (widget.loginProvider.user?.president == true) {
+        isApproval = true;
+        isReject = true;
+      }
     } else {
       isDelete = false;
     }
