@@ -79,300 +79,314 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 Expanded(
-                  child: ListView(
+                  child: Padding(
                     padding: const EdgeInsets.all(8),
-                    children: [
-                      const ConnectionCard(),
-                      GroupSelectCard(
-                        loginProvider: loginProvider,
-                        homeProvider: homeProvider,
-                      ),
-                      GridView(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: EdgeInsets.zero,
-                        gridDelegate: kHome2Grid,
+                    child: SingleChildScrollView(
+                      child: Column(
                         children: [
-                          StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                            stream: noticeService.streamList(
-                              organizationId: loginProvider.organization?.id,
-                              searchStart: null,
-                              searchEnd: null,
-                            ),
-                            builder: (context, snapshot) {
-                              bool alert = false;
-                              if (snapshot.hasData) {
-                                alert = noticeService.checkAlert(
-                                  data: snapshot.data,
-                                  currentGroup: homeProvider.currentGroup,
-                                  user: loginProvider.user,
-                                );
-                              }
-                              return HomeIconCard(
-                                icon: FontAwesomeIcons.solidBell,
-                                label: 'お知らせ',
-                                color: kBlackColor,
-                                backgroundColor: kWhiteColor,
-                                alert: alert,
-                                onTap: () => showBottomUpScreen(
-                                  context,
-                                  NoticeScreen(
-                                    loginProvider: loginProvider,
-                                    homeProvider: homeProvider,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                            stream: messageService.streamListUnread(
-                              organizationId: loginProvider.organization?.id,
-                            ),
-                            builder: (context, snapshot) {
-                              bool alert = false;
-                              if (snapshot.hasData) {
-                                List<ChatMessageModel> messages =
-                                    messageService.generateListUnread(
-                                  data: snapshot.data,
-                                  currentGroup: homeProvider.currentGroup,
-                                  loginUser: loginProvider.user,
-                                );
-                                if (messages.isNotEmpty) {
-                                  alert = true;
-                                }
-                              }
-                              return HomeIconCard(
-                                icon: FontAwesomeIcons.solidComments,
-                                label: 'チャット',
-                                color: kBlackColor,
-                                backgroundColor: kWhiteColor,
-                                alert: alert,
-                                onTap: () => showBottomUpScreen(
-                                  context,
-                                  ChatScreen(
-                                    loginProvider: loginProvider,
-                                    homeProvider: homeProvider,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                      HomePlanCard(
-                        loginProvider: loginProvider,
-                        homeProvider: homeProvider,
-                        onTap: () => showBottomUpScreen(
-                          context,
-                          PlanScreen(
+                          const ConnectionCard(),
+                          GroupSelectCard(
                             loginProvider: loginProvider,
                             homeProvider: homeProvider,
                           ),
-                        ),
-                      ),
-                      HomeProblemCard(
-                        loginProvider: loginProvider,
-                        homeProvider: homeProvider,
-                        onTap: () => showBottomUpScreen(
-                          context,
-                          ProblemScreen(
+                          GridView(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            gridDelegate: kHome2Grid,
+                            children: [
+                              StreamBuilder<
+                                  QuerySnapshot<Map<String, dynamic>>>(
+                                stream: noticeService.streamList(
+                                  organizationId:
+                                      loginProvider.organization?.id,
+                                  searchStart: null,
+                                  searchEnd: null,
+                                ),
+                                builder: (context, snapshot) {
+                                  bool alert = false;
+                                  if (snapshot.hasData) {
+                                    alert = noticeService.checkAlert(
+                                      data: snapshot.data,
+                                      currentGroup: homeProvider.currentGroup,
+                                      user: loginProvider.user,
+                                    );
+                                  }
+                                  return HomeIconCard(
+                                    icon: FontAwesomeIcons.solidBell,
+                                    label: 'お知らせ',
+                                    color: kBlackColor,
+                                    backgroundColor: kWhiteColor,
+                                    alert: alert,
+                                    onTap: () => showBottomUpScreen(
+                                      context,
+                                      NoticeScreen(
+                                        loginProvider: loginProvider,
+                                        homeProvider: homeProvider,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              StreamBuilder<
+                                  QuerySnapshot<Map<String, dynamic>>>(
+                                stream: messageService.streamListUnread(
+                                  organizationId:
+                                      loginProvider.organization?.id,
+                                ),
+                                builder: (context, snapshot) {
+                                  bool alert = false;
+                                  if (snapshot.hasData) {
+                                    List<ChatMessageModel> messages =
+                                        messageService.generateListUnread(
+                                      data: snapshot.data,
+                                      currentGroup: homeProvider.currentGroup,
+                                      loginUser: loginProvider.user,
+                                    );
+                                    if (messages.isNotEmpty) {
+                                      alert = true;
+                                    }
+                                  }
+                                  return HomeIconCard(
+                                    icon: FontAwesomeIcons.solidComments,
+                                    label: 'チャット',
+                                    color: kBlackColor,
+                                    backgroundColor: kWhiteColor,
+                                    alert: alert,
+                                    onTap: () => showBottomUpScreen(
+                                      context,
+                                      ChatScreen(
+                                        loginProvider: loginProvider,
+                                        homeProvider: homeProvider,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                          HomePlanCard(
                             loginProvider: loginProvider,
                             homeProvider: homeProvider,
-                          ),
-                        ),
-                      ),
-                      GridView(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: EdgeInsets.zero,
-                        gridDelegate: kHome2Grid,
-                        children: [
-                          StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                            stream: lostService.streamList(
-                              organizationId: loginProvider.organization?.id,
-                              searchStart: null,
-                              searchEnd: null,
-                              searchStatus: [0],
-                            ),
-                            builder: (context, snapshot) {
-                              bool alert = false;
-                              if (snapshot.hasData) {
-                                alert = lostService.checkAlert(
-                                  data: snapshot.data,
-                                );
-                              }
-                              return HomeIconCard(
-                                icon: FontAwesomeIcons.personCircleQuestion,
-                                label: '落とし物',
-                                color: kBlackColor,
-                                backgroundColor: kWhiteColor,
-                                alert: alert,
-                                alertMessage: '保管中',
-                                onTap: () => showBottomUpScreen(
-                                  context,
-                                  LostScreen(
-                                    loginProvider: loginProvider,
-                                    homeProvider: homeProvider,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                            stream: applyService.streamList(
-                              organizationId: loginProvider.organization?.id,
-                              searchStart: null,
-                              searchEnd: null,
-                              approval: [0],
-                            ),
-                            builder: (context, snapshot) {
-                              bool alert = false;
-                              if (snapshot.hasData) {
-                                alert = applyService.checkAlert(
-                                  data: snapshot.data,
-                                );
-                              }
-                              return HomeIconCard(
-                                icon: FontAwesomeIcons.filePen,
-                                label: '各種申請',
-                                color: kBlackColor,
-                                backgroundColor: kWhiteColor,
-                                alert: alert,
-                                alertMessage: '承認待ちあり',
-                                onTap: () => showBottomUpScreen(
-                                  context,
-                                  ApplyScreen(
-                                    loginProvider: loginProvider,
-                                    homeProvider: homeProvider,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                      GridView(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: EdgeInsets.zero,
-                        gridDelegate: kHome3Grid,
-                        children: [
-                          HomeIconCard(
-                            icon: FontAwesomeIcons.businessTime,
-                            iconSize: 42,
-                            label: '勤怠打刻',
-                            labelFontSize: 16,
-                            color: kBlackColor,
-                            backgroundColor: kWhiteColor,
                             onTap: () => showBottomUpScreen(
                               context,
-                              WorkScreen(
+                              PlanScreen(
                                 loginProvider: loginProvider,
                                 homeProvider: homeProvider,
                               ),
                             ),
                           ),
-                          HomeIconCard(
-                            icon: FontAwesomeIcons.clipboardCheck,
-                            iconSize: 42,
-                            label: '業務日報',
-                            labelFontSize: 16,
-                            color: kBlackColor,
-                            backgroundColor: kWhiteColor,
+                          HomeProblemCard(
+                            loginProvider: loginProvider,
+                            homeProvider: homeProvider,
                             onTap: () => showBottomUpScreen(
                               context,
-                              ReportScreen(
+                              ProblemScreen(
                                 loginProvider: loginProvider,
                                 homeProvider: homeProvider,
                               ),
                             ),
                           ),
-                          StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                            stream: loanService.streamList(
-                              organizationId: loginProvider.organization?.id,
-                              searchStart: null,
-                              searchEnd: null,
-                              searchStatus: [0],
-                            ),
-                            builder: (context, snapshot) {
-                              bool alert = false;
-                              if (snapshot.hasData) {
-                                alert = loanService.checkAlert(
-                                  data: snapshot.data,
-                                );
-                              }
-                              return HomeIconCard(
-                                icon: FontAwesomeIcons.rightLeft,
+                          GridView(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            gridDelegate: kHome2Grid,
+                            children: [
+                              StreamBuilder<
+                                  QuerySnapshot<Map<String, dynamic>>>(
+                                stream: lostService.streamList(
+                                  organizationId:
+                                      loginProvider.organization?.id,
+                                  searchStart: null,
+                                  searchEnd: null,
+                                  searchStatus: [0],
+                                ),
+                                builder: (context, snapshot) {
+                                  bool alert = false;
+                                  if (snapshot.hasData) {
+                                    alert = lostService.checkAlert(
+                                      data: snapshot.data,
+                                    );
+                                  }
+                                  return HomeIconCard(
+                                    icon: FontAwesomeIcons.personCircleQuestion,
+                                    label: '落とし物',
+                                    color: kBlackColor,
+                                    backgroundColor: kWhiteColor,
+                                    alert: alert,
+                                    alertMessage: '保管中',
+                                    onTap: () => showBottomUpScreen(
+                                      context,
+                                      LostScreen(
+                                        loginProvider: loginProvider,
+                                        homeProvider: homeProvider,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              StreamBuilder<
+                                  QuerySnapshot<Map<String, dynamic>>>(
+                                stream: applyService.streamList(
+                                  organizationId:
+                                      loginProvider.organization?.id,
+                                  searchStart: null,
+                                  searchEnd: null,
+                                  approval: [0],
+                                ),
+                                builder: (context, snapshot) {
+                                  bool alert = false;
+                                  if (snapshot.hasData) {
+                                    alert = applyService.checkAlert(
+                                      data: snapshot.data,
+                                    );
+                                  }
+                                  return HomeIconCard(
+                                    icon: FontAwesomeIcons.filePen,
+                                    label: '各種申請',
+                                    color: kBlackColor,
+                                    backgroundColor: kWhiteColor,
+                                    alert: alert,
+                                    alertMessage: '承認待ちあり',
+                                    onTap: () => showBottomUpScreen(
+                                      context,
+                                      ApplyScreen(
+                                        loginProvider: loginProvider,
+                                        homeProvider: homeProvider,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                          GridView(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            gridDelegate: kHome3Grid,
+                            children: [
+                              HomeIconCard(
+                                icon: FontAwesomeIcons.businessTime,
                                 iconSize: 42,
-                                label: '貸出／返却',
+                                label: '勤怠打刻',
                                 labelFontSize: 16,
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,
-                                alert: alert,
-                                alertMessage: '貸出中',
                                 onTap: () => showBottomUpScreen(
                                   context,
-                                  LoanScreen(
+                                  WorkScreen(
                                     loginProvider: loginProvider,
                                     homeProvider: homeProvider,
                                   ),
                                 ),
-                              );
-                            },
-                          ),
-                          HomeIconCard(
-                            icon: FontAwesomeIcons.bolt,
-                            iconSize: 42,
-                            label: 'メーター検針',
-                            labelFontSize: 16,
-                            color: kBlackColor,
-                            backgroundColor: kWhiteColor,
-                            onTap: () async {
-                              Uri url =
-                                  Uri.parse('https://hirome.co.jp/meter/');
-                              if (!await launchUrl(url)) {
-                                throw Exception('Could not launch $url');
-                              }
-                            },
-                          ),
-                          loginProvider.user?.admin == true
-                              ? HomeIconCard(
-                                  icon: FontAwesomeIcons.usersRectangle,
-                                  iconSize: 42,
-                                  label: 'グループ一覧',
-                                  labelFontSize: 16,
-                                  color: kWhiteColor,
-                                  backgroundColor: kDisabledColor,
-                                  onTap: () => showBottomUpScreen(
-                                    context,
-                                    GroupScreen(
-                                      loginProvider: loginProvider,
-                                      homeProvider: homeProvider,
-                                    ),
+                              ),
+                              HomeIconCard(
+                                icon: FontAwesomeIcons.clipboardCheck,
+                                iconSize: 42,
+                                label: '業務日報',
+                                labelFontSize: 16,
+                                color: kBlackColor,
+                                backgroundColor: kWhiteColor,
+                                onTap: () => showBottomUpScreen(
+                                  context,
+                                  ReportScreen(
+                                    loginProvider: loginProvider,
+                                    homeProvider: homeProvider,
                                   ),
-                                )
-                              : Container(),
-                          loginProvider.user?.admin == true
-                              ? HomeIconCard(
-                                  icon: FontAwesomeIcons.users,
-                                  iconSize: 42,
-                                  label: 'スタッフ一覧',
-                                  labelFontSize: 16,
-                                  color: kWhiteColor,
-                                  backgroundColor: kDisabledColor,
-                                  onTap: () => showBottomUpScreen(
-                                    context,
-                                    UserScreen(
-                                      loginProvider: loginProvider,
-                                      homeProvider: homeProvider,
+                                ),
+                              ),
+                              StreamBuilder<
+                                  QuerySnapshot<Map<String, dynamic>>>(
+                                stream: loanService.streamList(
+                                  organizationId:
+                                      loginProvider.organization?.id,
+                                  searchStart: null,
+                                  searchEnd: null,
+                                  searchStatus: [0],
+                                ),
+                                builder: (context, snapshot) {
+                                  bool alert = false;
+                                  if (snapshot.hasData) {
+                                    alert = loanService.checkAlert(
+                                      data: snapshot.data,
+                                    );
+                                  }
+                                  return HomeIconCard(
+                                    icon: FontAwesomeIcons.rightLeft,
+                                    iconSize: 42,
+                                    label: '貸出／返却',
+                                    labelFontSize: 16,
+                                    color: kBlackColor,
+                                    backgroundColor: kWhiteColor,
+                                    alert: alert,
+                                    alertMessage: '貸出中',
+                                    onTap: () => showBottomUpScreen(
+                                      context,
+                                      LoanScreen(
+                                        loginProvider: loginProvider,
+                                        homeProvider: homeProvider,
+                                      ),
                                     ),
-                                  ),
-                                )
-                              : Container(),
+                                  );
+                                },
+                              ),
+                              HomeIconCard(
+                                icon: FontAwesomeIcons.bolt,
+                                iconSize: 42,
+                                label: 'メーター検針',
+                                labelFontSize: 16,
+                                color: kBlackColor,
+                                backgroundColor: kWhiteColor,
+                                onTap: () async {
+                                  Uri url =
+                                      Uri.parse('https://hirome.co.jp/meter/');
+                                  if (!await launchUrl(url)) {
+                                    throw Exception('Could not launch $url');
+                                  }
+                                },
+                              ),
+                              loginProvider.user?.admin == true
+                                  ? HomeIconCard(
+                                      icon: FontAwesomeIcons.usersRectangle,
+                                      iconSize: 42,
+                                      label: 'グループ一覧',
+                                      labelFontSize: 16,
+                                      color: kWhiteColor,
+                                      backgroundColor: kDisabledColor,
+                                      onTap: () => showBottomUpScreen(
+                                        context,
+                                        GroupScreen(
+                                          loginProvider: loginProvider,
+                                          homeProvider: homeProvider,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
+                              loginProvider.user?.admin == true
+                                  ? HomeIconCard(
+                                      icon: FontAwesomeIcons.users,
+                                      iconSize: 42,
+                                      label: 'スタッフ一覧',
+                                      labelFontSize: 16,
+                                      color: kWhiteColor,
+                                      backgroundColor: kDisabledColor,
+                                      onTap: () => showBottomUpScreen(
+                                        context,
+                                        UserScreen(
+                                          loginProvider: loginProvider,
+                                          homeProvider: homeProvider,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
+                            ],
+                          ),
+                          const SizedBox(height: 100),
                         ],
                       ),
-                      const SizedBox(height: 100),
-                    ],
+                    ),
                   ),
                 ),
               ],

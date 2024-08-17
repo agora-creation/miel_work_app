@@ -211,6 +211,20 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                 builder: (context) => ImageDetailDialog(
                                   File(message.image).path,
                                   onPressedClose: () => Navigator.pop(context),
+                                  onPressedDelete: () async {
+                                    String? error =
+                                        await messageProvider.delete(
+                                      message: message,
+                                    );
+                                    if (error != null) {
+                                      if (!mounted) return;
+                                      showMessage(context, error, false);
+                                      return;
+                                    }
+                                    if (!mounted) return;
+                                    showMessage(context, 'ファイルを削除しました', true);
+                                    Navigator.pop(context);
+                                  },
                                 ),
                               ),
                               onTapFile: () {
@@ -222,6 +236,21 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                       File(message.file).path,
                                       onPressedClose: () =>
                                           Navigator.pop(context),
+                                      onPressedDelete: () async {
+                                        String? error =
+                                            await messageProvider.delete(
+                                          message: message,
+                                        );
+                                        if (error != null) {
+                                          if (!mounted) return;
+                                          showMessage(context, error, false);
+                                          return;
+                                        }
+                                        if (!mounted) return;
+                                        showMessage(
+                                            context, 'ファイルを削除しました', true);
+                                        Navigator.pop(context);
+                                      },
                                     ),
                                   );
                                 }
@@ -232,6 +261,21 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                       File(message.file).path,
                                       onPressedClose: () =>
                                           Navigator.pop(context),
+                                      onPressedDelete: () async {
+                                        String? error =
+                                            await messageProvider.delete(
+                                          message: message,
+                                        );
+                                        if (error != null) {
+                                          if (!mounted) return;
+                                          showMessage(context, error, false);
+                                          return;
+                                        }
+                                        if (!mounted) return;
+                                        showMessage(
+                                            context, 'ファイルを削除しました', true);
+                                        Navigator.pop(context);
+                                      },
                                     ),
                                   );
                                 }
@@ -312,174 +356,6 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
   }
 }
 
-// class ImageDialog extends StatefulWidget {
-//   final ChatMessageProvider messageProvider;
-//   final ChatMessageModel message;
-//   final String file;
-//
-//   const ImageDialog({
-//     required this.messageProvider,
-//     required this.message,
-//     this.file = '',
-//     super.key,
-//   });
-//
-//   @override
-//   State<ImageDialog> createState() => _ImageDialogState();
-// }
-//
-// class _ImageDialogState extends State<ImageDialog> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Stack(
-//       alignment: Alignment.topCenter,
-//       children: [
-//         Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Expanded(
-//               child: InteractiveViewer(
-//                 minScale: 0.1,
-//                 maxScale: 5,
-//                 child: Image.network(
-//                   widget.file == ''
-//                       ? widget.message.image
-//                       : File(widget.file).path,
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             Material(
-//               elevation: 8,
-//               borderRadius: BorderRadius.circular(100),
-//               color: kWhiteColor,
-//               child: IconButton(
-//                 onPressed: () => Navigator.of(context).pop(),
-//                 icon: const FaIcon(
-//                   FontAwesomeIcons.xmark,
-//                   color: kBlackColor,
-//                   size: 30,
-//                 ),
-//               ),
-//             ),
-//             Material(
-//               elevation: 8,
-//               borderRadius: BorderRadius.circular(100),
-//               color: kWhiteColor,
-//               child: IconButton(
-//                 onPressed: () async {
-//                   String? error = await widget.messageProvider.delete(
-//                     message: widget.message,
-//                   );
-//                   if (error != null) {
-//                     if (!mounted) return;
-//                     showMessage(context, error, false);
-//                     return;
-//                   }
-//                   Navigator.of(context).pop();
-//                 },
-//                 icon: const Icon(
-//                   Icons.delete,
-//                   color: kRedColor,
-//                   size: 30,
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ],
-//     );
-//   }
-// }
-//
-// class PdfDialog extends StatefulWidget {
-//   final ChatMessageProvider messageProvider;
-//   final ChatMessageModel message;
-//   final String file;
-//
-//   const PdfDialog({
-//     required this.messageProvider,
-//     required this.message,
-//     this.file = '',
-//     super.key,
-//   });
-//
-//   @override
-//   State<PdfDialog> createState() => _PdfDialogState();
-// }
-//
-// class _PdfDialogState extends State<PdfDialog> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Stack(
-//       alignment: Alignment.topCenter,
-//       children: [
-//         Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Expanded(
-//               child: InteractiveViewer(
-//                 minScale: 0.1,
-//                 maxScale: 5,
-//                 child: SfPdfViewer.network(
-//                   widget.file == ''
-//                       ? widget.message.image
-//                       : File(widget.file).path,
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             Material(
-//               elevation: 8,
-//               borderRadius: BorderRadius.circular(100),
-//               color: kWhiteColor,
-//               child: IconButton(
-//                 onPressed: () => Navigator.of(context).pop(),
-//                 icon: const FaIcon(
-//                   FontAwesomeIcons.xmark,
-//                   color: kBlackColor,
-//                   size: 30,
-//                 ),
-//               ),
-//             ),
-//             Material(
-//               elevation: 8,
-//               borderRadius: BorderRadius.circular(100),
-//               color: kWhiteColor,
-//               child: IconButton(
-//                 onPressed: () async {
-//                   String? error = await widget.messageProvider.delete(
-//                     message: widget.message,
-//                   );
-//                   if (error != null) {
-//                     if (!mounted) return;
-//                     showMessage(context, error, false);
-//                     return;
-//                   }
-//                   Navigator.of(context).pop();
-//                 },
-//                 icon: const FaIcon(
-//                   FontAwesomeIcons.trash,
-//                   color: kRedColor,
-//                   size: 30,
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ],
-//     );
-//   }
-// }
-
 class SearchKeywordDialog extends StatefulWidget {
   final Function() getKeyword;
 
@@ -529,6 +405,18 @@ class _SearchKeywordDialogState extends State<SearchKeywordDialog> {
           labelColor: kWhiteColor,
           backgroundColor: kGreyColor,
           onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'クリア',
+          labelColor: kWhiteColor,
+          backgroundColor: kCyanColor,
+          onPressed: () async {
+            await removePrefs('keyword');
+            widget.getKeyword();
+            if (!mounted) return;
+            Navigator.pop(context);
+          },
         ),
         CustomButton(
           type: ButtonSizeType.sm,
