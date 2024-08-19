@@ -48,6 +48,22 @@ class ProblemProvider with ChangeNotifier {
         final task = await storage.ref(storagePath).putFile(imageFile);
         image = (await task.ref.getDownloadURL());
       }
+      String image2 = '';
+      if (image2XFile != null) {
+        File image2File = File(image2XFile.path);
+        FirebaseStorage storage = FirebaseStorage.instance;
+        String storagePath = 'problem/$id';
+        final task = await storage.ref(storagePath).putFile(image2File);
+        image2 = (await task.ref.getDownloadURL());
+      }
+      String image3 = '';
+      if (image3XFile != null) {
+        File image3File = File(image3XFile.path);
+        FirebaseStorage storage = FirebaseStorage.instance;
+        String storagePath = 'problem/$id';
+        final task = await storage.ref(storagePath).putFile(image3File);
+        image3 = (await task.ref.getDownloadURL());
+      }
       _problemService.create({
         'id': id,
         'organizationId': organization.id,
@@ -60,6 +76,8 @@ class ProblemProvider with ChangeNotifier {
         'targetAddress': targetAddress,
         'details': details,
         'image': image,
+        'image2': image2,
+        'image3': image3,
         'states': states,
         'count': count,
         'processed': false,
@@ -120,7 +138,23 @@ class ProblemProvider with ChangeNotifier {
         final task = await storage.ref(storagePath).putFile(imageFile);
         image = (await task.ref.getDownloadURL());
       }
-      if (image != null) {
+      String? image2;
+      if (image2XFile != null) {
+        File image2File = File(image2XFile.path);
+        FirebaseStorage storage = FirebaseStorage.instance;
+        String storagePath = 'problem/${problem.id}';
+        final task = await storage.ref(storagePath).putFile(image2File);
+        image2 = (await task.ref.getDownloadURL());
+      }
+      String? image3;
+      if (image3XFile != null) {
+        File image3File = File(image3XFile.path);
+        FirebaseStorage storage = FirebaseStorage.instance;
+        String storagePath = 'problem/${problem.id}';
+        final task = await storage.ref(storagePath).putFile(image3File);
+        image3 = (await task.ref.getDownloadURL());
+      }
+      if (image != null || image2 != null || image3 != null) {
         _problemService.update({
           'id': problem.id,
           'type': type,
@@ -132,6 +166,8 @@ class ProblemProvider with ChangeNotifier {
           'targetAddress': targetAddress,
           'details': details,
           'image': image,
+          'image2': image2,
+          'image3': image3,
           'states': states,
           'count': count,
           'createdAt': createdAt,
