@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as picker;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
@@ -10,10 +14,14 @@ import 'package:miel_work_app/screens/loan_mod.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
+import 'package:miel_work_app/widgets/custom_text_field.dart';
+import 'package:miel_work_app/widgets/file_link.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
+import 'package:miel_work_app/widgets/image_detail_dialog.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:signature/signature.dart';
 
 class LoanDetailScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -32,8 +40,16 @@ class LoanDetailScreen extends StatefulWidget {
 }
 
 class _LoanDetailScreenState extends State<LoanDetailScreen> {
+  DateTime returnAt = DateTime.now();
+  TextEditingController returnUserController = TextEditingController();
+  SignatureController signImageController = SignatureController(
+    penStrokeWidth: 2,
+    exportBackgroundColor: kWhiteColor,
+  );
+
   @override
   Widget build(BuildContext context) {
+    final loanProvider = Provider.of<LoanProvider>(context);
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
@@ -87,52 +103,163 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
         ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              FormLabel(
-                '貸出日',
-                child: FormValue(
-                  dateText('yyyy/MM/dd HH:mm', widget.loan.loanAt),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FormLabel(
+                  '貸出日',
+                  child: FormValue(
+                    dateText('yyyy/MM/dd HH:mm', widget.loan.loanAt),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              FormLabel(
-                '貸出先',
-                child: FormValue(widget.loan.loanUser),
-              ),
-              const SizedBox(height: 16),
-              FormLabel(
-                '貸出先(会社)',
-                child: FormValue(widget.loan.loanCompany),
-              ),
-              const SizedBox(height: 16),
-              FormLabel(
-                '対応スタッフ',
-                child: FormValue(widget.loan.loanStaff),
-              ),
-              const SizedBox(height: 16),
-              FormLabel(
-                '返却予定日',
-                child: FormValue(
-                  dateText('yyyy/MM/dd HH:mm', widget.loan.returnPlanAt),
+                const SizedBox(height: 16),
+                FormLabel(
+                  '貸出先',
+                  child: FormValue(widget.loan.loanUser),
                 ),
-              ),
-              const SizedBox(height: 16),
-              FormLabel(
-                '品名',
-                child: FormValue(widget.loan.itemName),
-              ),
-              const SizedBox(height: 16),
-              FormLabel(
-                '添付写真',
-                child: Container(),
-              ),
-              const SizedBox(height: 100),
-            ],
+                const SizedBox(height: 16),
+                FormLabel(
+                  '貸出先(会社)',
+                  child: FormValue(widget.loan.loanCompany),
+                ),
+                const SizedBox(height: 16),
+                FormLabel(
+                  '対応スタッフ',
+                  child: FormValue(widget.loan.loanStaff),
+                ),
+                const SizedBox(height: 16),
+                FormLabel(
+                  '返却予定日',
+                  child: FormValue(
+                    dateText('yyyy/MM/dd HH:mm', widget.loan.returnPlanAt),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                FormLabel(
+                  '品名',
+                  child: FormValue(widget.loan.itemName),
+                ),
+                const SizedBox(height: 16),
+                widget.loan.itemImage != ''
+                    ? FormLabel(
+                        '添付写真',
+                        child: FileLink(
+                          file: widget.loan.itemImage,
+                          onTap: () => showDialog(
+                            context: context,
+                            builder: (context) => ImageDetailDialog(
+                              File(widget.loan.itemImage).path,
+                              onPressedClose: () => Navigator.pop(context),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
+                const SizedBox(height: 24),
+                Divider(color: kBorderColor),
+                const SizedBox(height: 24),
+                FormLabel(
+                  '返却日',
+                  child: FormValue(
+                    dateText('yyyy/MM/dd HH:mm', returnAt),
+                    onTap: widget.loan.status == 0
+                        ? () async {
+                            picker.DatePicker.showDateTimePicker(
+                              context,
+                              showTitleActions: true,
+                              minTime: kFirstDate,
+                              maxTime: kLastDate,
+                              theme: kDatePickerTheme,
+                              onConfirm: (value) {
+                                setState(() {
+                                  returnAt = value;
+                                });
+                              },
+                              currentTime: returnAt,
+                              locale: picker.LocaleType.jp,
+                            );
+                          }
+                        : null,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                FormLabel(
+                  '返却スタッフ',
+                  child: widget.loan.status == 0
+                      ? CustomTextField(
+                          controller: returnUserController,
+                          textInputType: TextInputType.text,
+                          maxLines: 1,
+                        )
+                      : FormValue(widget.loan.returnUser),
+                ),
+                const SizedBox(height: 16),
+                FormLabel(
+                  '署名',
+                  child: widget.loan.status == 0
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: kBorderColor),
+                              ),
+                              child: Signature(
+                                controller: signImageController,
+                                backgroundColor: kWhiteColor,
+                                width: double.infinity,
+                                height: 200,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            CustomButton(
+                              type: ButtonSizeType.sm,
+                              label: '書き直す',
+                              labelColor: kBlackColor,
+                              backgroundColor: kGreyColor.withOpacity(0.3),
+                              onPressed: () => signImageController.clear(),
+                            ),
+                          ],
+                        )
+                      : Image.network(
+                          widget.loan.signImage,
+                          fit: BoxFit.cover,
+                        ),
+                ),
+                const SizedBox(height: 16),
+                widget.loan.status == 0
+                    ? CustomButton(
+                        type: ButtonSizeType.lg,
+                        label: '返却処理をする',
+                        labelColor: kWhiteColor,
+                        backgroundColor: kReturnColor,
+                        onPressed: () async {
+                          String? error = await loanProvider.updateReturn(
+                            organization: widget.loginProvider.organization,
+                            loan: widget.loan,
+                            returnAt: returnAt,
+                            returnUser: returnUserController.text,
+                            signImageController: signImageController,
+                            loginUser: widget.loginProvider.user,
+                          );
+                          if (error != null) {
+                            if (!mounted) return;
+                            showMessage(context, error, false);
+                            return;
+                          }
+                          if (!mounted) return;
+                          showMessage(context, '返却されました', true);
+                          Navigator.pop(context);
+                        },
+                      )
+                    : Container(),
+                const SizedBox(height: 100),
+              ],
+            ),
           ),
         ),
       ),

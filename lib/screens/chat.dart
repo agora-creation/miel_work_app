@@ -70,43 +70,45 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: ListView.builder(
-        itemCount: chats.length,
-        itemBuilder: (context, index) {
-          ChatModel chat = chats[index];
-          return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-            stream: messageService.streamList(
-              chatId: chat.id,
-            ),
-            builder: (context, snapshot) {
-              List<ChatMessageModel> messages = [];
-              if (snapshot.hasData) {
-                messages = messageService.generateListUnread(
-                  data: snapshot.data,
-                  currentGroup: widget.homeProvider.currentGroup,
-                  loginUser: widget.loginProvider.user,
-                );
-              }
-              return ChatList(
-                chat: chat,
-                unreadCount: messages.length,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      type: PageTransitionType.rightToLeft,
-                      child: ChatMessageScreen(
-                        loginProvider: widget.loginProvider,
-                        homeProvider: widget.homeProvider,
-                        chat: chat,
-                      ),
-                    ),
+      body: SafeArea(
+        child: ListView.builder(
+          itemCount: chats.length,
+          itemBuilder: (context, index) {
+            ChatModel chat = chats[index];
+            return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream: messageService.streamList(
+                chatId: chat.id,
+              ),
+              builder: (context, snapshot) {
+                List<ChatMessageModel> messages = [];
+                if (snapshot.hasData) {
+                  messages = messageService.generateListUnread(
+                    data: snapshot.data,
+                    currentGroup: widget.homeProvider.currentGroup,
+                    loginUser: widget.loginProvider.user,
                   );
-                },
-              );
-            },
-          );
-        },
+                }
+                return ChatList(
+                  chat: chat,
+                  unreadCount: messages.length,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        type: PageTransitionType.rightToLeft,
+                        child: ChatMessageScreen(
+                          loginProvider: widget.loginProvider,
+                          homeProvider: widget.homeProvider,
+                          chat: chat,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            );
+          },
+        ),
       ),
       bottomNavigationBar: CustomFooter(
         loginProvider: widget.loginProvider,

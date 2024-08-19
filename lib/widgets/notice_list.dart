@@ -48,9 +48,9 @@ class NoticeList extends StatelessWidget {
                     style: const TextStyle(fontSize: 14),
                   ),
                   notice.file != ''
-                      ? const Chip(
+                      ? Chip(
                           label: Text('添付あり'),
-                          backgroundColor: kCyanColor,
+                          backgroundColor: kCyanColor.withOpacity(0.3),
                         )
                       : Container(),
                 ],

@@ -110,93 +110,95 @@ class _ProblemScreenState extends State<ProblemScreen> {
           ),
           shape: Border(bottom: BorderSide(color: kBorderColor)),
         ),
-        body: TabBarView(
-          children: [
-            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: problemService.streamList(
-                organizationId: widget.loginProvider.organization?.id,
-                searchStart: searchStart,
-                searchEnd: searchEnd,
-                processed: false,
-              ),
-              builder: (context, snapshot) {
-                List<ProblemModel> problems = [];
-                if (snapshot.hasData) {
-                  problems = problemService.generateList(
-                    data: snapshot.data,
-                  );
-                }
-                if (problems.isEmpty) {
-                  return const Center(child: Text('クレーム／要望はありません'));
-                }
-                return ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: problems.length,
-                  itemBuilder: (context, index) {
-                    ProblemModel problem = problems[index];
-                    return ProblemList(
-                      problem: problem,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: ProblemDetailScreen(
-                              loginProvider: widget.loginProvider,
-                              homeProvider: widget.homeProvider,
-                              problem: problem,
-                            ),
-                          ),
-                        );
-                      },
+        body: SafeArea(
+          child: TabBarView(
+            children: [
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: problemService.streamList(
+                  organizationId: widget.loginProvider.organization?.id,
+                  searchStart: searchStart,
+                  searchEnd: searchEnd,
+                  processed: false,
+                ),
+                builder: (context, snapshot) {
+                  List<ProblemModel> problems = [];
+                  if (snapshot.hasData) {
+                    problems = problemService.generateList(
+                      data: snapshot.data,
                     );
-                  },
-                );
-              },
-            ),
-            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: problemService.streamList(
-                organizationId: widget.loginProvider.organization?.id,
-                searchStart: searchStart,
-                searchEnd: searchEnd,
-                processed: true,
-              ),
-              builder: (context, snapshot) {
-                List<ProblemModel> problems = [];
-                if (snapshot.hasData) {
-                  problems = problemService.generateList(
-                    data: snapshot.data,
-                  );
-                }
-                if (problems.isEmpty) {
-                  return const Center(child: Text('クレーム／要望はありません'));
-                }
-                return ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: problems.length,
-                  itemBuilder: (context, index) {
-                    ProblemModel problem = problems[index];
-                    return ProblemList(
-                      problem: problem,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: ProblemDetailScreen(
-                              loginProvider: widget.loginProvider,
-                              homeProvider: widget.homeProvider,
-                              problem: problem,
+                  }
+                  if (problems.isEmpty) {
+                    return const Center(child: Text('クレーム／要望はありません'));
+                  }
+                  return ListView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: problems.length,
+                    itemBuilder: (context, index) {
+                      ProblemModel problem = problems[index];
+                      return ProblemList(
+                        problem: problem,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: ProblemDetailScreen(
+                                loginProvider: widget.loginProvider,
+                                homeProvider: widget.homeProvider,
+                                problem: problem,
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: problemService.streamList(
+                  organizationId: widget.loginProvider.organization?.id,
+                  searchStart: searchStart,
+                  searchEnd: searchEnd,
+                  processed: true,
+                ),
+                builder: (context, snapshot) {
+                  List<ProblemModel> problems = [];
+                  if (snapshot.hasData) {
+                    problems = problemService.generateList(
+                      data: snapshot.data,
                     );
-                  },
-                );
-              },
-            ),
-          ],
+                  }
+                  if (problems.isEmpty) {
+                    return const Center(child: Text('クレーム／要望はありません'));
+                  }
+                  return ListView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: problems.length,
+                    itemBuilder: (context, index) {
+                      ProblemModel problem = problems[index];
+                      return ProblemList(
+                        problem: problem,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: ProblemDetailScreen(
+                                loginProvider: widget.loginProvider,
+                                homeProvider: widget.homeProvider,
+                                problem: problem,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {

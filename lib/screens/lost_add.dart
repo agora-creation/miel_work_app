@@ -62,108 +62,110 @@ class _LostAddScreenState extends State<LostAddScreen> {
       ),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                FormLabel(
-                  '発見日',
-                  child: FormValue(
-                    dateText('yyyy/MM/dd HH:mm', discoveryAt),
-                    onTap: () async {
-                      picker.DatePicker.showDateTimePicker(
-                        context,
-                        showTitleActions: true,
-                        minTime: kFirstDate,
-                        maxTime: kLastDate,
-                        theme: kDatePickerTheme,
-                        onConfirm: (value) {
-                          setState(() {
-                            discoveryAt = value;
-                          });
-                        },
-                        currentTime: discoveryAt,
-                        locale: picker.LocaleType.jp,
-                      );
-                    },
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  FormLabel(
+                    '発見日',
+                    child: FormValue(
+                      dateText('yyyy/MM/dd HH:mm', discoveryAt),
+                      onTap: () async {
+                        picker.DatePicker.showDateTimePicker(
+                          context,
+                          showTitleActions: true,
+                          minTime: kFirstDate,
+                          maxTime: kLastDate,
+                          theme: kDatePickerTheme,
+                          onConfirm: (value) {
+                            setState(() {
+                              discoveryAt = value;
+                            });
+                          },
+                          currentTime: discoveryAt,
+                          locale: picker.LocaleType.jp,
+                        );
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  '発見場所',
-                  child: CustomTextField(
-                    controller: discoveryPlaceController,
-                    textInputType: TextInputType.text,
-                    maxLines: 1,
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    '発見場所',
+                    child: CustomTextField(
+                      controller: discoveryPlaceController,
+                      textInputType: TextInputType.text,
+                      maxLines: 1,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  '発見者',
-                  child: CustomTextField(
-                    controller: discoveryUserController,
-                    textInputType: TextInputType.text,
-                    maxLines: 1,
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    '発見者',
+                    child: CustomTextField(
+                      controller: discoveryUserController,
+                      textInputType: TextInputType.text,
+                      maxLines: 1,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  '落とし物No',
-                  child: CustomTextField(
-                    controller: itemNumberController,
-                    textInputType: TextInputType.text,
-                    maxLines: 1,
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    '落とし物No',
+                    child: CustomTextField(
+                      controller: itemNumberController,
+                      textInputType: TextInputType.text,
+                      maxLines: 1,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  '品名',
-                  child: CustomTextField(
-                    controller: itemNameController,
-                    textInputType: TextInputType.text,
-                    maxLines: 1,
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    '品名',
+                    child: CustomTextField(
+                      controller: itemNameController,
+                      textInputType: TextInputType.text,
+                      maxLines: 1,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  '添付写真',
-                  child: GestureDetector(
-                    onTap: () async {
-                      final result = await ImagePicker().pickImage(
-                        source: ImageSource.gallery,
-                      );
-                      setState(() {
-                        itemImageXFile = result;
-                      });
-                    },
-                    child: itemImageXFile != null
-                        ? Image.file(
-                            File(itemImageXFile!.path),
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                          )
-                        : Container(
-                            color: kGreyColor.withOpacity(0.3),
-                            width: double.infinity,
-                            height: 100,
-                            child: const Center(
-                              child: Text('写真が選択されていません'),
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    '添付写真',
+                    child: GestureDetector(
+                      onTap: () async {
+                        final result = await ImagePicker().pickImage(
+                          source: ImageSource.gallery,
+                        );
+                        setState(() {
+                          itemImageXFile = result;
+                        });
+                      },
+                      child: itemImageXFile != null
+                          ? Image.file(
+                              File(itemImageXFile!.path),
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                            )
+                          : Container(
+                              color: kGreyColor.withOpacity(0.3),
+                              width: double.infinity,
+                              height: 100,
+                              child: const Center(
+                                child: Text('写真が選択されていません'),
+                              ),
                             ),
-                          ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  '備考',
-                  child: CustomTextField(
-                    controller: remarksController,
-                    textInputType: TextInputType.text,
-                    maxLines: 10,
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    '備考',
+                    child: CustomTextField(
+                      controller: remarksController,
+                      textInputType: TextInputType.text,
+                      maxLines: 10,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 100),
-              ],
+                  const SizedBox(height: 100),
+                ],
+              ),
             ),
           ),
         ),

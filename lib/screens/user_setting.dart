@@ -51,63 +51,65 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
         ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: Column(
-        children: [
-          SettingList(
-            label: '名前',
-            value: widget.loginProvider.user?.name ?? '',
-            onTap: () => showDialog(
-              context: context,
-              builder: (context) => ModNameDialog(
-                loginProvider: widget.loginProvider,
-              ),
-            ),
-          ),
-          SettingList(
-            label: 'メールアドレス',
-            value: widget.loginProvider.user?.email ?? '',
-            onTap: () => showDialog(
-              context: context,
-              builder: (context) => ModEmailDialog(
-                loginProvider: widget.loginProvider,
-              ),
-            ),
-          ),
-          SettingList(
-            label: 'パスワード',
-            value: '********',
-            onTap: () => showDialog(
-              context: context,
-              builder: (context) => ModPasswordDialog(
-                loginProvider: widget.loginProvider,
-              ),
-            ),
-          ),
-          SettingList(
-            label: 'このアプリの使い方',
-            value: '',
-            onTap: () {
-              Navigator.push(
-                context,
-                PageTransition(
-                  type: PageTransitionType.rightToLeft,
-                  child: const HowToScreen(),
+      body: SafeArea(
+        child: Column(
+          children: [
+            SettingList(
+              label: '名前',
+              value: widget.loginProvider.user?.name ?? '',
+              onTap: () => showDialog(
+                context: context,
+                builder: (context) => ModNameDialog(
+                  loginProvider: widget.loginProvider,
                 ),
-              );
-            },
-          ),
-          const SizedBox(height: 24),
-          LinkText(
-            label: 'この端末からログアウトする',
-            color: kRedColor,
-            onTap: () => showDialog(
-              context: context,
-              builder: (context) => LogoutDialog(
-                loginProvider: widget.loginProvider,
               ),
             ),
-          ),
-        ],
+            SettingList(
+              label: 'メールアドレス',
+              value: widget.loginProvider.user?.email ?? '',
+              onTap: () => showDialog(
+                context: context,
+                builder: (context) => ModEmailDialog(
+                  loginProvider: widget.loginProvider,
+                ),
+              ),
+            ),
+            SettingList(
+              label: 'パスワード',
+              value: '********',
+              onTap: () => showDialog(
+                context: context,
+                builder: (context) => ModPasswordDialog(
+                  loginProvider: widget.loginProvider,
+                ),
+              ),
+            ),
+            SettingList(
+              label: 'このアプリの使い方',
+              value: '',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.rightToLeft,
+                    child: const HowToScreen(),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 24),
+            LinkText(
+              label: 'この端末からログアウトする',
+              color: kRedColor,
+              onTap: () => showDialog(
+                context: context,
+                builder: (context) => LogoutDialog(
+                  loginProvider: widget.loginProvider,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: CustomFooter(
         loginProvider: widget.loginProvider,

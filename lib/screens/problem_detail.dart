@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
@@ -10,8 +12,10 @@ import 'package:miel_work_app/screens/problem_mod.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
+import 'package:miel_work_app/widgets/file_link.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
+import 'package:miel_work_app/widgets/image_detail_dialog.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -93,82 +97,121 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
         ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                '報告日時: ${dateText('yyyy/MM/dd HH:mm', widget.problem.createdAt)}',
-                style: const TextStyle(color: kDisabledColor),
-              ),
-              const SizedBox(height: 4),
-              FormLabel(
-                '対応項目',
-                child: Chip(
-                  label: Text(widget.problem.type),
-                  backgroundColor: widget.problem.typeColor(),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  '報告日時: ${dateText('yyyy/MM/dd HH:mm', widget.problem.createdAt)}',
+                  style: const TextStyle(color: kDisabledColor),
                 ),
-              ),
-              const SizedBox(height: 8),
-              FormLabel(
-                'タイトル',
-                child: FormValue(widget.problem.title),
-              ),
-              const SizedBox(height: 8),
-              FormLabel(
-                '対応者',
-                child: FormValue(widget.problem.picName),
-              ),
-              const SizedBox(height: 8),
-              FormLabel(
-                '相手の名前',
-                child: FormValue(widget.problem.targetName),
-              ),
-              const SizedBox(height: 8),
-              FormLabel(
-                '相手の年齢',
-                child: FormValue(widget.problem.targetAge),
-              ),
-              const SizedBox(height: 8),
-              FormLabel(
-                '相手の連絡先',
-                child: FormValue(widget.problem.targetTel),
-              ),
-              const SizedBox(height: 8),
-              FormLabel(
-                '相手の住所',
-                child: FormValue(widget.problem.targetAddress),
-              ),
-              const SizedBox(height: 8),
-              FormLabel(
-                '詳細',
-                child: FormValue(widget.problem.details),
-              ),
-              const SizedBox(height: 8),
-              FormLabel(
-                '添付写真',
-                child: widget.problem.image != ''
-                    ? Image.network(
-                        widget.problem.image,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
+                const SizedBox(height: 4),
+                FormLabel(
+                  '対応項目',
+                  child: Chip(
+                    label: Text(widget.problem.type),
+                    backgroundColor: widget.problem.typeColor(),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  'タイトル',
+                  child: FormValue(widget.problem.title),
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  '対応者',
+                  child: FormValue(widget.problem.picName),
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  '相手の名前',
+                  child: FormValue(widget.problem.targetName),
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  '相手の年齢',
+                  child: FormValue(widget.problem.targetAge),
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  '相手の連絡先',
+                  child: FormValue(widget.problem.targetTel),
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  '相手の住所',
+                  child: FormValue(widget.problem.targetAddress),
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  '詳細',
+                  child: FormValue(widget.problem.details),
+                ),
+                const SizedBox(height: 8),
+                widget.problem.image != ''
+                    ? FormLabel(
+                        '添付写真',
+                        child: FileLink(
+                          file: widget.problem.image,
+                          onTap: () => showDialog(
+                            context: context,
+                            builder: (context) => ImageDetailDialog(
+                              File(widget.problem.image).path,
+                              onPressedClose: () => Navigator.pop(context),
+                            ),
+                          ),
+                        ),
                       )
                     : Container(),
-              ),
-              const SizedBox(height: 8),
-              FormLabel(
-                '対応状態',
-                child: FormValue(widget.problem.stateText()),
-              ),
-              const SizedBox(height: 8),
-              FormLabel(
-                '同じような注意(対応)をした回数',
-                child: FormValue(widget.problem.count.toString()),
-              ),
-              const SizedBox(height: 100),
-            ],
+                const SizedBox(height: 4),
+                widget.problem.image2 != ''
+                    ? FormLabel(
+                        '添付写真2',
+                        child: FileLink(
+                          file: widget.problem.image2,
+                          onTap: () => showDialog(
+                            context: context,
+                            builder: (context) => ImageDetailDialog(
+                              File(widget.problem.image2).path,
+                              onPressedClose: () => Navigator.pop(context),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
+                const SizedBox(height: 4),
+                widget.problem.image3 != ''
+                    ? FormLabel(
+                        '添付写真3',
+                        child: FileLink(
+                          file: widget.problem.image3,
+                          onTap: () => showDialog(
+                            context: context,
+                            builder: (context) => ImageDetailDialog(
+                              File(widget.problem.image3).path,
+                              onPressedClose: () => Navigator.pop(context),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
+                const SizedBox(height: 8),
+                FormLabel(
+                  '対応状態',
+                  child: FormValue(widget.problem.stateText()),
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  '同じような注意(対応)をした回数',
+                  child: FormValue(widget.problem.count.toString()),
+                ),
+                const SizedBox(height: 100),
+              ],
+            ),
           ),
         ),
       ),

@@ -66,33 +66,35 @@ class _WorkScreenState extends State<WorkScreen> {
         ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: Column(
-        children: [
-          MonthPickerButton(
-            value: searchMonth,
-            onTap: () async {
-              DateTime? selected = await showMonthPicker(
-                context: context,
-                initialDate: searchMonth,
-                locale: const Locale('ja'),
-              );
-              if (selected == null) return;
-              _changeMonth(selected);
-            },
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: days.length,
-              itemBuilder: (context, index) {
-                DateTime day = days[index];
-                return DayList(
-                  day,
-                  child: Container(),
+      body: SafeArea(
+        child: Column(
+          children: [
+            MonthPickerButton(
+              value: searchMonth,
+              onTap: () async {
+                DateTime? selected = await showMonthPicker(
+                  context: context,
+                  initialDate: searchMonth,
+                  locale: const Locale('ja'),
                 );
+                if (selected == null) return;
+                _changeMonth(selected);
               },
             ),
-          ),
-        ],
+            Expanded(
+              child: ListView.builder(
+                itemCount: days.length,
+                itemBuilder: (context, index) {
+                  DateTime day = days[index];
+                  return DayList(
+                    day,
+                    child: Container(),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},

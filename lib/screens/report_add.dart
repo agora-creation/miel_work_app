@@ -268,8 +268,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
         ),
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8),

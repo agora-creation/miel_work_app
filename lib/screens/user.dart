@@ -72,39 +72,41 @@ class _UserScreenState extends State<UserScreen> {
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: users.isNotEmpty
-          ? ListView.builder(
-              itemCount: users.length,
-              itemBuilder: (context, index) {
-                UserModel user = users[index];
-                OrganizationGroupModel? userInGroup;
-                if (widget.homeProvider.groups.isNotEmpty) {
-                  for (OrganizationGroupModel group
-                      in widget.homeProvider.groups) {
-                    if (group.userIds.contains(user.id)) {
-                      userInGroup = group;
+          ? SafeArea(
+              child: ListView.builder(
+                itemCount: users.length,
+                itemBuilder: (context, index) {
+                  UserModel user = users[index];
+                  OrganizationGroupModel? userInGroup;
+                  if (widget.homeProvider.groups.isNotEmpty) {
+                    for (OrganizationGroupModel group
+                        in widget.homeProvider.groups) {
+                      if (group.userIds.contains(user.id)) {
+                        userInGroup = group;
+                      }
                     }
                   }
-                }
-                return UserList(
-                  user: user,
-                  userInGroup: userInGroup,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                        type: PageTransitionType.rightToLeft,
-                        child: UserModScreen(
-                          loginProvider: widget.loginProvider,
-                          homeProvider: widget.homeProvider,
-                          user: user,
-                          userInGroup: userInGroup,
-                          getUsers: _getUsers,
+                  return UserList(
+                    user: user,
+                    userInGroup: userInGroup,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          child: UserModScreen(
+                            loginProvider: widget.loginProvider,
+                            homeProvider: widget.homeProvider,
+                            user: user,
+                            userInGroup: userInGroup,
+                            getUsers: _getUsers,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                );
-              },
+                      );
+                    },
+                  );
+                },
+              ),
             )
           : const Center(child: Text('スタッフはいません')),
       floatingActionButton: FloatingActionButton.extended(

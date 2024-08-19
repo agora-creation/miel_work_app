@@ -16,10 +16,10 @@ import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
+import 'package:miel_work_app/widgets/file_link.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:miel_work_app/widgets/image_detail_dialog.dart';
-import 'package:miel_work_app/widgets/link_text.dart';
 import 'package:miel_work_app/widgets/pdf_detail_dialog.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -130,55 +130,47 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      '申請日時: ${dateText('yyyy/MM/dd HH:mm', widget.apply.createdAt)}',
-                      style: const TextStyle(
-                        color: kGreyColor,
-                        fontSize: 14,
-                      ),
-                    ),
-                    Text(
-                      '申請番号: ${widget.apply.number}',
-                      style: const TextStyle(
-                        color: kGreyColor,
-                        fontSize: 14,
-                      ),
-                    ),
-                    Text(
-                      '申請者: ${widget.apply.createdUserName}',
-                      style: const TextStyle(
-                        color: kGreyColor,
-                        fontSize: 14,
-                      ),
-                    ),
-                    widget.apply.approval == 1
-                        ? Text(
-                            '承認日時: ${dateText('yyyy/MM/dd HH:mm', widget.apply.approvedAt)}',
-                            style: const TextStyle(
-                              color: kRedColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        : Container(),
-                    widget.apply.approval == 1
-                        ? Text(
-                            '承認番号: ${widget.apply.approvalNumber}',
-                            style: const TextStyle(
-                              color: kRedColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        : Container(),
-                  ],
+              Text(
+                '申請日時: ${dateText('yyyy/MM/dd HH:mm', widget.apply.createdAt)}',
+                style: const TextStyle(
+                  color: kGreyColor,
+                  fontSize: 14,
                 ),
               ),
+              Text(
+                '申請番号: ${widget.apply.number}',
+                style: const TextStyle(
+                  color: kGreyColor,
+                  fontSize: 14,
+                ),
+              ),
+              Text(
+                '申請者: ${widget.apply.createdUserName}',
+                style: const TextStyle(
+                  color: kGreyColor,
+                  fontSize: 14,
+                ),
+              ),
+              widget.apply.approval == 1
+                  ? Text(
+                      '承認日時: ${dateText('yyyy/MM/dd HH:mm', widget.apply.approvedAt)}',
+                      style: const TextStyle(
+                        color: kRedColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  : Container(),
+              widget.apply.approval == 1
+                  ? Text(
+                      '承認番号: ${widget.apply.approvalNumber}',
+                      style: const TextStyle(
+                        color: kRedColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  : Container(),
               const SizedBox(height: 4),
               FormLabel(
                 '承認者一覧',
@@ -236,12 +228,12 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                       ),
                     )
                   : Container(),
-              FormLabel(
-                '添付ファイル',
-                child: widget.apply.file != ''
-                    ? LinkText(
-                        label: '確認する',
-                        color: kBlueColor,
+              widget.apply.file != ''
+                  ? FormLabel(
+                      '添付ファイル',
+                      child: FileLink(
+                        file: widget.apply.file,
+                        fileExt: widget.apply.fileExt,
                         onTap: () {
                           String ext = widget.apply.fileExt;
                           if (imageExtensions.contains(ext)) {
@@ -263,16 +255,16 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                             );
                           }
                         },
-                      )
-                    : Container(),
-              ),
+                      ),
+                    )
+                  : Container(),
               const SizedBox(height: 8),
-              FormLabel(
-                '添付ファイル2',
-                child: widget.apply.file2 != ''
-                    ? LinkText(
-                        label: '確認する',
-                        color: kBlueColor,
+              widget.apply.file2 != ''
+                  ? FormLabel(
+                      '添付ファイル2',
+                      child: FileLink(
+                        file: widget.apply.file2,
+                        fileExt: widget.apply.file2Ext,
                         onTap: () {
                           String ext = widget.apply.file2Ext;
                           if (imageExtensions.contains(ext)) {
@@ -294,16 +286,16 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                             );
                           }
                         },
-                      )
-                    : Container(),
-              ),
+                      ),
+                    )
+                  : Container(),
               const SizedBox(height: 8),
-              FormLabel(
-                '添付ファイル3',
-                child: widget.apply.file3 != ''
-                    ? LinkText(
-                        label: '確認する',
-                        color: kBlueColor,
+              widget.apply.file3 != ''
+                  ? FormLabel(
+                      '添付ファイル3',
+                      child: FileLink(
+                        file: widget.apply.file3,
+                        fileExt: widget.apply.file3Ext,
                         onTap: () {
                           String ext = widget.apply.file3Ext;
                           if (imageExtensions.contains(ext)) {
@@ -325,16 +317,16 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                             );
                           }
                         },
-                      )
-                    : Container(),
-              ),
+                      ),
+                    )
+                  : Container(),
               const SizedBox(height: 8),
-              FormLabel(
-                '添付ファイル4',
-                child: widget.apply.file4 != ''
-                    ? LinkText(
-                        label: '確認する',
-                        color: kBlueColor,
+              widget.apply.file4 != ''
+                  ? FormLabel(
+                      '添付ファイル4',
+                      child: FileLink(
+                        file: widget.apply.file4,
+                        fileExt: widget.apply.file4Ext,
                         onTap: () {
                           String ext = widget.apply.file4Ext;
                           if (imageExtensions.contains(ext)) {
@@ -356,16 +348,16 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                             );
                           }
                         },
-                      )
-                    : Container(),
-              ),
+                      ),
+                    )
+                  : Container(),
               const SizedBox(height: 8),
-              FormLabel(
-                '添付ファイル5',
-                child: widget.apply.file5 != ''
-                    ? LinkText(
-                        label: '確認する',
-                        color: kBlueColor,
+              widget.apply.file5 != ''
+                  ? FormLabel(
+                      '添付ファイル5',
+                      child: FileLink(
+                        file: widget.apply.file5,
+                        fileExt: widget.apply.file5Ext,
                         onTap: () {
                           String ext = widget.apply.file5Ext;
                           if (imageExtensions.contains(ext)) {
@@ -387,9 +379,9 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                             );
                           }
                         },
-                      )
-                    : Container(),
-              ),
+                      ),
+                    )
+                  : Container(),
               const SizedBox(height: 8),
               FormLabel(
                 'メモ',

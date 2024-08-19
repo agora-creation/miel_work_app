@@ -119,60 +119,62 @@ class _PlanDetailScreenState extends State<PlanDetailScreen> {
         ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              FormLabel(
-                '公開グループ',
-                child: FormValue('${selectedGroup?.name}'),
-              ),
-              const SizedBox(height: 16),
-              FormLabel(
-                'カテゴリ',
-                child: FormValue('${selectedCategory?.name}'),
-              ),
-              const SizedBox(height: 16),
-              FormLabel(
-                '件名',
-                child: FormValue(widget.plan.subject),
-              ),
-              const SizedBox(height: 16),
-              FormLabel(
-                '開始日時～終了日時',
-                child: FormValue(
-                  '${dateText('yyyy/MM/dd HH:mm', widget.plan.startedAt)}～${dateText('yyyy/MM/dd HH:mm', widget.plan.endedAt)}',
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FormLabel(
+                  '公開グループ',
+                  child: FormValue(selectedGroup?.name ?? 'グループの指定なし'),
                 ),
-              ),
-              const SizedBox(height: 16),
-              FormLabel(
-                'メモ',
-                child: FormValue(widget.plan.memo),
-              ),
-              const SizedBox(height: 16),
-              FormLabel(
-                '事前アラート通知',
-                child: FormValue('${widget.plan.alertMinute}'),
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                '※『公開グループ』が未選択の場合、全てのスタッフが対象になります。',
-                style: TextStyle(
-                  color: kRedColor,
-                  fontSize: 14,
+                const SizedBox(height: 16),
+                FormLabel(
+                  'カテゴリ',
+                  child: FormValue('${selectedCategory?.name}'),
                 ),
-              ),
-              const Text(
-                '※『公開グループ』を指定した場合、そのグループのスタッフのみ閲覧が可能になります。',
-                style: TextStyle(
-                  color: kRedColor,
-                  fontSize: 14,
+                const SizedBox(height: 16),
+                FormLabel(
+                  '件名',
+                  child: FormValue(widget.plan.subject),
                 ),
-              ),
-              const SizedBox(height: 100),
-            ],
+                const SizedBox(height: 16),
+                FormLabel(
+                  '開始日時～終了日時',
+                  child: FormValue(
+                    '${dateText('yyyy/MM/dd HH:mm', widget.plan.startedAt)}～${dateText('yyyy/MM/dd HH:mm', widget.plan.endedAt)}',
+                  ),
+                ),
+                const SizedBox(height: 16),
+                FormLabel(
+                  'メモ',
+                  child: FormValue(widget.plan.memo),
+                ),
+                const SizedBox(height: 16),
+                FormLabel(
+                  '事前アラート通知',
+                  child: FormValue('${widget.plan.alertMinute}'),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  '※『公開グループ』が未選択の場合、全てのスタッフが対象になります。',
+                  style: TextStyle(
+                    color: kRedColor,
+                    fontSize: 14,
+                  ),
+                ),
+                const Text(
+                  '※『公開グループ』を指定した場合、そのグループのスタッフのみ閲覧が可能になります。',
+                  style: TextStyle(
+                    color: kRedColor,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 100),
+              ],
+            ),
           ),
         ),
       ),

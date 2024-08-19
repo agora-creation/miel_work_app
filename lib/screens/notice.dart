@@ -98,47 +98,49 @@ class _NoticeScreenState extends State<NoticeScreen> {
         ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: noticeService.streamList(
-          organizationId: widget.loginProvider.organization?.id,
-          searchStart: searchStart,
-          searchEnd: searchEnd,
-        ),
-        builder: (context, snapshot) {
-          List<NoticeModel> notices = [];
-          if (snapshot.hasData) {
-            notices = noticeService.generateList(
-              data: snapshot.data,
-              currentGroup: widget.homeProvider.currentGroup,
-            );
-          }
-          if (notices.isEmpty) {
-            return const Center(child: Text('お知らせはありません'));
-          }
-          return ListView.builder(
-            itemCount: notices.length,
-            itemBuilder: (context, index) {
-              NoticeModel notice = notices[index];
-              return NoticeList(
-                notice: notice,
-                user: widget.loginProvider.user,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      type: PageTransitionType.rightToLeft,
-                      child: NoticeDetailScreen(
-                        loginProvider: widget.loginProvider,
-                        homeProvider: widget.homeProvider,
-                        notice: notice,
-                      ),
-                    ),
-                  );
-                },
+      body: SafeArea(
+        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: noticeService.streamList(
+            organizationId: widget.loginProvider.organization?.id,
+            searchStart: searchStart,
+            searchEnd: searchEnd,
+          ),
+          builder: (context, snapshot) {
+            List<NoticeModel> notices = [];
+            if (snapshot.hasData) {
+              notices = noticeService.generateList(
+                data: snapshot.data,
+                currentGroup: widget.homeProvider.currentGroup,
               );
-            },
-          );
-        },
+            }
+            if (notices.isEmpty) {
+              return const Center(child: Text('お知らせはありません'));
+            }
+            return ListView.builder(
+              itemCount: notices.length,
+              itemBuilder: (context, index) {
+                NoticeModel notice = notices[index];
+                return NoticeList(
+                  notice: notice,
+                  user: widget.loginProvider.user,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        type: PageTransitionType.rightToLeft,
+                        child: NoticeDetailScreen(
+                          loginProvider: widget.loginProvider,
+                          homeProvider: widget.homeProvider,
+                          notice: notice,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {

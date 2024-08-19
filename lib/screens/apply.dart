@@ -114,135 +114,137 @@ class _ApplyScreenState extends State<ApplyScreen> {
           ),
           shape: Border(bottom: BorderSide(color: kBorderColor)),
         ),
-        body: TabBarView(
-          children: [
-            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: applyService.streamList(
-                organizationId: widget.loginProvider.organization?.id,
-                searchStart: searchStart,
-                searchEnd: searchEnd,
-                approval: [0],
-              ),
-              builder: (context, snapshot) {
-                List<ApplyModel> applies = [];
-                if (snapshot.hasData) {
-                  applies = applyService.generateList(
-                    data: snapshot.data,
-                    currentGroup: widget.homeProvider.currentGroup,
-                  );
-                }
-                if (applies.isEmpty) {
-                  return const Center(child: Text('申請はありません'));
-                }
-                return ListView.builder(
-                  itemCount: applies.length,
-                  itemBuilder: (context, index) {
-                    ApplyModel apply = applies[index];
-                    return ApplyList(
-                      apply: apply,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: ApplyDetailScreen(
-                              loginProvider: widget.loginProvider,
-                              homeProvider: widget.homeProvider,
-                              apply: apply,
-                            ),
-                          ),
-                        );
-                      },
+        body: SafeArea(
+          child: TabBarView(
+            children: [
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: applyService.streamList(
+                  organizationId: widget.loginProvider.organization?.id,
+                  searchStart: searchStart,
+                  searchEnd: searchEnd,
+                  approval: [0],
+                ),
+                builder: (context, snapshot) {
+                  List<ApplyModel> applies = [];
+                  if (snapshot.hasData) {
+                    applies = applyService.generateList(
+                      data: snapshot.data,
+                      currentGroup: widget.homeProvider.currentGroup,
                     );
-                  },
-                );
-              },
-            ),
-            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: applyService.streamList(
-                organizationId: widget.loginProvider.organization?.id,
-                searchStart: searchStart,
-                searchEnd: searchEnd,
-                approval: [1],
-              ),
-              builder: (context, snapshot) {
-                List<ApplyModel> applies = [];
-                if (snapshot.hasData) {
-                  applies = applyService.generateList(
-                    data: snapshot.data,
-                    currentGroup: widget.homeProvider.currentGroup,
-                  );
-                }
-                if (applies.isEmpty) {
-                  return const Center(child: Text('申請はありません'));
-                }
-                return ListView.builder(
-                  itemCount: applies.length,
-                  itemBuilder: (context, index) {
-                    ApplyModel apply = applies[index];
-                    return ApplyList(
-                      apply: apply,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: ApplyDetailScreen(
-                              loginProvider: widget.loginProvider,
-                              homeProvider: widget.homeProvider,
-                              apply: apply,
+                  }
+                  if (applies.isEmpty) {
+                    return const Center(child: Text('申請はありません'));
+                  }
+                  return ListView.builder(
+                    itemCount: applies.length,
+                    itemBuilder: (context, index) {
+                      ApplyModel apply = applies[index];
+                      return ApplyList(
+                        apply: apply,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: ApplyDetailScreen(
+                                loginProvider: widget.loginProvider,
+                                homeProvider: widget.homeProvider,
+                                apply: apply,
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                );
-              },
-            ),
-            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: applyService.streamList(
-                organizationId: widget.loginProvider.organization?.id,
-                searchStart: searchStart,
-                searchEnd: searchEnd,
-                approval: [9],
-              ),
-              builder: (context, snapshot) {
-                List<ApplyModel> applies = [];
-                if (snapshot.hasData) {
-                  applies = applyService.generateList(
-                    data: snapshot.data,
-                    currentGroup: widget.homeProvider.currentGroup,
+                          );
+                        },
+                      );
+                    },
                   );
-                }
-                if (applies.isEmpty) {
-                  return const Center(child: Text('申請はありません'));
-                }
-                return ListView.builder(
-                  itemCount: applies.length,
-                  itemBuilder: (context, index) {
-                    ApplyModel apply = applies[index];
-                    return ApplyList(
-                      apply: apply,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: ApplyDetailScreen(
-                              loginProvider: widget.loginProvider,
-                              homeProvider: widget.homeProvider,
-                              apply: apply,
-                            ),
-                          ),
-                        );
-                      },
+                },
+              ),
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: applyService.streamList(
+                  organizationId: widget.loginProvider.organization?.id,
+                  searchStart: searchStart,
+                  searchEnd: searchEnd,
+                  approval: [1],
+                ),
+                builder: (context, snapshot) {
+                  List<ApplyModel> applies = [];
+                  if (snapshot.hasData) {
+                    applies = applyService.generateList(
+                      data: snapshot.data,
+                      currentGroup: widget.homeProvider.currentGroup,
                     );
-                  },
-                );
-              },
-            ),
-          ],
+                  }
+                  if (applies.isEmpty) {
+                    return const Center(child: Text('申請はありません'));
+                  }
+                  return ListView.builder(
+                    itemCount: applies.length,
+                    itemBuilder: (context, index) {
+                      ApplyModel apply = applies[index];
+                      return ApplyList(
+                        apply: apply,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: ApplyDetailScreen(
+                                loginProvider: widget.loginProvider,
+                                homeProvider: widget.homeProvider,
+                                apply: apply,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: applyService.streamList(
+                  organizationId: widget.loginProvider.organization?.id,
+                  searchStart: searchStart,
+                  searchEnd: searchEnd,
+                  approval: [9],
+                ),
+                builder: (context, snapshot) {
+                  List<ApplyModel> applies = [];
+                  if (snapshot.hasData) {
+                    applies = applyService.generateList(
+                      data: snapshot.data,
+                      currentGroup: widget.homeProvider.currentGroup,
+                    );
+                  }
+                  if (applies.isEmpty) {
+                    return const Center(child: Text('申請はありません'));
+                  }
+                  return ListView.builder(
+                    itemCount: applies.length,
+                    itemBuilder: (context, index) {
+                      ApplyModel apply = applies[index];
+                      return ApplyList(
+                        apply: apply,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: ApplyDetailScreen(
+                                loginProvider: widget.loginProvider,
+                                homeProvider: widget.homeProvider,
+                                apply: apply,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {

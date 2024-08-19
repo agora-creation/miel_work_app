@@ -15,148 +15,144 @@ class LoanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        color: kWhiteColor,
-        elevation: 8,
-        child: Container(
-          margin: const EdgeInsets.all(8),
-          padding: const EdgeInsets.all(8),
-          child: Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    child: loan.itemImage != ''
-                        ? Image.network(
-                            loan.itemImage,
-                            fit: BoxFit.cover,
-                          )
-                        : Container(
-                            color: kGreyColor.withOpacity(0.3),
-                            width: double.infinity,
-                            height: 150,
-                            child: const Center(
-                              child: Text('写真なし'),
-                            ),
-                          ),
-                  ),
-                  Table(
-                    border: TableBorder.all(color: kBorderColor),
-                    columnWidths: const {
-                      0: IntrinsicColumnWidth(),
-                      1: FlexColumnWidth(2),
-                    },
-                    children: [
-                      TableRow(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(4),
-                            child: Text('品名'),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(4),
-                            child: Text(
-                              loan.itemName,
-                              softWrap: false,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                          ),
-                        ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Card(
+          color: kWhiteColor,
+          elevation: 8,
+          child: Container(
+            margin: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: [
+                loan.itemImage != ''
+                    ? Image.network(
+                        loan.itemImage,
+                        fit: BoxFit.cover,
+                      )
+                    : Container(
+                        color: kGreyColor.withOpacity(0.3),
+                        width: double.infinity,
+                        height: 150,
+                        child: const Center(
+                          child: Text('写真なし'),
+                        ),
                       ),
-                      TableRow(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(4),
-                            child: Text('貸出日'),
+                Table(
+                  border: TableBorder.all(color: kBorderColor),
+                  columnWidths: const {
+                    0: IntrinsicColumnWidth(),
+                    1: FlexColumnWidth(2),
+                  },
+                  children: [
+                    TableRow(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(4),
+                          child: Text('品名'),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Text(
+                            loan.itemName,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(4),
-                            child: Text(
-                              dateText('yyyy/MM/dd', loan.loanAt),
-                              softWrap: false,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(4),
+                          child: Text('貸出日'),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Text(
+                            dateText('yyyy/MM/dd', loan.loanAt),
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
-                        ],
-                      ),
-                      TableRow(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(4),
-                            child: Text('貸出先'),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(4),
+                          child: Text('貸出先'),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Text(
+                            loan.loanUser,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(4),
-                            child: Text(
-                              loan.loanUser,
-                              softWrap: false,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(4),
+                          child: Text('貸出先(会社)'),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Text(
+                            loan.loanCompany,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
-                        ],
-                      ),
-                      TableRow(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(4),
-                            child: Text('貸出先(会社)'),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(4),
+                          child: Text('対応スタッフ'),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Text(
+                            loan.loanStaff,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(4),
-                            child: Text(
-                              loan.loanCompany,
-                              softWrap: false,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(4),
+                          child: Text('返却予定日'),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Text(
+                            dateText('yyyy/MM/dd', loan.returnPlanAt),
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
-                        ],
-                      ),
-                      TableRow(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(4),
-                            child: Text('対応スタッフ'),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(4),
-                            child: Text(
-                              loan.loanStaff,
-                              softWrap: false,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                          ),
-                        ],
-                      ),
-                      TableRow(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(4),
-                            child: Text('返却予定日'),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(4),
-                            child: Text(
-                              dateText('yyyy/MM/dd', loan.returnPlanAt),
-                              softWrap: false,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

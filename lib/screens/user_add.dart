@@ -80,84 +80,86 @@ class _UserAddScreenState extends State<UserAddScreen> {
       ),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                FormLabel(
-                  'スタッフ名',
-                  child: CustomTextField(
-                    controller: nameController,
-                    textInputType: TextInputType.name,
-                    maxLines: 1,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  'メールアドレス',
-                  child: CustomTextField(
-                    controller: emailController,
-                    textInputType: TextInputType.emailAddress,
-                    maxLines: 1,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  'パスワード',
-                  child: CustomTextField(
-                    controller: passwordController,
-                    textInputType: TextInputType.visiblePassword,
-                    maxLines: 1,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  '所属グループ',
-                  child: DropdownButton<OrganizationGroupModel?>(
-                    hint: const Text(
-                      '未所属',
-                      style: TextStyle(color: kGreyColor),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  FormLabel(
+                    'スタッフ名',
+                    child: CustomTextField(
+                      controller: nameController,
+                      textInputType: TextInputType.name,
+                      maxLines: 1,
                     ),
-                    underline: Container(),
-                    isExpanded: true,
-                    value: selectedGroup,
-                    items: groupItems,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedGroup = value;
-                      });
-                    },
                   ),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  '管理者権限',
-                  child: CheckboxListTile(
-                    value: admin,
-                    onChanged: (value) {
-                      setState(() {
-                        admin = value ?? false;
-                      });
-                    },
-                    title: const Text('管理者にする'),
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    'メールアドレス',
+                    child: CustomTextField(
+                      controller: emailController,
+                      textInputType: TextInputType.emailAddress,
+                      maxLines: 1,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  '社長権限',
-                  child: CheckboxListTile(
-                    value: president,
-                    onChanged: (value) {
-                      setState(() {
-                        president = value ?? false;
-                      });
-                    },
-                    title: const Text('社長にする'),
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    'パスワード',
+                    child: CustomTextField(
+                      controller: passwordController,
+                      textInputType: TextInputType.visiblePassword,
+                      maxLines: 1,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 100),
-              ],
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    '所属グループ',
+                    child: DropdownButton<OrganizationGroupModel?>(
+                      hint: const Text(
+                        '未所属',
+                        style: TextStyle(color: kGreyColor),
+                      ),
+                      underline: Container(),
+                      isExpanded: true,
+                      value: selectedGroup,
+                      items: groupItems,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedGroup = value;
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    '管理者権限',
+                    child: CheckboxListTile(
+                      value: admin,
+                      onChanged: (value) {
+                        setState(() {
+                          admin = value ?? false;
+                        });
+                      },
+                      title: const Text('管理者にする'),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    '社長権限',
+                    child: CheckboxListTile(
+                      value: president,
+                      onChanged: (value) {
+                        setState(() {
+                          president = value ?? false;
+                        });
+                      },
+                      title: const Text('社長にする'),
+                    ),
+                  ),
+                  const SizedBox(height: 100),
+                ],
+              ),
             ),
           ),
         ),

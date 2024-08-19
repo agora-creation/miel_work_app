@@ -75,250 +75,262 @@ class _ApplyModScreenState extends State<ApplyModScreen> {
       ),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                FormLabel(
-                  '申請番号',
-                  child: CustomTextField(
-                    controller: numberController,
-                    textInputType: TextInputType.number,
-                    maxLines: 1,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FormLabel(
+                    '申請番号',
+                    child: CustomTextField(
+                      controller: numberController,
+                      textInputType: TextInputType.number,
+                      maxLines: 1,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  '申請種別',
-                  child: Column(
-                    children: kApplyTypes.map((e) {
-                      return RadioListTile(
-                        title: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Chip(
-                            label: Text('$e申請'),
-                            backgroundColor: generateApplyColor(e),
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    '申請種別',
+                    child: Column(
+                      children: kApplyTypes.map((e) {
+                        return RadioListTile(
+                          title: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Chip(
+                              label: Text('$e申請'),
+                              backgroundColor: generateApplyColor(e),
+                            ),
                           ),
-                        ),
-                        value: e,
-                        groupValue: type,
-                        onChanged: (value) {
-                          if (value == null) return;
-                          setState(() {
-                            type = value;
-                          });
-                        },
-                      );
-                    }).toList(),
+                          value: e,
+                          groupValue: type,
+                          onChanged: (value) {
+                            if (value == null) return;
+                            setState(() {
+                              type = value;
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  '件名',
-                  child: CustomTextField(
-                    controller: titleController,
-                    textInputType: TextInputType.text,
-                    maxLines: 1,
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    '件名',
+                    child: CustomTextField(
+                      controller: titleController,
+                      textInputType: TextInputType.text,
+                      maxLines: 1,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                type == '稟議' || type == '支払伺い'
-                    ? Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: FormLabel(
-                          '金額',
-                          child: CustomTextField(
-                            controller: priceController,
-                            textInputType: TextInputType.number,
-                            inputFormatters: [
-                              CurrencyTextInputFormatter.currency(
-                                locale: 'ja',
-                                decimalDigits: 0,
-                                symbol: '',
-                              ),
-                            ],
-                            maxLines: 1,
-                            prefix: const Text('¥ '),
+                  const SizedBox(height: 16),
+                  type == '稟議' || type == '支払伺い'
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: FormLabel(
+                            '金額',
+                            child: CustomTextField(
+                              controller: priceController,
+                              textInputType: TextInputType.number,
+                              inputFormatters: [
+                                CurrencyTextInputFormatter.currency(
+                                  locale: 'ja',
+                                  decimalDigits: 0,
+                                  symbol: '',
+                                ),
+                              ],
+                              maxLines: 1,
+                              prefix: const Text('¥ '),
+                            ),
                           ),
-                        ),
-                      )
-                    : Container(),
-                FormLabel(
-                  '内容',
-                  child: CustomTextField(
-                    controller: contentController,
-                    textInputType: TextInputType.multiline,
-                    maxLines: 15,
+                        )
+                      : Container(),
+                  FormLabel(
+                    '内容',
+                    child: CustomTextField(
+                      controller: contentController,
+                      textInputType: TextInputType.multiline,
+                      maxLines: 15,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  '添付ファイル',
-                  child: widget.apply.file != ''
-                      ? LinkText(
-                          label: '確認する',
-                          color: kBlueColor,
-                          onTap: () {
-                            String ext = widget.apply.fileExt;
-                            if (imageExtensions.contains(ext)) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => ImageDetailDialog(
-                                  File(widget.apply.file).path,
-                                  onPressedClose: () => Navigator.pop(context),
-                                ),
-                              );
-                            }
-                            if (pdfExtensions.contains(ext)) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => PdfDetailDialog(
-                                  File(widget.apply.file).path,
-                                  onPressedClose: () => Navigator.pop(context),
-                                ),
-                              );
-                            }
-                          },
-                        )
-                      : Container(),
-                ),
-                const SizedBox(height: 8),
-                FormLabel(
-                  '添付ファイル2',
-                  child: widget.apply.file2 != ''
-                      ? LinkText(
-                          label: '確認する',
-                          color: kBlueColor,
-                          onTap: () {
-                            String ext = widget.apply.file2Ext;
-                            if (imageExtensions.contains(ext)) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => ImageDetailDialog(
-                                  File(widget.apply.file2).path,
-                                  onPressedClose: () => Navigator.pop(context),
-                                ),
-                              );
-                            }
-                            if (pdfExtensions.contains(ext)) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => PdfDetailDialog(
-                                  File(widget.apply.file2).path,
-                                  onPressedClose: () => Navigator.pop(context),
-                                ),
-                              );
-                            }
-                          },
-                        )
-                      : Container(),
-                ),
-                const SizedBox(height: 8),
-                FormLabel(
-                  '添付ファイル3',
-                  child: widget.apply.file3 != ''
-                      ? LinkText(
-                          label: '確認する',
-                          color: kBlueColor,
-                          onTap: () {
-                            String ext = widget.apply.file3Ext;
-                            if (imageExtensions.contains(ext)) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => ImageDetailDialog(
-                                  File(widget.apply.file3).path,
-                                  onPressedClose: () => Navigator.pop(context),
-                                ),
-                              );
-                            }
-                            if (pdfExtensions.contains(ext)) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => PdfDetailDialog(
-                                  File(widget.apply.file3).path,
-                                  onPressedClose: () => Navigator.pop(context),
-                                ),
-                              );
-                            }
-                          },
-                        )
-                      : Container(),
-                ),
-                const SizedBox(height: 8),
-                FormLabel(
-                  '添付ファイル4',
-                  child: widget.apply.file4 != ''
-                      ? LinkText(
-                          label: '確認する',
-                          color: kBlueColor,
-                          onTap: () {
-                            String ext = widget.apply.file4Ext;
-                            if (imageExtensions.contains(ext)) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => ImageDetailDialog(
-                                  File(widget.apply.file4).path,
-                                  onPressedClose: () => Navigator.pop(context),
-                                ),
-                              );
-                            }
-                            if (pdfExtensions.contains(ext)) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => PdfDetailDialog(
-                                  File(widget.apply.file4).path,
-                                  onPressedClose: () => Navigator.pop(context),
-                                ),
-                              );
-                            }
-                          },
-                        )
-                      : Container(),
-                ),
-                const SizedBox(height: 8),
-                FormLabel(
-                  '添付ファイル5',
-                  child: widget.apply.file5 != ''
-                      ? LinkText(
-                          label: '確認する',
-                          color: kBlueColor,
-                          onTap: () {
-                            String ext = widget.apply.file5Ext;
-                            if (imageExtensions.contains(ext)) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => ImageDetailDialog(
-                                  File(widget.apply.file5).path,
-                                  onPressedClose: () => Navigator.pop(context),
-                                ),
-                              );
-                            }
-                            if (pdfExtensions.contains(ext)) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => PdfDetailDialog(
-                                  File(widget.apply.file5).path,
-                                  onPressedClose: () => Navigator.pop(context),
-                                ),
-                              );
-                            }
-                          },
-                        )
-                      : Container(),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  'メモ',
-                  child: CustomTextField(
-                    controller: memoController,
-                    textInputType: TextInputType.multiline,
-                    maxLines: 5,
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    '添付ファイル',
+                    child: widget.apply.file != ''
+                        ? LinkText(
+                            label: '確認する',
+                            color: kBlueColor,
+                            onTap: () {
+                              String ext = widget.apply.fileExt;
+                              if (imageExtensions.contains(ext)) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => ImageDetailDialog(
+                                    File(widget.apply.file).path,
+                                    onPressedClose: () =>
+                                        Navigator.pop(context),
+                                  ),
+                                );
+                              }
+                              if (pdfExtensions.contains(ext)) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => PdfDetailDialog(
+                                    File(widget.apply.file).path,
+                                    onPressedClose: () =>
+                                        Navigator.pop(context),
+                                  ),
+                                );
+                              }
+                            },
+                          )
+                        : Container(),
                   ),
-                ),
-                const SizedBox(height: 100),
-              ],
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    '添付ファイル2',
+                    child: widget.apply.file2 != ''
+                        ? LinkText(
+                            label: '確認する',
+                            color: kBlueColor,
+                            onTap: () {
+                              String ext = widget.apply.file2Ext;
+                              if (imageExtensions.contains(ext)) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => ImageDetailDialog(
+                                    File(widget.apply.file2).path,
+                                    onPressedClose: () =>
+                                        Navigator.pop(context),
+                                  ),
+                                );
+                              }
+                              if (pdfExtensions.contains(ext)) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => PdfDetailDialog(
+                                    File(widget.apply.file2).path,
+                                    onPressedClose: () =>
+                                        Navigator.pop(context),
+                                  ),
+                                );
+                              }
+                            },
+                          )
+                        : Container(),
+                  ),
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    '添付ファイル3',
+                    child: widget.apply.file3 != ''
+                        ? LinkText(
+                            label: '確認する',
+                            color: kBlueColor,
+                            onTap: () {
+                              String ext = widget.apply.file3Ext;
+                              if (imageExtensions.contains(ext)) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => ImageDetailDialog(
+                                    File(widget.apply.file3).path,
+                                    onPressedClose: () =>
+                                        Navigator.pop(context),
+                                  ),
+                                );
+                              }
+                              if (pdfExtensions.contains(ext)) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => PdfDetailDialog(
+                                    File(widget.apply.file3).path,
+                                    onPressedClose: () =>
+                                        Navigator.pop(context),
+                                  ),
+                                );
+                              }
+                            },
+                          )
+                        : Container(),
+                  ),
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    '添付ファイル4',
+                    child: widget.apply.file4 != ''
+                        ? LinkText(
+                            label: '確認する',
+                            color: kBlueColor,
+                            onTap: () {
+                              String ext = widget.apply.file4Ext;
+                              if (imageExtensions.contains(ext)) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => ImageDetailDialog(
+                                    File(widget.apply.file4).path,
+                                    onPressedClose: () =>
+                                        Navigator.pop(context),
+                                  ),
+                                );
+                              }
+                              if (pdfExtensions.contains(ext)) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => PdfDetailDialog(
+                                    File(widget.apply.file4).path,
+                                    onPressedClose: () =>
+                                        Navigator.pop(context),
+                                  ),
+                                );
+                              }
+                            },
+                          )
+                        : Container(),
+                  ),
+                  const SizedBox(height: 8),
+                  FormLabel(
+                    '添付ファイル5',
+                    child: widget.apply.file5 != ''
+                        ? LinkText(
+                            label: '確認する',
+                            color: kBlueColor,
+                            onTap: () {
+                              String ext = widget.apply.file5Ext;
+                              if (imageExtensions.contains(ext)) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => ImageDetailDialog(
+                                    File(widget.apply.file5).path,
+                                    onPressedClose: () =>
+                                        Navigator.pop(context),
+                                  ),
+                                );
+                              }
+                              if (pdfExtensions.contains(ext)) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => PdfDetailDialog(
+                                    File(widget.apply.file5).path,
+                                    onPressedClose: () =>
+                                        Navigator.pop(context),
+                                  ),
+                                );
+                              }
+                            },
+                          )
+                        : Container(),
+                  ),
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    'メモ',
+                    child: CustomTextField(
+                      controller: memoController,
+                      textInputType: TextInputType.multiline,
+                      maxLines: 5,
+                    ),
+                  ),
+                  const SizedBox(height: 100),
+                ],
+              ),
             ),
           ),
         ),

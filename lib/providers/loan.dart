@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/services/fm.dart';
 import 'package:miel_work_app/services/loan.dart';
 import 'package:miel_work_app/services/user.dart';
+import 'package:signature/signature.dart';
 
 class LoanProvider with ChangeNotifier {
   final LoanService _loanService = LoanService();
@@ -133,6 +135,40 @@ class LoanProvider with ChangeNotifier {
       }
     } catch (e) {
       error = '貸出情報の編集に失敗しました';
+    }
+    return error;
+  }
+
+  Future<String?> updateReturn({
+    required OrganizationModel? organization,
+    required LoanModel loan,
+    required DateTime returnAt,
+    required String returnUser,
+    required SignatureController signImageController,
+    required UserModel? loginUser,
+  }) async {
+    String? error;
+    if (organization == null) return '貸出物の返却に失敗しました';
+    if (returnUser == '') return '返却スタッフは必須入力です';
+    if (loginUser == null) return '貸出物の返却に失敗しました';
+    try {
+      Uint8List? uploadFile = await signImageController.toPngBytes();
+      if (uploadFile == null) return '署名のアップロードに失敗しました';
+      String fileName = 'sign.png';
+      Reference storageRef =
+          FirebaseStorage.instance.ref().child('loan/${loan.id}/$fileName');
+      UploadTask uploadTask = storageRef.putData(uploadFile);
+      TaskSnapshot downloadUrl = await uploadTask;
+      String signImage = (await downloadUrl.ref.getDownloadURL());
+      _loanService.update({
+        'id': loan.id,
+        'status': 1,
+        'returnAt': returnAt,
+        'returnUser': returnUser,
+        'signImage': signImage,
+      });
+    } catch (e) {
+      error = '貸出物の返却に失敗しました';
     }
     return error;
   }

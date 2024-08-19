@@ -43,50 +43,52 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
         ),
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: planService.streamList(
-          organizationId: widget.loginProvider.organization?.id,
-          searchCategories: [],
-        ),
-        builder: (context, snapshot) {
-          List<PlanModel> plans = [];
-          if (snapshot.hasData) {
-            plans = planService.generateList(
-              data: snapshot.data,
-              currentGroup: widget.homeProvider.currentGroup,
-              searchStart: DateTime(
-                now.year,
-                now.month,
-                now.day,
-                0,
-                0,
-                0,
-              ),
-              searchEnd: DateTime(
-                now.year,
-                now.month,
-                now.day,
-                23,
-                59,
-                59,
-              ),
-            );
-          }
-          if (plans.isEmpty) {
-            return const Center(child: Text('今日の予定はありません'));
-          }
-          return ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: plans.length,
-            itemBuilder: (context, index) {
-              PlanModel plan = plans[index];
-              return PlanList(
-                plan: plan,
-                groups: widget.homeProvider.groups,
+      body: SafeArea(
+        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: planService.streamList(
+            organizationId: widget.loginProvider.organization?.id,
+            searchCategories: [],
+          ),
+          builder: (context, snapshot) {
+            List<PlanModel> plans = [];
+            if (snapshot.hasData) {
+              plans = planService.generateList(
+                data: snapshot.data,
+                currentGroup: widget.homeProvider.currentGroup,
+                searchStart: DateTime(
+                  now.year,
+                  now.month,
+                  now.day,
+                  0,
+                  0,
+                  0,
+                ),
+                searchEnd: DateTime(
+                  now.year,
+                  now.month,
+                  now.day,
+                  23,
+                  59,
+                  59,
+                ),
               );
-            },
-          );
-        },
+            }
+            if (plans.isEmpty) {
+              return const Center(child: Text('今日の予定はありません'));
+            }
+            return ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: plans.length,
+              itemBuilder: (context, index) {
+                PlanModel plan = plans[index];
+                return PlanList(
+                  plan: plan,
+                  groups: widget.homeProvider.groups,
+                );
+              },
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Navigator.of(context, rootNavigator: true).pop(),

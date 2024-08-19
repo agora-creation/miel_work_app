@@ -58,34 +58,36 @@ class _CategoryScreenState extends State<CategoryScreen> {
         ),
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: categoryService.streamList(
-          organizationId: widget.organization?.id,
-        ),
-        builder: (context, snapshot) {
-          List<CategoryModel> categories = [];
-          if (snapshot.hasData) {
-            categories = categoryService.generateList(
-              data: snapshot.data,
-            );
-          }
-          if (categories.isEmpty) {
-            return const Center(child: Text('カテゴリはありません'));
-          }
-          return ListView.builder(
-            itemCount: categories.length,
-            itemBuilder: (context, index) {
-              CategoryModel category = categories[index];
-              return CategoryList(
-                category: category,
-                onTap: () => showDialog(
-                  context: context,
-                  builder: (context) => DelCategoryDialog(category: category),
-                ),
+      body: SafeArea(
+        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: categoryService.streamList(
+            organizationId: widget.organization?.id,
+          ),
+          builder: (context, snapshot) {
+            List<CategoryModel> categories = [];
+            if (snapshot.hasData) {
+              categories = categoryService.generateList(
+                data: snapshot.data,
               );
-            },
-          );
-        },
+            }
+            if (categories.isEmpty) {
+              return const Center(child: Text('カテゴリはありません'));
+            }
+            return ListView.builder(
+              itemCount: categories.length,
+              itemBuilder: (context, index) {
+                CategoryModel category = categories[index];
+                return CategoryList(
+                  category: category,
+                  onTap: () => showDialog(
+                    context: context,
+                    builder: (context) => DelCategoryDialog(category: category),
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => showDialog(

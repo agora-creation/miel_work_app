@@ -96,66 +96,68 @@ class _ManualModScreenState extends State<NoticeModScreen> {
       ),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                FormLabel(
-                  'タイトル',
-                  child: CustomTextField(
-                    controller: titleController,
-                    textInputType: TextInputType.name,
-                    maxLines: 1,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  'お知らせ内容',
-                  child: CustomTextField(
-                    controller: contentController,
-                    textInputType: TextInputType.multiline,
-                    maxLines: 15,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  '送信先グループ',
-                  child: DropdownButton<OrganizationGroupModel?>(
-                    hint: const Text(
-                      'グループの指定なし',
-                      style: TextStyle(color: kGreyColor),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  FormLabel(
+                    'タイトル',
+                    child: CustomTextField(
+                      controller: titleController,
+                      textInputType: TextInputType.name,
+                      maxLines: 1,
                     ),
-                    underline: Container(),
-                    isExpanded: true,
-                    value: selectedGroup,
-                    items: groupItems,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedGroup = value;
-                      });
-                    },
                   ),
-                ),
-                const SizedBox(height: 16),
-                FormLabel(
-                  '添付ファイル',
-                  child: FilePickerButton(
-                    value: pickedFile,
-                    defaultValue: widget.notice.file,
-                    onPressed: () async {
-                      final result = await FilePicker.platform.pickFiles(
-                        type: FileType.any,
-                      );
-                      if (result == null) return;
-                      setState(() {
-                        pickedFile = File(result.files.single.path!);
-                      });
-                    },
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    'お知らせ内容',
+                    child: CustomTextField(
+                      controller: contentController,
+                      textInputType: TextInputType.multiline,
+                      maxLines: 15,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 100),
-              ],
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    '送信先グループ',
+                    child: DropdownButton<OrganizationGroupModel?>(
+                      hint: const Text(
+                        'グループの指定なし',
+                        style: TextStyle(color: kGreyColor),
+                      ),
+                      underline: Container(),
+                      isExpanded: true,
+                      value: selectedGroup,
+                      items: groupItems,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedGroup = value;
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  FormLabel(
+                    '添付ファイル',
+                    child: FilePickerButton(
+                      value: pickedFile,
+                      defaultValue: widget.notice.file,
+                      onPressed: () async {
+                        final result = await FilePicker.platform.pickFiles(
+                          type: FileType.any,
+                        );
+                        if (result == null) return;
+                        setState(() {
+                          pickedFile = File(result.files.single.path!);
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 100),
+                ],
+              ),
             ),
           ),
         ),

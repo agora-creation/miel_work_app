@@ -69,37 +69,39 @@ class _GroupScreenState extends State<GroupScreen> {
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: groups.isNotEmpty
-          ? ListView.builder(
-              itemCount: groups.length,
-              itemBuilder: (context, index) {
-                OrganizationGroupModel group = groups[index];
-                return Container(
-                  decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(color: kBorderColor)),
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      group.name,
-                      style: const TextStyle(fontSize: 20),
+          ? SafeArea(
+              child: ListView.builder(
+                itemCount: groups.length,
+                itemBuilder: (context, index) {
+                  OrganizationGroupModel group = groups[index];
+                  return Container(
+                    decoration: BoxDecoration(
+                      border: Border(bottom: BorderSide(color: kBorderColor)),
                     ),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.rightToLeft,
-                          child: GroupModScreen(
-                            loginProvider: widget.loginProvider,
-                            homeProvider: widget.homeProvider,
-                            group: group,
-                            getGroups: _getGroups,
+                    child: ListTile(
+                      title: Text(
+                        group.name,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.rightToLeft,
+                            child: GroupModScreen(
+                              loginProvider: widget.loginProvider,
+                              homeProvider: widget.homeProvider,
+                              group: group,
+                              getGroups: _getGroups,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
             )
           : const Center(child: Text('グループはありません')),
       floatingActionButton: FloatingActionButton.extended(

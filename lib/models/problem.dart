@@ -22,6 +22,8 @@ class ProblemModel {
   String _targetAddress = '';
   String _details = '';
   String _image = '';
+  String _image2 = '';
+  String _image3 = '';
   List<String> states = [];
   int _count = 0;
   bool _processed = false;
@@ -40,6 +42,8 @@ class ProblemModel {
   String get targetAddress => _targetAddress;
   String get details => _details;
   String get image => _image;
+  String get image2 => _image2;
+  String get image3 => _image3;
   int get count => _count;
   bool get processed => _processed;
   DateTime get createdAt => _createdAt;
@@ -59,6 +63,8 @@ class ProblemModel {
     _targetAddress = data['targetAddress'] ?? '';
     _details = data['details'] ?? '';
     _image = data['image'] ?? '';
+    _image2 = data['image2'] ?? '';
+    _image3 = data['image3'] ?? '';
     states = _convertStates(data['states']);
     _count = data['count'] ?? 0;
     _processed = data['processed'] ?? false;

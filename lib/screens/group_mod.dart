@@ -77,21 +77,23 @@ class _GroupModScreenState extends State<GroupModScreen> {
       ),
       body: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                FormLabel(
-                  'グループ名',
-                  child: CustomTextField(
-                    controller: nameController,
-                    textInputType: TextInputType.name,
-                    maxLines: 1,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  FormLabel(
+                    'グループ名',
+                    child: CustomTextField(
+                      controller: nameController,
+                      textInputType: TextInputType.name,
+                      maxLines: 1,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 100),
-              ],
+                  const SizedBox(height: 100),
+                ],
+              ),
             ),
           ),
         ),

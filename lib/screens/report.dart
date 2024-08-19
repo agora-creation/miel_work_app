@@ -74,86 +74,88 @@ class _ReportScreenState extends State<ReportScreen> {
         ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: Column(
-        children: [
-          MonthPickerButton(
-            value: searchMonth,
-            onTap: () async {
-              DateTime? selected = await showMonthPicker(
-                context: context,
-                initialDate: searchMonth,
-                locale: const Locale('ja'),
-              );
-              if (selected == null) return;
-              _changeMonth(selected);
-            },
-          ),
-          Expanded(
-            child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: reportService.streamList(
-                organizationId: widget.loginProvider.organization?.id,
-                searchStart: DateTime(
-                  searchMonth.year,
-                  searchMonth.month,
-                  1,
-                ),
-                searchEnd: DateTime(
-                  searchMonth.year,
-                  searchMonth.month + 1,
-                  1,
-                ).add(
-                  const Duration(days: -1),
-                ),
-              ),
-              builder: (context, snapshot) {
-                List<ReportModel> reports = [];
-                if (snapshot.hasData) {
-                  reports = reportService.generateList(
-                    data: snapshot.data,
-                  );
-                }
-                return ListView.builder(
-                  itemCount: days.length,
-                  itemBuilder: (context, index) {
-                    DateTime day = days[index];
-                    ReportModel? report;
-                    if (reports.isNotEmpty) {
-                      for (ReportModel tmpReport in reports) {
-                        String dayKey = dateText(
-                          'yyyy-MM-dd',
-                          tmpReport.createdAt,
-                        );
-                        if (day == DateTime.parse(dayKey)) {
-                          report = tmpReport;
-                        }
-                      }
-                    }
-                    return DayList(
-                      day,
-                      child: ReportList(
-                        report: report,
-                        onTap: () {
-                          if (report == null) return;
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                              type: PageTransitionType.rightToLeft,
-                              child: ReportModScreen(
-                                loginProvider: widget.loginProvider,
-                                homeProvider: widget.homeProvider,
-                                report: report,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
+      body: SafeArea(
+        child: Column(
+          children: [
+            MonthPickerButton(
+              value: searchMonth,
+              onTap: () async {
+                DateTime? selected = await showMonthPicker(
+                  context: context,
+                  initialDate: searchMonth,
+                  locale: const Locale('ja'),
                 );
+                if (selected == null) return;
+                _changeMonth(selected);
               },
             ),
-          ),
-        ],
+            Expanded(
+              child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: reportService.streamList(
+                  organizationId: widget.loginProvider.organization?.id,
+                  searchStart: DateTime(
+                    searchMonth.year,
+                    searchMonth.month,
+                    1,
+                  ),
+                  searchEnd: DateTime(
+                    searchMonth.year,
+                    searchMonth.month + 1,
+                    1,
+                  ).add(
+                    const Duration(days: -1),
+                  ),
+                ),
+                builder: (context, snapshot) {
+                  List<ReportModel> reports = [];
+                  if (snapshot.hasData) {
+                    reports = reportService.generateList(
+                      data: snapshot.data,
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: days.length,
+                    itemBuilder: (context, index) {
+                      DateTime day = days[index];
+                      ReportModel? report;
+                      if (reports.isNotEmpty) {
+                        for (ReportModel tmpReport in reports) {
+                          String dayKey = dateText(
+                            'yyyy-MM-dd',
+                            tmpReport.createdAt,
+                          );
+                          if (day == DateTime.parse(dayKey)) {
+                            report = tmpReport;
+                          }
+                        }
+                      }
+                      return DayList(
+                        day,
+                        child: ReportList(
+                          report: report,
+                          onTap: () {
+                            if (report == null) return;
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: ReportModScreen(
+                                  loginProvider: widget.loginProvider,
+                                  homeProvider: widget.homeProvider,
+                                  report: report,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {

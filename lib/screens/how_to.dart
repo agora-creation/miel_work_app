@@ -26,7 +26,9 @@ class HowToScreen extends StatelessWidget {
         ),
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: SfPdfViewer.network('https://agora-c.com/miel-work/manual.pdf'),
+      body: SafeArea(
+        child: SfPdfViewer.network('https://agora-c.com/miel-work/manual.pdf'),
+      ),
     );
   }
 }

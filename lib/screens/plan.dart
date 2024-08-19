@@ -120,119 +120,121 @@ class _PlanScreenState extends State<PlanScreen> {
         ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: Column(
-        children: [
-          MonthPickerButton(
-            value: searchMonth,
-            onTap: () async {
-              DateTime? selected = await showMonthPicker(
-                context: context,
-                initialDate: searchMonth,
-                locale: const Locale('ja'),
-              );
-              if (selected == null) return;
-              _changeMonth(selected);
-            },
-          ),
-          Expanded(
-            child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: planService.streamList(
-                organizationId: widget.loginProvider.organization?.id,
-                searchCategories: searchCategories,
-              ),
-              builder: (context, snapshot) {
-                List<PlanModel> plans = [];
-                if (snapshot.hasData) {
-                  plans = planService.generateList(
-                    data: snapshot.data,
-                    currentGroup: widget.homeProvider.currentGroup,
-                    searchStart: DateTime(
-                      searchMonth.year,
-                      searchMonth.month,
-                      1,
-                    ),
-                    searchEnd: DateTime(
-                      searchMonth.year,
-                      searchMonth.month + 1,
-                      1,
-                    ).add(
-                      const Duration(days: -1),
-                    ),
-                  );
-                }
-                return ListView.builder(
-                  itemCount: days.length,
-                  itemBuilder: (context, index) {
-                    DateTime day = days[index];
-                    DateTime dayStart = DateTime(
-                      day.year,
-                      day.month,
-                      day.day,
-                      0,
-                      0,
-                      0,
-                    );
-                    DateTime dayEnd = DateTime(
-                      day.year,
-                      day.month,
-                      day.day,
-                      23,
-                      59,
-                      59,
-                    );
-                    List<PlanModel> dayPlans = [];
-                    if (plans.isNotEmpty) {
-                      for (PlanModel plan in plans) {
-                        bool listIn = false;
-                        if (plan.startedAt.millisecondsSinceEpoch <=
-                                dayStart.millisecondsSinceEpoch &&
-                            dayStart.millisecondsSinceEpoch <=
-                                plan.endedAt.millisecondsSinceEpoch) {
-                          listIn = true;
-                        } else if (dayStart.millisecondsSinceEpoch <=
-                                plan.startedAt.millisecondsSinceEpoch &&
-                            plan.endedAt.millisecondsSinceEpoch <=
-                                dayEnd.millisecondsSinceEpoch) {
-                          listIn = true;
-                        }
-                        if (listIn) {
-                          dayPlans.add(plan);
-                        }
-                      }
-                    }
-                    return DayList(
-                      day,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Column(
-                          children: dayPlans.map((dayPlan) {
-                            return PlanList(
-                              plan: dayPlan,
-                              groups: widget.homeProvider.groups,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  PageTransition(
-                                    type: PageTransitionType.rightToLeft,
-                                    child: PlanDetailScreen(
-                                      loginProvider: widget.loginProvider,
-                                      homeProvider: widget.homeProvider,
-                                      plan: dayPlan,
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    );
-                  },
+      body: SafeArea(
+        child: Column(
+          children: [
+            MonthPickerButton(
+              value: searchMonth,
+              onTap: () async {
+                DateTime? selected = await showMonthPicker(
+                  context: context,
+                  initialDate: searchMonth,
+                  locale: const Locale('ja'),
                 );
+                if (selected == null) return;
+                _changeMonth(selected);
               },
             ),
-          ),
-        ],
+            Expanded(
+              child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: planService.streamList(
+                  organizationId: widget.loginProvider.organization?.id,
+                  searchCategories: searchCategories,
+                ),
+                builder: (context, snapshot) {
+                  List<PlanModel> plans = [];
+                  if (snapshot.hasData) {
+                    plans = planService.generateList(
+                      data: snapshot.data,
+                      currentGroup: widget.homeProvider.currentGroup,
+                      searchStart: DateTime(
+                        searchMonth.year,
+                        searchMonth.month,
+                        1,
+                      ),
+                      searchEnd: DateTime(
+                        searchMonth.year,
+                        searchMonth.month + 1,
+                        1,
+                      ).add(
+                        const Duration(days: -1),
+                      ),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: days.length,
+                    itemBuilder: (context, index) {
+                      DateTime day = days[index];
+                      DateTime dayStart = DateTime(
+                        day.year,
+                        day.month,
+                        day.day,
+                        0,
+                        0,
+                        0,
+                      );
+                      DateTime dayEnd = DateTime(
+                        day.year,
+                        day.month,
+                        day.day,
+                        23,
+                        59,
+                        59,
+                      );
+                      List<PlanModel> dayPlans = [];
+                      if (plans.isNotEmpty) {
+                        for (PlanModel plan in plans) {
+                          bool listIn = false;
+                          if (plan.startedAt.millisecondsSinceEpoch <=
+                                  dayStart.millisecondsSinceEpoch &&
+                              dayStart.millisecondsSinceEpoch <=
+                                  plan.endedAt.millisecondsSinceEpoch) {
+                            listIn = true;
+                          } else if (dayStart.millisecondsSinceEpoch <=
+                                  plan.startedAt.millisecondsSinceEpoch &&
+                              plan.endedAt.millisecondsSinceEpoch <=
+                                  dayEnd.millisecondsSinceEpoch) {
+                            listIn = true;
+                          }
+                          if (listIn) {
+                            dayPlans.add(plan);
+                          }
+                        }
+                      }
+                      return DayList(
+                        day,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Column(
+                            children: dayPlans.map((dayPlan) {
+                              return PlanList(
+                                plan: dayPlan,
+                                groups: widget.homeProvider.groups,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    PageTransition(
+                                      type: PageTransitionType.rightToLeft,
+                                      child: PlanDetailScreen(
+                                        loginProvider: widget.loginProvider,
+                                        homeProvider: widget.homeProvider,
+                                        plan: dayPlan,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {

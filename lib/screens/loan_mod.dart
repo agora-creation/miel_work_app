@@ -13,6 +13,7 @@ import 'package:miel_work_app/providers/loan.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
+import 'package:miel_work_app/widgets/file_link.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:provider/provider.dart';
@@ -181,14 +182,16 @@ class _LoanModScreenState extends State<LoanModScreen> {
                             fit: BoxFit.cover,
                             width: double.infinity,
                           )
-                        : Container(
-                            color: kGreyColor.withOpacity(0.3),
-                            width: double.infinity,
-                            height: 100,
-                            child: const Center(
-                              child: Text('写真が選択されていません'),
-                            ),
-                          ),
+                        : widget.loan.itemImage != ''
+                            ? FileLink(file: widget.loan.itemImage)
+                            : Container(
+                                color: kGreyColor.withOpacity(0.3),
+                                width: double.infinity,
+                                height: 100,
+                                child: const Center(
+                                  child: Text('写真が選択されていません'),
+                                ),
+                              ),
                   ),
                 ),
                 const SizedBox(height: 100),

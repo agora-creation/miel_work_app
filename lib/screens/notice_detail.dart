@@ -14,10 +14,10 @@ import 'package:miel_work_app/services/notice.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
+import 'package:miel_work_app/widgets/file_link.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:miel_work_app/widgets/image_detail_dialog.dart';
-import 'package:miel_work_app/widgets/link_text.dart';
 import 'package:miel_work_app/widgets/pdf_detail_dialog.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -114,69 +114,71 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
         ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                dateText('yyyy/MM/dd HH:mm', widget.notice.createdAt),
-                style: const TextStyle(
-                  color: kGreyColor,
-                  fontSize: 14,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '送信日時: ${dateText('yyyy/MM/dd HH:mm', widget.notice.createdAt)}',
+                  style: const TextStyle(
+                    color: kGreyColor,
+                    fontSize: 14,
+                  ),
                 ),
-              ),
-              Text(
-                widget.notice.createdUserName,
-                style: const TextStyle(
-                  color: kGreyColor,
-                  fontSize: 14,
+                Text(
+                  '送信者: ${widget.notice.createdUserName}',
+                  style: const TextStyle(
+                    color: kGreyColor,
+                    fontSize: 14,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 4),
-              FormLabel(
-                'タイトル',
-                child: FormValue(widget.notice.title),
-              ),
-              const SizedBox(height: 8),
-              FormLabel(
-                'お知らせ内容',
-                child: FormValue(widget.notice.content),
-              ),
-              const SizedBox(height: 8),
-              FormLabel(
-                '添付ファイル',
-                child: widget.notice.file != ''
-                    ? LinkText(
-                        label: '確認する',
-                        color: kBlueColor,
-                        onTap: () {
-                          String ext = widget.notice.fileExt;
-                          if (imageExtensions.contains(ext)) {
-                            showDialog(
-                              context: context,
-                              builder: (context) => ImageDetailDialog(
-                                File(widget.notice.file).path,
-                                onPressedClose: () => Navigator.pop(context),
-                              ),
-                            );
-                          }
-                          if (pdfExtensions.contains(ext)) {
-                            showDialog(
-                              context: context,
-                              builder: (context) => PdfDetailDialog(
-                                File(widget.notice.file).path,
-                                onPressedClose: () => Navigator.pop(context),
-                              ),
-                            );
-                          }
-                        },
+                const SizedBox(height: 4),
+                FormLabel(
+                  'タイトル',
+                  child: FormValue(widget.notice.title),
+                ),
+                const SizedBox(height: 8),
+                FormLabel(
+                  'お知らせ内容',
+                  child: FormValue(widget.notice.content),
+                ),
+                const SizedBox(height: 8),
+                widget.notice.file != ''
+                    ? FormLabel(
+                        '添付ファイル',
+                        child: FileLink(
+                          file: widget.notice.file,
+                          fileExt: widget.notice.fileExt,
+                          onTap: () {
+                            String ext = widget.notice.fileExt;
+                            if (imageExtensions.contains(ext)) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => ImageDetailDialog(
+                                  File(widget.notice.file).path,
+                                  onPressedClose: () => Navigator.pop(context),
+                                ),
+                              );
+                            }
+                            if (pdfExtensions.contains(ext)) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => PdfDetailDialog(
+                                  File(widget.notice.file).path,
+                                  onPressedClose: () => Navigator.pop(context),
+                                ),
+                              );
+                            }
+                          },
+                        ),
                       )
                     : Container(),
-              ),
-              const SizedBox(height: 100),
-            ],
+                const SizedBox(height: 100),
+              ],
+            ),
           ),
         ),
       ),
