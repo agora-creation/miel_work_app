@@ -236,20 +236,16 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                       File(message.file).path,
                                       onPressedClose: () =>
                                           Navigator.pop(context),
-                                      onPressedDelete: () async {
-                                        String? error =
-                                            await messageProvider.delete(
-                                          message: message,
-                                        );
-                                        if (error != null) {
-                                          if (!mounted) return;
-                                          showMessage(context, error, false);
-                                          return;
-                                        }
-                                        if (!mounted) return;
-                                        showMessage(
-                                            context, 'ファイルを削除しました', true);
-                                        Navigator.pop(context);
+                                      onPressedDelete: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => DeleteDialog(
+                                            messageProvider: messageProvider,
+                                            message: message,
+                                          ),
+                                        ).then((value) {
+                                          Navigator.pop(context);
+                                        });
                                       },
                                     ),
                                   );
@@ -261,20 +257,16 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                       File(message.file).path,
                                       onPressedClose: () =>
                                           Navigator.pop(context),
-                                      onPressedDelete: () async {
-                                        String? error =
-                                            await messageProvider.delete(
-                                          message: message,
-                                        );
-                                        if (error != null) {
-                                          if (!mounted) return;
-                                          showMessage(context, error, false);
-                                          return;
-                                        }
-                                        if (!mounted) return;
-                                        showMessage(
-                                            context, 'ファイルを削除しました', true);
-                                        Navigator.pop(context);
+                                      onPressedDelete: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => DeleteDialog(
+                                            messageProvider: messageProvider,
+                                            message: message,
+                                          ),
+                                        ).then((value) {
+                                          Navigator.pop(context);
+                                        });
                                       },
                                     ),
                                   );
@@ -537,6 +529,70 @@ class _ReadUsersDialogState extends State<ReadUsersDialog> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class DeleteDialog extends StatefulWidget {
+  final ChatMessageProvider messageProvider;
+  final ChatMessageModel message;
+
+  const DeleteDialog({
+    required this.messageProvider,
+    required this.message,
+    super.key,
+  });
+
+  @override
+  State<DeleteDialog> createState() => _DeleteDialogState();
+}
+
+class _DeleteDialogState extends State<DeleteDialog> {
+  @override
+  Widget build(BuildContext context) {
+    return CustomAlertDialog(
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 8),
+          Text(
+            '本当に削除しますか？',
+            style: TextStyle(
+              color: kRedColor,
+              fontSize: 16,
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '削除する',
+          labelColor: kWhiteColor,
+          backgroundColor: kRedColor,
+          onPressed: () async {
+            String? error = await widget.messageProvider.delete(
+              message: widget.message,
+            );
+            if (error != null) {
+              if (!mounted) return;
+              showMessage(context, error, false);
+              return;
+            }
+            if (!mounted) return;
+            showMessage(context, 'ファイルを削除しました', true);
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }
