@@ -8,7 +8,7 @@ class AnimationBackground extends StatefulWidget {
 }
 
 class _AnimationBackgroundState extends State<AnimationBackground>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late double deviceHeight;
   late double imageWidth;
   late AnimationController controller;
