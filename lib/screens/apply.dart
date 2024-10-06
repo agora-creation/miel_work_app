@@ -53,7 +53,7 @@ class _ApplyScreenState extends State<ApplyScreen> {
           automaticallyImplyLeading: false,
           backgroundColor: kWhiteColor,
           title: const Text(
-            '各種申請',
+            '社内申請',
             style: TextStyle(color: kBlackColor),
           ),
           actions: [

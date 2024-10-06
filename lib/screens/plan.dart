@@ -22,6 +22,7 @@ import 'package:miel_work_app/widgets/month_picker_button.dart';
 import 'package:miel_work_app/widgets/plan_list.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 class PlanScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -38,6 +39,7 @@ class PlanScreen extends StatefulWidget {
 }
 
 class _PlanScreenState extends State<PlanScreen> {
+  AutoScrollController controller = AutoScrollController();
   PlanService planService = PlanService();
   List<String> searchCategories = [];
   DateTime searchMonth = DateTime.now();
@@ -57,6 +59,10 @@ class _PlanScreenState extends State<PlanScreen> {
   void _init() async {
     await ConfigService().checkReview();
     days = generateDays(searchMonth);
+    controller.scrollToIndex(
+      DateTime.now().day,
+      preferPosition: AutoScrollPosition.begin,
+    );
     setState(() {});
   }
 
@@ -162,6 +168,7 @@ class _PlanScreenState extends State<PlanScreen> {
                     );
                   }
                   return ListView.builder(
+                    controller: controller,
                     itemCount: days.length,
                     itemBuilder: (context, index) {
                       DateTime day = days[index];
@@ -201,30 +208,35 @@ class _PlanScreenState extends State<PlanScreen> {
                           }
                         }
                       }
-                      return DayList(
-                        day,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            children: dayPlans.map((dayPlan) {
-                              return PlanList(
-                                plan: dayPlan,
-                                groups: widget.homeProvider.groups,
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    PageTransition(
-                                      type: PageTransitionType.rightToLeft,
-                                      child: PlanDetailScreen(
-                                        loginProvider: widget.loginProvider,
-                                        homeProvider: widget.homeProvider,
-                                        plan: dayPlan,
+                      return AutoScrollTag(
+                        key: ValueKey(day.day),
+                        controller: controller,
+                        index: day.day,
+                        child: DayList(
+                          day,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Column(
+                              children: dayPlans.map((dayPlan) {
+                                return PlanList(
+                                  plan: dayPlan,
+                                  groups: widget.homeProvider.groups,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      PageTransition(
+                                        type: PageTransitionType.rightToLeft,
+                                        child: PlanDetailScreen(
+                                          loginProvider: widget.loginProvider,
+                                          homeProvider: widget.homeProvider,
+                                          plan: dayPlan,
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
-                              );
-                            }).toList(),
+                                    );
+                                  },
+                                );
+                              }).toList(),
+                            ),
                           ),
                         ),
                       );

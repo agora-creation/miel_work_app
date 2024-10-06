@@ -25,7 +25,6 @@ import 'package:miel_work_app/services/lost.dart';
 import 'package:miel_work_app/services/notice.dart';
 import 'package:miel_work_app/services/problem.dart';
 import 'package:miel_work_app/widgets/animation_background.dart';
-import 'package:miel_work_app/widgets/connection_card.dart';
 import 'package:miel_work_app/widgets/custom_appbar.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/group_select_card.dart';
@@ -84,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          const ConnectionCard(),
+                          // const ConnectionCard(),
                           GroupSelectCard(
                             loginProvider: loginProvider,
                             homeProvider: homeProvider,
@@ -244,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   }
                                   return HomeIconCard(
                                     icon: FontAwesomeIcons.filePen,
-                                    label: '各種申請',
+                                    label: '社内申請',
                                     color: kBlackColor,
                                     backgroundColor: kWhiteColor,
                                     alert: alert,
