@@ -59,10 +59,6 @@ class _PlanScreenState extends State<PlanScreen> {
   void _init() async {
     await ConfigService().checkReview();
     days = generateDays(searchMonth);
-    controller.scrollToIndex(
-      DateTime.now().day,
-      preferPosition: AutoScrollPosition.begin,
-    );
     setState(() {});
   }
 
@@ -74,6 +70,10 @@ class _PlanScreenState extends State<PlanScreen> {
 
   @override
   Widget build(BuildContext context) {
+    controller.scrollToIndex(
+      DateTime.now().day,
+      preferPosition: AutoScrollPosition.begin,
+    );
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
