@@ -83,7 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          // const ConnectionCard(),
                           GroupSelectCard(
                             loginProvider: loginProvider,
                             homeProvider: homeProvider,
@@ -194,6 +193,48 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               StreamBuilder<
                                   QuerySnapshot<Map<String, dynamic>>>(
+                                stream: applyService.streamList(
+                                  organizationId:
+                                      loginProvider.organization?.id,
+                                  searchStart: null,
+                                  searchEnd: null,
+                                  approval: [0],
+                                ),
+                                builder: (context, snapshot) {
+                                  bool alert = false;
+                                  if (snapshot.hasData) {
+                                    alert = applyService.checkAlert(
+                                      data: snapshot.data,
+                                    );
+                                  }
+                                  return HomeIconCard(
+                                    icon: FontAwesomeIcons.solidFile,
+                                    label: '社内申請',
+                                    color: kBlackColor,
+                                    backgroundColor: kWhiteColor,
+                                    alert: alert,
+                                    alertMessage: '承認待ちあり',
+                                    onTap: () => showBottomUpScreen(
+                                      context,
+                                      ApplyScreen(
+                                        loginProvider: loginProvider,
+                                        homeProvider: homeProvider,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              HomeIconCard(
+                                icon: FontAwesomeIcons.file,
+                                label: '社外申請',
+                                color: kBlackColor,
+                                backgroundColor: kWhiteColor,
+                                alert: false,
+                                alertMessage: '承認待ちあり',
+                                onTap: () {},
+                              ),
+                              StreamBuilder<
+                                  QuerySnapshot<Map<String, dynamic>>>(
                                 stream: lostService.streamList(
                                   organizationId:
                                       loginProvider.organization?.id,
@@ -227,30 +268,30 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               StreamBuilder<
                                   QuerySnapshot<Map<String, dynamic>>>(
-                                stream: applyService.streamList(
+                                stream: loanService.streamList(
                                   organizationId:
                                       loginProvider.organization?.id,
                                   searchStart: null,
                                   searchEnd: null,
-                                  approval: [0],
+                                  searchStatus: [0],
                                 ),
                                 builder: (context, snapshot) {
                                   bool alert = false;
                                   if (snapshot.hasData) {
-                                    alert = applyService.checkAlert(
+                                    alert = loanService.checkAlert(
                                       data: snapshot.data,
                                     );
                                   }
                                   return HomeIconCard(
-                                    icon: FontAwesomeIcons.filePen,
-                                    label: '社内申請',
+                                    icon: FontAwesomeIcons.rightLeft,
+                                    label: '貸出／返却',
                                     color: kBlackColor,
                                     backgroundColor: kWhiteColor,
                                     alert: alert,
-                                    alertMessage: '承認待ちあり',
+                                    alertMessage: '貸出中',
                                     onTap: () => showBottomUpScreen(
                                       context,
-                                      ApplyScreen(
+                                      LoanScreen(
                                         loginProvider: loginProvider,
                                         homeProvider: homeProvider,
                                       ),
@@ -295,41 +336,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     homeProvider: homeProvider,
                                   ),
                                 ),
-                              ),
-                              StreamBuilder<
-                                  QuerySnapshot<Map<String, dynamic>>>(
-                                stream: loanService.streamList(
-                                  organizationId:
-                                      loginProvider.organization?.id,
-                                  searchStart: null,
-                                  searchEnd: null,
-                                  searchStatus: [0],
-                                ),
-                                builder: (context, snapshot) {
-                                  bool alert = false;
-                                  if (snapshot.hasData) {
-                                    alert = loanService.checkAlert(
-                                      data: snapshot.data,
-                                    );
-                                  }
-                                  return HomeIconCard(
-                                    icon: FontAwesomeIcons.rightLeft,
-                                    iconSize: 42,
-                                    label: '貸出／返却',
-                                    labelFontSize: 16,
-                                    color: kBlackColor,
-                                    backgroundColor: kWhiteColor,
-                                    alert: alert,
-                                    alertMessage: '貸出中',
-                                    onTap: () => showBottomUpScreen(
-                                      context,
-                                      LoanScreen(
-                                        loginProvider: loginProvider,
-                                        homeProvider: homeProvider,
-                                      ),
-                                    ),
-                                  );
-                                },
                               ),
                               HomeIconCard(
                                 icon: FontAwesomeIcons.bolt,
