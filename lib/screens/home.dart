@@ -15,6 +15,10 @@ import 'package:miel_work_app/screens/notice.dart';
 import 'package:miel_work_app/screens/plan.dart';
 import 'package:miel_work_app/screens/problem.dart';
 import 'package:miel_work_app/screens/report.dart';
+import 'package:miel_work_app/screens/request_cycle.dart';
+import 'package:miel_work_app/screens/request_facility.dart';
+import 'package:miel_work_app/screens/request_interview.dart';
+import 'package:miel_work_app/screens/request_square.dart';
 import 'package:miel_work_app/screens/user.dart';
 import 'package:miel_work_app/screens/user_setting.dart';
 import 'package:miel_work_app/screens/work.dart';
@@ -24,13 +28,20 @@ import 'package:miel_work_app/services/loan.dart';
 import 'package:miel_work_app/services/lost.dart';
 import 'package:miel_work_app/services/notice.dart';
 import 'package:miel_work_app/services/problem.dart';
+import 'package:miel_work_app/services/request_cycle.dart';
+import 'package:miel_work_app/services/request_facility.dart';
+import 'package:miel_work_app/services/request_interview.dart';
+import 'package:miel_work_app/services/request_square.dart';
 import 'package:miel_work_app/widgets/animation_background.dart';
+import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_appbar.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/group_select_card.dart';
 import 'package:miel_work_app/widgets/home_icon_card.dart';
 import 'package:miel_work_app/widgets/home_plan_card.dart';
 import 'package:miel_work_app/widgets/home_problem_card.dart';
+import 'package:miel_work_app/widgets/request_list.dart';
+import 'package:multiple_stream_builder/multiple_stream_builder.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -46,6 +57,10 @@ class _HomeScreenState extends State<HomeScreen> {
   ChatMessageService messageService = ChatMessageService();
   ProblemService problemService = ProblemService();
   ApplyService applyService = ApplyService();
+  RequestInterviewService interviewService = RequestInterviewService();
+  RequestSquareService squareService = RequestSquareService();
+  RequestFacilityService facilityService = RequestFacilityService();
+  RequestCycleService cycleService = RequestCycleService();
   LostService lostService = LostService();
   LoanService loanService = LoanService();
 
@@ -224,14 +239,79 @@ class _HomeScreenState extends State<HomeScreen> {
                                   );
                                 },
                               ),
-                              HomeIconCard(
-                                icon: FontAwesomeIcons.file,
-                                label: '社外申請',
-                                color: kBlackColor,
-                                backgroundColor: kWhiteColor,
-                                alert: false,
-                                alertMessage: '承認待ちあり',
-                                onTap: () {},
+                              StreamBuilder4<
+                                  QuerySnapshot<Map<String, dynamic>>,
+                                  QuerySnapshot<Map<String, dynamic>>,
+                                  QuerySnapshot<Map<String, dynamic>>,
+                                  QuerySnapshot<Map<String, dynamic>>>(
+                                streams: StreamTuple4(
+                                  interviewService.streamList(
+                                    searchStart: null,
+                                    searchEnd: null,
+                                    approval: [0],
+                                  )!,
+                                  squareService.streamList(
+                                    searchStart: null,
+                                    searchEnd: null,
+                                    approval: [0],
+                                  )!,
+                                  facilityService.streamList(
+                                    searchStart: null,
+                                    searchEnd: null,
+                                    approval: [0],
+                                  )!,
+                                  cycleService.streamList(
+                                    searchStart: null,
+                                    searchEnd: null,
+                                    approval: [0],
+                                  )!,
+                                ),
+                                builder: (context, snapshot) {
+                                  bool alert = false;
+                                  if (snapshot.snapshot1.data != null) {
+                                    if (snapshot.snapshot1.data!.size > 0) {
+                                      alert = interviewService.checkAlert(
+                                        data: snapshot.snapshot1.data,
+                                      );
+                                    }
+                                  }
+                                  if (snapshot.snapshot2.data != null) {
+                                    if (snapshot.snapshot2.data!.size > 0) {
+                                      alert = squareService.checkAlert(
+                                        data: snapshot.snapshot2.data,
+                                      );
+                                    }
+                                  }
+                                  if (snapshot.snapshot3.data != null) {
+                                    if (snapshot.snapshot3.data!.size > 0) {
+                                      alert = facilityService.checkAlert(
+                                        data: snapshot.snapshot3.data,
+                                      );
+                                    }
+                                  }
+                                  if (snapshot.snapshot4.data != null) {
+                                    if (snapshot.snapshot4.data!.size > 0) {
+                                      alert = cycleService.checkAlert(
+                                        data: snapshot.snapshot4.data,
+                                      );
+                                    }
+                                  }
+                                  return HomeIconCard(
+                                    icon: FontAwesomeIcons.file,
+                                    label: '社外申請',
+                                    color: kBlackColor,
+                                    backgroundColor: kWhiteColor,
+                                    alert: alert,
+                                    alertMessage: '承認待ちあり',
+                                    onTap: () => showDialog(
+                                      context: context,
+                                      builder: (context) => RequestSelectDialog(
+                                        loginProvider: loginProvider,
+                                        homeProvider: homeProvider,
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
                               StreamBuilder<
                                   QuerySnapshot<Map<String, dynamic>>>(
@@ -402,6 +482,154 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: CustomFooter(
         loginProvider: loginProvider,
         homeProvider: homeProvider,
+      ),
+    );
+  }
+}
+
+class RequestSelectDialog extends StatelessWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+
+  const RequestSelectDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    RequestInterviewService interviewService = RequestInterviewService();
+    RequestSquareService squareService = RequestSquareService();
+    RequestFacilityService facilityService = RequestFacilityService();
+    RequestCycleService cycleService = RequestCycleService();
+
+    return CustomAlertDialog(
+      contentPadding: EdgeInsets.zero,
+      content: Container(
+        decoration: BoxDecoration(border: Border.all(color: kBorderColor)),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: interviewService.streamList(
+                  searchStart: null,
+                  searchEnd: null,
+                  approval: [0],
+                ),
+                builder: (context, snapshot) {
+                  bool alert = false;
+                  if (snapshot.hasData) {
+                    alert = interviewService.checkAlert(
+                      data: snapshot.data,
+                    );
+                  }
+                  return RequestList(
+                    label: '取材申込',
+                    alert: alert,
+                    onTap: () => showBottomUpScreen(
+                      context,
+                      RequestInterviewScreen(
+                        loginProvider: loginProvider,
+                        homeProvider: homeProvider,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: squareService.streamList(
+                  searchStart: null,
+                  searchEnd: null,
+                  approval: [0],
+                ),
+                builder: (context, snapshot) {
+                  bool alert = false;
+                  if (snapshot.hasData) {
+                    alert = squareService.checkAlert(
+                      data: snapshot.data,
+                    );
+                  }
+                  return RequestList(
+                    label: 'よさこい広場使用申込',
+                    alert: alert,
+                    onTap: () => showBottomUpScreen(
+                      context,
+                      RequestSquareScreen(
+                        loginProvider: loginProvider,
+                        homeProvider: homeProvider,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: facilityService.streamList(
+                  searchStart: null,
+                  searchEnd: null,
+                  approval: [0],
+                ),
+                builder: (context, snapshot) {
+                  bool alert = false;
+                  if (snapshot.hasData) {
+                    alert = facilityService.checkAlert(
+                      data: snapshot.data,
+                    );
+                  }
+                  return RequestList(
+                    label: '施設使用申込',
+                    alert: alert,
+                    onTap: () => showBottomUpScreen(
+                      context,
+                      RequestFacilityScreen(
+                        loginProvider: loginProvider,
+                        homeProvider: homeProvider,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: cycleService.streamList(
+                  searchStart: null,
+                  searchEnd: null,
+                  approval: [0],
+                ),
+                builder: (context, snapshot) {
+                  bool alert = false;
+                  if (snapshot.hasData) {
+                    alert = cycleService.checkAlert(
+                      data: snapshot.data,
+                    );
+                  }
+                  return RequestList(
+                    label: '自転車置き場使用申込',
+                    alert: alert,
+                    onTap: () => showBottomUpScreen(
+                      context,
+                      RequestCycleScreen(
+                        loginProvider: loginProvider,
+                        homeProvider: homeProvider,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              RequestList(
+                label: '夜間居残り作業申請',
+                alert: false,
+                onTap: () {},
+              ),
+              RequestList(
+                label: '店舗工事作業申請',
+                alert: false,
+                onTap: () {},
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
