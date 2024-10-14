@@ -31,7 +31,7 @@ class RequestInterviewList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    interview.companyUserName,
+                    interview.companyName,
                     style: const TextStyle(fontSize: 18),
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,

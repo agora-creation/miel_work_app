@@ -31,7 +31,7 @@ class RequestFacilityList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    facility.companyUserName,
+                    facility.companyName,
                     style: const TextStyle(fontSize: 18),
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,

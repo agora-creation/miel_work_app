@@ -18,6 +18,7 @@ import 'package:miel_work_app/screens/report.dart';
 import 'package:miel_work_app/screens/request_cycle.dart';
 import 'package:miel_work_app/screens/request_facility.dart';
 import 'package:miel_work_app/screens/request_interview.dart';
+import 'package:miel_work_app/screens/request_overtime.dart';
 import 'package:miel_work_app/screens/request_square.dart';
 import 'package:miel_work_app/screens/user.dart';
 import 'package:miel_work_app/screens/user_setting.dart';
@@ -31,6 +32,7 @@ import 'package:miel_work_app/services/problem.dart';
 import 'package:miel_work_app/services/request_cycle.dart';
 import 'package:miel_work_app/services/request_facility.dart';
 import 'package:miel_work_app/services/request_interview.dart';
+import 'package:miel_work_app/services/request_overtime.dart';
 import 'package:miel_work_app/services/request_square.dart';
 import 'package:miel_work_app/widgets/animation_background.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
@@ -61,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
   RequestSquareService squareService = RequestSquareService();
   RequestFacilityService facilityService = RequestFacilityService();
   RequestCycleService cycleService = RequestCycleService();
+  RequestOvertimeService overtimeService = RequestOvertimeService();
   LostService lostService = LostService();
   LoanService loanService = LoanService();
 
@@ -239,12 +242,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                   );
                                 },
                               ),
-                              StreamBuilder4<
+                              StreamBuilder5<
+                                  QuerySnapshot<Map<String, dynamic>>,
                                   QuerySnapshot<Map<String, dynamic>>,
                                   QuerySnapshot<Map<String, dynamic>>,
                                   QuerySnapshot<Map<String, dynamic>>,
                                   QuerySnapshot<Map<String, dynamic>>>(
-                                streams: StreamTuple4(
+                                streams: StreamTuple5(
                                   interviewService.streamList(
                                     searchStart: null,
                                     searchEnd: null,
@@ -261,6 +265,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                     approval: [0],
                                   )!,
                                   cycleService.streamList(
+                                    searchStart: null,
+                                    searchEnd: null,
+                                    approval: [0],
+                                  )!,
+                                  overtimeService.streamList(
                                     searchStart: null,
                                     searchEnd: null,
                                     approval: [0],
@@ -293,6 +302,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     if (snapshot.snapshot4.data!.size > 0) {
                                       alert = cycleService.checkAlert(
                                         data: snapshot.snapshot4.data,
+                                      );
+                                    }
+                                  }
+                                  if (snapshot.snapshot5.data != null) {
+                                    if (snapshot.snapshot5.data!.size > 0) {
+                                      alert = overtimeService.checkAlert(
+                                        data: snapshot.snapshot5.data,
                                       );
                                     }
                                   }
@@ -503,6 +519,7 @@ class RequestSelectDialog extends StatelessWidget {
     RequestSquareService squareService = RequestSquareService();
     RequestFacilityService facilityService = RequestFacilityService();
     RequestCycleService cycleService = RequestCycleService();
+    RequestOvertimeService overtimeService = RequestOvertimeService();
 
     return CustomAlertDialog(
       contentPadding: EdgeInsets.zero,
@@ -617,15 +634,31 @@ class RequestSelectDialog extends StatelessWidget {
                   );
                 },
               ),
-              RequestList(
-                label: '夜間居残り作業申請',
-                alert: false,
-                onTap: () {},
-              ),
-              RequestList(
-                label: '店舗工事作業申請',
-                alert: false,
-                onTap: () {},
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: overtimeService.streamList(
+                  searchStart: null,
+                  searchEnd: null,
+                  approval: [0],
+                ),
+                builder: (context, snapshot) {
+                  bool alert = false;
+                  if (snapshot.hasData) {
+                    alert = overtimeService.checkAlert(
+                      data: snapshot.data,
+                    );
+                  }
+                  return RequestList(
+                    label: '夜間居残り作業申請',
+                    alert: alert,
+                    onTap: () => showBottomUpScreen(
+                      context,
+                      RequestOvertimeScreen(
+                        loginProvider: loginProvider,
+                        homeProvider: homeProvider,
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           ),

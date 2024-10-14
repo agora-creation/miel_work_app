@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/models/request_square.dart';
+import 'package:miel_work_app/models/request_overtime.dart';
 
-class RequestSquareList extends StatelessWidget {
-  final RequestSquareModel square;
+class RequestOvertimeList extends StatelessWidget {
+  final RequestOvertimeModel overtime;
   final Function()? onTap;
 
-  const RequestSquareList({
-    required this.square,
+  const RequestOvertimeList({
+    required this.overtime,
     this.onTap,
     super.key,
   });
@@ -31,23 +31,23 @@ class RequestSquareList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    square.companyName,
+                    overtime.companyName,
                     style: const TextStyle(fontSize: 18),
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
                   Text(
-                    '申込担当者名: ${square.companyUserName}',
+                    '店舗責任者名: ${overtime.companyUserName}',
                     style: const TextStyle(fontSize: 14),
                   ),
                   Text(
-                    '申込日時: ${dateText('yyyy/MM/dd HH:mm', square.createdAt)}',
+                    '申請日時: ${dateText('yyyy/MM/dd HH:mm', overtime.createdAt)}',
                     style: const TextStyle(fontSize: 14),
                   ),
-                  square.approval == 1
+                  overtime.approval == 1
                       ? Text(
-                          '承認日時: ${dateText('yyyy/MM/dd HH:mm', square.approvedAt)}',
+                          '承認日時: ${dateText('yyyy/MM/dd HH:mm', overtime.approvedAt)}',
                           style: const TextStyle(
                             color: kRedColor,
                             fontSize: 14,
