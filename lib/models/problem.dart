@@ -26,6 +26,7 @@ class ProblemModel {
   String _image3 = '';
   List<String> states = [];
   int _count = 0;
+  String _memo = '';
   bool _processed = false;
   List<String> readUserIds = [];
   DateTime _createdAt = DateTime.now();
@@ -45,6 +46,7 @@ class ProblemModel {
   String get image2 => _image2;
   String get image3 => _image3;
   int get count => _count;
+  String get memo => _memo;
   bool get processed => _processed;
   DateTime get createdAt => _createdAt;
   DateTime get expirationAt => _expirationAt;
@@ -67,6 +69,7 @@ class ProblemModel {
     _image3 = data['image3'] ?? '';
     states = _convertStates(data['states']);
     _count = data['count'] ?? 0;
+    _memo = data['memo'] ?? '';
     _processed = data['processed'] ?? false;
     readUserIds = _convertReadUserIds(data['readUserIds']);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();

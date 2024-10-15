@@ -10,6 +10,7 @@ class RequestFacilityModel {
   DateTime _useStartedAt = DateTime.now();
   DateTime _useEndedAt = DateTime.now();
   bool _useAtPending = false;
+  String _memo = '';
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
   List<ApprovalUserModel> approvalUsers = [];
@@ -23,6 +24,7 @@ class RequestFacilityModel {
   DateTime get useStartedAt => _useStartedAt;
   DateTime get useEndedAt => _useEndedAt;
   bool get useAtPending => _useAtPending;
+  String get memo => _memo;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
   DateTime get createdAt => _createdAt;
@@ -39,6 +41,7 @@ class RequestFacilityModel {
     _useStartedAt = data['useStartedAt'].toDate() ?? DateTime.now();
     _useEndedAt = data['useEndedAt'].toDate() ?? DateTime.now();
     _useAtPending = data['useAtPending'] ?? false;
+    _memo = data['memo'] ?? '';
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
     approvalUsers = _convertApprovalUsers(data['approvalUsers']);

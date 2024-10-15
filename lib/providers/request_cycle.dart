@@ -26,19 +26,12 @@ class RequestCycleProvider with ChangeNotifier {
         'userPresident': loginUser.president,
         'approvedAt': DateTime.now(),
       });
-      if (loginUser.president) {
-        _cycleService.update({
-          'id': cycle.id,
-          'approval': 1,
-          'approvedAt': DateTime.now(),
-          'approvalUsers': approvalUsers,
-        });
-      } else {
-        _cycleService.update({
-          'id': cycle.id,
-          'approvalUsers': approvalUsers,
-        });
-      }
+      _cycleService.update({
+        'id': cycle.id,
+        'approval': 1,
+        'approvedAt': DateTime.now(),
+        'approvalUsers': approvalUsers,
+      });
     } catch (e) {
       error = '申請の承認に失敗しました';
     }

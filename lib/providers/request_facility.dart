@@ -26,19 +26,12 @@ class RequestFacilityProvider with ChangeNotifier {
         'userPresident': loginUser.president,
         'approvedAt': DateTime.now(),
       });
-      if (loginUser.president) {
-        _facilityService.update({
-          'id': facility.id,
-          'approval': 1,
-          'approvedAt': DateTime.now(),
-          'approvalUsers': approvalUsers,
-        });
-      } else {
-        _facilityService.update({
-          'id': facility.id,
-          'approvalUsers': approvalUsers,
-        });
-      }
+      _facilityService.update({
+        'id': facility.id,
+        'approval': 1,
+        'approvedAt': DateTime.now(),
+        'approvalUsers': approvalUsers,
+      });
     } catch (e) {
       error = '申請の承認に失敗しました';
     }

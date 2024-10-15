@@ -13,6 +13,8 @@ class RequestConstModel {
   DateTime _constStartedAt = DateTime.now();
   DateTime _constEndedAt = DateTime.now();
   bool _constAtPending = false;
+  String _processFile = '';
+  String _processFileExt = '';
   String _constContent = '';
   bool _noise = false;
   String _noiseMeasures = '';
@@ -20,6 +22,7 @@ class RequestConstModel {
   String _dustMeasures = '';
   bool _fire = false;
   String _fireMeasures = '';
+  String _memo = '';
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
   List<ApprovalUserModel> approvalUsers = [];
@@ -36,6 +39,8 @@ class RequestConstModel {
   DateTime get constStartedAt => _constStartedAt;
   DateTime get constEndedAt => _constEndedAt;
   bool get constAtPending => _constAtPending;
+  String get processFile => _processFile;
+  String get processFileExt => _processFileExt;
   String get constContent => _constContent;
   bool get noise => _noise;
   String get noiseMeasures => _noiseMeasures;
@@ -43,6 +48,7 @@ class RequestConstModel {
   String get dustMeasures => _dustMeasures;
   bool get fire => _fire;
   String get fireMeasures => _fireMeasures;
+  String get memo => _memo;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
   DateTime get createdAt => _createdAt;
@@ -62,6 +68,8 @@ class RequestConstModel {
     _constStartedAt = data['constStartedAt'].toDate() ?? DateTime.now();
     _constEndedAt = data['constEndedAt'].toDate() ?? DateTime.now();
     _constAtPending = data['constAtPending'] ?? false;
+    _processFile = data['processFile'] ?? '';
+    _processFileExt = data['processFileExt'] ?? '';
     _constContent = data['constContent'] ?? '';
     _noise = data['noise'] ?? false;
     _noiseMeasures = data['noiseMeasures'] ?? '';
@@ -69,6 +77,7 @@ class RequestConstModel {
     _dustMeasures = data['dustMeasures'] ?? '';
     _fire = data['fire'] ?? false;
     _fireMeasures = data['fireMeasures'] ?? '';
+    _memo = data['memo'] ?? '';
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
     approvalUsers = _convertApprovalUsers(data['approvalUsers']);

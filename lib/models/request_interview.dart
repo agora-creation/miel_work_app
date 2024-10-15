@@ -40,6 +40,7 @@ class RequestInterviewModel {
   String _insertedVisitors = '';
   String _insertedContent = '';
   String _remarks = '';
+  String _memo = '';
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
   List<ApprovalUserModel> approvalUsers = [];
@@ -83,6 +84,7 @@ class RequestInterviewModel {
   String get insertedVisitors => _insertedVisitors;
   String get insertedContent => _insertedContent;
   String get remarks => _remarks;
+  String get memo => _memo;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
   DateTime get createdAt => _createdAt;
@@ -130,6 +132,7 @@ class RequestInterviewModel {
     _insertedVisitors = data['insertedVisitors'] ?? '';
     _insertedContent = data['insertedContent'] ?? '';
     _remarks = data['remarks'] ?? '';
+    _memo = data['memo'] ?? '';
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
     approvalUsers = _convertApprovalUsers(data['approvalUsers']);

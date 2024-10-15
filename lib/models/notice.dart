@@ -8,6 +8,7 @@ class NoticeModel {
   String _content = '';
   String _file = '';
   String _fileExt = '';
+  String _memo = '';
   List<String> readUserIds = [];
   String _createdUserId = '';
   String _createdUserName = '';
@@ -21,6 +22,7 @@ class NoticeModel {
   String get content => _content;
   String get file => _file;
   String get fileExt => _fileExt;
+  String get memo => _memo;
   String get createdUserId => _createdUserId;
   String get createdUserName => _createdUserName;
   DateTime get createdAt => _createdAt;
@@ -36,6 +38,7 @@ class NoticeModel {
     _content = data['content'] ?? '';
     _file = data['file'] ?? '';
     _fileExt = data['fileExt'] ?? '';
+    _memo = data['memo'] ?? '';
     readUserIds = _convertReadUserIds(data['readUserIds']);
     _createdUserId = data['createdUserId'] ?? '';
     _createdUserName = data['createdUserName'] ?? '';

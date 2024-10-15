@@ -26,19 +26,12 @@ class RequestInterviewProvider with ChangeNotifier {
         'userPresident': loginUser.president,
         'approvedAt': DateTime.now(),
       });
-      if (loginUser.president) {
-        _interviewService.update({
-          'id': interview.id,
-          'approval': 1,
-          'approvedAt': DateTime.now(),
-          'approvalUsers': approvalUsers,
-        });
-      } else {
-        _interviewService.update({
-          'id': interview.id,
-          'approvalUsers': approvalUsers,
-        });
-      }
+      _interviewService.update({
+        'id': interview.id,
+        'approval': 1,
+        'approvedAt': DateTime.now(),
+        'approvalUsers': approvalUsers,
+      });
     } catch (e) {
       error = '申請の承認に失敗しました';
     }

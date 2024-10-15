@@ -26,19 +26,12 @@ class RequestConstProvider with ChangeNotifier {
         'userPresident': loginUser.president,
         'approvedAt': DateTime.now(),
       });
-      if (loginUser.president) {
-        _constService.update({
-          'id': requestConst.id,
-          'approval': 1,
-          'approvedAt': DateTime.now(),
-          'approvalUsers': approvalUsers,
-        });
-      } else {
-        _constService.update({
-          'id': requestConst.id,
-          'approvalUsers': approvalUsers,
-        });
-      }
+      _constService.update({
+        'id': requestConst.id,
+        'approval': 1,
+        'approvedAt': DateTime.now(),
+        'approvalUsers': approvalUsers,
+      });
     } catch (e) {
       error = '申請の承認に失敗しました';
     }

@@ -14,6 +14,7 @@ class LoanModel {
   DateTime _returnAt = DateTime.now();
   String _returnUser = '';
   String _signImage = '';
+  String _memo = '';
   List<String> readUserIds = [];
   DateTime _createdAt = DateTime.now();
   DateTime _expirationAt = DateTime.now();
@@ -31,6 +32,7 @@ class LoanModel {
   DateTime get returnAt => _returnAt;
   String get returnUser => _returnUser;
   String get signImage => _signImage;
+  String get memo => _memo;
   DateTime get createdAt => _createdAt;
   DateTime get expirationAt => _expirationAt;
 
@@ -50,6 +52,7 @@ class LoanModel {
     _returnAt = data['returnAt'].toDate() ?? DateTime.now();
     _returnUser = data['returnUser'] ?? '';
     _signImage = data['signImage'] ?? '';
+    _memo = data['memo'] ?? '';
     readUserIds = _convertReadUserIds(data['readUserIds']);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
     _expirationAt = data['expirationAt'].toDate() ?? DateTime.now();

@@ -19,6 +19,7 @@ class RequestSquareModel {
   bool _useDesk = false;
   int _useDeskNum = 0;
   String _useContent = '';
+  String _memo = '';
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
   List<ApprovalUserModel> approvalUsers = [];
@@ -41,6 +42,7 @@ class RequestSquareModel {
   bool get useDesk => _useDesk;
   int get useDeskNum => _useDeskNum;
   String get useContent => _useContent;
+  String get memo => _memo;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
   DateTime get createdAt => _createdAt;
@@ -66,6 +68,7 @@ class RequestSquareModel {
     _useDesk = data['useDesk'] ?? false;
     _useDeskNum = data['useDeskNum'] ?? 0;
     _useContent = data['useContent'] ?? '';
+    _memo = data['memo'] ?? '';
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
     approvalUsers = _convertApprovalUsers(data['approvalUsers']);

@@ -163,7 +163,7 @@ class _RequestCycleDetailScreenState extends State<RequestCycleDetailScreen> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          isReject && widget.loginProvider.user?.president == true
+          isReject
               ? FloatingActionButton.extended(
                   heroTag: 'reject',
                   onPressed: () => showDialog(

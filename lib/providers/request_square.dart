@@ -26,19 +26,12 @@ class RequestSquareProvider with ChangeNotifier {
         'userPresident': loginUser.president,
         'approvedAt': DateTime.now(),
       });
-      if (loginUser.president) {
-        _squareService.update({
-          'id': square.id,
-          'approval': 1,
-          'approvedAt': DateTime.now(),
-          'approvalUsers': approvalUsers,
-        });
-      } else {
-        _squareService.update({
-          'id': square.id,
-          'approvalUsers': approvalUsers,
-        });
-      }
+      _squareService.update({
+        'id': square.id,
+        'approval': 1,
+        'approvedAt': DateTime.now(),
+        'approvalUsers': approvalUsers,
+      });
     } catch (e) {
       error = '申請の承認に失敗しました';
     }
