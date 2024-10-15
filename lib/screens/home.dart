@@ -15,6 +15,7 @@ import 'package:miel_work_app/screens/notice.dart';
 import 'package:miel_work_app/screens/plan.dart';
 import 'package:miel_work_app/screens/problem.dart';
 import 'package:miel_work_app/screens/report.dart';
+import 'package:miel_work_app/screens/request_const.dart';
 import 'package:miel_work_app/screens/request_cycle.dart';
 import 'package:miel_work_app/screens/request_facility.dart';
 import 'package:miel_work_app/screens/request_interview.dart';
@@ -29,6 +30,7 @@ import 'package:miel_work_app/services/loan.dart';
 import 'package:miel_work_app/services/lost.dart';
 import 'package:miel_work_app/services/notice.dart';
 import 'package:miel_work_app/services/problem.dart';
+import 'package:miel_work_app/services/request_const.dart';
 import 'package:miel_work_app/services/request_cycle.dart';
 import 'package:miel_work_app/services/request_facility.dart';
 import 'package:miel_work_app/services/request_interview.dart';
@@ -64,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
   RequestFacilityService facilityService = RequestFacilityService();
   RequestCycleService cycleService = RequestCycleService();
   RequestOvertimeService overtimeService = RequestOvertimeService();
+  RequestConstService constService = RequestConstService();
   LostService lostService = LostService();
   LoanService loanService = LoanService();
 
@@ -242,13 +245,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   );
                                 },
                               ),
-                              StreamBuilder5<
+                              StreamBuilder6<
+                                  QuerySnapshot<Map<String, dynamic>>,
                                   QuerySnapshot<Map<String, dynamic>>,
                                   QuerySnapshot<Map<String, dynamic>>,
                                   QuerySnapshot<Map<String, dynamic>>,
                                   QuerySnapshot<Map<String, dynamic>>,
                                   QuerySnapshot<Map<String, dynamic>>>(
-                                streams: StreamTuple5(
+                                streams: StreamTuple6(
                                   interviewService.streamList(
                                     searchStart: null,
                                     searchEnd: null,
@@ -270,6 +274,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                     approval: [0],
                                   )!,
                                   overtimeService.streamList(
+                                    searchStart: null,
+                                    searchEnd: null,
+                                    approval: [0],
+                                  )!,
+                                  constService.streamList(
                                     searchStart: null,
                                     searchEnd: null,
                                     approval: [0],
@@ -309,6 +318,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     if (snapshot.snapshot5.data!.size > 0) {
                                       alert = overtimeService.checkAlert(
                                         data: snapshot.snapshot5.data,
+                                      );
+                                    }
+                                  }
+                                  if (snapshot.snapshot6.data != null) {
+                                    if (snapshot.snapshot6.data!.size > 0) {
+                                      alert = constService.checkAlert(
+                                        data: snapshot.snapshot6.data,
                                       );
                                     }
                                   }
@@ -520,6 +536,7 @@ class RequestSelectDialog extends StatelessWidget {
     RequestFacilityService facilityService = RequestFacilityService();
     RequestCycleService cycleService = RequestCycleService();
     RequestOvertimeService overtimeService = RequestOvertimeService();
+    RequestConstService constService = RequestConstService();
 
     return CustomAlertDialog(
       contentPadding: EdgeInsets.zero,
@@ -653,6 +670,32 @@ class RequestSelectDialog extends StatelessWidget {
                     onTap: () => showBottomUpScreen(
                       context,
                       RequestOvertimeScreen(
+                        loginProvider: loginProvider,
+                        homeProvider: homeProvider,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: constService.streamList(
+                  searchStart: null,
+                  searchEnd: null,
+                  approval: [0],
+                ),
+                builder: (context, snapshot) {
+                  bool alert = false;
+                  if (snapshot.hasData) {
+                    alert = constService.checkAlert(
+                      data: snapshot.data,
+                    );
+                  }
+                  return RequestList(
+                    label: '店舗工事作業申請',
+                    alert: alert,
+                    onTap: () => showBottomUpScreen(
+                      context,
+                      RequestConstScreen(
                         loginProvider: loginProvider,
                         homeProvider: homeProvider,
                       ),
