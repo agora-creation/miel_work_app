@@ -39,6 +39,7 @@ class RequestInterviewModel {
   String _insertedShopName = '';
   String _insertedVisitors = '';
   String _insertedContent = '';
+  List<String> attachedFiles = [];
   String _remarks = '';
   String _memo = '';
   int _approval = 0;
@@ -131,6 +132,7 @@ class RequestInterviewModel {
     _insertedShopName = data['insertedShopName'] ?? '';
     _insertedVisitors = data['insertedVisitors'] ?? '';
     _insertedContent = data['insertedContent'] ?? '';
+    attachedFiles = data['attachedFiles'] ?? [];
     _remarks = data['remarks'] ?? '';
     _memo = data['memo'] ?? '';
     _approval = data['approval'] ?? 0;

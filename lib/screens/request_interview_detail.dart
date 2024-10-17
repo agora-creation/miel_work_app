@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
@@ -8,13 +10,17 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/request_interview.dart';
 import 'package:miel_work_app/widgets/approval_user_list.dart';
+import 'package:miel_work_app/widgets/attached_file_list.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/dotted_divider.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
+import 'package:miel_work_app/widgets/image_detail_dialog.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
+import 'package:miel_work_app/widgets/pdf_detail_dialog.dart';
+import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -271,7 +277,7 @@ class _RequestInterviewDetailScreenState
                         ),
                       ],
                     )
-                  : Container(),
+                  : const Text('ロケハンなし'),
               const SizedBox(height: 16),
               const DottedDivider(),
               const SizedBox(height: 16),
@@ -330,10 +336,47 @@ class _RequestInterviewDetailScreenState
                         ),
                       ],
                     )
-                  : Container(),
+                  : const Text('インサート撮影なし'),
               const SizedBox(height: 16),
               const DottedDivider(),
               const SizedBox(height: 16),
+              FormLabel(
+                '添付ファイル',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: widget.interview.attachedFiles.map((file) {
+                        return AttachedFileList(
+                          fileName: p.basename(file),
+                          onTap: () {
+                            String ext = p.extension(file);
+                            if (imageExtensions.contains(ext)) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => ImageDetailDialog(
+                                  File(file).path,
+                                  onPressedClose: () => Navigator.pop(context),
+                                ),
+                              );
+                            }
+                            if (pdfExtensions.contains(ext)) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => PdfDetailDialog(
+                                  File(file).path,
+                                  onPressedClose: () => Navigator.pop(context),
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
               FormLabel(
                 'その他連絡事項',
                 child: FormValue(widget.interview.remarks),

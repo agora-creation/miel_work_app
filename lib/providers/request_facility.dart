@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/models/approval_user.dart';
 import 'package:miel_work_app/models/request_facility.dart';
 import 'package:miel_work_app/models/user.dart';
+import 'package:miel_work_app/services/mail.dart';
 import 'package:miel_work_app/services/request_facility.dart';
 
 class RequestFacilityProvider with ChangeNotifier {
   final RequestFacilityService _facilityService = RequestFacilityService();
+  final MailService _mailService = MailService();
 
   Future<String?> approval({
     required RequestFacilityModel facility,
@@ -32,6 +34,18 @@ class RequestFacilityProvider with ChangeNotifier {
         'approvedAt': DateTime.now(),
         'approvalUsers': approvalUsers,
       });
+      String message = '''
+施設使用申込が承認されました。
+
+      ''';
+      _mailService.create({
+        'id': _mailService.id(),
+        'to': facility.companyUserEmail,
+        'subject': '施設使用申込承認のお知らせ',
+        'message': message,
+        'createdAt': DateTime.now(),
+        'expirationAt': DateTime.now().add(const Duration(hours: 1)),
+      });
     } catch (e) {
       error = '申請の承認に失敗しました';
     }
@@ -48,6 +62,18 @@ class RequestFacilityProvider with ChangeNotifier {
       _facilityService.update({
         'id': facility.id,
         'approval': 9,
+      });
+      String message = '''
+施設使用申込が否決されました。
+
+      ''';
+      _mailService.create({
+        'id': _mailService.id(),
+        'to': facility.companyUserEmail,
+        'subject': '施設使用申込否決のお知らせ',
+        'message': message,
+        'createdAt': DateTime.now(),
+        'expirationAt': DateTime.now().add(const Duration(hours: 1)),
       });
     } catch (e) {
       error = '申請の否決に失敗しました';

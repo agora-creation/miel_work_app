@@ -19,6 +19,7 @@ class RequestSquareModel {
   bool _useDesk = false;
   int _useDeskNum = 0;
   String _useContent = '';
+  List<String> attachedFiles = [];
   String _memo = '';
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
@@ -68,6 +69,7 @@ class RequestSquareModel {
     _useDesk = data['useDesk'] ?? false;
     _useDeskNum = data['useDeskNum'] ?? 0;
     _useContent = data['useContent'] ?? '';
+    attachedFiles = data['attachedFiles'] ?? [];
     _memo = data['memo'] ?? '';
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();

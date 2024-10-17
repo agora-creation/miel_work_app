@@ -11,6 +11,7 @@ class RequestOvertimeModel {
   DateTime _useEndedAt = DateTime.now();
   bool _useAtPending = false;
   String _useContent = '';
+  List<String> attachedFiles = [];
   String _memo = '';
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
@@ -44,6 +45,7 @@ class RequestOvertimeModel {
     _useEndedAt = data['useEndedAt'].toDate() ?? DateTime.now();
     _useAtPending = data['useAtPending'] ?? false;
     _useContent = data['useContent'] ?? '';
+    attachedFiles = data['attachedFiles'] ?? [];
     _memo = data['memo'] ?? '';
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();

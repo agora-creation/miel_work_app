@@ -10,6 +10,7 @@ class RequestFacilityModel {
   DateTime _useStartedAt = DateTime.now();
   DateTime _useEndedAt = DateTime.now();
   bool _useAtPending = false;
+  List<String> attachedFiles = [];
   String _memo = '';
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
@@ -41,6 +42,7 @@ class RequestFacilityModel {
     _useStartedAt = data['useStartedAt'].toDate() ?? DateTime.now();
     _useEndedAt = data['useEndedAt'].toDate() ?? DateTime.now();
     _useAtPending = data['useAtPending'] ?? false;
+    attachedFiles = data['attachedFiles'] ?? [];
     _memo = data['memo'] ?? '';
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
