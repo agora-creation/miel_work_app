@@ -291,7 +291,7 @@ class _RequestConstDetailScreenState extends State<RequestConstDetailScreen> {
                   heroTag: 'reject',
                   onPressed: () => showDialog(
                     context: context,
-                    builder: (context) => ApprovalRequestConstDialog(
+                    builder: (context) => RejectRequestConstDialog(
                       loginProvider: widget.loginProvider,
                       homeProvider: widget.homeProvider,
                       requestConst: widget.requestConst,
@@ -314,7 +314,7 @@ class _RequestConstDetailScreenState extends State<RequestConstDetailScreen> {
                   heroTag: 'approval',
                   onPressed: () => showDialog(
                     context: context,
-                    builder: (context) => RejectRequestConstDialog(
+                    builder: (context) => ApprovalRequestConstDialog(
                       loginProvider: widget.loginProvider,
                       homeProvider: widget.homeProvider,
                       requestConst: widget.requestConst,

@@ -234,7 +234,7 @@ class _RequestOvertimeDetailScreenState
                   heroTag: 'reject',
                   onPressed: () => showDialog(
                     context: context,
-                    builder: (context) => ApprovalRequestOvertimeDialog(
+                    builder: (context) => RejectRequestOvertimeDialog(
                       loginProvider: widget.loginProvider,
                       homeProvider: widget.homeProvider,
                       overtime: widget.overtime,
@@ -257,7 +257,7 @@ class _RequestOvertimeDetailScreenState
                   heroTag: 'approval',
                   onPressed: () => showDialog(
                     context: context,
-                    builder: (context) => RejectRequestOvertimeDialog(
+                    builder: (context) => ApprovalRequestOvertimeDialog(
                       loginProvider: widget.loginProvider,
                       homeProvider: widget.homeProvider,
                       overtime: widget.overtime,

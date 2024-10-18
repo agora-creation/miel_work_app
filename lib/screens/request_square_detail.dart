@@ -285,7 +285,7 @@ class _RequestSquareDetailScreenState extends State<RequestSquareDetailScreen> {
                   heroTag: 'reject',
                   onPressed: () => showDialog(
                     context: context,
-                    builder: (context) => ApprovalRequestSquareDialog(
+                    builder: (context) => RejectRequestSquareDialog(
                       loginProvider: widget.loginProvider,
                       homeProvider: widget.homeProvider,
                       square: widget.square,
@@ -308,7 +308,7 @@ class _RequestSquareDetailScreenState extends State<RequestSquareDetailScreen> {
                   heroTag: 'approval',
                   onPressed: () => showDialog(
                     context: context,
-                    builder: (context) => RejectRequestSquareDialog(
+                    builder: (context) => ApprovalRequestSquareDialog(
                       loginProvider: widget.loginProvider,
                       homeProvider: widget.homeProvider,
                       square: widget.square,

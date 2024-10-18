@@ -245,7 +245,7 @@ class _RequestFacilityDetailScreenState
                   heroTag: 'reject',
                   onPressed: () => showDialog(
                     context: context,
-                    builder: (context) => ApprovalRequestFacilityDialog(
+                    builder: (context) => RejectRequestFacilityDialog(
                       loginProvider: widget.loginProvider,
                       homeProvider: widget.homeProvider,
                       facility: widget.facility,
@@ -268,7 +268,7 @@ class _RequestFacilityDetailScreenState
                   heroTag: 'approval',
                   onPressed: () => showDialog(
                     context: context,
-                    builder: (context) => RejectRequestFacilityDialog(
+                    builder: (context) => ApprovalRequestFacilityDialog(
                       loginProvider: widget.loginProvider,
                       homeProvider: widget.homeProvider,
                       facility: widget.facility,

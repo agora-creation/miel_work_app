@@ -168,7 +168,7 @@ class _RequestCycleDetailScreenState extends State<RequestCycleDetailScreen> {
                   heroTag: 'reject',
                   onPressed: () => showDialog(
                     context: context,
-                    builder: (context) => ApprovalRequestCycleDialog(
+                    builder: (context) => RejectRequestCycleDialog(
                       loginProvider: widget.loginProvider,
                       homeProvider: widget.homeProvider,
                       cycle: widget.cycle,
@@ -191,7 +191,7 @@ class _RequestCycleDetailScreenState extends State<RequestCycleDetailScreen> {
                   heroTag: 'approval',
                   onPressed: () => showDialog(
                     context: context,
-                    builder: (context) => RejectRequestCycleDialog(
+                    builder: (context) => ApprovalRequestCycleDialog(
                       loginProvider: widget.loginProvider,
                       homeProvider: widget.homeProvider,
                       cycle: widget.cycle,
