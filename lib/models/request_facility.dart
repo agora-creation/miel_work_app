@@ -42,12 +42,20 @@ class RequestFacilityModel {
     _useStartedAt = data['useStartedAt'].toDate() ?? DateTime.now();
     _useEndedAt = data['useEndedAt'].toDate() ?? DateTime.now();
     _useAtPending = data['useAtPending'] ?? false;
-    attachedFiles = data['attachedFiles'] ?? [];
+    attachedFiles = _convertAttachedFiles(data['attachedFiles'] ?? []);
     _memo = data['memo'] ?? '';
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
     approvalUsers = _convertApprovalUsers(data['approvalUsers']);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
+  }
+
+  List<String> _convertAttachedFiles(List list) {
+    List<String> converted = [];
+    for (String data in list) {
+      converted.add(data);
+    }
+    return converted;
   }
 
   List<ApprovalUserModel> _convertApprovalUsers(List list) {

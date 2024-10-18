@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/approval_user.dart';
 import 'package:miel_work_app/models/request_square.dart';
 import 'package:miel_work_app/models/user.dart';
@@ -28,24 +29,82 @@ class RequestSquareProvider with ChangeNotifier {
         'userPresident': loginUser.president,
         'approvedAt': DateTime.now(),
       });
-      _squareService.update({
-        'id': square.id,
-        'approval': 1,
-        'approvedAt': DateTime.now(),
-        'approvalUsers': approvalUsers,
-      });
-      String message = '''
+      if (loginUser.president) {
+        _squareService.update({
+          'id': square.id,
+          'approval': 1,
+          'approvedAt': DateTime.now(),
+          'approvalUsers': approvalUsers,
+        });
+        String useAtText = '';
+        if (square.useAtPending) {
+          useAtText = '未定';
+        } else {
+          useAtText =
+              '${dateText('yyyy/MM/dd HH:mm', square.useStartedAt)}〜${dateText('yyyy/MM/dd HH:mm', square.useEndedAt)}';
+        }
+        String useClassText = '';
+        if (square.useFull) {
+          useClassText = '''
+全面使用
+        ''';
+        }
+        if (square.useChair) {
+          useClassText = '''
+折りたたみイス：${square.useChairNum}脚
+        ''';
+        }
+        if (square.useDesk) {
+          useClassText = '''
+折りたたみ机：${square.useDeskNum}台
+        ''';
+        }
+        String attachedFilesText = '';
+        if (square.attachedFiles.isNotEmpty) {
+          for (final file in square.attachedFiles) {
+            attachedFilesText += '$file\n';
+          }
+        }
+        String message = '''
 よさこい広場使用申込が承認されました。
+以下申込内容をご確認し、ご利用ください。
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+■申込者情報
+【申込会社名(又は店名)】${square.companyName}
+【申込担当者名】${square.companyUserName}
+【申込担当者メールアドレス】${square.companyUserEmail}
+【申込担当者電話番号】${square.companyUserTel}
+【住所】${square.companyAddress}
 
+■使用者情報 (申込者情報と異なる場合のみ)
+【使用会社名(又は店名)】${square.useCompanyName}
+【使用者名】${square.useCompanyUserName}
+
+■使用情報
+【使用予定日時】$useAtText
+【使用区分】
+$useClassText
+【使用内容】
+${square.useContent}
+【添付ファイル】
+$attachedFilesText
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       ''';
-      _mailService.create({
-        'id': _mailService.id(),
-        'to': square.companyUserEmail,
-        'subject': 'よさこい広場使用申込承認のお知らせ',
-        'message': message,
-        'createdAt': DateTime.now(),
-        'expirationAt': DateTime.now().add(const Duration(hours: 1)),
-      });
+        _mailService.create({
+          'id': _mailService.id(),
+          'to': square.companyUserEmail,
+          'subject': 'よさこい広場使用申込承認のお知らせ',
+          'message': message,
+          'createdAt': DateTime.now(),
+          'expirationAt': DateTime.now().add(const Duration(hours: 1)),
+        });
+      } else {
+        _squareService.update({
+          'id': square.id,
+          'approvalUsers': approvalUsers,
+        });
+      }
     } catch (e) {
       error = '申請の承認に失敗しました';
     }
@@ -63,9 +122,60 @@ class RequestSquareProvider with ChangeNotifier {
         'id': square.id,
         'approval': 9,
       });
+      String useAtText = '';
+      if (square.useAtPending) {
+        useAtText = '未定';
+      } else {
+        useAtText =
+            '${dateText('yyyy/MM/dd HH:mm', square.useStartedAt)}〜${dateText('yyyy/MM/dd HH:mm', square.useEndedAt)}';
+      }
+      String useClassText = '';
+      if (square.useFull) {
+        useClassText = '''
+全面使用
+        ''';
+      }
+      if (square.useChair) {
+        useClassText = '''
+折りたたみイス：${square.useChairNum}脚
+        ''';
+      }
+      if (square.useDesk) {
+        useClassText = '''
+折りたたみ机：${square.useDeskNum}台
+        ''';
+      }
+      String attachedFilesText = '';
+      if (square.attachedFiles.isNotEmpty) {
+        for (final file in square.attachedFiles) {
+          attachedFilesText += '$file\n';
+        }
+      }
       String message = '''
 よさこい広場使用申込が否決されました。
+以下申込内容をご確認し、再度申込を行なってください。
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+■申込者情報
+【申込会社名(又は店名)】${square.companyName}
+【申込担当者名】${square.companyUserName}
+【申込担当者メールアドレス】${square.companyUserEmail}
+【申込担当者電話番号】${square.companyUserTel}
+【住所】${square.companyAddress}
 
+■使用者情報 (申込者情報と異なる場合のみ)
+【使用会社名(又は店名)】${square.useCompanyName}
+【使用者名】${square.useCompanyUserName}
+
+■使用情報
+【使用予定日時】$useAtText
+【使用区分】
+$useClassText
+【使用内容】
+${square.useContent}
+【添付ファイル】
+$attachedFilesText
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       ''';
       _mailService.create({
         'id': _mailService.id(),

@@ -21,6 +21,9 @@ class RequestConstModel {
   bool _fire = false;
   String _fireMeasures = '';
   List<String> attachedFiles = [];
+  bool _meeting = false;
+  DateTime _meetingAt = DateTime.now();
+  String _caution = '';
   String _memo = '';
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
@@ -45,6 +48,9 @@ class RequestConstModel {
   String get dustMeasures => _dustMeasures;
   bool get fire => _fire;
   String get fireMeasures => _fireMeasures;
+  bool get meeting => _meeting;
+  DateTime get meetingAt => _meetingAt;
+  String get caution => _caution;
   String get memo => _memo;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
@@ -72,12 +78,23 @@ class RequestConstModel {
     _dustMeasures = data['dustMeasures'] ?? '';
     _fire = data['fire'] ?? false;
     _fireMeasures = data['fireMeasures'] ?? '';
-    attachedFiles = data['attachedFiles'] ?? [];
+    attachedFiles = _convertAttachedFiles(data['attachedFiles'] ?? []);
+    _meeting = data['meeting'] ?? false;
+    _meetingAt = data['meetingAt'].toDate() ?? DateTime.now();
+    _caution = data['caution'] ?? '';
     _memo = data['memo'] ?? '';
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
     approvalUsers = _convertApprovalUsers(data['approvalUsers']);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
+  }
+
+  List<String> _convertAttachedFiles(List list) {
+    List<String> converted = [];
+    for (String data in list) {
+      converted.add(data);
+    }
+    return converted;
   }
 
   List<ApprovalUserModel> _convertApprovalUsers(List list) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/approval_user.dart';
 import 'package:miel_work_app/models/request_const.dart';
 import 'package:miel_work_app/models/user.dart';
@@ -11,9 +12,13 @@ class RequestConstProvider with ChangeNotifier {
 
   Future<String?> approval({
     required RequestConstModel requestConst,
+    required bool meeting,
+    required DateTime meetingAt,
+    required String caution,
     required UserModel? loginUser,
   }) async {
     String? error;
+    if (caution == '') return '注意事項を入力してください';
     if (loginUser == null) return '申請の承認に失敗しました';
     try {
       List<Map> approvalUsers = [];
@@ -34,9 +39,65 @@ class RequestConstProvider with ChangeNotifier {
         'approvedAt': DateTime.now(),
         'approvalUsers': approvalUsers,
       });
+      String constAtText = '';
+      if (requestConst.constAtPending) {
+        constAtText = '未定';
+      } else {
+        constAtText =
+            '${dateText('yyyy/MM/dd HH:mm', requestConst.constStartedAt)}〜${dateText('yyyy/MM/dd HH:mm', requestConst.constEndedAt)}';
+      }
+      String noiseText = '';
+      if (requestConst.noise) {
+        noiseText = '有(${requestConst.noiseMeasures})';
+      }
+      String dustText = '';
+      if (requestConst.dust) {
+        dustText = '有(${requestConst.dustMeasures})';
+      }
+      String fireText = '';
+      if (requestConst.fire) {
+        fireText = '有(${requestConst.fireMeasures})';
+      }
+      String attachedFilesText = '';
+      if (requestConst.attachedFiles.isNotEmpty) {
+        for (final file in requestConst.attachedFiles) {
+          attachedFilesText += '$file\n';
+        }
+      }
+      String meetingText = '不要';
+      if (meeting) {
+        meetingText = '必要(${dateText('yyyy/MM/dd HH:mm', meetingAt)})';
+      }
       String message = '''
 店舗工事作業申請が承認されました。
 
+[着工前の打ち合わせ] $meetingText
+[注意事項]
+$caution
+
+以下申込内容をご確認し、作業を行なってください。
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+■申請者情報
+【店舗名】${requestConst.companyName}
+【店舗責任者名】${requestConst.companyUserName}
+【店舗責任者メールアドレス】${requestConst.companyUserEmail}
+【店舗責任者電話番号】${requestConst.companyUserTel}
+
+■工事施工情報
+【工事施工会社名】${requestConst.constName}
+【工事施工代表者名】${requestConst.constUserName}
+【工事施工代表者電話番号】${requestConst.constUserTel}
+【施工予定日時】$constAtText
+【施工内容】
+${requestConst.constContent}
+【騒音】$noiseText
+【粉塵】$dustText
+【火気の使用】$fireText
+
+【添付ファイル】
+$attachedFilesText
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       ''';
       _mailService.create({
         'id': _mailService.id(),
@@ -63,9 +124,56 @@ class RequestConstProvider with ChangeNotifier {
         'id': requestConst.id,
         'approval': 9,
       });
+      String constAtText = '';
+      if (requestConst.constAtPending) {
+        constAtText = '未定';
+      } else {
+        constAtText =
+            '${dateText('yyyy/MM/dd HH:mm', requestConst.constStartedAt)}〜${dateText('yyyy/MM/dd HH:mm', requestConst.constEndedAt)}';
+      }
+      String noiseText = '';
+      if (requestConst.noise) {
+        noiseText = '有(${requestConst.noiseMeasures})';
+      }
+      String dustText = '';
+      if (requestConst.dust) {
+        dustText = '有(${requestConst.dustMeasures})';
+      }
+      String fireText = '';
+      if (requestConst.fire) {
+        fireText = '有(${requestConst.fireMeasures})';
+      }
+      String attachedFilesText = '';
+      if (requestConst.attachedFiles.isNotEmpty) {
+        for (final file in requestConst.attachedFiles) {
+          attachedFilesText += '$file\n';
+        }
+      }
       String message = '''
 店舗工事作業申請が否決されました。
+以下申込内容をご確認し、再度申請を行なってください。
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+■申請者情報
+【店舗名】${requestConst.companyName}
+【店舗責任者名】${requestConst.companyUserName}
+【店舗責任者メールアドレス】${requestConst.companyUserEmail}
+【店舗責任者電話番号】${requestConst.companyUserTel}
 
+■工事施工情報
+【工事施工会社名】${requestConst.constName}
+【工事施工代表者名】${requestConst.constUserName}
+【工事施工代表者電話番号】${requestConst.constUserTel}
+【施工予定日時】$constAtText
+【施工内容】
+${requestConst.constContent}
+【騒音】$noiseText
+【粉塵】$dustText
+【火気の使用】$fireText
+
+【添付ファイル】
+$attachedFilesText
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       ''';
       _mailService.create({
         'id': _mailService.id(),

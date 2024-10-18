@@ -8,6 +8,7 @@ class RequestCycleModel {
   String _companyUserEmail = '';
   String _companyUserTel = '';
   String _companyAddress = '';
+  String _lockNumber = '';
   String _memo = '';
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
@@ -20,6 +21,7 @@ class RequestCycleModel {
   String get companyUserEmail => _companyUserEmail;
   String get companyUserTel => _companyUserTel;
   String get companyAddress => _companyAddress;
+  String get lockNumber => _lockNumber;
   String get memo => _memo;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
@@ -35,6 +37,7 @@ class RequestCycleModel {
     _companyUserEmail = data['companyUserEmail'] ?? '';
     _companyUserTel = data['companyUserTel'] ?? '';
     _companyAddress = data['companyAddress'] ?? '';
+    _lockNumber = data['lockNumber'] ?? '';
     _memo = data['memo'] ?? '';
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();

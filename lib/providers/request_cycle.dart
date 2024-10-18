@@ -11,9 +11,11 @@ class RequestCycleProvider with ChangeNotifier {
 
   Future<String?> approval({
     required RequestCycleModel cycle,
+    required String lockNumber,
     required UserModel? loginUser,
   }) async {
     String? error;
+    if (lockNumber == '') return '施錠番号を入力してください';
     if (loginUser == null) return '申請の承認に失敗しました';
     try {
       List<Map> approvalUsers = [];
@@ -37,11 +39,23 @@ class RequestCycleProvider with ChangeNotifier {
       String message = '''
 自転車置き場使用申込が承認されました。
 
+施錠番号は『$lockNumber』です。
+
+以下申込内容をご確認し、ご利用ください。
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+■申込者情報
+【店舗名】${cycle.companyName}
+【使用者名】${cycle.companyUserName}
+【使用者メールアドレス】${cycle.companyUserEmail}
+【使用者電話番号】${cycle.companyUserTel}
+【住所】${cycle.companyAddress}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       ''';
       _mailService.create({
         'id': _mailService.id(),
         'to': cycle.companyUserEmail,
-        'subject': '取材申込承認のお知らせ',
+        'subject': '自転車置き場使用申込承認のお知らせ',
         'message': message,
         'createdAt': DateTime.now(),
         'expirationAt': DateTime.now().add(const Duration(hours: 1)),
@@ -65,12 +79,21 @@ class RequestCycleProvider with ChangeNotifier {
       });
       String message = '''
 自転車置き場使用申込が否決されました。
+以下申込内容をご確認し、再度申込を行なってください。
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+■申込者情報
+【店舗名】${cycle.companyName}
+【使用者名】${cycle.companyUserName}
+【使用者メールアドレス】${cycle.companyUserEmail}
+【使用者電話番号】${cycle.companyUserTel}
+【住所】${cycle.companyAddress}
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       ''';
       _mailService.create({
         'id': _mailService.id(),
         'to': cycle.companyUserEmail,
-        'subject': '取材申込否決のお知らせ',
+        'subject': '自転車置き場使用申込否決のお知らせ',
         'message': message,
         'createdAt': DateTime.now(),
         'expirationAt': DateTime.now().add(const Duration(hours: 1)),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/approval_user.dart';
 import 'package:miel_work_app/models/request_overtime.dart';
 import 'package:miel_work_app/models/user.dart';
@@ -34,9 +35,38 @@ class RequestOvertimeProvider with ChangeNotifier {
         'approvedAt': DateTime.now(),
         'approvalUsers': approvalUsers,
       });
+      String useAtText = '';
+      if (overtime.useAtPending) {
+        useAtText = '未定';
+      } else {
+        useAtText =
+            '${dateText('yyyy/MM/dd HH:mm', overtime.useStartedAt)}〜${dateText('yyyy/MM/dd HH:mm', overtime.useEndedAt)}';
+      }
+      String attachedFilesText = '';
+      if (overtime.attachedFiles.isNotEmpty) {
+        for (final file in overtime.attachedFiles) {
+          attachedFilesText += '$file\n';
+        }
+      }
       String message = '''
 夜間居残り作業申請が承認されました。
+以下申込内容をご確認し、作業を行なってください。
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+■申請者情報
+【店舗名】${overtime.companyName}
+【店舗責任者名】${overtime.companyUserName}
+【店舗責任者メールアドレス】${overtime.companyUserEmail}
+【店舗責任者電話番号】${overtime.companyUserTel}
 
+■作業情報
+【作業予定日時】$useAtText
+【作業内容】
+${overtime.useContent}
+
+【添付ファイル】
+$attachedFilesText
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       ''';
       _mailService.create({
         'id': _mailService.id(),
@@ -63,9 +93,38 @@ class RequestOvertimeProvider with ChangeNotifier {
         'id': overtime.id,
         'approval': 9,
       });
+      String useAtText = '';
+      if (overtime.useAtPending) {
+        useAtText = '未定';
+      } else {
+        useAtText =
+            '${dateText('yyyy/MM/dd HH:mm', overtime.useStartedAt)}〜${dateText('yyyy/MM/dd HH:mm', overtime.useEndedAt)}';
+      }
+      String attachedFilesText = '';
+      if (overtime.attachedFiles.isNotEmpty) {
+        for (final file in overtime.attachedFiles) {
+          attachedFilesText += '$file\n';
+        }
+      }
       String message = '''
 夜間居残り作業申請が否決されました。
+以下申込内容をご確認し、再度申請を行なってください。
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+■申請者情報
+【店舗名】${overtime.companyName}
+【店舗責任者名】${overtime.companyUserName}
+【店舗責任者メールアドレス】${overtime.companyUserEmail}
+【店舗責任者電話番号】${overtime.companyUserTel}
 
+■作業情報
+【作業予定日時】$useAtText
+【作業内容】
+${overtime.useContent}
+
+【添付ファイル】
+$attachedFilesText
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       ''';
       _mailService.create({
         'id': _mailService.id(),

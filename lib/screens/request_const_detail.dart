@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as picker;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
@@ -14,6 +16,7 @@ import 'package:miel_work_app/widgets/attached_file_list.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
+import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/dotted_divider.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
@@ -360,18 +363,77 @@ class ApprovalRequestConstDialog extends StatefulWidget {
 
 class _ApprovalRequestConstDialogState
     extends State<ApprovalRequestConstDialog> {
+  bool meeting = false;
+  DateTime meetingAt = DateTime.now();
+  TextEditingController cautionController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final constProvider = Provider.of<RequestConstProvider>(context);
     return CustomAlertDialog(
-      content: const Column(
+      content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 8),
-          Text(
+          const SizedBox(height: 8),
+          const Text(
             '本当に承認しますか？',
             style: TextStyle(color: kRedColor),
+          ),
+          const SizedBox(height: 8),
+          FormLabel(
+            '着工前の打ち合わせ',
+            child: Container(
+              decoration: const BoxDecoration(
+                border: Border(
+                  top: BorderSide(color: kGreyColor),
+                  bottom: BorderSide(color: kGreyColor),
+                ),
+              ),
+              child: CheckboxListTile(
+                value: meeting,
+                onChanged: (value) {
+                  setState(() {
+                    meeting = value ?? false;
+                  });
+                },
+                title: const Text('必要'),
+              ),
+            ),
+          ),
+          meeting
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: FormLabel(
+                    '打ち合わせ日時',
+                    child: FormValue(
+                      dateText('yyyy/MM/dd HH:mm', meetingAt),
+                      onTap: () => picker.DatePicker.showDateTimePicker(
+                        context,
+                        showTitleActions: true,
+                        minTime: kFirstDate,
+                        maxTime: kLastDate,
+                        theme: kDatePickerTheme,
+                        onConfirm: (value) {
+                          setState(() {
+                            meetingAt = value;
+                          });
+                        },
+                        currentTime: meetingAt,
+                        locale: picker.LocaleType.jp,
+                      ),
+                    ),
+                  ),
+                )
+              : Container(),
+          const SizedBox(height: 8),
+          FormLabel(
+            '注意事項',
+            child: CustomTextField(
+              controller: cautionController,
+              textInputType: TextInputType.multiline,
+              maxLines: 3,
+            ),
           ),
         ],
       ),
@@ -391,6 +453,9 @@ class _ApprovalRequestConstDialogState
           onPressed: () async {
             String? error = await constProvider.approval(
               requestConst: widget.requestConst,
+              meeting: meeting,
+              meetingAt: meetingAt,
+              caution: cautionController.text,
               loginUser: widget.loginProvider.user,
             );
             if (error != null) {

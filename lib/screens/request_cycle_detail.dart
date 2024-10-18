@@ -11,6 +11,7 @@ import 'package:miel_work_app/widgets/approval_user_list.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
+import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/dotted_divider.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
@@ -237,18 +238,29 @@ class ApprovalRequestCycleDialog extends StatefulWidget {
 
 class _ApprovalRequestCycleDialogState
     extends State<ApprovalRequestCycleDialog> {
+  TextEditingController lockNumberController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final cycleProvider = Provider.of<RequestCycleProvider>(context);
     return CustomAlertDialog(
-      content: const Column(
+      content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 8),
-          Text(
+          const SizedBox(height: 8),
+          const Text(
             '本当に承認しますか？',
             style: TextStyle(color: kRedColor),
+          ),
+          const SizedBox(height: 8),
+          FormLabel(
+            '施錠番号',
+            child: CustomTextField(
+              controller: lockNumberController,
+              textInputType: TextInputType.number,
+              maxLines: 1,
+            ),
           ),
         ],
       ),
@@ -268,6 +280,7 @@ class _ApprovalRequestCycleDialogState
           onPressed: () async {
             String? error = await cycleProvider.approval(
               cycle: widget.cycle,
+              lockNumber: lockNumberController.text,
               loginUser: widget.loginProvider.user,
             );
             if (error != null) {

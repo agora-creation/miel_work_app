@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/approval_user.dart';
 import 'package:miel_work_app/models/request_facility.dart';
 import 'package:miel_work_app/models/user.dart';
@@ -34,9 +36,44 @@ class RequestFacilityProvider with ChangeNotifier {
         'approvedAt': DateTime.now(),
         'approvalUsers': approvalUsers,
       });
+      String useAtText = '';
+      if (facility.useAtPending) {
+        useAtText = '未定';
+      } else {
+        useAtText =
+            '${dateText('yyyy/MM/dd HH:mm', facility.useStartedAt)}〜${dateText('yyyy/MM/dd HH:mm', facility.useEndedAt)}';
+      }
+      int useAtDaysPrice = 0;
+      if (!facility.useAtPending) {
+        int useAtDays =
+            facility.useEndedAt.difference(facility.useStartedAt).inDays;
+        int price = 1200;
+        useAtDaysPrice = price * useAtDays;
+      }
+      String attachedFilesText = '';
+      if (facility.attachedFiles.isNotEmpty) {
+        for (final file in facility.attachedFiles) {
+          attachedFilesText += '$file\n';
+        }
+      }
       String message = '''
 施設使用申込が承認されました。
+以下申込内容をご確認し、ご利用ください。
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+■申込者情報
+【店舗名】${facility.companyName}
+【店舗責任者名】${facility.companyUserName}
+【店舗責任者メールアドレス】${facility.companyUserEmail}
+【店舗責任者電話番号】${facility.companyUserTel}
 
+■旧梵屋跡の倉庫を使用します (貸出面積：約12㎡)
+【使用予定日時】$useAtText
+【使用料合計(税抜)】${NumberFormat("#,###").format(useAtDaysPrice)}円
+
+【添付ファイル】
+$attachedFilesText
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       ''';
       _mailService.create({
         'id': _mailService.id(),
@@ -63,9 +100,44 @@ class RequestFacilityProvider with ChangeNotifier {
         'id': facility.id,
         'approval': 9,
       });
+      String useAtText = '';
+      if (facility.useAtPending) {
+        useAtText = '未定';
+      } else {
+        useAtText =
+            '${dateText('yyyy/MM/dd HH:mm', facility.useStartedAt)}〜${dateText('yyyy/MM/dd HH:mm', facility.useEndedAt)}';
+      }
+      int useAtDaysPrice = 0;
+      if (!facility.useAtPending) {
+        int useAtDays =
+            facility.useEndedAt.difference(facility.useStartedAt).inDays;
+        int price = 1200;
+        useAtDaysPrice = price * useAtDays;
+      }
+      String attachedFilesText = '';
+      if (facility.attachedFiles.isNotEmpty) {
+        for (final file in facility.attachedFiles) {
+          attachedFilesText += '$file\n';
+        }
+      }
       String message = '''
 施設使用申込が否決されました。
+以下申込内容をご確認し、再度申込を行なってください。
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+■申込者情報
+【店舗名】${facility.companyName}
+【店舗責任者名】${facility.companyUserName}
+【店舗責任者メールアドレス】${facility.companyUserEmail}
+【店舗責任者電話番号】${facility.companyUserTel}
 
+■旧梵屋跡の倉庫を使用します (貸出面積：約12㎡)
+【使用予定日時】$useAtText
+【使用料合計(税抜)】${NumberFormat("#,###").format(useAtDaysPrice)}円
+
+【添付ファイル】
+$attachedFilesText
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       ''';
       _mailService.create({
         'id': _mailService.id(),
