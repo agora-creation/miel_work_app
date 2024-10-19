@@ -9,6 +9,30 @@ class RequestCycleProvider with ChangeNotifier {
   final RequestCycleService _cycleService = RequestCycleService();
   final MailService _mailService = MailService();
 
+  Future<String?> update({
+    required RequestCycleModel cycle,
+    required String companyName,
+    required String companyUserName,
+    required String companyUserEmail,
+    required String companyUserTel,
+    required String companyAddress,
+  }) async {
+    String? error;
+    try {
+      _cycleService.update({
+        'id': cycle.id,
+        'companyName': companyName,
+        'companyUserName': companyUserName,
+        'companyUserEmail': companyUserEmail,
+        'companyUserTel': companyUserTel,
+        'companyAddress': companyAddress,
+      });
+    } catch (e) {
+      error = '自転車置き場使用申込情報の編集に失敗しました';
+    }
+    return error;
+  }
+
   Future<String?> approval({
     required RequestCycleModel cycle,
     required String lockNumber,
@@ -32,6 +56,7 @@ class RequestCycleProvider with ChangeNotifier {
       });
       _cycleService.update({
         'id': cycle.id,
+        'lockNumber': lockNumber,
         'approval': 1,
         'approvedAt': DateTime.now(),
         'approvalUsers': approvalUsers,

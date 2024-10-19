@@ -10,6 +10,35 @@ class RequestOvertimeProvider with ChangeNotifier {
   final RequestOvertimeService _overtimeService = RequestOvertimeService();
   final MailService _mailService = MailService();
 
+  Future<String?> update({
+    required RequestOvertimeModel overtime,
+    required String companyName,
+    required String companyUserName,
+    required String companyUserEmail,
+    required String companyUserTel,
+    required DateTime useStartedAt,
+    required DateTime useEndedAt,
+    required bool useAtPending,
+    required String useContent,
+  }) async {
+    String? error;
+    try {
+      _overtimeService.update({
+        'id': overtime.id,
+        'companyName': companyName,
+        'companyUserName': companyUserName,
+        'companyUserEmail': companyUserEmail,
+        'companyUserTel': companyUserTel,
+        'useStartedAt': useStartedAt,
+        'useEndedAt': useEndedAt,
+        'useAtPending': useAtPending,
+      });
+    } catch (e) {
+      error = '夜間居残り作業申請情報の編集に失敗しました';
+    }
+    return error;
+  }
+
   Future<String?> approval({
     required RequestOvertimeModel overtime,
     required UserModel? loginUser,

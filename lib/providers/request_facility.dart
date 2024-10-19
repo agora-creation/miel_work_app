@@ -11,6 +11,34 @@ class RequestFacilityProvider with ChangeNotifier {
   final RequestFacilityService _facilityService = RequestFacilityService();
   final MailService _mailService = MailService();
 
+  Future<String?> update({
+    required RequestFacilityModel facility,
+    required String companyName,
+    required String companyUserName,
+    required String companyUserEmail,
+    required String companyUserTel,
+    required DateTime useStartedAt,
+    required DateTime useEndedAt,
+    required bool useAtPending,
+  }) async {
+    String? error;
+    try {
+      _facilityService.update({
+        'id': facility.id,
+        'companyName': companyName,
+        'companyUserName': companyUserName,
+        'companyUserEmail': companyUserEmail,
+        'companyUserTel': companyUserTel,
+        'useStartedAt': useStartedAt,
+        'useEndedAt': useEndedAt,
+        'useAtPending': useAtPending,
+      });
+    } catch (e) {
+      error = '施設使用申込情報の編集に失敗しました';
+    }
+    return error;
+  }
+
   Future<String?> approval({
     required RequestFacilityModel facility,
     required UserModel? loginUser,

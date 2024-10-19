@@ -10,6 +10,54 @@ class RequestConstProvider with ChangeNotifier {
   final RequestConstService _constService = RequestConstService();
   final MailService _mailService = MailService();
 
+  Future<String?> update({
+    required RequestConstModel requestConst,
+    required String companyName,
+    required String companyUserName,
+    required String companyUserEmail,
+    required String companyUserTel,
+    required String constName,
+    required String constUserName,
+    required String constUserTel,
+    required DateTime constStartedAt,
+    required DateTime constEndedAt,
+    required bool constAtPending,
+    required String constContent,
+    required bool noise,
+    required String noiseMeasures,
+    required bool dust,
+    required String dustMeasures,
+    required bool fire,
+    required String fireMeasures,
+  }) async {
+    String? error;
+    try {
+      _constService.update({
+        'id': requestConst.id,
+        'companyName': companyName,
+        'companyUserName': companyUserName,
+        'companyUserEmail': companyUserEmail,
+        'companyUserTel': companyUserTel,
+        'constName': constName,
+        'constUserName': constUserName,
+        'constUserTel': constUserTel,
+        'constStartedAt': constStartedAt,
+        'constEndedAt': constEndedAt,
+        'constAtPending': constAtPending,
+        'constContent': constContent,
+        'noise': noise,
+        'noiseMeasures': noiseMeasures,
+        'dust': dust,
+        'dustMeasures': dustMeasures,
+        'fire': fire,
+        'fireMeasures': fireMeasures,
+      });
+    } catch (e) {
+      error = '店舗工事作業申請情報の編集に失敗しました';
+    }
+    return error;
+  }
+
   Future<String?> approval({
     required RequestConstModel requestConst,
     required bool meeting,
@@ -35,6 +83,9 @@ class RequestConstProvider with ChangeNotifier {
       });
       _constService.update({
         'id': requestConst.id,
+        'meeting': meeting,
+        'meetingAt': meetingAt,
+        'caution': caution,
         'approval': 1,
         'approvedAt': DateTime.now(),
         'approvalUsers': approvalUsers,

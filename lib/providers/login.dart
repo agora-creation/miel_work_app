@@ -79,11 +79,11 @@ class LoginProvider with ChangeNotifier {
           }
           String uid = result?.user?.uid ?? '';
           String token = await _fmService.getToken() ?? '';
-          _userService.update({
-            'id': _user?.id,
-            'uid': uid,
-            'token': token,
-          });
+          // _userService.update({
+          //   'id': _user?.id,
+          //   'uid': uid,
+          //   'token': token,
+          // });
           await setPrefsString('email', email);
           await setPrefsString('password', password);
         } else {

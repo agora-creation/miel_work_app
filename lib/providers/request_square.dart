@@ -10,6 +10,52 @@ class RequestSquareProvider with ChangeNotifier {
   final RequestSquareService _squareService = RequestSquareService();
   final MailService _mailService = MailService();
 
+  Future<String?> update({
+    required RequestSquareModel square,
+    required String companyName,
+    required String companyUserName,
+    required String companyUserEmail,
+    required String companyUserTel,
+    required String companyAddress,
+    required String useCompanyName,
+    required String useCompanyUserName,
+    required DateTime useStartedAt,
+    required DateTime useEndedAt,
+    required bool useAtPending,
+    required bool useFull,
+    required bool useChair,
+    required int useChairNum,
+    required bool useDesk,
+    required int useDeskNum,
+    required String useContent,
+  }) async {
+    String? error;
+    try {
+      _squareService.update({
+        'id': square.id,
+        'companyName': companyName,
+        'companyUserName': companyUserName,
+        'companyUserEmail': companyUserEmail,
+        'companyUserTel': companyUserTel,
+        'companyAddress': companyAddress,
+        'useCompanyName': useCompanyName,
+        'useCompanyUserName': useCompanyUserName,
+        'useStartedAt': useStartedAt,
+        'useEndedAt': useEndedAt,
+        'useAtPending': useAtPending,
+        'useFull': useFull,
+        'useChair': useChair,
+        'useChairNum': useChairNum,
+        'useDesk': useDesk,
+        'useDeskNum': useDeskNum,
+        'useContent': useContent,
+      });
+    } catch (e) {
+      error = 'よさこい広場使用申込情報の編集に失敗しました';
+    }
+    return error;
+  }
+
   Future<String?> approval({
     required RequestSquareModel square,
     required UserModel? loginUser,
