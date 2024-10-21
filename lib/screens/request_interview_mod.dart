@@ -375,6 +375,7 @@ class _RequestInterviewModScreenState extends State<RequestInterviewModScreen> {
                       interviewedReserved = value ?? false;
                     });
                   },
+                  child: Container(),
                 ),
               ),
               const SizedBox(height: 8),
@@ -419,6 +420,7 @@ class _RequestInterviewModScreenState extends State<RequestInterviewModScreen> {
                     location = value ?? false;
                   });
                 },
+                child: Container(),
               ),
               location
                   ? Column(
@@ -525,6 +527,7 @@ class _RequestInterviewModScreenState extends State<RequestInterviewModScreen> {
                     insert = value ?? false;
                   });
                 },
+                child: Container(),
               ),
               insert
                   ? Column(
@@ -608,6 +611,7 @@ class _RequestInterviewModScreenState extends State<RequestInterviewModScreen> {
                                 insertedReserved = value ?? false;
                               });
                             },
+                            child: Container(),
                           ),
                         ),
                         const SizedBox(height: 8),

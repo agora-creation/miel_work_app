@@ -313,6 +313,7 @@ class _ProblemModScreenState extends State<ProblemModScreen> {
                             }
                             setState(() {});
                           },
+                          child: Container(),
                         );
                       }).toList(),
                     ),

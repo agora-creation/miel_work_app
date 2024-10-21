@@ -9,6 +9,7 @@ import 'package:miel_work_app/models/request_overtime.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/request_overtime.dart';
+import 'package:miel_work_app/screens/request_overtime_mod.dart';
 import 'package:miel_work_app/widgets/approval_user_list.dart';
 import 'package:miel_work_app/widgets/attached_file_list.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
@@ -20,6 +21,7 @@ import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:miel_work_app/widgets/image_detail_dialog.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
 import 'package:miel_work_app/widgets/pdf_detail_dialog.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -77,6 +79,41 @@ class _RequestOvertimeDetailScreenState
           '夜間居残り作業申請：申請詳細',
           style: TextStyle(color: kBlackColor),
         ),
+        actions: [
+          IconButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => DelRequestOvertimeDialog(
+                loginProvider: widget.loginProvider,
+                homeProvider: widget.homeProvider,
+                overtime: widget.overtime,
+              ),
+            ),
+            icon: const FaIcon(
+              FontAwesomeIcons.trash,
+              color: kRedColor,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  type: PageTransitionType.rightToLeft,
+                  child: RequestOvertimeModScreen(
+                    loginProvider: widget.loginProvider,
+                    homeProvider: widget.homeProvider,
+                    overtime: widget.overtime,
+                  ),
+                ),
+              );
+            },
+            icon: const FaIcon(
+              FontAwesomeIcons.pen,
+              color: kBlueColor,
+            ),
+          ),
+        ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: SingleChildScrollView(
@@ -280,6 +317,74 @@ class _RequestOvertimeDetailScreenState
         loginProvider: widget.loginProvider,
         homeProvider: widget.homeProvider,
       ),
+    );
+  }
+}
+
+class DelRequestOvertimeDialog extends StatefulWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final RequestOvertimeModel overtime;
+
+  const DelRequestOvertimeDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.overtime,
+    super.key,
+  });
+
+  @override
+  State<DelRequestOvertimeDialog> createState() =>
+      _DelRequestOvertimeDialogState();
+}
+
+class _DelRequestOvertimeDialogState extends State<DelRequestOvertimeDialog> {
+  @override
+  Widget build(BuildContext context) {
+    final overtimeProvider = Provider.of<RequestOvertimeProvider>(context);
+    return CustomAlertDialog(
+      content: const SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 8),
+            Text(
+              '本当に削除しますか？',
+              style: TextStyle(color: kRedColor),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '削除する',
+          labelColor: kWhiteColor,
+          backgroundColor: kRedColor,
+          onPressed: () async {
+            String? error = await overtimeProvider.delete(
+              overtime: widget.overtime,
+            );
+            if (error != null) {
+              if (!mounted) return;
+              showMessage(context, error, false);
+              return;
+            }
+            if (!mounted) return;
+            showMessage(context, '申請情報が削除されました', true);
+            Navigator.pop(context);
+            Navigator.of(context, rootNavigator: true).pop();
+          },
+        ),
+      ],
     );
   }
 }

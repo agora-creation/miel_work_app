@@ -335,6 +335,7 @@ class _SearchCategoryDialogState extends State<SearchCategoryDialog> {
                   }
                   setState(() {});
                 },
+                child: Container(),
               );
             }).toList(),
           ),

@@ -7,6 +7,7 @@ import 'package:miel_work_app/models/request_cycle.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/request_cycle.dart';
+import 'package:miel_work_app/screens/request_cycle_mod.dart';
 import 'package:miel_work_app/widgets/approval_user_list.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
@@ -16,6 +17,7 @@ import 'package:miel_work_app/widgets/dotted_divider.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:miel_work_app/widgets/link_text.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -71,6 +73,41 @@ class _RequestCycleDetailScreenState extends State<RequestCycleDetailScreen> {
           '自転車置き場使用申込：申請詳細',
           style: TextStyle(color: kBlackColor),
         ),
+        actions: [
+          IconButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => DelRequestCycleDialog(
+                loginProvider: widget.loginProvider,
+                homeProvider: widget.homeProvider,
+                cycle: widget.cycle,
+              ),
+            ),
+            icon: const FaIcon(
+              FontAwesomeIcons.trash,
+              color: kRedColor,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  type: PageTransitionType.rightToLeft,
+                  child: RequestCycleModScreen(
+                    loginProvider: widget.loginProvider,
+                    homeProvider: widget.homeProvider,
+                    cycle: widget.cycle,
+                  ),
+                ),
+              );
+            },
+            icon: const FaIcon(
+              FontAwesomeIcons.pen,
+              color: kBlueColor,
+            ),
+          ),
+        ],
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: SingleChildScrollView(
@@ -215,6 +252,73 @@ class _RequestCycleDetailScreenState extends State<RequestCycleDetailScreen> {
         loginProvider: widget.loginProvider,
         homeProvider: widget.homeProvider,
       ),
+    );
+  }
+}
+
+class DelRequestCycleDialog extends StatefulWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final RequestCycleModel cycle;
+
+  const DelRequestCycleDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.cycle,
+    super.key,
+  });
+
+  @override
+  State<DelRequestCycleDialog> createState() => _DelRequestCycleDialogState();
+}
+
+class _DelRequestCycleDialogState extends State<DelRequestCycleDialog> {
+  @override
+  Widget build(BuildContext context) {
+    final cycleProvider = Provider.of<RequestCycleProvider>(context);
+    return CustomAlertDialog(
+      content: const SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 8),
+            Text(
+              '本当に削除しますか？',
+              style: TextStyle(color: kRedColor),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '削除する',
+          labelColor: kWhiteColor,
+          backgroundColor: kRedColor,
+          onPressed: () async {
+            String? error = await cycleProvider.delete(
+              cycle: widget.cycle,
+            );
+            if (error != null) {
+              if (!mounted) return;
+              showMessage(context, error, false);
+              return;
+            }
+            if (!mounted) return;
+            showMessage(context, '申請情報が削除されました', true);
+            Navigator.pop(context);
+            Navigator.of(context, rootNavigator: true).pop();
+          },
+        ),
+      ],
     );
   }
 }

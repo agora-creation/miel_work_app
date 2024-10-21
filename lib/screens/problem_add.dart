@@ -287,6 +287,7 @@ class _ProblemAddScreenState extends State<ProblemAddScreen> {
                             }
                             setState(() {});
                           },
+                          child: Container(),
                         );
                       }).toList(),
                     ),
