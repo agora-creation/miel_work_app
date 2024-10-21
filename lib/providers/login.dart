@@ -78,12 +78,18 @@ class LoginProvider with ChangeNotifier {
             _group = tmpGroup;
           }
           String uid = result?.user?.uid ?? '';
+          //Token更新
           String token = await _fmService.getToken() ?? '';
-          // _userService.update({
-          //   'id': _user?.id,
-          //   'uid': uid,
-          //   'token': token,
-          // });
+          List<String> tokens = tmpUser.tokens;
+          if (!tokens.contains(token)) {
+            tokens.add(token);
+          }
+          _userService.update({
+            'id': tmpUser.id,
+            'uid': uid,
+            'token': token,
+            'tokens': tokens,
+          });
           await setPrefsString('email', email);
           await setPrefsString('password', password);
         } else {
@@ -196,6 +202,17 @@ class LoginProvider with ChangeNotifier {
             if (tmpGroup != null) {
               _group = tmpGroup;
             }
+            //Token更新
+            String token = await _fmService.getToken() ?? '';
+            List<String> tokens = tmpUser.tokens;
+            if (!tokens.contains(token)) {
+              tokens.add(token);
+            }
+            _userService.update({
+              'id': tmpUser.id,
+              'token': token,
+              'tokens': tokens,
+            });
           }
         }
       }
@@ -232,6 +249,17 @@ class LoginProvider with ChangeNotifier {
               if (tmpGroup != null) {
                 _group = tmpGroup;
               }
+              //Token更新
+              String token = await _fmService.getToken() ?? '';
+              List<String> tokens = tmpUser.tokens;
+              if (!tokens.contains(token)) {
+                tokens.add(token);
+              }
+              _userService.update({
+                'id': tmpUser.id,
+                'token': token,
+                'tokens': tokens,
+              });
             } else {
               _authUser = null;
               _status = AuthStatus.unauthenticated;

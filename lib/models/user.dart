@@ -7,6 +7,7 @@ class UserModel {
   String _password = '';
   String _uid = '';
   String _token = '';
+  List<String> tokens = [];
   bool _admin = false;
   bool _president = false;
   DateTime _createdAt = DateTime.now();
@@ -30,8 +31,17 @@ class UserModel {
     _password = data['password'] ?? '';
     _uid = data['uid'] ?? '';
     _token = data['token'] ?? '';
+    tokens = _convertTokens(data['tokens']);
     _admin = data['admin'] ?? false;
     _president = data['president'] ?? false;
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
+  }
+
+  List<String> _convertTokens(List list) {
+    List<String> ret = [];
+    for (dynamic id in list) {
+      ret.add('$id');
+    }
+    return ret;
   }
 }
