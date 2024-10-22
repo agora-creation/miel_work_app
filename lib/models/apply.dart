@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/approval_user.dart';
+import 'package:miel_work_app/models/comment.dart';
 
 const List<String> kApplyTypes = ['稟議', '支払伺い', '協議・報告', '企画'];
 
@@ -31,7 +32,7 @@ class ApplyModel {
   List<ApprovalUserModel> approvalUsers = [];
   String _approvalNumber = '';
   String _approvalReason = '';
-  String memo = '';
+  List<CommentModel> comments = [];
   String _createdUserId = '';
   String _createdUserName = '';
   DateTime _createdAt = DateTime.now();
@@ -89,14 +90,22 @@ class ApplyModel {
     _reason = data['reason'] ?? '';
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
-    approvalUsers = _convertApprovalUsers(data['approvalUsers']);
+    approvalUsers = _convertApprovalUsers(data['approvalUsers'] ?? []);
     _approvalNumber = data['approvalNumber'] ?? '';
     _approvalReason = data['approvalReason'] ?? '';
-    memo = data['memo'] ?? '';
+    comments = _convertComments(data['comments'] ?? []);
     _createdUserId = data['createdUserId'] ?? '';
     _createdUserName = data['createdUserName'] ?? '';
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
     _expirationAt = data['expirationAt'].toDate() ?? DateTime.now();
+  }
+
+  List<CommentModel> _convertComments(List list) {
+    List<CommentModel> converted = [];
+    for (Map data in list) {
+      converted.add(CommentModel.fromMap(data));
+    }
+    return converted;
   }
 
   List<ApprovalUserModel> _convertApprovalUsers(List list) {

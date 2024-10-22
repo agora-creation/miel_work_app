@@ -14,6 +14,22 @@ class RequestOvertimeService {
     firestore.collection(collection).doc(values['id']).delete();
   }
 
+  Future<RequestOvertimeModel?> selectData({
+    required String id,
+  }) async {
+    RequestOvertimeModel? ret;
+    await firestore
+        .collection(collection)
+        .where('id', isEqualTo: id)
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        ret = RequestOvertimeModel.fromSnapshot(value.docs.first);
+      }
+    });
+    return ret;
+  }
+
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required DateTime? searchStart,
     required DateTime? searchEnd,

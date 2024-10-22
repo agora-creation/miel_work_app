@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:miel_work_app/common/functions.dart';
-import 'package:miel_work_app/models/loan.dart';
+import 'package:miel_work_app/models/plan_guardsman.dart';
 
-class LoanService {
-  String collection = 'loan';
+class PlanGuardsmanService {
+  String collection = 'planGuardsman';
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   String id() {
@@ -22,27 +22,10 @@ class LoanService {
     firestore.collection(collection).doc(values['id']).delete();
   }
 
-  Future<LoanModel?> selectData({
-    required String id,
-  }) async {
-    LoanModel? ret;
-    await firestore
-        .collection(collection)
-        .where('id', isEqualTo: id)
-        .get()
-        .then((value) {
-      if (value.docs.isNotEmpty) {
-        ret = LoanModel.fromSnapshot(value.docs.first);
-      }
-    });
-    return ret;
-  }
-
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
     required DateTime? searchStart,
     required DateTime? searchEnd,
-    required List<int> searchStatus,
   }) {
     if (searchStart != null && searchEnd != null) {
       Timestamp startAt = convertTimestamp(searchStart, false);
@@ -50,38 +33,23 @@ class LoanService {
       return FirebaseFirestore.instance
           .collection(collection)
           .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .where('status', whereIn: searchStatus)
-          .orderBy('createdAt', descending: true)
+          .orderBy('eventAt', descending: true)
           .startAt([endAt]).endAt([startAt]).snapshots();
     } else {
       return FirebaseFirestore.instance
           .collection(collection)
           .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .where('status', whereIn: searchStatus)
-          .orderBy('createdAt', descending: true)
+          .orderBy('eventAt', descending: true)
           .snapshots();
     }
   }
 
-  bool checkAlert({
+  List<PlanGuardsmanModel> generateList({
     required QuerySnapshot<Map<String, dynamic>>? data,
   }) {
-    bool ret = false;
+    List<PlanGuardsmanModel> ret = [];
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
-      LoanModel loan = LoanModel.fromSnapshot(doc);
-      if (loan.status == 0) {
-        ret = true;
-      }
-    }
-    return ret;
-  }
-
-  List<LoanModel> generateList({
-    required QuerySnapshot<Map<String, dynamic>>? data,
-  }) {
-    List<LoanModel> ret = [];
-    for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
-      ret.add(LoanModel.fromSnapshot(doc));
+      ret.add(PlanGuardsmanModel.fromSnapshot(doc));
     }
     return ret;
   }

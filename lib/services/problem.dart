@@ -22,6 +22,22 @@ class ProblemService {
     firestore.collection(collection).doc(values['id']).delete();
   }
 
+  Future<ProblemModel?> selectData({
+    required String id,
+  }) async {
+    ProblemModel? ret;
+    await firestore
+        .collection(collection)
+        .where('id', isEqualTo: id)
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        ret = ProblemModel.fromSnapshot(value.docs.first);
+      }
+    });
+    return ret;
+  }
+
   Future<List<ProblemModel>> selectList({
     required String? organizationId,
     required DateTime? searchStart,

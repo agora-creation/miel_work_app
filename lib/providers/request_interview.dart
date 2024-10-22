@@ -98,6 +98,38 @@ class RequestInterviewProvider with ChangeNotifier {
     return error;
   }
 
+  Future<String?> addComment({
+    required RequestInterviewModel interview,
+    required String content,
+    required UserModel? loginUser,
+  }) async {
+    String? error;
+    if (content == '') return '社内コメントの追記に失敗しました';
+    if (loginUser == null) return '社内コメントの追記に失敗しました';
+    try {
+      List<Map> comments = [];
+      if (interview.comments.isNotEmpty) {
+        for (final comment in interview.comments) {
+          comments.add(comment.toMap());
+        }
+      }
+      comments.add({
+        'id': dateText('yyyyMMddHHmm', DateTime.now()),
+        'userId': loginUser.id,
+        'userName': loginUser.name,
+        'content': content,
+        'createdAt': DateTime.now(),
+      });
+      _interviewService.update({
+        'id': interview.id,
+        'comments': comments,
+      });
+    } catch (e) {
+      error = '社内コメントの追記に失敗しました';
+    }
+    return error;
+  }
+
   Future<String?> approval({
     required RequestInterviewModel interview,
     required UserModel? loginUser,

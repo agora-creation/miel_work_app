@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:miel_work_app/models/comment.dart';
 
 class LostModel {
   String _id = '';
@@ -14,7 +15,7 @@ class LostModel {
   DateTime _returnAt = DateTime.now();
   String _returnUser = '';
   String _signImage = '';
-  String _memo = '';
+  List<CommentModel> comments = [];
   List<String> readUserIds = [];
   DateTime _createdAt = DateTime.now();
   DateTime _expirationAt = DateTime.now();
@@ -32,7 +33,6 @@ class LostModel {
   DateTime get returnAt => _returnAt;
   String get returnUser => _returnUser;
   String get signImage => _signImage;
-  String get memo => _memo;
   DateTime get createdAt => _createdAt;
   DateTime get expirationAt => _expirationAt;
 
@@ -52,10 +52,18 @@ class LostModel {
     _returnAt = data['returnAt'].toDate() ?? DateTime.now();
     _returnUser = data['returnUser'] ?? '';
     _signImage = data['signImage'] ?? '';
-    _memo = data['memo'] ?? '';
-    readUserIds = _convertReadUserIds(data['readUserIds']);
+    comments = _convertComments(data['comments'] ?? []);
+    readUserIds = _convertReadUserIds(data['readUserIds'] ?? []);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
     _expirationAt = data['expirationAt'].toDate() ?? DateTime.now();
+  }
+
+  List<CommentModel> _convertComments(List list) {
+    List<CommentModel> converted = [];
+    for (Map data in list) {
+      converted.add(CommentModel.fromMap(data));
+    }
+    return converted;
   }
 
   List<String> _convertReadUserIds(List list) {

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:miel_work_app/models/approval_user.dart';
+import 'package:miel_work_app/models/comment.dart';
 
 class RequestSquareModel {
   String _id = '';
@@ -20,7 +21,7 @@ class RequestSquareModel {
   int _useDeskNum = 0;
   String _useContent = '';
   List<String> attachedFiles = [];
-  String _memo = '';
+  List<CommentModel> comments = [];
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
   List<ApprovalUserModel> approvalUsers = [];
@@ -43,7 +44,6 @@ class RequestSquareModel {
   bool get useDesk => _useDesk;
   int get useDeskNum => _useDeskNum;
   String get useContent => _useContent;
-  String get memo => _memo;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
   DateTime get createdAt => _createdAt;
@@ -70,10 +70,10 @@ class RequestSquareModel {
     _useDeskNum = data['useDeskNum'] ?? 0;
     _useContent = data['useContent'] ?? '';
     attachedFiles = _convertAttachedFiles(data['attachedFiles'] ?? []);
-    _memo = data['memo'] ?? '';
+    comments = _convertComments(data['comments'] ?? []);
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
-    approvalUsers = _convertApprovalUsers(data['approvalUsers']);
+    approvalUsers = _convertApprovalUsers(data['approvalUsers'] ?? []);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
   }
 
@@ -81,6 +81,14 @@ class RequestSquareModel {
     List<String> converted = [];
     for (String data in list) {
       converted.add(data);
+    }
+    return converted;
+  }
+
+  List<CommentModel> _convertComments(List list) {
+    List<CommentModel> converted = [];
+    for (Map data in list) {
+      converted.add(CommentModel.fromMap(data));
     }
     return converted;
   }

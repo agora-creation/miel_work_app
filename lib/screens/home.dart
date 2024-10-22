@@ -13,6 +13,8 @@ import 'package:miel_work_app/screens/loan.dart';
 import 'package:miel_work_app/screens/lost.dart';
 import 'package:miel_work_app/screens/notice.dart';
 import 'package:miel_work_app/screens/plan.dart';
+import 'package:miel_work_app/screens/plan_garbageman.dart';
+import 'package:miel_work_app/screens/plan_guardsman.dart';
 import 'package:miel_work_app/screens/problem.dart';
 import 'package:miel_work_app/screens/report.dart';
 import 'package:miel_work_app/screens/request_const.dart';
@@ -426,7 +428,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 labelFontSize: 16,
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,
-                                onTap: () {},
+                                onTap: () => showBottomUpScreen(
+                                  context,
+                                  PlanGuardsmanScreen(
+                                    loginProvider: loginProvider,
+                                    homeProvider: homeProvider,
+                                  ),
+                                ),
                               ),
                               HomeIconCard(
                                 icon: FontAwesomeIcons.tableCells,
@@ -435,7 +443,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 labelFontSize: 16,
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,
-                                onTap: () {},
+                                onTap: () => showBottomUpScreen(
+                                  context,
+                                  PlanGarbagemanScreen(
+                                    loginProvider: loginProvider,
+                                    homeProvider: homeProvider,
+                                  ),
+                                ),
                               ),
                               HomeIconCard(
                                 icon: FontAwesomeIcons.tableCells,

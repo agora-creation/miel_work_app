@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/approval_user.dart';
 import 'package:miel_work_app/models/request_cycle.dart';
 import 'package:miel_work_app/models/user.dart';
@@ -29,6 +30,38 @@ class RequestCycleProvider with ChangeNotifier {
       });
     } catch (e) {
       error = '自転車置き場使用申込情報の編集に失敗しました';
+    }
+    return error;
+  }
+
+  Future<String?> addComment({
+    required RequestCycleModel cycle,
+    required String content,
+    required UserModel? loginUser,
+  }) async {
+    String? error;
+    if (content == '') return '社内コメントの追記に失敗しました';
+    if (loginUser == null) return '社内コメントの追記に失敗しました';
+    try {
+      List<Map> comments = [];
+      if (cycle.comments.isNotEmpty) {
+        for (final comment in cycle.comments) {
+          comments.add(comment.toMap());
+        }
+      }
+      comments.add({
+        'id': dateText('yyyyMMddHHmm', DateTime.now()),
+        'userId': loginUser.id,
+        'userName': loginUser.name,
+        'content': content,
+        'createdAt': DateTime.now(),
+      });
+      _cycleService.update({
+        'id': cycle.id,
+        'comments': comments,
+      });
+    } catch (e) {
+      error = '社内コメントの追記に失敗しました';
     }
     return error;
   }

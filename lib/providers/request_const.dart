@@ -58,6 +58,38 @@ class RequestConstProvider with ChangeNotifier {
     return error;
   }
 
+  Future<String?> addComment({
+    required RequestConstModel requestConst,
+    required String content,
+    required UserModel? loginUser,
+  }) async {
+    String? error;
+    if (content == '') return '社内コメントの追記に失敗しました';
+    if (loginUser == null) return '社内コメントの追記に失敗しました';
+    try {
+      List<Map> comments = [];
+      if (requestConst.comments.isNotEmpty) {
+        for (final comment in requestConst.comments) {
+          comments.add(comment.toMap());
+        }
+      }
+      comments.add({
+        'id': dateText('yyyyMMddHHmm', DateTime.now()),
+        'userId': loginUser.id,
+        'userName': loginUser.name,
+        'content': content,
+        'createdAt': DateTime.now(),
+      });
+      _constService.update({
+        'id': requestConst.id,
+        'comments': comments,
+      });
+    } catch (e) {
+      error = '社内コメントの追記に失敗しました';
+    }
+    return error;
+  }
+
   Future<String?> approval({
     required RequestConstModel requestConst,
     required bool meeting,

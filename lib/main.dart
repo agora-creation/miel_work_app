@@ -14,6 +14,8 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/lost.dart';
 import 'package:miel_work_app/providers/notice.dart';
 import 'package:miel_work_app/providers/plan.dart';
+import 'package:miel_work_app/providers/plan_garbageman.dart';
+import 'package:miel_work_app/providers/plan_guardsman.dart';
 import 'package:miel_work_app/providers/problem.dart';
 import 'package:miel_work_app/providers/report.dart';
 import 'package:miel_work_app/providers/request_const.dart';
@@ -75,6 +77,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: RequestCycleProvider()),
         ChangeNotifierProvider.value(value: RequestOvertimeProvider()),
         ChangeNotifierProvider.value(value: RequestConstProvider()),
+        ChangeNotifierProvider.value(value: PlanGuardsmanProvider()),
+        ChangeNotifierProvider.value(value: PlanGarbagemanProvider()),
       ],
       child: MediaQuery.withNoTextScaling(
         child: MaterialApp(

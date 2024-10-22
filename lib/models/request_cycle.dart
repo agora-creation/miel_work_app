@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:miel_work_app/models/approval_user.dart';
+import 'package:miel_work_app/models/comment.dart';
 
 class RequestCycleModel {
   String _id = '';
@@ -9,7 +10,7 @@ class RequestCycleModel {
   String _companyUserTel = '';
   String _companyAddress = '';
   String _lockNumber = '';
-  String _memo = '';
+  List<CommentModel> comments = [];
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
   List<ApprovalUserModel> approvalUsers = [];
@@ -22,7 +23,6 @@ class RequestCycleModel {
   String get companyUserTel => _companyUserTel;
   String get companyAddress => _companyAddress;
   String get lockNumber => _lockNumber;
-  String get memo => _memo;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
   DateTime get createdAt => _createdAt;
@@ -38,11 +38,19 @@ class RequestCycleModel {
     _companyUserTel = data['companyUserTel'] ?? '';
     _companyAddress = data['companyAddress'] ?? '';
     _lockNumber = data['lockNumber'] ?? '';
-    _memo = data['memo'] ?? '';
+    comments = _convertComments(data['comments'] ?? []);
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
-    approvalUsers = _convertApprovalUsers(data['approvalUsers']);
+    approvalUsers = _convertApprovalUsers(data['approvalUsers'] ?? []);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
+  }
+
+  List<CommentModel> _convertComments(List list) {
+    List<CommentModel> converted = [];
+    for (Map data in list) {
+      converted.add(CommentModel.fromMap(data));
+    }
+    return converted;
   }
 
   List<ApprovalUserModel> _convertApprovalUsers(List list) {

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/comment.dart';
 
 const List<String> kProblemTypes = ['問題行動', 'クレーム', '要望', 'その他'];
 const List<String> kProblemStates = [
@@ -26,7 +27,7 @@ class ProblemModel {
   String _image3 = '';
   List<String> states = [];
   int _count = 0;
-  String _memo = '';
+  List<CommentModel> comments = [];
   bool _processed = false;
   List<String> readUserIds = [];
   DateTime _createdAt = DateTime.now();
@@ -46,7 +47,6 @@ class ProblemModel {
   String get image2 => _image2;
   String get image3 => _image3;
   int get count => _count;
-  String get memo => _memo;
   bool get processed => _processed;
   DateTime get createdAt => _createdAt;
   DateTime get expirationAt => _expirationAt;
@@ -67,11 +67,11 @@ class ProblemModel {
     _image = data['image'] ?? '';
     _image2 = data['image2'] ?? '';
     _image3 = data['image3'] ?? '';
-    states = _convertStates(data['states']);
+    states = _convertStates(data['states'] ?? []);
     _count = data['count'] ?? 0;
-    _memo = data['memo'] ?? '';
+    comments = _convertComments(data['comments'] ?? []);
     _processed = data['processed'] ?? false;
-    readUserIds = _convertReadUserIds(data['readUserIds']);
+    readUserIds = _convertReadUserIds(data['readUserIds'] ?? []);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
     _expirationAt = data['expirationAt'].toDate() ?? DateTime.now();
   }
@@ -82,6 +82,14 @@ class ProblemModel {
       ret.add('$id');
     }
     return ret;
+  }
+
+  List<CommentModel> _convertComments(List list) {
+    List<CommentModel> converted = [];
+    for (Map data in list) {
+      converted.add(CommentModel.fromMap(data));
+    }
+    return converted;
   }
 
   List<String> _convertReadUserIds(List list) {

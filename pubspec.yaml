@@ -48,6 +48,7 @@ dependencies:
   in_app_review: ^2.0.9
   custom_pop_up_menu: ^1.2.4
   signature: ^5.5.0
+  calendar_view: ^1.2.0
 
   firebase_core: ^3.5.0
   firebase_auth: ^5.3.0

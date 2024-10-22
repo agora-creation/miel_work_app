@@ -14,6 +14,22 @@ class RequestSquareService {
     firestore.collection(collection).doc(values['id']).delete();
   }
 
+  Future<RequestSquareModel?> selectData({
+    required String id,
+  }) async {
+    RequestSquareModel? ret;
+    await firestore
+        .collection(collection)
+        .where('id', isEqualTo: id)
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        ret = RequestSquareModel.fromSnapshot(value.docs.first);
+      }
+    });
+    return ret;
+  }
+
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required DateTime? searchStart,
     required DateTime? searchEnd,

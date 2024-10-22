@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/notice.dart';
 import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/organization_group.dart';
@@ -159,6 +160,38 @@ class NoticeProvider with ChangeNotifier {
       }
     } catch (e) {
       error = 'お知らせの編集に失敗しました';
+    }
+    return error;
+  }
+
+  Future<String?> addComment({
+    required NoticeModel notice,
+    required String content,
+    required UserModel? loginUser,
+  }) async {
+    String? error;
+    if (content == '') return '社内コメントの追記に失敗しました';
+    if (loginUser == null) return '社内コメントの追記に失敗しました';
+    try {
+      List<Map> comments = [];
+      if (notice.comments.isNotEmpty) {
+        for (final comment in notice.comments) {
+          comments.add(comment.toMap());
+        }
+      }
+      comments.add({
+        'id': dateText('yyyyMMddHHmm', DateTime.now()),
+        'userId': loginUser.id,
+        'userName': loginUser.name,
+        'content': content,
+        'createdAt': DateTime.now(),
+      });
+      _noticeService.update({
+        'id': notice.id,
+        'comments': comments,
+      });
+    } catch (e) {
+      error = '社内コメントの追記に失敗しました';
     }
     return error;
   }

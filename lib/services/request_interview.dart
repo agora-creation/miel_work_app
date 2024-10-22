@@ -14,6 +14,22 @@ class RequestInterviewService {
     firestore.collection(collection).doc(values['id']).delete();
   }
 
+  Future<RequestInterviewModel?> selectData({
+    required String id,
+  }) async {
+    RequestInterviewModel? ret;
+    await firestore
+        .collection(collection)
+        .where('id', isEqualTo: id)
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        ret = RequestInterviewModel.fromSnapshot(value.docs.first);
+      }
+    });
+    return ret;
+  }
+
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required DateTime? searchStart,
     required DateTime? searchEnd,

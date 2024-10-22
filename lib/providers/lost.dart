@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/lost.dart';
 import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/user.dart';
@@ -167,6 +168,38 @@ class LostProvider with ChangeNotifier {
       });
     } catch (e) {
       error = '落とし物の返却に失敗しました';
+    }
+    return error;
+  }
+
+  Future<String?> addComment({
+    required LostModel lost,
+    required String content,
+    required UserModel? loginUser,
+  }) async {
+    String? error;
+    if (content == '') return '社内コメントの追記に失敗しました';
+    if (loginUser == null) return '社内コメントの追記に失敗しました';
+    try {
+      List<Map> comments = [];
+      if (lost.comments.isNotEmpty) {
+        for (final comment in lost.comments) {
+          comments.add(comment.toMap());
+        }
+      }
+      comments.add({
+        'id': dateText('yyyyMMddHHmm', DateTime.now()),
+        'userId': loginUser.id,
+        'userName': loginUser.name,
+        'content': content,
+        'createdAt': DateTime.now(),
+      });
+      _lostService.update({
+        'id': lost.id,
+        'comments': comments,
+      });
+    } catch (e) {
+      error = '社内コメントの追記に失敗しました';
     }
     return error;
   }

@@ -14,6 +14,22 @@ class RequestFacilityService {
     firestore.collection(collection).doc(values['id']).delete();
   }
 
+  Future<RequestFacilityModel?> selectData({
+    required String id,
+  }) async {
+    RequestFacilityModel? ret;
+    await firestore
+        .collection(collection)
+        .where('id', isEqualTo: id)
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        ret = RequestFacilityModel.fromSnapshot(value.docs.first);
+      }
+    });
+    return ret;
+  }
+
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required DateTime? searchStart,
     required DateTime? searchEnd,

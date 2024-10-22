@@ -14,6 +14,22 @@ class RequestCycleService {
     firestore.collection(collection).doc(values['id']).delete();
   }
 
+  Future<RequestCycleModel?> selectData({
+    required String id,
+  }) async {
+    RequestCycleModel? ret;
+    await firestore
+        .collection(collection)
+        .where('id', isEqualTo: id)
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        ret = RequestCycleModel.fromSnapshot(value.docs.first);
+      }
+    });
+    return ret;
+  }
+
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required DateTime? searchStart,
     required DateTime? searchEnd,

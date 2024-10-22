@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:miel_work_app/models/approval_user.dart';
+import 'package:miel_work_app/models/comment.dart';
 
 class RequestFacilityModel {
   String _id = '';
@@ -11,7 +12,7 @@ class RequestFacilityModel {
   DateTime _useEndedAt = DateTime.now();
   bool _useAtPending = false;
   List<String> attachedFiles = [];
-  String _memo = '';
+  List<CommentModel> comments = [];
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
   List<ApprovalUserModel> approvalUsers = [];
@@ -25,7 +26,6 @@ class RequestFacilityModel {
   DateTime get useStartedAt => _useStartedAt;
   DateTime get useEndedAt => _useEndedAt;
   bool get useAtPending => _useAtPending;
-  String get memo => _memo;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
   DateTime get createdAt => _createdAt;
@@ -43,10 +43,10 @@ class RequestFacilityModel {
     _useEndedAt = data['useEndedAt'].toDate() ?? DateTime.now();
     _useAtPending = data['useAtPending'] ?? false;
     attachedFiles = _convertAttachedFiles(data['attachedFiles'] ?? []);
-    _memo = data['memo'] ?? '';
+    comments = _convertComments(data['comments'] ?? []);
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
-    approvalUsers = _convertApprovalUsers(data['approvalUsers']);
+    approvalUsers = _convertApprovalUsers(data['approvalUsers'] ?? []);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
   }
 
@@ -54,6 +54,14 @@ class RequestFacilityModel {
     List<String> converted = [];
     for (String data in list) {
       converted.add(data);
+    }
+    return converted;
+  }
+
+  List<CommentModel> _convertComments(List list) {
+    List<CommentModel> converted = [];
+    for (Map data in list) {
+      converted.add(CommentModel.fromMap(data));
     }
     return converted;
   }

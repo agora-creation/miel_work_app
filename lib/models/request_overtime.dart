@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:miel_work_app/models/approval_user.dart';
+import 'package:miel_work_app/models/comment.dart';
 
 class RequestOvertimeModel {
   String _id = '';
@@ -12,7 +13,7 @@ class RequestOvertimeModel {
   bool _useAtPending = false;
   String _useContent = '';
   List<String> attachedFiles = [];
-  String _memo = '';
+  List<CommentModel> comments = [];
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
   List<ApprovalUserModel> approvalUsers = [];
@@ -27,7 +28,6 @@ class RequestOvertimeModel {
   DateTime get useEndedAt => _useEndedAt;
   bool get useAtPending => _useAtPending;
   String get useContent => _useContent;
-  String get memo => _memo;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
   DateTime get createdAt => _createdAt;
@@ -46,10 +46,10 @@ class RequestOvertimeModel {
     _useAtPending = data['useAtPending'] ?? false;
     _useContent = data['useContent'] ?? '';
     attachedFiles = _convertAttachedFiles(data['attachedFiles'] ?? []);
-    _memo = data['memo'] ?? '';
+    comments = _convertComments(data['comments'] ?? []);
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
-    approvalUsers = _convertApprovalUsers(data['approvalUsers']);
+    approvalUsers = _convertApprovalUsers(data['approvalUsers'] ?? []);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
   }
 
@@ -57,6 +57,14 @@ class RequestOvertimeModel {
     List<String> converted = [];
     for (String data in list) {
       converted.add(data);
+    }
+    return converted;
+  }
+
+  List<CommentModel> _convertComments(List list) {
+    List<CommentModel> converted = [];
+    for (Map data in list) {
+      converted.add(CommentModel.fromMap(data));
     }
     return converted;
   }

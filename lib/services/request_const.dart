@@ -14,6 +14,22 @@ class RequestConstService {
     firestore.collection(collection).doc(values['id']).delete();
   }
 
+  Future<RequestConstModel?> selectData({
+    required String id,
+  }) async {
+    RequestConstModel? ret;
+    await firestore
+        .collection(collection)
+        .where('id', isEqualTo: id)
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        ret = RequestConstModel.fromSnapshot(value.docs.first);
+      }
+    });
+    return ret;
+  }
+
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required DateTime? searchStart,
     required DateTime? searchEnd,
