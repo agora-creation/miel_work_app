@@ -420,6 +420,33 @@ class _HomeScreenState extends State<HomeScreen> {
                             gridDelegate: kHome3Grid,
                             children: [
                               HomeIconCard(
+                                icon: FontAwesomeIcons.tableCells,
+                                iconSize: 42,
+                                label: '警備員予定表',
+                                labelFontSize: 16,
+                                color: kBlackColor,
+                                backgroundColor: kWhiteColor,
+                                onTap: () {},
+                              ),
+                              HomeIconCard(
+                                icon: FontAwesomeIcons.tableCells,
+                                iconSize: 42,
+                                label: '清掃員予定表',
+                                labelFontSize: 16,
+                                color: kBlackColor,
+                                backgroundColor: kWhiteColor,
+                                onTap: () {},
+                              ),
+                              HomeIconCard(
+                                icon: FontAwesomeIcons.tableCells,
+                                iconSize: 42,
+                                label: '食器センター予定表',
+                                labelFontSize: 12,
+                                color: kBlackColor,
+                                backgroundColor: kWhiteColor,
+                                onTap: () {},
+                              ),
+                              HomeIconCard(
                                 icon: FontAwesomeIcons.businessTime,
                                 iconSize: 42,
                                 label: '勤怠打刻',
