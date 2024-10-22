@@ -241,7 +241,7 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
                   ),
                   const SizedBox(height: 16),
                   FormLabel(
-                    'メモ',
+                    '社内メモ',
                     child: CustomTextField(
                       controller: memoController,
                       textInputType: TextInputType.multiline,

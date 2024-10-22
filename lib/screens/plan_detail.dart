@@ -149,7 +149,7 @@ class _PlanDetailScreenState extends State<PlanDetailScreen> {
                 ),
                 const SizedBox(height: 16),
                 FormLabel(
-                  'メモ',
+                  '社内メモ',
                   child: FormValue(widget.plan.memo),
                 ),
                 const SizedBox(height: 16),

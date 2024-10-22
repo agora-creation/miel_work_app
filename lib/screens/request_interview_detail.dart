@@ -5,16 +5,20 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/approval_user.dart';
+import 'package:miel_work_app/models/comment.dart';
 import 'package:miel_work_app/models/request_interview.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/request_interview.dart';
 import 'package:miel_work_app/screens/request_interview_mod.dart';
+import 'package:miel_work_app/services/request_interview.dart';
 import 'package:miel_work_app/widgets/approval_user_list.dart';
 import 'package:miel_work_app/widgets/attached_file_list.dart';
+import 'package:miel_work_app/widgets/comment_list.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
+import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/dotted_divider.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
@@ -45,8 +49,32 @@ class RequestInterviewDetailScreen extends StatefulWidget {
 
 class _RequestInterviewDetailScreenState
     extends State<RequestInterviewDetailScreen> {
+  RequestInterviewService interviewService = RequestInterviewService();
+  List<CommentModel> comments = [];
+
+  void _reloadComments() async {
+    RequestInterviewModel? tmpInterview = await interviewService.selectData(
+      id: widget.interview.id,
+    );
+    if (tmpInterview == null) return;
+    comments = tmpInterview.comments;
+    setState(() {});
+  }
+
+  void _init() async {
+    comments = widget.interview.comments;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    _init();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final interviewProvider = Provider.of<RequestInterviewProvider>(context);
     bool isApproval = true;
     bool isReject = true;
     if (widget.interview.approvalUsers.isNotEmpty) {
@@ -420,6 +448,90 @@ class _RequestInterviewDetailScreenState
               ),
               const SizedBox(height: 16),
               const DottedDivider(),
+              const SizedBox(height: 8),
+              Container(
+                color: kGreyColor.withOpacity(0.2),
+                padding: const EdgeInsets.all(16),
+                child: FormLabel(
+                  '社内コメント',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      comments.isNotEmpty
+                          ? Column(
+                              children: comments.map((comment) {
+                                return CommentList(comment: comment);
+                              }).toList(),
+                            )
+                          : const ListTile(title: Text('コメントがありません')),
+                      const SizedBox(height: 8),
+                      CustomButton(
+                        type: ButtonSizeType.sm,
+                        label: 'コメント追加',
+                        labelColor: kWhiteColor,
+                        backgroundColor: kBlueColor,
+                        onPressed: () {
+                          TextEditingController commentContentController =
+                              TextEditingController();
+                          showDialog(
+                            context: context,
+                            builder: (context) => CustomAlertDialog(
+                              content: SizedBox(
+                                width: 600,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(height: 8),
+                                    CustomTextField(
+                                      controller: commentContentController,
+                                      textInputType: TextInputType.multiline,
+                                      maxLines: null,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              actions: [
+                                CustomButton(
+                                  type: ButtonSizeType.sm,
+                                  label: 'キャンセル',
+                                  labelColor: kWhiteColor,
+                                  backgroundColor: kGreyColor,
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                                CustomButton(
+                                  type: ButtonSizeType.sm,
+                                  label: '追記する',
+                                  labelColor: kWhiteColor,
+                                  backgroundColor: kBlueColor,
+                                  onPressed: () async {
+                                    String? error =
+                                        await interviewProvider.addComment(
+                                      interview: widget.interview,
+                                      content: commentContentController.text,
+                                      loginUser: widget.loginProvider.user,
+                                    );
+                                    if (error != null) {
+                                      if (!mounted) return;
+                                      showMessage(context, error, false);
+                                      return;
+                                    }
+                                    _reloadComments();
+                                    if (!mounted) return;
+                                    showMessage(
+                                        context, '社内コメントが追記されました', true);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               const SizedBox(height: 100),
             ],
           ),

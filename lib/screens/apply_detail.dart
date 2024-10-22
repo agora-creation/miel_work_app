@@ -6,11 +6,14 @@ import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/apply.dart';
 import 'package:miel_work_app/models/approval_user.dart';
+import 'package:miel_work_app/models/comment.dart';
 import 'package:miel_work_app/providers/apply.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/apply_mod.dart';
+import 'package:miel_work_app/services/apply.dart';
 import 'package:miel_work_app/widgets/approval_user_list.dart';
+import 'package:miel_work_app/widgets/comment_list.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
@@ -40,8 +43,32 @@ class ApplyDetailScreen extends StatefulWidget {
 }
 
 class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
+  ApplyService applyService = ApplyService();
+  List<CommentModel> comments = [];
+
+  void _reloadComments() async {
+    ApplyModel? tmpApply = await applyService.selectData(
+      id: widget.apply.id,
+    );
+    if (tmpApply == null) return;
+    comments = tmpApply.comments;
+    setState(() {});
+  }
+
+  void _init() async {
+    comments = widget.apply.comments;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    _init();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final applyProvider = Provider.of<ApplyProvider>(context);
     bool isApproval = true;
     bool isReject = true;
     bool isDelete = true;
@@ -415,6 +442,90 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                 style: TextStyle(
                   color: kRedColor,
                   fontSize: 12,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                color: kGreyColor.withOpacity(0.2),
+                padding: const EdgeInsets.all(16),
+                child: FormLabel(
+                  '社内コメント',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      comments.isNotEmpty
+                          ? Column(
+                              children: comments.map((comment) {
+                                return CommentList(comment: comment);
+                              }).toList(),
+                            )
+                          : const ListTile(title: Text('コメントがありません')),
+                      const SizedBox(height: 8),
+                      CustomButton(
+                        type: ButtonSizeType.sm,
+                        label: 'コメント追加',
+                        labelColor: kWhiteColor,
+                        backgroundColor: kBlueColor,
+                        onPressed: () {
+                          TextEditingController commentContentController =
+                              TextEditingController();
+                          showDialog(
+                            context: context,
+                            builder: (context) => CustomAlertDialog(
+                              content: SizedBox(
+                                width: 600,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(height: 8),
+                                    CustomTextField(
+                                      controller: commentContentController,
+                                      textInputType: TextInputType.multiline,
+                                      maxLines: null,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              actions: [
+                                CustomButton(
+                                  type: ButtonSizeType.sm,
+                                  label: 'キャンセル',
+                                  labelColor: kWhiteColor,
+                                  backgroundColor: kGreyColor,
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                                CustomButton(
+                                  type: ButtonSizeType.sm,
+                                  label: '追記する',
+                                  labelColor: kWhiteColor,
+                                  backgroundColor: kBlueColor,
+                                  onPressed: () async {
+                                    String? error =
+                                        await applyProvider.addComment(
+                                      apply: widget.apply,
+                                      content: commentContentController.text,
+                                      loginUser: widget.loginProvider.user,
+                                    );
+                                    if (error != null) {
+                                      if (!mounted) return;
+                                      showMessage(context, error, false);
+                                      return;
+                                    }
+                                    _reloadComments();
+                                    if (!mounted) return;
+                                    showMessage(
+                                        context, '社内コメントが追記されました', true);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 100),

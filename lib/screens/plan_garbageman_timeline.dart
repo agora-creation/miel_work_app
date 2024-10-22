@@ -1,4 +1,3 @@
-import 'package:calendar_view/calendar_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
@@ -10,140 +9,100 @@ import 'package:miel_work_app/models/plan_garbageman.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/plan_garbageman.dart';
-import 'package:miel_work_app/screens/plan_garbageman_timeline.dart';
+import 'package:miel_work_app/screens/plan_garbageman.dart';
 import 'package:miel_work_app/services/plan_garbageman.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
-import 'package:miel_work_app/widgets/custom_calendar.dart';
-import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
-import 'package:miel_work_app/widgets/month_picker_button.dart';
-import 'package:month_picker_dialog/month_picker_dialog.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:miel_work_app/widgets/plan_garbageman_list.dart';
 import 'package:provider/provider.dart';
 
-class PlanGarbagemanScreen extends StatefulWidget {
+class PlanGarbagemanTimelineScreen extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
+  final DateTime day;
 
-  const PlanGarbagemanScreen({
+  const PlanGarbagemanTimelineScreen({
     required this.loginProvider,
     required this.homeProvider,
+    required this.day,
     super.key,
   });
 
   @override
-  State<PlanGarbagemanScreen> createState() => _PlanGarbagemanScreenState();
+  State<PlanGarbagemanTimelineScreen> createState() =>
+      _PlanGarbagemanTimelineScreenState();
 }
 
-class _PlanGarbagemanScreenState extends State<PlanGarbagemanScreen> {
-  EventController controller = EventController();
+class _PlanGarbagemanTimelineScreenState
+    extends State<PlanGarbagemanTimelineScreen> {
   PlanGarbagemanService garbagemanService = PlanGarbagemanService();
-  DateTime searchMonth = DateTime.now();
-  List<DateTime> days = [];
-
-  void _changeMonth(DateTime value) {
-    searchMonth = value;
-    days = generateDays(value);
-    setState(() {});
-  }
-
-  void _init() async {
-    days = generateDays(searchMonth);
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    _init();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         backgroundColor: kWhiteColor,
-        title: const Text(
-          '清掃員予定表',
-          style: TextStyle(color: kBlackColor),
-        ),
-        actions: [
-          IconButton(
-            icon: const FaIcon(
-              FontAwesomeIcons.xmark,
-              color: kBlackColor,
-            ),
-            onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+        leading: IconButton(
+          icon: const FaIcon(
+            FontAwesomeIcons.chevronLeft,
+            color: kBlackColor,
+            size: 18,
           ),
-        ],
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          '${dateText('yyyy/MM/dd', widget.day)}：清掃員予定表',
+          style: const TextStyle(color: kBlackColor),
+        ),
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            MonthPickerButton(
-              value: searchMonth,
-              onTap: () async {
-                DateTime? selected = await showMonthPicker(
-                  context: context,
-                  initialDate: searchMonth,
-                  locale: const Locale('ja'),
+        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: garbagemanService.streamList(
+            organizationId: widget.loginProvider.organization?.id,
+            searchStart: widget.day,
+            searchEnd: DateTime(
+              widget.day.year,
+              widget.day.month,
+              widget.day.day,
+              23,
+              59,
+              59,
+            ),
+          ),
+          builder: (context, snapshot) {
+            List<PlanGarbagemanModel> garbageMans = [];
+            if (snapshot.hasData) {
+              garbageMans = garbagemanService.generateList(
+                data: snapshot.data,
+              );
+            }
+            if (garbageMans.isEmpty) {
+              return const Center(child: Text('この日の予定はありません'));
+            }
+            return ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: garbageMans.length,
+              itemBuilder: (context, index) {
+                PlanGarbagemanModel garbageman = garbageMans[index];
+                return PlanGarbagemanList(
+                  garbageman: garbageman,
+                  onTap: () => showDialog(
+                    context: context,
+                    builder: (context) => ModGarbagemanDialog(
+                      loginProvider: widget.loginProvider,
+                      homeProvider: widget.homeProvider,
+                      garbageman: garbageman,
+                    ),
+                  ),
                 );
-                if (selected == null) return;
-                _changeMonth(selected);
               },
-            ),
-            Expanded(
-              child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                stream: garbagemanService.streamList(
-                  organizationId: widget.loginProvider.organization?.id,
-                  searchStart: days.first,
-                  searchEnd: days.last,
-                ),
-                builder: (context, snapshot) {
-                  List<PlanGarbagemanModel> garbageMans = [];
-                  if (snapshot.hasData) {
-                    garbageMans = garbagemanService.generateList(
-                      data: snapshot.data,
-                    );
-                  }
-                  if (garbageMans.isNotEmpty) {
-                    for (final garbageman in garbageMans) {
-                      controller.add(CalendarEventData(
-                        title: garbageman.content,
-                        date: garbageman.eventAt,
-                      ));
-                    }
-                  }
-                  return CustomCalendar(
-                    controller: controller,
-                    initialMonth: searchMonth,
-                    onPageChange: (month, page) {
-                      _changeMonth(month);
-                    },
-                    onCellTap: (events, day) {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.rightToLeft,
-                          child: PlanGarbagemanTimelineScreen(
-                            loginProvider: widget.loginProvider,
-                            homeProvider: widget.homeProvider,
-                            day: day,
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
+            );
+          },
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -164,37 +123,34 @@ class _PlanGarbagemanScreenState extends State<PlanGarbagemanScreen> {
           style: TextStyle(color: kWhiteColor),
         ),
       ),
-      bottomNavigationBar: CustomFooter(
-        loginProvider: widget.loginProvider,
-        homeProvider: widget.homeProvider,
-      ),
     );
   }
 }
 
-class AddGarbagemanDialog extends StatefulWidget {
+class ModGarbagemanDialog extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
-  final DateTime day;
+  final PlanGarbagemanModel garbageman;
 
-  const AddGarbagemanDialog({
+  const ModGarbagemanDialog({
     required this.loginProvider,
     required this.homeProvider,
-    required this.day,
+    required this.garbageman,
     super.key,
   });
 
   @override
-  State<AddGarbagemanDialog> createState() => _AddGarbagemanDialogState();
+  State<ModGarbagemanDialog> createState() => _ModGarbagemanDialogState();
 }
 
-class _AddGarbagemanDialogState extends State<AddGarbagemanDialog> {
+class _ModGarbagemanDialogState extends State<ModGarbagemanDialog> {
   TextEditingController contentController = TextEditingController();
   DateTime eventAt = DateTime.now();
 
   @override
   void initState() {
-    eventAt = widget.day;
+    contentController.text = widget.garbageman.content;
+    eventAt = widget.garbageman.eventAt;
     super.initState();
   }
 
@@ -252,11 +208,31 @@ class _AddGarbagemanDialogState extends State<AddGarbagemanDialog> {
         ),
         CustomButton(
           type: ButtonSizeType.sm,
-          label: '追加する',
+          label: '削除する',
+          labelColor: kWhiteColor,
+          backgroundColor: kRedColor,
+          onPressed: () async {
+            String? error = await garbagemanProvider.delete(
+              garbageman: widget.garbageman,
+            );
+            if (error != null) {
+              if (!mounted) return;
+              showMessage(context, error, false);
+              return;
+            }
+            if (!mounted) return;
+            showMessage(context, '清掃員予定が削除されました', true);
+            Navigator.pop(context);
+          },
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '保存する',
           labelColor: kWhiteColor,
           backgroundColor: kBlueColor,
           onPressed: () async {
-            String? error = await garbagemanProvider.create(
+            String? error = await garbagemanProvider.update(
+              garbageman: widget.garbageman,
               organization: widget.loginProvider.organization,
               content: contentController.text,
               eventAt: eventAt,
@@ -267,7 +243,7 @@ class _AddGarbagemanDialogState extends State<AddGarbagemanDialog> {
               return;
             }
             if (!mounted) return;
-            showMessage(context, '清掃員予定が追加されました', true);
+            showMessage(context, '清掃員予定が変更されました', true);
             Navigator.pop(context);
           },
         ),

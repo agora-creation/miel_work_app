@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/comment.dart';
 import 'package:miel_work_app/models/notice.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/home.dart';
@@ -11,9 +12,11 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/notice.dart';
 import 'package:miel_work_app/screens/notice_mod.dart';
 import 'package:miel_work_app/services/notice.dart';
+import 'package:miel_work_app/widgets/comment_list.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
+import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/file_link.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
@@ -40,6 +43,16 @@ class NoticeDetailScreen extends StatefulWidget {
 
 class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
   NoticeService noticeService = NoticeService();
+  List<CommentModel> comments = [];
+
+  void _reloadComments() async {
+    NoticeModel? tmpNotice = await noticeService.selectData(
+      id: widget.notice.id,
+    );
+    if (tmpNotice == null) return;
+    comments = tmpNotice.comments;
+    setState(() {});
+  }
 
   void _init() async {
     UserModel? user = widget.loginProvider.user;
@@ -56,11 +69,13 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
   @override
   void initState() {
     _init();
+    comments = widget.notice.comments;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final noticeProvider = Provider.of<NoticeProvider>(context);
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
@@ -176,6 +191,91 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
                         ),
                       )
                     : Container(),
+                const SizedBox(height: 8),
+                Container(
+                  color: kGreyColor.withOpacity(0.2),
+                  padding: const EdgeInsets.all(16),
+                  child: FormLabel(
+                    '社内コメント',
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        comments.isNotEmpty
+                            ? Column(
+                                children: comments.map((comment) {
+                                  return CommentList(comment: comment);
+                                }).toList(),
+                              )
+                            : const ListTile(title: Text('コメントがありません')),
+                        const SizedBox(height: 8),
+                        CustomButton(
+                          type: ButtonSizeType.sm,
+                          label: 'コメント追加',
+                          labelColor: kWhiteColor,
+                          backgroundColor: kBlueColor,
+                          onPressed: () {
+                            TextEditingController commentContentController =
+                                TextEditingController();
+                            showDialog(
+                              context: context,
+                              builder: (context) => CustomAlertDialog(
+                                content: SizedBox(
+                                  width: 600,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const SizedBox(height: 8),
+                                      CustomTextField(
+                                        controller: commentContentController,
+                                        textInputType: TextInputType.multiline,
+                                        maxLines: null,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                actions: [
+                                  CustomButton(
+                                    type: ButtonSizeType.sm,
+                                    label: 'キャンセル',
+                                    labelColor: kWhiteColor,
+                                    backgroundColor: kGreyColor,
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                  CustomButton(
+                                    type: ButtonSizeType.sm,
+                                    label: '追記する',
+                                    labelColor: kWhiteColor,
+                                    backgroundColor: kBlueColor,
+                                    onPressed: () async {
+                                      String? error =
+                                          await noticeProvider.addComment(
+                                        notice: widget.notice,
+                                        content: commentContentController.text,
+                                        loginUser: widget.loginProvider.user,
+                                      );
+                                      if (error != null) {
+                                        if (!mounted) return;
+                                        showMessage(context, error, false);
+                                        return;
+                                      }
+                                      _reloadComments();
+                                      if (!mounted) return;
+                                      showMessage(
+                                          context, '社内コメントが追記されました', true);
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 100),
               ],
             ),
