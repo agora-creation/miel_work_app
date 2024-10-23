@@ -154,16 +154,20 @@ class _PlanScreenState extends State<PlanScreen> {
                       data: snapshot.data,
                       currentGroup: widget.homeProvider.currentGroup,
                       searchStart: DateTime(
-                        searchMonth.year,
-                        searchMonth.month,
-                        1,
+                        days.first.year,
+                        days.first.month,
+                        days.first.day,
+                        0,
+                        0,
+                        0,
                       ),
                       searchEnd: DateTime(
-                        searchMonth.year,
-                        searchMonth.month + 1,
-                        1,
-                      ).add(
-                        const Duration(days: -1),
+                        days.last.year,
+                        days.last.month,
+                        days.last.day,
+                        23,
+                        59,
+                        59,
                       ),
                     );
                   }
