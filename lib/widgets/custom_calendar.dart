@@ -1,5 +1,6 @@
 import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 
 class CustomCalendar extends StatelessWidget {
@@ -24,6 +25,45 @@ class CustomCalendar extends StatelessWidget {
       controller: controller,
       child: MonthView(
         borderColor: kBorderColor,
+        cellBuilder: (day, events, isToday, isInMonth, isInYear) {
+          if (!isInMonth) {
+            return Container(color: kGreyColor.withOpacity(0.3));
+          }
+          return Container(
+            decoration: isToday
+                ? BoxDecoration(
+                    border: Border.all(
+                      color: kLightBlueColor,
+                      width: 3,
+                    ),
+                  )
+                : null,
+            padding: const EdgeInsets.all(4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(dateText('dd', day)),
+                Column(
+                  children: events.map((event) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: Container(
+                        color: kGreyColor.withOpacity(0.3),
+                        child: Text(
+                          event.title,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'SourceHanSansJP-Bold',
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          );
+        },
         controller: controller,
         initialMonth: initialMonth,
         cellAspectRatio: cellAspectRatio,

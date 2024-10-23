@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/models/organization.dart';
-import 'package:miel_work_app/models/plan_garbageman.dart';
+import 'package:miel_work_app/models/plan_dish_center.dart';
 import 'package:miel_work_app/models/user.dart';
-import 'package:miel_work_app/services/plan_garbageman.dart';
+import 'package:miel_work_app/services/plan_dish_center.dart';
 
-class PlanGarbagemanProvider with ChangeNotifier {
-  final PlanGarbagemanService _garbagemanService = PlanGarbagemanService();
+class PlanDishCenterProvider with ChangeNotifier {
+  final PlanDishCenterService _dishCenterService = PlanDishCenterService();
 
   Future<String?> create({
     required OrganizationModel? organization,
@@ -14,11 +14,11 @@ class PlanGarbagemanProvider with ChangeNotifier {
     required DateTime endedAt,
   }) async {
     String? error;
-    if (organization == null) return '清掃員予定の追加に失敗しました';
-    if (user == null) return '清掃員予定の追加に失敗しました';
+    if (organization == null) return '食器センター予定の追加に失敗しました';
+    if (user == null) return '食器センター予定の追加に失敗しました';
     try {
-      String id = _garbagemanService.id();
-      _garbagemanService.create({
+      String id = _dishCenterService.id();
+      _dishCenterService.create({
         'id': id,
         'organizationId': organization.id,
         'userId': user.id,
@@ -29,24 +29,24 @@ class PlanGarbagemanProvider with ChangeNotifier {
         'expirationAt': startedAt.add(const Duration(days: 365)),
       });
     } catch (e) {
-      error = '清掃員予定の追加に失敗しました';
+      error = '食器センター予定の追加に失敗しました';
     }
     return error;
   }
 
   Future<String?> update({
-    required PlanGarbagemanModel garbageman,
+    required PlanDishCenterModel dishCenter,
     required OrganizationModel? organization,
     required UserModel? user,
     required DateTime startedAt,
     required DateTime endedAt,
   }) async {
     String? error;
-    if (organization == null) return '清掃員予定の編集に失敗しました';
-    if (user == null) return '清掃員予定の編集に失敗しました';
+    if (organization == null) return '食器センター予定の編集に失敗しました';
+    if (user == null) return '食器センター予定の編集に失敗しました';
     try {
-      _garbagemanService.update({
-        'id': garbageman.id,
+      _dishCenterService.update({
+        'id': dishCenter.id,
         'organizationId': organization.id,
         'userId': user.id,
         'userName': user.name,
@@ -55,21 +55,21 @@ class PlanGarbagemanProvider with ChangeNotifier {
         'expirationAt': startedAt.add(const Duration(days: 365)),
       });
     } catch (e) {
-      error = '清掃員予定の編集に失敗しました';
+      error = '食器センター予定の編集に失敗しました';
     }
     return error;
   }
 
   Future<String?> delete({
-    required PlanGarbagemanModel garbageman,
+    required PlanDishCenterModel dishCenter,
   }) async {
     String? error;
     try {
-      _garbagemanService.delete({
-        'id': garbageman.id,
+      _dishCenterService.delete({
+        'id': dishCenter.id,
       });
     } catch (e) {
-      error = '清掃員予定の削除に失敗しました';
+      error = '食器センター予定の削除に失敗しました';
     }
     return error;
   }

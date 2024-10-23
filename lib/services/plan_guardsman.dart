@@ -33,13 +33,13 @@ class PlanGuardsmanService {
       return FirebaseFirestore.instance
           .collection(collection)
           .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .orderBy('eventAt', descending: true)
-          .startAt([endAt]).endAt([startAt]).snapshots();
+          .orderBy('startedAt', descending: false)
+          .startAt([startAt]).endAt([endAt]).snapshots();
     } else {
       return FirebaseFirestore.instance
           .collection(collection)
           .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .orderBy('eventAt', descending: true)
+          .orderBy('startedAt', descending: false)
           .snapshots();
     }
   }

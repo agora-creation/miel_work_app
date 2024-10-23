@@ -31,7 +31,7 @@ class WorkModel {
     _userId = data['userId'] ?? '';
     _startedAt = data['startedAt'].toDate() ?? DateTime.now();
     _endedAt = data['endedAt'].toDate() ?? DateTime.now();
-    workBreaks = _convertWorkBreaks(data['workBreaks']);
+    workBreaks = _convertWorkBreaks(data['workBreaks'] ?? []);
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
     _expirationAt = data['expirationAt'].toDate() ?? DateTime.now();
   }

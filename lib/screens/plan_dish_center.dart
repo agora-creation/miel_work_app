@@ -6,13 +6,13 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/models/plan_garbageman.dart';
+import 'package:miel_work_app/models/plan_dish_center.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/providers/plan_garbageman.dart';
-import 'package:miel_work_app/screens/plan_garbageman_timeline.dart';
-import 'package:miel_work_app/services/plan_garbageman.dart';
+import 'package:miel_work_app/providers/plan_dish_center.dart';
+import 'package:miel_work_app/screens/plan_dish_center_timeline.dart';
+import 'package:miel_work_app/services/plan_dish_center.dart';
 import 'package:miel_work_app/services/user.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
@@ -25,23 +25,23 @@ import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-class PlanGarbagemanScreen extends StatefulWidget {
+class PlanDishCenterScreen extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
 
-  const PlanGarbagemanScreen({
+  const PlanDishCenterScreen({
     required this.loginProvider,
     required this.homeProvider,
     super.key,
   });
 
   @override
-  State<PlanGarbagemanScreen> createState() => _PlanGarbagemanScreenState();
+  State<PlanDishCenterScreen> createState() => _PlanDishCenterScreenState();
 }
 
-class _PlanGarbagemanScreenState extends State<PlanGarbagemanScreen> {
+class _PlanDishCenterScreenState extends State<PlanDishCenterScreen> {
   EventController controller = EventController();
-  PlanGarbagemanService garbagemanService = PlanGarbagemanService();
+  PlanDishCenterService dishCenterService = PlanDishCenterService();
   DateTime searchMonth = DateTime.now();
   List<DateTime> days = [];
 
@@ -70,7 +70,7 @@ class _PlanGarbagemanScreenState extends State<PlanGarbagemanScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: kWhiteColor,
         title: const Text(
-          '清掃員予定表',
+          '食器センター予定表',
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
@@ -101,27 +101,27 @@ class _PlanGarbagemanScreenState extends State<PlanGarbagemanScreen> {
             ),
             Expanded(
               child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                stream: garbagemanService.streamList(
+                stream: dishCenterService.streamList(
                   organizationId: widget.loginProvider.organization?.id,
                   searchStart: days.first,
                   searchEnd: days.last,
                 ),
                 builder: (context, snapshot) {
-                  List<PlanGarbagemanModel> garbageMans = [];
+                  List<PlanDishCenterModel> dishCenters = [];
                   if (snapshot.hasData) {
-                    garbageMans = garbagemanService.generateList(
+                    dishCenters = dishCenterService.generateList(
                       data: snapshot.data,
                     );
                   }
-                  if (garbageMans.isNotEmpty) {
+                  if (dishCenters.isNotEmpty) {
                     List<CalendarEventData> events = [];
-                    for (final garbageman in garbageMans) {
+                    for (final dishCenter in dishCenters) {
                       events.add(CalendarEventData(
                         title:
-                            '[${garbageman.userName}]${dateText('HH:mm', garbageman.startedAt)}〜${dateText('HH:mm', garbageman.endedAt)}',
-                        date: garbageman.startedAt,
-                        startTime: garbageman.startedAt,
-                        endTime: garbageman.endedAt,
+                            '[${dishCenter.userName}]${dateText('HH:mm', dishCenter.startedAt)}〜${dateText('HH:mm', dishCenter.endedAt)}',
+                        date: dishCenter.startedAt,
+                        startTime: dishCenter.startedAt,
+                        endTime: dishCenter.endedAt,
                       ));
                     }
                     controller.addAll(events);
@@ -137,7 +137,7 @@ class _PlanGarbagemanScreenState extends State<PlanGarbagemanScreen> {
                         context,
                         PageTransition(
                           type: PageTransitionType.rightToLeft,
-                          child: PlanGarbagemanTimelineScreen(
+                          child: PlanDishCenterTimelineScreen(
                             loginProvider: widget.loginProvider,
                             homeProvider: widget.homeProvider,
                             day: day,
@@ -155,7 +155,7 @@ class _PlanGarbagemanScreenState extends State<PlanGarbagemanScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => showDialog(
           context: context,
-          builder: (context) => AddGarbagemanDialog(
+          builder: (context) => AddDishCenterDialog(
             loginProvider: widget.loginProvider,
             homeProvider: widget.homeProvider,
             day: DateTime.now(),
@@ -178,12 +178,12 @@ class _PlanGarbagemanScreenState extends State<PlanGarbagemanScreen> {
   }
 }
 
-class AddGarbagemanDialog extends StatefulWidget {
+class AddDishCenterDialog extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
   final DateTime day;
 
-  const AddGarbagemanDialog({
+  const AddDishCenterDialog({
     required this.loginProvider,
     required this.homeProvider,
     required this.day,
@@ -191,10 +191,10 @@ class AddGarbagemanDialog extends StatefulWidget {
   });
 
   @override
-  State<AddGarbagemanDialog> createState() => _AddGarbagemanDialogState();
+  State<AddDishCenterDialog> createState() => _AddDishCenterDialogState();
 }
 
-class _AddGarbagemanDialogState extends State<AddGarbagemanDialog> {
+class _AddDishCenterDialogState extends State<AddDishCenterDialog> {
   UserService userService = UserService();
   List<UserModel> users = [];
   UserModel? selectedUser;
@@ -237,7 +237,7 @@ class _AddGarbagemanDialogState extends State<AddGarbagemanDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final garbagemanProvider = Provider.of<PlanGarbagemanProvider>(context);
+    final dishCenterProvider = Provider.of<PlanDishCenterProvider>(context);
     return CustomAlertDialog(
       content: SizedBox(
         width: 500,
@@ -318,7 +318,7 @@ class _AddGarbagemanDialogState extends State<AddGarbagemanDialog> {
           labelColor: kWhiteColor,
           backgroundColor: kBlueColor,
           onPressed: () async {
-            String? error = await garbagemanProvider.create(
+            String? error = await dishCenterProvider.create(
               organization: widget.loginProvider.organization,
               user: selectedUser,
               startedAt: startedAt,
@@ -330,7 +330,7 @@ class _AddGarbagemanDialogState extends State<AddGarbagemanDialog> {
               return;
             }
             if (!mounted) return;
-            showMessage(context, '清掃員予定が追加されました', true);
+            showMessage(context, '食器センター予定が追加されました', true);
             Navigator.pop(context);
           },
         ),

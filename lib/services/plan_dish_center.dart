@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:miel_work_app/common/functions.dart';
-import 'package:miel_work_app/models/plan_garbageman.dart';
+import 'package:miel_work_app/models/plan_dish_center.dart';
 
-class PlanGarbagemanService {
-  String collection = 'planGarbageman';
+class PlanDishCenterService {
+  String collection = 'planDishCenter';
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   String id() {
@@ -44,12 +44,12 @@ class PlanGarbagemanService {
     }
   }
 
-  List<PlanGarbagemanModel> generateList({
+  List<PlanDishCenterModel> generateList({
     required QuerySnapshot<Map<String, dynamic>>? data,
   }) {
-    List<PlanGarbagemanModel> ret = [];
+    List<PlanDishCenterModel> ret = [];
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
-      ret.add(PlanGarbagemanModel.fromSnapshot(doc));
+      ret.add(PlanDishCenterModel.fromSnapshot(doc));
     }
     return ret;
   }

@@ -14,6 +14,7 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/lost.dart';
 import 'package:miel_work_app/providers/notice.dart';
 import 'package:miel_work_app/providers/plan.dart';
+import 'package:miel_work_app/providers/plan_dish_center.dart';
 import 'package:miel_work_app/providers/plan_garbageman.dart';
 import 'package:miel_work_app/providers/plan_guardsman.dart';
 import 'package:miel_work_app/providers/problem.dart';
@@ -79,6 +80,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: RequestConstProvider()),
         ChangeNotifierProvider.value(value: PlanGuardsmanProvider()),
         ChangeNotifierProvider.value(value: PlanGarbagemanProvider()),
+        ChangeNotifierProvider.value(value: PlanDishCenterProvider()),
       ],
       child: MediaQuery.withNoTextScaling(
         child: MaterialApp(

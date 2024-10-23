@@ -31,7 +31,7 @@ class UserModel {
     _password = data['password'] ?? '';
     _uid = data['uid'] ?? '';
     _token = data['token'] ?? '';
-    tokens = _convertTokens(data['tokens']);
+    tokens = _convertTokens(data['tokens'] ?? []);
     _admin = data['admin'] ?? false;
     _president = data['president'] ?? false;
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();

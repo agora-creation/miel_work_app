@@ -5,25 +5,27 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/models/plan_guardsman.dart';
+import 'package:miel_work_app/models/plan_dish_center.dart';
+import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
-import 'package:miel_work_app/providers/plan_guardsman.dart';
-import 'package:miel_work_app/screens/plan_guardsman.dart';
-import 'package:miel_work_app/services/plan_guardsman.dart';
+import 'package:miel_work_app/providers/plan_dish_center.dart';
+import 'package:miel_work_app/screens/plan_dish_center.dart';
+import 'package:miel_work_app/services/plan_dish_center.dart';
+import 'package:miel_work_app/services/user.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/datetime_range_form.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
-import 'package:miel_work_app/widgets/plan_guardsman_list.dart';
+import 'package:miel_work_app/widgets/plan_dish_center_list.dart';
 import 'package:provider/provider.dart';
 
-class PlanGuardsmanTimelineScreen extends StatefulWidget {
+class PlanDishCenterTimelineScreen extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
   final DateTime day;
 
-  const PlanGuardsmanTimelineScreen({
+  const PlanDishCenterTimelineScreen({
     required this.loginProvider,
     required this.homeProvider,
     required this.day,
@@ -31,13 +33,13 @@ class PlanGuardsmanTimelineScreen extends StatefulWidget {
   });
 
   @override
-  State<PlanGuardsmanTimelineScreen> createState() =>
-      _PlanGuardsmanTimelineScreenState();
+  State<PlanDishCenterTimelineScreen> createState() =>
+      _PlanDishCenterTimelineScreenState();
 }
 
-class _PlanGuardsmanTimelineScreenState
-    extends State<PlanGuardsmanTimelineScreen> {
-  PlanGuardsmanService guardsmanService = PlanGuardsmanService();
+class _PlanDishCenterTimelineScreenState
+    extends State<PlanDishCenterTimelineScreen> {
+  PlanDishCenterService dishCenterService = PlanDishCenterService();
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +56,14 @@ class _PlanGuardsmanTimelineScreenState
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          '${dateText('yyyy/MM/dd', widget.day)}：警備員予定表',
+          '${dateText('yyyy/MM/dd', widget.day)}：食器センター予定表',
           style: const TextStyle(color: kBlackColor),
         ),
         shape: Border(bottom: BorderSide(color: kBorderColor)),
       ),
       body: SafeArea(
         child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: guardsmanService.streamList(
+          stream: dishCenterService.streamList(
             organizationId: widget.loginProvider.organization?.id,
             searchStart: widget.day,
             searchEnd: DateTime(
@@ -74,28 +76,28 @@ class _PlanGuardsmanTimelineScreenState
             ),
           ),
           builder: (context, snapshot) {
-            List<PlanGuardsmanModel> guardsMans = [];
+            List<PlanDishCenterModel> dishCenters = [];
             if (snapshot.hasData) {
-              guardsMans = guardsmanService.generateList(
+              dishCenters = dishCenterService.generateList(
                 data: snapshot.data,
               );
             }
-            if (guardsMans.isEmpty) {
+            if (dishCenters.isEmpty) {
               return const Center(child: Text('この日の予定はありません'));
             }
             return ListView.builder(
               padding: const EdgeInsets.all(8),
-              itemCount: guardsMans.length,
+              itemCount: dishCenters.length,
               itemBuilder: (context, index) {
-                PlanGuardsmanModel guardsman = guardsMans[index];
-                return PlanGuardsmanList(
-                  guardsman: guardsman,
+                PlanDishCenterModel dishCenter = dishCenters[index];
+                return PlanDishCenterList(
+                  dishCenter: dishCenter,
                   onTap: () => showDialog(
                     context: context,
-                    builder: (context) => ModGuardsmanDialog(
+                    builder: (context) => ModDishCenterDialog(
                       loginProvider: widget.loginProvider,
                       homeProvider: widget.homeProvider,
-                      guardsman: guardsman,
+                      dishCenter: dishCenter,
                     ),
                   ),
                 );
@@ -107,7 +109,7 @@ class _PlanGuardsmanTimelineScreenState
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => showDialog(
           context: context,
-          builder: (context) => AddGuardsmanDialog(
+          builder: (context) => AddDishCenterDialog(
             loginProvider: widget.loginProvider,
             homeProvider: widget.homeProvider,
             day: DateTime.now(),
@@ -126,36 +128,54 @@ class _PlanGuardsmanTimelineScreenState
   }
 }
 
-class ModGuardsmanDialog extends StatefulWidget {
+class ModDishCenterDialog extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
-  final PlanGuardsmanModel guardsman;
+  final PlanDishCenterModel dishCenter;
 
-  const ModGuardsmanDialog({
+  const ModDishCenterDialog({
     required this.loginProvider,
     required this.homeProvider,
-    required this.guardsman,
+    required this.dishCenter,
     super.key,
   });
 
   @override
-  State<ModGuardsmanDialog> createState() => _ModGuardsmanDialogState();
+  State<ModDishCenterDialog> createState() => _ModDishCenterDialogState();
 }
 
-class _ModGuardsmanDialogState extends State<ModGuardsmanDialog> {
+class _ModDishCenterDialogState extends State<ModDishCenterDialog> {
+  UserService userService = UserService();
+  List<UserModel> users = [];
+  UserModel? selectedUser;
   DateTime startedAt = DateTime.now();
   DateTime endedAt = DateTime.now();
 
+  void _getUsers() async {
+    if (widget.homeProvider.currentGroup == null) {
+      users = await userService.selectList(
+        userIds: widget.loginProvider.organization?.userIds ?? [],
+      );
+    } else {
+      users = await userService.selectList(
+        userIds: widget.homeProvider.currentGroup?.userIds ?? [],
+      );
+    }
+    setState(() {});
+  }
+
   @override
   void initState() {
-    startedAt = widget.guardsman.startedAt;
-    endedAt = widget.guardsman.endedAt;
+    _getUsers();
+    startedAt = widget.dishCenter.startedAt;
+    endedAt = widget.dishCenter.endedAt;
+    selectedUser = users.singleWhere((e) => e.id == widget.dishCenter.userId);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final guardsmanProvider = Provider.of<PlanGuardsmanProvider>(context);
+    final dishCenterProvider = Provider.of<PlanDishCenterProvider>(context);
     return CustomAlertDialog(
       content: SizedBox(
         width: 500,
@@ -163,6 +183,25 @@ class _ModGuardsmanDialogState extends State<ModGuardsmanDialog> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const SizedBox(height: 8),
+            FormLabel(
+              'スタッフ選択',
+              child: DropdownButton<UserModel>(
+                isExpanded: true,
+                value: selectedUser,
+                items: users.map((user) {
+                  return DropdownMenuItem(
+                    value: user,
+                    child: Text(user.name),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedUser = value;
+                  });
+                },
+              ),
+            ),
             const SizedBox(height: 8),
             FormLabel(
               '予定日時',
@@ -217,8 +256,8 @@ class _ModGuardsmanDialogState extends State<ModGuardsmanDialog> {
           labelColor: kWhiteColor,
           backgroundColor: kRedColor,
           onPressed: () async {
-            String? error = await guardsmanProvider.delete(
-              guardsman: widget.guardsman,
+            String? error = await dishCenterProvider.delete(
+              dishCenter: widget.dishCenter,
             );
             if (error != null) {
               if (!mounted) return;
@@ -226,7 +265,7 @@ class _ModGuardsmanDialogState extends State<ModGuardsmanDialog> {
               return;
             }
             if (!mounted) return;
-            showMessage(context, '警備員予定が削除されました', true);
+            showMessage(context, '食器センター予定が削除されました', true);
             Navigator.pop(context);
           },
         ),
@@ -236,9 +275,10 @@ class _ModGuardsmanDialogState extends State<ModGuardsmanDialog> {
           labelColor: kWhiteColor,
           backgroundColor: kBlueColor,
           onPressed: () async {
-            String? error = await guardsmanProvider.update(
-              guardsman: widget.guardsman,
+            String? error = await dishCenterProvider.update(
+              dishCenter: widget.dishCenter,
               organization: widget.loginProvider.organization,
+              user: selectedUser,
               startedAt: startedAt,
               endedAt: endedAt,
             );
@@ -248,7 +288,7 @@ class _ModGuardsmanDialogState extends State<ModGuardsmanDialog> {
               return;
             }
             if (!mounted) return;
-            showMessage(context, '警備員予定が変更されました', true);
+            showMessage(context, '食器センター予定が変更されました', true);
             Navigator.pop(context);
           },
         ),

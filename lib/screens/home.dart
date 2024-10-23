@@ -13,6 +13,7 @@ import 'package:miel_work_app/screens/loan.dart';
 import 'package:miel_work_app/screens/lost.dart';
 import 'package:miel_work_app/screens/notice.dart';
 import 'package:miel_work_app/screens/plan.dart';
+import 'package:miel_work_app/screens/plan_dish_center.dart';
 import 'package:miel_work_app/screens/plan_garbageman.dart';
 import 'package:miel_work_app/screens/plan_guardsman.dart';
 import 'package:miel_work_app/screens/problem.dart';
@@ -458,7 +459,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 labelFontSize: 12,
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,
-                                onTap: () {},
+                                onTap: () => showBottomUpScreen(
+                                  context,
+                                  PlanDishCenterScreen(
+                                    loginProvider: loginProvider,
+                                    homeProvider: homeProvider,
+                                  ),
+                                ),
                               ),
                               HomeIconCard(
                                 icon: FontAwesomeIcons.businessTime,

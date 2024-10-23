@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
-import 'package:miel_work_app/models/plan_guardsman.dart';
+import 'package:miel_work_app/models/plan_dish_center.dart';
 
-class PlanGuardsmanList extends StatelessWidget {
-  final PlanGuardsmanModel guardsman;
+class PlanDishCenterList extends StatelessWidget {
+  final PlanDishCenterModel dishCenter;
   final Function()? onTap;
 
-  const PlanGuardsmanList({
-    required this.guardsman,
+  const PlanDishCenterList({
+    required this.dishCenter,
     this.onTap,
     super.key,
   });
@@ -30,7 +30,7 @@ class PlanGuardsmanList extends StatelessWidget {
             horizontal: 12,
           ),
           child: Text(
-            '${dateText('HH:mm', guardsman.startedAt)}〜${dateText('HH:mm', guardsman.endedAt)}',
+            '[${dishCenter.userName}]${dateText('HH:mm', dishCenter.startedAt)}〜${dateText('HH:mm', dishCenter.endedAt)}',
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

@@ -8,21 +8,20 @@ class PlanGuardsmanProvider with ChangeNotifier {
 
   Future<String?> create({
     required OrganizationModel? organization,
-    required String content,
-    required DateTime eventAt,
+    required DateTime startedAt,
+    required DateTime endedAt,
   }) async {
     String? error;
     if (organization == null) return '警備員予定の追加に失敗しました';
-    if (content == '') return '内容は必須入力です';
     try {
       String id = _guardsmanService.id();
       _guardsmanService.create({
         'id': id,
         'organizationId': organization.id,
-        'content': content,
-        'eventAt': eventAt,
+        'startedAt': startedAt,
+        'endedAt': endedAt,
         'createdAt': DateTime.now(),
-        'expirationAt': eventAt.add(const Duration(days: 365)),
+        'expirationAt': startedAt.add(const Duration(days: 365)),
       });
     } catch (e) {
       error = '警備員予定の追加に失敗しました';
@@ -33,19 +32,18 @@ class PlanGuardsmanProvider with ChangeNotifier {
   Future<String?> update({
     required PlanGuardsmanModel guardsman,
     required OrganizationModel? organization,
-    required String content,
-    required DateTime eventAt,
+    required DateTime startedAt,
+    required DateTime endedAt,
   }) async {
     String? error;
     if (organization == null) return '警備員予定の編集に失敗しました';
-    if (content == '') return '内容は必須入力です';
     try {
       _guardsmanService.update({
         'id': guardsman.id,
         'organizationId': organization.id,
-        'content': content,
-        'eventAt': eventAt,
-        'expirationAt': eventAt.add(const Duration(days: 365)),
+        'startedAt': startedAt,
+        'endedAt': endedAt,
+        'expirationAt': startedAt.add(const Duration(days: 365)),
       });
     } catch (e) {
       error = '警備員予定の編集に失敗しました';

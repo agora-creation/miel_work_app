@@ -6,16 +6,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/plan_garbageman.dart';
+import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/plan_garbageman.dart';
 import 'package:miel_work_app/screens/plan_garbageman.dart';
 import 'package:miel_work_app/services/plan_garbageman.dart';
+import 'package:miel_work_app/services/user.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
-import 'package:miel_work_app/widgets/custom_text_field.dart';
+import 'package:miel_work_app/widgets/datetime_range_form.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
-import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:miel_work_app/widgets/plan_garbageman_list.dart';
 import 'package:provider/provider.dart';
 
@@ -144,13 +145,31 @@ class ModGarbagemanDialog extends StatefulWidget {
 }
 
 class _ModGarbagemanDialogState extends State<ModGarbagemanDialog> {
-  TextEditingController contentController = TextEditingController();
-  DateTime eventAt = DateTime.now();
+  UserService userService = UserService();
+  List<UserModel> users = [];
+  UserModel? selectedUser;
+  DateTime startedAt = DateTime.now();
+  DateTime endedAt = DateTime.now();
+
+  void _getUsers() async {
+    if (widget.homeProvider.currentGroup == null) {
+      users = await userService.selectList(
+        userIds: widget.loginProvider.organization?.userIds ?? [],
+      );
+    } else {
+      users = await userService.selectList(
+        userIds: widget.homeProvider.currentGroup?.userIds ?? [],
+      );
+    }
+    setState(() {});
+  }
 
   @override
   void initState() {
-    contentController.text = widget.garbageman.content;
-    eventAt = widget.garbageman.eventAt;
+    _getUsers();
+    startedAt = widget.garbageman.startedAt;
+    endedAt = widget.garbageman.endedAt;
+    selectedUser = users.singleWhere((e) => e.id == widget.garbageman.userId);
     super.initState();
   }
 
@@ -164,35 +183,60 @@ class _ModGarbagemanDialogState extends State<ModGarbagemanDialog> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const SizedBox(height: 8),
             FormLabel(
-              '内容',
-              child: CustomTextField(
-                controller: contentController,
-                textInputType: TextInputType.text,
-                maxLines: 1,
+              'スタッフ選択',
+              child: DropdownButton<UserModel>(
+                isExpanded: true,
+                value: selectedUser,
+                items: users.map((user) {
+                  return DropdownMenuItem(
+                    value: user,
+                    child: Text(user.name),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedUser = value;
+                  });
+                },
               ),
             ),
             const SizedBox(height: 8),
             FormLabel(
-              '予定日',
-              child: FormValue(
-                dateText('yyyy/MM/dd', eventAt),
-                onTap: () async {
-                  picker.DatePicker.showDateTimePicker(
-                    context,
-                    showTitleActions: true,
-                    minTime: kFirstDate,
-                    maxTime: kLastDate,
-                    theme: kDatePickerTheme,
-                    onConfirm: (value) {
-                      setState(() {
-                        eventAt = value;
-                      });
-                    },
-                    currentTime: eventAt,
-                    locale: picker.LocaleType.jp,
-                  );
-                },
+              '予定日時',
+              child: DatetimeRangeForm(
+                startedAt: startedAt,
+                startedOnTap: () => picker.DatePicker.showDateTimePicker(
+                  context,
+                  showTitleActions: true,
+                  minTime: kFirstDate,
+                  maxTime: kLastDate,
+                  theme: kDatePickerTheme,
+                  onConfirm: (value) {
+                    setState(() {
+                      startedAt = value;
+                      endedAt = startedAt.add(const Duration(hours: 1));
+                    });
+                  },
+                  currentTime: startedAt,
+                  locale: picker.LocaleType.jp,
+                ),
+                endedAt: endedAt,
+                endedOnTap: () => picker.DatePicker.showDateTimePicker(
+                  context,
+                  showTitleActions: true,
+                  minTime: kFirstDate,
+                  maxTime: kLastDate,
+                  theme: kDatePickerTheme,
+                  onConfirm: (value) {
+                    setState(() {
+                      endedAt = value;
+                    });
+                  },
+                  currentTime: endedAt,
+                  locale: picker.LocaleType.jp,
+                ),
               ),
             ),
           ],
@@ -234,8 +278,9 @@ class _ModGarbagemanDialogState extends State<ModGarbagemanDialog> {
             String? error = await garbagemanProvider.update(
               garbageman: widget.garbageman,
               organization: widget.loginProvider.organization,
-              content: contentController.text,
-              eventAt: eventAt,
+              user: selectedUser,
+              startedAt: startedAt,
+              endedAt: endedAt,
             );
             if (error != null) {
               if (!mounted) return;
