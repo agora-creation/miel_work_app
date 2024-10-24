@@ -53,7 +53,7 @@ class CustomCalendar extends StatelessWidget {
                           '予定あり',
                           style: TextStyle(
                             color: Colors.transparent,
-                            fontSize: 10,
+                            fontSize: 8,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'SourceHanSansJP-Bold',
                           ),
