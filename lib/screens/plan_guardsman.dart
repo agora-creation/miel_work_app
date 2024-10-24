@@ -217,51 +217,48 @@ class _AddGuardsmanDialogState extends State<AddGuardsmanDialog> {
   Widget build(BuildContext context) {
     final guardsmanProvider = Provider.of<PlanGuardsmanProvider>(context);
     return CustomAlertDialog(
-      content: SizedBox(
-        width: 500,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 8),
-            FormLabel(
-              '予定日時',
-              child: DatetimeRangeForm(
-                startedAt: startedAt,
-                startedOnTap: () => picker.DatePicker.showDateTimePicker(
-                  context,
-                  showTitleActions: true,
-                  minTime: kFirstDate,
-                  maxTime: kLastDate,
-                  theme: kDatePickerTheme,
-                  onConfirm: (value) {
-                    setState(() {
-                      startedAt = value;
-                      endedAt = startedAt.add(const Duration(hours: 1));
-                    });
-                  },
-                  currentTime: startedAt,
-                  locale: picker.LocaleType.jp,
-                ),
-                endedAt: endedAt,
-                endedOnTap: () => picker.DatePicker.showDateTimePicker(
-                  context,
-                  showTitleActions: true,
-                  minTime: kFirstDate,
-                  maxTime: kLastDate,
-                  theme: kDatePickerTheme,
-                  onConfirm: (value) {
-                    setState(() {
-                      endedAt = value;
-                    });
-                  },
-                  currentTime: endedAt,
-                  locale: picker.LocaleType.jp,
-                ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 8),
+          FormLabel(
+            '予定日時',
+            child: DatetimeRangeForm(
+              startedAt: startedAt,
+              startedOnTap: () => picker.DatePicker.showDateTimePicker(
+                context,
+                showTitleActions: true,
+                minTime: kFirstDate,
+                maxTime: kLastDate,
+                theme: kDatePickerTheme,
+                onConfirm: (value) {
+                  setState(() {
+                    startedAt = value;
+                    endedAt = startedAt.add(const Duration(hours: 1));
+                  });
+                },
+                currentTime: startedAt,
+                locale: picker.LocaleType.jp,
+              ),
+              endedAt: endedAt,
+              endedOnTap: () => picker.DatePicker.showDateTimePicker(
+                context,
+                showTitleActions: true,
+                minTime: kFirstDate,
+                maxTime: kLastDate,
+                theme: kDatePickerTheme,
+                onConfirm: (value) {
+                  setState(() {
+                    endedAt = value;
+                  });
+                },
+                currentTime: endedAt,
+                locale: picker.LocaleType.jp,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       actions: [
         CustomButton(

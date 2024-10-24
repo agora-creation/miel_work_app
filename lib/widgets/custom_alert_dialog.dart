@@ -16,6 +16,7 @@ class CustomAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      insetPadding: const EdgeInsets.all(8),
       contentPadding: contentPadding,
       backgroundColor: kWhiteColor,
       surfaceTintColor: kWhiteColor,

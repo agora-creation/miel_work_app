@@ -6,12 +6,14 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
+import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/plan_garbageman.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/plan_garbageman.dart';
 import 'package:miel_work_app/screens/plan_garbageman_timeline.dart';
+import 'package:miel_work_app/services/organization_group.dart';
 import 'package:miel_work_app/services/plan_garbageman.dart';
 import 'package:miel_work_app/services/user.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
@@ -195,28 +197,26 @@ class AddGarbagemanDialog extends StatefulWidget {
 }
 
 class _AddGarbagemanDialogState extends State<AddGarbagemanDialog> {
+  OrganizationGroupService groupService = OrganizationGroupService();
   UserService userService = UserService();
   List<UserModel> users = [];
   UserModel? selectedUser;
   DateTime startedAt = DateTime.now();
   DateTime endedAt = DateTime.now();
 
-  void _getUsers() async {
-    if (widget.homeProvider.currentGroup == null) {
+  void _init() async {
+    OrganizationGroupModel? group = await groupService.selectDataName(
+      organizationId: widget.loginProvider.organization?.id ?? 'error',
+      name: '清掃員',
+    );
+    if (group != null) {
       users = await userService.selectList(
-        userIds: widget.loginProvider.organization?.userIds ?? [],
-      );
-    } else {
-      users = await userService.selectList(
-        userIds: widget.homeProvider.currentGroup?.userIds ?? [],
+        userIds: group.userIds,
       );
     }
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    _getUsers();
+    if (users.isNotEmpty) {
+      selectedUser = users.first;
+    }
     startedAt = DateTime(
       widget.day.year,
       widget.day.month,
@@ -229,9 +229,12 @@ class _AddGarbagemanDialogState extends State<AddGarbagemanDialog> {
       widget.day.day,
       20,
     );
-    if (users.isNotEmpty) {
-      selectedUser = users.first;
-    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    _init();
     super.initState();
   }
 
@@ -239,70 +242,67 @@ class _AddGarbagemanDialogState extends State<AddGarbagemanDialog> {
   Widget build(BuildContext context) {
     final garbagemanProvider = Provider.of<PlanGarbagemanProvider>(context);
     return CustomAlertDialog(
-      content: SizedBox(
-        width: 500,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 8),
-            FormLabel(
-              'スタッフ選択',
-              child: DropdownButton<UserModel>(
-                isExpanded: true,
-                value: selectedUser,
-                items: users.map((user) {
-                  return DropdownMenuItem(
-                    value: user,
-                    child: Text(user.name),
-                  );
-                }).toList(),
-                onChanged: (value) {
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 8),
+          FormLabel(
+            'スタッフ選択',
+            child: DropdownButton<UserModel?>(
+              isExpanded: true,
+              value: selectedUser,
+              items: users.map((user) {
+                return DropdownMenuItem(
+                  value: user,
+                  child: Text(user.name),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedUser = value;
+                });
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
+          FormLabel(
+            '予定日時',
+            child: DatetimeRangeForm(
+              startedAt: startedAt,
+              startedOnTap: () => picker.DatePicker.showDateTimePicker(
+                context,
+                showTitleActions: true,
+                minTime: kFirstDate,
+                maxTime: kLastDate,
+                theme: kDatePickerTheme,
+                onConfirm: (value) {
                   setState(() {
-                    selectedUser = value;
+                    startedAt = value;
+                    endedAt = startedAt.add(const Duration(hours: 1));
                   });
                 },
+                currentTime: startedAt,
+                locale: picker.LocaleType.jp,
+              ),
+              endedAt: endedAt,
+              endedOnTap: () => picker.DatePicker.showDateTimePicker(
+                context,
+                showTitleActions: true,
+                minTime: kFirstDate,
+                maxTime: kLastDate,
+                theme: kDatePickerTheme,
+                onConfirm: (value) {
+                  setState(() {
+                    endedAt = value;
+                  });
+                },
+                currentTime: endedAt,
+                locale: picker.LocaleType.jp,
               ),
             ),
-            const SizedBox(height: 8),
-            FormLabel(
-              '予定日時',
-              child: DatetimeRangeForm(
-                startedAt: startedAt,
-                startedOnTap: () => picker.DatePicker.showDateTimePicker(
-                  context,
-                  showTitleActions: true,
-                  minTime: kFirstDate,
-                  maxTime: kLastDate,
-                  theme: kDatePickerTheme,
-                  onConfirm: (value) {
-                    setState(() {
-                      startedAt = value;
-                      endedAt = startedAt.add(const Duration(hours: 1));
-                    });
-                  },
-                  currentTime: startedAt,
-                  locale: picker.LocaleType.jp,
-                ),
-                endedAt: endedAt,
-                endedOnTap: () => picker.DatePicker.showDateTimePicker(
-                  context,
-                  showTitleActions: true,
-                  minTime: kFirstDate,
-                  maxTime: kLastDate,
-                  theme: kDatePickerTheme,
-                  onConfirm: (value) {
-                    setState(() {
-                      endedAt = value;
-                    });
-                  },
-                  currentTime: endedAt,
-                  locale: picker.LocaleType.jp,
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
       actions: [
         CustomButton(

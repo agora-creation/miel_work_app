@@ -48,10 +48,12 @@ class CustomCalendar extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 4),
                       child: Container(
-                        color: kGreyColor.withOpacity(0.3),
-                        child: Text(
-                          event.title,
-                          style: const TextStyle(
+                        color: kLightBlueColor.withOpacity(0.3),
+                        child: const Text(
+                          '予定あり',
+                          style: TextStyle(
+                            color: Colors.transparent,
+                            fontSize: 10,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'SourceHanSansJP-Bold',
                           ),
