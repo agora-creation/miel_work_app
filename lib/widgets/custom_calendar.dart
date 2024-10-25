@@ -27,14 +27,14 @@ class CustomCalendar extends StatelessWidget {
         borderColor: kBorderColor,
         cellBuilder: (day, events, isToday, isInMonth, isInYear) {
           if (!isInMonth) {
-            return Container(color: kGreyColor.withOpacity(0.3));
+            return Container(color: kGreyColor.withOpacity(0.2));
           }
           return Container(
             decoration: isToday
                 ? BoxDecoration(
                     border: Border.all(
                       color: kLightBlueColor,
-                      width: 3,
+                      width: 2,
                     ),
                   )
                 : null,
@@ -48,7 +48,7 @@ class CustomCalendar extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 4),
                       child: Container(
-                        color: kLightBlueColor.withOpacity(0.3),
+                        color: kLightBlueColor.withOpacity(0.2),
                         child: const Text(
                           '予定あり',
                           style: TextStyle(
