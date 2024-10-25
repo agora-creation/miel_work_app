@@ -43,24 +43,28 @@ class CustomCalendar extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(dateText('dd', day)),
-                Column(
-                  children: events.map((event) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Container(
-                        color: kLightBlueColor.withOpacity(0.2),
-                        child: const Text(
-                          '予定あり',
-                          style: TextStyle(
-                            color: Colors.transparent,
-                            fontSize: 8,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'SourceHanSansJP-Bold',
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: events.map((event) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 4),
+                          child: Container(
+                            color: kLightBlueColor.withOpacity(0.2),
+                            child: const Text(
+                              '予定あり',
+                              style: TextStyle(
+                                color: Colors.transparent,
+                                fontSize: 8,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'SourceHanSansJP-Bold',
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
+                        );
+                      }).toList(),
+                    ),
+                  ),
                 ),
               ],
             ),
