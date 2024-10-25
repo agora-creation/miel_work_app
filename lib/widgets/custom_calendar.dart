@@ -50,7 +50,7 @@ class CustomCalendar extends StatelessWidget {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 4),
                           child: Container(
-                            color: kLightBlueColor.withOpacity(0.2),
+                            color: kLightBlueColor.withOpacity(0.8),
                             child: const Text(
                               '予定あり',
                               style: TextStyle(
