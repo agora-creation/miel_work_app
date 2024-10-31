@@ -14,8 +14,8 @@ class PlanDishCenterProvider with ChangeNotifier {
     required DateTime endedAt,
   }) async {
     String? error;
-    if (organization == null) return '食器センター予定の追加に失敗しました';
-    if (user == null) return '食器センター予定の追加に失敗しました';
+    if (organization == null) return '勤務予定の追加に失敗しました';
+    if (user == null) return '勤務予定の追加に失敗しました';
     try {
       String id = _dishCenterService.id();
       _dishCenterService.create({
@@ -29,7 +29,7 @@ class PlanDishCenterProvider with ChangeNotifier {
         'expirationAt': startedAt.add(const Duration(days: 365)),
       });
     } catch (e) {
-      error = '食器センター予定の追加に失敗しました';
+      error = '勤務予定の追加に失敗しました';
     }
     return error;
   }
@@ -42,8 +42,8 @@ class PlanDishCenterProvider with ChangeNotifier {
     required DateTime endedAt,
   }) async {
     String? error;
-    if (organization == null) return '食器センター予定の編集に失敗しました';
-    if (user == null) return '食器センター予定の編集に失敗しました';
+    if (organization == null) return '勤務予定の編集に失敗しました';
+    if (user == null) return '勤務予定の編集に失敗しました';
     try {
       _dishCenterService.update({
         'id': dishCenter.id,
@@ -55,7 +55,7 @@ class PlanDishCenterProvider with ChangeNotifier {
         'expirationAt': startedAt.add(const Duration(days: 365)),
       });
     } catch (e) {
-      error = '食器センター予定の編集に失敗しました';
+      error = '勤務予定の編集に失敗しました';
     }
     return error;
   }
@@ -69,7 +69,7 @@ class PlanDishCenterProvider with ChangeNotifier {
         'id': dishCenter.id,
       });
     } catch (e) {
-      error = '食器センター予定の削除に失敗しました';
+      error = '勤務予定の削除に失敗しました';
     }
     return error;
   }

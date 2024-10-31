@@ -12,7 +12,7 @@ class PlanGuardsmanProvider with ChangeNotifier {
     required DateTime endedAt,
   }) async {
     String? error;
-    if (organization == null) return '警備員予定の追加に失敗しました';
+    if (organization == null) return '勤務予定の追加に失敗しました';
     try {
       String id = _guardsmanService.id();
       _guardsmanService.create({
@@ -24,7 +24,7 @@ class PlanGuardsmanProvider with ChangeNotifier {
         'expirationAt': startedAt.add(const Duration(days: 365)),
       });
     } catch (e) {
-      error = '警備員予定の追加に失敗しました';
+      error = '勤務予定の追加に失敗しました';
     }
     return error;
   }
@@ -36,7 +36,7 @@ class PlanGuardsmanProvider with ChangeNotifier {
     required DateTime endedAt,
   }) async {
     String? error;
-    if (organization == null) return '警備員予定の編集に失敗しました';
+    if (organization == null) return '勤務予定の編集に失敗しました';
     try {
       _guardsmanService.update({
         'id': guardsman.id,
@@ -46,7 +46,7 @@ class PlanGuardsmanProvider with ChangeNotifier {
         'expirationAt': startedAt.add(const Duration(days: 365)),
       });
     } catch (e) {
-      error = '警備員予定の編集に失敗しました';
+      error = '勤務予定の編集に失敗しました';
     }
     return error;
   }
@@ -60,7 +60,7 @@ class PlanGuardsmanProvider with ChangeNotifier {
         'id': guardsman.id,
       });
     } catch (e) {
-      error = '警備員予定の削除に失敗しました';
+      error = '勤務予定の削除に失敗しました';
     }
     return error;
   }

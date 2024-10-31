@@ -425,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               HomeIconCard(
                                 icon: FontAwesomeIcons.tableCells,
                                 iconSize: 42,
-                                label: '警備員予定表',
+                                label: '警備員勤務表',
                                 labelFontSize: 16,
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,
@@ -440,7 +440,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               HomeIconCard(
                                 icon: FontAwesomeIcons.tableCells,
                                 iconSize: 42,
-                                label: '清掃員予定表',
+                                label: '清掃員勤務表',
                                 labelFontSize: 16,
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,
@@ -455,7 +455,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               HomeIconCard(
                                 icon: FontAwesomeIcons.tableCells,
                                 iconSize: 42,
-                                label: '食器センター予定表',
+                                label: '食器センター勤務表',
                                 labelFontSize: 12,
                                 color: kBlackColor,
                                 backgroundColor: kWhiteColor,

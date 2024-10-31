@@ -14,8 +14,8 @@ class PlanGarbagemanProvider with ChangeNotifier {
     required DateTime endedAt,
   }) async {
     String? error;
-    if (organization == null) return '清掃員予定の追加に失敗しました';
-    if (user == null) return '清掃員予定の追加に失敗しました';
+    if (organization == null) return '勤務予定の追加に失敗しました';
+    if (user == null) return '勤務予定の追加に失敗しました';
     try {
       String id = _garbagemanService.id();
       _garbagemanService.create({
@@ -29,7 +29,7 @@ class PlanGarbagemanProvider with ChangeNotifier {
         'expirationAt': startedAt.add(const Duration(days: 365)),
       });
     } catch (e) {
-      error = '清掃員予定の追加に失敗しました';
+      error = '勤務予定の追加に失敗しました';
     }
     return error;
   }
@@ -42,8 +42,8 @@ class PlanGarbagemanProvider with ChangeNotifier {
     required DateTime endedAt,
   }) async {
     String? error;
-    if (organization == null) return '清掃員予定の編集に失敗しました';
-    if (user == null) return '清掃員予定の編集に失敗しました';
+    if (organization == null) return '勤務予定の編集に失敗しました';
+    if (user == null) return '勤務予定の編集に失敗しました';
     try {
       _garbagemanService.update({
         'id': garbageman.id,
@@ -55,7 +55,7 @@ class PlanGarbagemanProvider with ChangeNotifier {
         'expirationAt': startedAt.add(const Duration(days: 365)),
       });
     } catch (e) {
-      error = '清掃員予定の編集に失敗しました';
+      error = '勤務予定の編集に失敗しました';
     }
     return error;
   }
@@ -69,7 +69,7 @@ class PlanGarbagemanProvider with ChangeNotifier {
         'id': garbageman.id,
       });
     } catch (e) {
-      error = '清掃員予定の削除に失敗しました';
+      error = '勤務予定の削除に失敗しました';
     }
     return error;
   }

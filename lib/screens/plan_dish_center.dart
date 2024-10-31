@@ -72,7 +72,7 @@ class _PlanDishCenterScreenState extends State<PlanDishCenterScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: kWhiteColor,
         title: const Text(
-          '食器センター予定表',
+          '食器センター勤務表',
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
@@ -330,7 +330,7 @@ class _AddDishCenterDialogState extends State<AddDishCenterDialog> {
               return;
             }
             if (!mounted) return;
-            showMessage(context, '食器センター予定が追加されました', true);
+            showMessage(context, '勤務予定が追加されました', true);
             Navigator.pop(context);
           },
         ),

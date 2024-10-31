@@ -54,7 +54,7 @@ class _PlanGuardsmanTimelineScreenState
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          '${dateText('yyyy/MM/dd', widget.day)}：警備員予定表',
+          '${dateText('yyyy/MM/dd', widget.day)}：警備員勤務表',
           style: const TextStyle(color: kBlackColor),
         ),
         shape: Border(bottom: BorderSide(color: kBorderColor)),
@@ -223,7 +223,7 @@ class _ModGuardsmanDialogState extends State<ModGuardsmanDialog> {
               return;
             }
             if (!mounted) return;
-            showMessage(context, '警備員予定が削除されました', true);
+            showMessage(context, '勤務予定が削除されました', true);
             Navigator.pop(context);
           },
         ),
@@ -245,7 +245,7 @@ class _ModGuardsmanDialogState extends State<ModGuardsmanDialog> {
               return;
             }
             if (!mounted) return;
-            showMessage(context, '警備員予定が変更されました', true);
+            showMessage(context, '勤務予定が変更されました', true);
             Navigator.pop(context);
           },
         ),
