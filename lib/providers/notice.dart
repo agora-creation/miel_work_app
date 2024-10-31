@@ -74,11 +74,13 @@ class NoticeProvider with ChangeNotifier {
       if (sendUsers.isNotEmpty) {
         for (UserModel user in sendUsers) {
           if (user.id == loginUser.id) continue;
-          _fmService.send(
-            token: user.token,
-            title: title,
-            body: content,
-          );
+          for (final token in user.tokens) {
+            _fmService.send(
+              token: token,
+              title: title,
+              body: content,
+            );
+          }
         }
       }
     } catch (e) {
@@ -136,27 +138,6 @@ class NoticeProvider with ChangeNotifier {
           'readUserIds': [loginUser.id],
           'expirationAt': DateTime.now().add(const Duration(days: 365)),
         });
-      }
-      //通知
-      List<UserModel> sendUsers = [];
-      if (group != null) {
-        sendUsers = await _userService.selectList(
-          userIds: group.userIds,
-        );
-      } else {
-        sendUsers = await _userService.selectList(
-          userIds: organization.userIds,
-        );
-      }
-      if (sendUsers.isNotEmpty) {
-        for (UserModel user in sendUsers) {
-          if (user.id == loginUser.id) continue;
-          _fmService.send(
-            token: user.token,
-            title: title,
-            body: content,
-          );
-        }
       }
     } catch (e) {
       error = 'お知らせの編集に失敗しました';

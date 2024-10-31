@@ -148,11 +148,13 @@ class ApplyProvider with ChangeNotifier {
       if (sendUsers.isNotEmpty) {
         for (UserModel user in sendUsers) {
           if (user.id == loginUser.id) continue;
-          _fmService.send(
-            token: user.token,
-            title: title,
-            body: '申請が提出されました。',
-          );
+          for (final token in user.tokens) {
+            _fmService.send(
+              token: token,
+              title: title,
+              body: '申請が提出されました',
+            );
+          }
         }
       }
     } catch (e) {
@@ -261,11 +263,13 @@ class ApplyProvider with ChangeNotifier {
         if (sendUsers.isNotEmpty) {
           for (UserModel user in sendUsers) {
             if (user.id == loginUser.id) continue;
-            _fmService.send(
-              token: user.token,
-              title: apply.title,
-              body: '申請が承認されました',
-            );
+            for (final token in user.tokens) {
+              _fmService.send(
+                token: token,
+                title: apply.title,
+                body: '申請が承認されました',
+              );
+            }
           }
         }
       } else {
@@ -303,11 +307,13 @@ class ApplyProvider with ChangeNotifier {
       if (sendUsers.isNotEmpty) {
         for (UserModel user in sendUsers) {
           if (user.id == loginUser.id) continue;
-          _fmService.send(
-            token: user.token,
-            title: apply.title,
-            body: '申請が否決されました。',
-          );
+          for (final token in user.tokens) {
+            _fmService.send(
+              token: token,
+              title: apply.title,
+              body: '申請が否決されました。',
+            );
+          }
         }
       }
     } catch (e) {

@@ -71,11 +71,13 @@ class LoanProvider with ChangeNotifier {
       if (sendUsers.isNotEmpty) {
         for (UserModel user in sendUsers) {
           if (user.id == loginUser.id) continue;
-          _fmService.send(
-            token: user.token,
-            title: '貸出物が追加されました',
-            body: itemName,
-          );
+          for (final token in user.tokens) {
+            _fmService.send(
+              token: token,
+              title: '貸出物が追加されました',
+              body: itemName,
+            );
+          }
         }
       }
     } catch (e) {

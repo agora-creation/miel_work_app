@@ -70,11 +70,13 @@ class LostProvider with ChangeNotifier {
       if (sendUsers.isNotEmpty) {
         for (UserModel user in sendUsers) {
           if (user.id == loginUser.id) continue;
-          _fmService.send(
-            token: user.token,
-            title: '落とし物がありました',
-            body: itemName,
-          );
+          for (final token in user.tokens) {
+            _fmService.send(
+              token: token,
+              title: '落とし物がありました',
+              body: itemName,
+            );
+          }
         }
       }
     } catch (e) {
