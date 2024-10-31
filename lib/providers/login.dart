@@ -87,7 +87,6 @@ class LoginProvider with ChangeNotifier {
           _userService.update({
             'id': tmpUser.id,
             'uid': uid,
-            'token': token,
             'tokens': tokens,
           });
           await setPrefsString('email', email);
@@ -166,7 +165,6 @@ class LoginProvider with ChangeNotifier {
     _userService.update({
       'id': _user?.id,
       'uid': '',
-      'token': '',
     });
     await _auth?.signOut();
     _status = AuthStatus.unauthenticated;
@@ -210,7 +208,6 @@ class LoginProvider with ChangeNotifier {
             }
             _userService.update({
               'id': tmpUser.id,
-              'token': token,
               'tokens': tokens,
             });
           }
@@ -257,7 +254,6 @@ class LoginProvider with ChangeNotifier {
               }
               _userService.update({
                 'id': tmpUser.id,
-                'token': token,
                 'tokens': tokens,
               });
             } else {
