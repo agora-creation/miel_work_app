@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -227,7 +228,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                   },
                                 ),
                               ),
-                              onTapFile: () {
+                              onTapFile: () async {
                                 String ext = message.fileExt;
                                 if (imageExtensions.contains(ext)) {
                                   showDialog(
@@ -269,6 +270,15 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                         });
                                       },
                                     ),
+                                  );
+                                }
+                                if (etcExtensions.contains(ext)) {
+                                  Uint8List bytes =
+                                      await File(message.file).readAsBytes();
+                                  await FileSaver.instance.saveFile(
+                                    name: message.id,
+                                    bytes: bytes,
+                                    ext: ext.replaceAll('.', ''),
                                   );
                                 }
                               },

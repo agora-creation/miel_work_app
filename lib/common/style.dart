@@ -117,3 +117,8 @@ const List<String> imageExtensions = [
 const List<String> pdfExtensions = [
   '.pdf',
 ];
+
+const List<String> etcExtensions = [
+  '.docx',
+  '.xlsx',
+];

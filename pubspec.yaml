@@ -3,7 +3,7 @@ description: "A new Flutter project."
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.7.7+1
+version: 1.7.8+1
 
 environment:
   sdk: '>=3.2.6 <4.0.0'
@@ -49,6 +49,7 @@ dependencies:
   custom_pop_up_menu: ^1.2.4
   signature: ^5.5.0
   calendar_view: ^1.2.0
+  file_saver: ^0.2.14
 
   firebase_core: ^3.5.0
   firebase_auth: ^5.3.0
