@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -30,6 +29,7 @@ import 'package:miel_work_app/widgets/message_form_field.dart';
 import 'package:miel_work_app/widgets/message_list.dart';
 import 'package:miel_work_app/widgets/pdf_detail_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChatMessageScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -273,13 +273,8 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                   );
                                 }
                                 if (etcExtensions.contains(ext)) {
-                                  Uint8List bytes =
-                                      await File(message.file).readAsBytes();
-                                  await FileSaver.instance.saveFile(
-                                    name: message.id,
-                                    bytes: bytes,
-                                    ext: ext.replaceAll('.', ''),
-                                  );
+                                  Uri url = Uri.parse(message.file);
+                                  await launchUrl(url);
                                 }
                               },
                             );
