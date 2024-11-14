@@ -35,6 +35,13 @@ class FileLink extends StatelessWidget {
         onTap: onTap,
       );
     }
+    if (etcExtensions.contains(fileExt)) {
+      return LinkText(
+        label: 'ファイルを開く',
+        color: kBlueColor,
+        onTap: onTap,
+      );
+    }
     return Container();
   }
 }

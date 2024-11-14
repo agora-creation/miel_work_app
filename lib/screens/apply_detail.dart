@@ -25,6 +25,7 @@ import 'package:miel_work_app/widgets/image_detail_dialog.dart';
 import 'package:miel_work_app/widgets/pdf_detail_dialog.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ApplyDetailScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -260,7 +261,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                       child: FileLink(
                         file: widget.apply.file,
                         fileExt: widget.apply.fileExt,
-                        onTap: () {
+                        onTap: () async {
                           String ext = widget.apply.fileExt;
                           if (imageExtensions.contains(ext)) {
                             showDialog(
@@ -280,6 +281,10 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                               ),
                             );
                           }
+                          if (etcExtensions.contains(ext)) {
+                            Uri url = Uri.parse(widget.apply.file);
+                            await launchUrl(url);
+                          }
                         },
                       ),
                     )
@@ -291,7 +296,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                       child: FileLink(
                         file: widget.apply.file2,
                         fileExt: widget.apply.file2Ext,
-                        onTap: () {
+                        onTap: () async {
                           String ext = widget.apply.file2Ext;
                           if (imageExtensions.contains(ext)) {
                             showDialog(
@@ -311,6 +316,10 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                               ),
                             );
                           }
+                          if (etcExtensions.contains(ext)) {
+                            Uri url = Uri.parse(widget.apply.file2);
+                            await launchUrl(url);
+                          }
                         },
                       ),
                     )
@@ -322,7 +331,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                       child: FileLink(
                         file: widget.apply.file3,
                         fileExt: widget.apply.file3Ext,
-                        onTap: () {
+                        onTap: () async {
                           String ext = widget.apply.file3Ext;
                           if (imageExtensions.contains(ext)) {
                             showDialog(
@@ -342,6 +351,10 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                               ),
                             );
                           }
+                          if (etcExtensions.contains(ext)) {
+                            Uri url = Uri.parse(widget.apply.file3);
+                            await launchUrl(url);
+                          }
                         },
                       ),
                     )
@@ -353,7 +366,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                       child: FileLink(
                         file: widget.apply.file4,
                         fileExt: widget.apply.file4Ext,
-                        onTap: () {
+                        onTap: () async {
                           String ext = widget.apply.file4Ext;
                           if (imageExtensions.contains(ext)) {
                             showDialog(
@@ -373,6 +386,10 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                               ),
                             );
                           }
+                          if (etcExtensions.contains(ext)) {
+                            Uri url = Uri.parse(widget.apply.file4);
+                            await launchUrl(url);
+                          }
                         },
                       ),
                     )
@@ -384,7 +401,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                       child: FileLink(
                         file: widget.apply.file5,
                         fileExt: widget.apply.file5Ext,
-                        onTap: () {
+                        onTap: () async {
                           String ext = widget.apply.file5Ext;
                           if (imageExtensions.contains(ext)) {
                             showDialog(
@@ -403,6 +420,10 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                                 onPressedClose: () => Navigator.pop(context),
                               ),
                             );
+                          }
+                          if (etcExtensions.contains(ext)) {
+                            Uri url = Uri.parse(widget.apply.file5);
+                            await launchUrl(url);
                           }
                         },
                       ),

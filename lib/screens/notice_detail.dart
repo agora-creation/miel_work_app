@@ -24,6 +24,7 @@ import 'package:miel_work_app/widgets/image_detail_dialog.dart';
 import 'package:miel_work_app/widgets/pdf_detail_dialog.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NoticeDetailScreen extends StatefulWidget {
   final LoginProvider loginProvider;
@@ -167,7 +168,7 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
                         child: FileLink(
                           file: widget.notice.file,
                           fileExt: widget.notice.fileExt,
-                          onTap: () {
+                          onTap: () async {
                             String ext = widget.notice.fileExt;
                             if (imageExtensions.contains(ext)) {
                               showDialog(
@@ -186,6 +187,10 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
                                   onPressedClose: () => Navigator.pop(context),
                                 ),
                               );
+                            }
+                            if (etcExtensions.contains(ext)) {
+                              Uri url = Uri.parse(widget.notice.file);
+                              await launchUrl(url);
                             }
                           },
                         ),
