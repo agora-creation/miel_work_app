@@ -24,6 +24,7 @@ import 'package:miel_work_app/screens/request_facility.dart';
 import 'package:miel_work_app/screens/request_interview.dart';
 import 'package:miel_work_app/screens/request_overtime.dart';
 import 'package:miel_work_app/screens/request_square.dart';
+import 'package:miel_work_app/screens/stock.dart';
 import 'package:miel_work_app/screens/user.dart';
 import 'package:miel_work_app/screens/user_setting.dart';
 import 'package:miel_work_app/screens/work.dart';
@@ -413,6 +414,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   );
                                 },
+                              ),
+                              HomeIconCard(
+                                icon: FontAwesomeIcons.boxesStacked,
+                                label: '在庫管理',
+                                color: kBlackColor,
+                                backgroundColor: kWhiteColor,
+                                alertMessage: '貸出中',
+                                onTap: () => showBottomUpScreen(
+                                  context,
+                                  StockScreen(
+                                    loginProvider: loginProvider,
+                                    homeProvider: homeProvider,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
