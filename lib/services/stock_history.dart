@@ -22,22 +22,6 @@ class StockHistoryService {
     firestore.collection(collection).doc(values['id']).delete();
   }
 
-  Future<StockHistoryModel?> selectData({
-    required String id,
-  }) async {
-    StockHistoryModel? ret;
-    await firestore
-        .collection(collection)
-        .where('id', isEqualTo: id)
-        .get()
-        .then((value) {
-      if (value.docs.isNotEmpty) {
-        ret = StockHistoryModel.fromSnapshot(value.docs.first);
-      }
-    });
-    return ret;
-  }
-
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? stockId,
     required DateTime? searchStart,

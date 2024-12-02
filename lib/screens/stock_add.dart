@@ -5,6 +5,7 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/stock.dart';
+import 'package:miel_work_app/services/stock.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
@@ -25,9 +26,23 @@ class StockAddScreen extends StatefulWidget {
 }
 
 class _StockAddScreenState extends State<StockAddScreen> {
+  StockService stockService = StockService();
   TextEditingController numberController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController quantityController = TextEditingController(text: '999');
+
+  void _init() async {
+    numberController.text = await stockService.getLastNumber(
+      organizationId: widget.loginProvider.organization?.id,
+    );
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    _init();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

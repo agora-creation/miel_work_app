@@ -49,19 +49,16 @@ class StockProvider with ChangeNotifier {
   Future<String?> update({
     required OrganizationModel? organization,
     required StockModel stock,
-    required String number,
     required String name,
     required UserModel? loginUser,
   }) async {
     String? error;
     if (organization == null) return '在庫品情報の編集に失敗しました';
-    if (number == '') return '在庫Noは必須入力です';
     if (name == '') return '在庫品名は必須入力です';
     if (loginUser == null) return '在庫品情報の編集に失敗しました';
     try {
       _stockService.update({
         'id': stock.id,
-        'number': number,
         'name': name,
       });
     } catch (e) {
