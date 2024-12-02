@@ -131,6 +131,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                         stock: widget.stock,
                       ),
                     ),
+                    disabled: widget.stock.quantity == 0,
                   ),
                   CustomButton(
                     type: ButtonSizeType.sm,
