@@ -34,6 +34,10 @@ class StockHistoryList extends StatelessWidget {
                   style: const TextStyle(fontSize: 12),
                 ),
                 Text(
+                  '${stockHistory.typeText()}担当者: ${stockHistory.createdUserName}',
+                  style: const TextStyle(fontSize: 12),
+                ),
+                Text(
                   '${stockHistory.typeSign()} ${stockHistory.quantity}',
                   style: const TextStyle(fontSize: 18),
                   softWrap: false,
