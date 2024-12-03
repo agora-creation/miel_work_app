@@ -38,7 +38,6 @@ class _LostModScreenState extends State<LostModScreen> {
   DateTime discoveryAt = DateTime.now();
   TextEditingController discoveryPlaceController = TextEditingController();
   TextEditingController discoveryUserController = TextEditingController();
-  TextEditingController itemNumberController = TextEditingController();
   TextEditingController itemNameController = TextEditingController();
   XFile? itemImageXFile;
   TextEditingController remarksController = TextEditingController();
@@ -48,7 +47,6 @@ class _LostModScreenState extends State<LostModScreen> {
     discoveryAt = widget.lost.discoveryAt;
     discoveryPlaceController.text = widget.lost.discoveryPlace;
     discoveryUserController.text = widget.lost.discoveryUser;
-    itemNumberController.text = widget.lost.itemNumber;
     itemNameController.text = widget.lost.itemName;
     remarksController.text = widget.lost.remarks;
     super.initState();
@@ -126,15 +124,6 @@ class _LostModScreenState extends State<LostModScreen> {
                   ),
                   const SizedBox(height: 16),
                   FormLabel(
-                    '落とし物No',
-                    child: CustomTextField(
-                      controller: itemNumberController,
-                      textInputType: TextInputType.text,
-                      maxLines: 1,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  FormLabel(
                     '品名',
                     child: CustomTextField(
                       controller: itemNameController,
@@ -196,7 +185,6 @@ class _LostModScreenState extends State<LostModScreen> {
             discoveryAt: discoveryAt,
             discoveryPlace: discoveryPlaceController.text,
             discoveryUser: discoveryUserController.text,
-            itemNumber: itemNumberController.text,
             itemName: itemNameController.text,
             itemImageXFile: itemImageXFile,
             remarks: remarksController.text,

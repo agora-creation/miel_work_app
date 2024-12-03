@@ -38,6 +38,25 @@ class LostService {
     return ret;
   }
 
+  Future<String> getLastItemNumber({
+    required String? organizationId,
+  }) async {
+    String ret = '1';
+    await firestore
+        .collection(collection)
+        .where('organizationId', isEqualTo: organizationId ?? 'error')
+        .orderBy('createdAt', descending: true)
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        LostModel lost = LostModel.fromSnapshot(value.docs.first);
+        int newItemNumber = int.parse(lost.itemNumber) + 1;
+        ret = newItemNumber.toString();
+      }
+    });
+    return ret;
+  }
+
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
     required DateTime? searchStart,

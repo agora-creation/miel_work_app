@@ -28,11 +28,11 @@ class StockService {
     await firestore
         .collection(collection)
         .where('organizationId', isEqualTo: organizationId ?? 'error')
-        .orderBy('number', descending: false)
+        .orderBy('createdAt', descending: true)
         .get()
         .then((value) {
       if (value.docs.isNotEmpty) {
-        StockModel stock = StockModel.fromSnapshot(value.docs.last);
+        StockModel stock = StockModel.fromSnapshot(value.docs.first);
         int newNumber = int.parse(stock.number) + 1;
         ret = newNumber.toString();
       }
@@ -46,7 +46,7 @@ class StockService {
     return FirebaseFirestore.instance
         .collection(collection)
         .where('organizationId', isEqualTo: organizationId ?? 'error')
-        .orderBy('number', descending: false)
+        .orderBy('createdAt', descending: true)
         .snapshots();
   }
 
