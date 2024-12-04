@@ -10,7 +10,11 @@ import 'package:miel_work_app/screens/lost_add.dart';
 import 'package:miel_work_app/screens/lost_detail.dart';
 import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/lost.dart';
+import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
+import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
+import 'package:miel_work_app/widgets/custom_text_field.dart';
+import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/lost_card.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -32,6 +36,12 @@ class _LostScreenState extends State<LostScreen> {
   LostService lostService = LostService();
   DateTime? searchStart;
   DateTime? searchEnd;
+  String? searchItemName;
+
+  void _getItemName() async {
+    searchItemName = await getPrefsString('itemName');
+    setState(() {});
+  }
 
   void _init() async {
     await ConfigService().checkReview();
@@ -40,6 +50,7 @@ class _LostScreenState extends State<LostScreen> {
   @override
   void initState() {
     _init();
+    _getItemName();
     super.initState();
   }
 
@@ -57,6 +68,15 @@ class _LostScreenState extends State<LostScreen> {
             style: TextStyle(color: kBlackColor),
           ),
           actions: [
+            IconButton(
+              onPressed: () => showDialog(
+                context: context,
+                builder: (context) => SearchItemNameDialog(
+                  getItemName: _getItemName,
+                ),
+              ),
+              icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
+            ),
             IconButton(
               onPressed: () async {
                 var selected = await showDataRangePickerDialog(
@@ -273,6 +293,89 @@ class _LostScreenState extends State<LostScreen> {
           homeProvider: widget.homeProvider,
         ),
       ),
+    );
+  }
+}
+
+class SearchItemNameDialog extends StatefulWidget {
+  final Function() getItemName;
+
+  const SearchItemNameDialog({
+    required this.getItemName,
+    super.key,
+  });
+
+  @override
+  State<SearchItemNameDialog> createState() => _SearchItemNameDialogState();
+}
+
+class _SearchItemNameDialogState extends State<SearchItemNameDialog> {
+  TextEditingController itemNameController = TextEditingController();
+
+  void _getItemName() async {
+    itemNameController = TextEditingController(
+      text: await getPrefsString('itemName') ?? '',
+    );
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    _getItemName();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomAlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 8),
+          FormLabel(
+            '品名',
+            child: CustomTextField(
+              controller: itemNameController,
+              textInputType: TextInputType.text,
+              maxLines: 1,
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '閉じる',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'クリア',
+          labelColor: kWhiteColor,
+          backgroundColor: kCyanColor,
+          onPressed: () async {
+            await removePrefs('itemName');
+            widget.getItemName();
+            if (!mounted) return;
+            Navigator.pop(context);
+          },
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '検索する',
+          labelColor: kWhiteColor,
+          backgroundColor: kLightBlueColor,
+          onPressed: () async {
+            await setPrefsString('itemName', itemNameController.text);
+            widget.getItemName();
+            if (!mounted) return;
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }

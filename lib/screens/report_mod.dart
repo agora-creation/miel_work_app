@@ -53,8 +53,6 @@ class _ReportModScreenState extends State<ReportModScreen> {
   List<ReportProblemModel> reportProblems = [];
   List<ReportPamphletModel> reportPamphlets = [];
   List<ReportEquipmentModel> reportEquipments = [];
-  String passport = '';
-  int passportCount = 0;
   String remarks = '';
   String agenda = '';
   bool lastConfirmShop = false;
@@ -179,8 +177,6 @@ class _ReportModScreenState extends State<ReportModScreen> {
     reportProblems = widget.report.reportProblems;
     reportPamphlets = widget.report.reportPamphlets;
     reportEquipments = widget.report.reportEquipments;
-    passport = widget.report.passport;
-    passportCount = widget.report.passportCount;
     remarks = widget.report.remarks;
     agenda = widget.report.agenda;
     lastConfirmShop = widget.report.lastConfirmShop;
@@ -1146,62 +1142,6 @@ class _ReportModScreenState extends State<ReportModScreen> {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  'パスポート',
-                  style: kReportHeaderStyle,
-                ),
-                Table(
-                  border: TableBorder.all(color: kBorderColor),
-                  children: [
-                    TableRow(
-                      children: [
-                        FormValue(
-                          passport,
-                          onTap: () => _showTextField(
-                            text: passport,
-                            textInputType: TextInputType.multiline,
-                            onChanged: (value) {
-                              passport = value;
-                              setState(() {});
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Table(
-                  border: TableBorder.all(color: kBorderColor),
-                  columnWidths: const {
-                    0: IntrinsicColumnWidth(),
-                    1: FlexColumnWidth(1),
-                  },
-                  children: [
-                    const TableRow(
-                      children: [
-                        ReportTableTh('前日の合計'),
-                        ReportTableTh('0'),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        const ReportTableTh('合計'),
-                        FormValue(
-                          '$passportCount',
-                          onTap: () => _showTextField(
-                            text: '$passportCount',
-                            onChanged: (value) {
-                              passportCount = int.parse(value);
-                              setState(() {});
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                const Text(
                   'その他報告・連絡',
                   style: kReportHeaderStyle,
                 ),
@@ -1568,8 +1508,6 @@ class _ReportModScreenState extends State<ReportModScreen> {
                 reportProblems: reportProblems,
                 reportPamphlets: reportPamphlets,
                 reportEquipments: reportEquipments,
-                passport: passport,
-                passportCount: passportCount,
                 remarks: remarks,
                 agenda: agenda,
                 lastConfirmShop: lastConfirmShop,

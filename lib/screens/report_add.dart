@@ -61,8 +61,6 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
   List<ReportProblemModel> reportProblems = [];
   List<ReportPamphletModel> reportPamphlets = [];
   List<ReportEquipmentModel> reportEquipments = [];
-  String passport = '';
-  int passportCount = 0;
   String remarks = '';
   String agenda = '';
   bool lastConfirmShop = false;
@@ -1188,62 +1186,6 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  'パスポート',
-                  style: kReportHeaderStyle,
-                ),
-                Table(
-                  border: TableBorder.all(color: kBorderColor),
-                  children: [
-                    TableRow(
-                      children: [
-                        FormValue(
-                          passport,
-                          onTap: () => _showTextField(
-                            text: passport,
-                            textInputType: TextInputType.multiline,
-                            onChanged: (value) {
-                              passport = value;
-                              setState(() {});
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Table(
-                  border: TableBorder.all(color: kBorderColor),
-                  columnWidths: const {
-                    0: IntrinsicColumnWidth(),
-                    1: FlexColumnWidth(1),
-                  },
-                  children: [
-                    const TableRow(
-                      children: [
-                        ReportTableTh('前日の合計'),
-                        ReportTableTh('0'),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        const ReportTableTh('合計'),
-                        FormValue(
-                          '$passportCount',
-                          onTap: () => _showTextField(
-                            text: '$passportCount',
-                            onChanged: (value) {
-                              passportCount = int.parse(value);
-                              setState(() {});
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                const Text(
                   'その他報告・連絡',
                   style: kReportHeaderStyle,
                 ),
@@ -1584,8 +1526,6 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
             reportProblems: reportProblems,
             reportPamphlets: reportPamphlets,
             reportEquipments: reportEquipments,
-            passport: passport,
-            passportCount: passportCount,
             remarks: remarks,
             agenda: agenda,
             lastConfirmShop: lastConfirmShop,

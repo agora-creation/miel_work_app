@@ -97,10 +97,18 @@ class LostService {
 
   List<LostModel> generateList({
     required QuerySnapshot<Map<String, dynamic>>? data,
+    String? itemName,
   }) {
     List<LostModel> ret = [];
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
-      ret.add(LostModel.fromSnapshot(doc));
+      LostModel lost = LostModel.fromSnapshot(doc);
+      if (itemName != null) {
+        if (lost.itemName.contains(itemName)) {
+          ret.add(lost);
+        }
+      } else {
+        ret.add(lost);
+      }
     }
     return ret;
   }
