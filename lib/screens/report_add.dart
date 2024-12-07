@@ -90,6 +90,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
   DateTime lastConfirmMoneyAt = DateTime.now();
   bool lastConfirmLock = false;
   DateTime lastConfirmLockAt = DateTime.now();
+  String lastConfirmLockName = '';
   bool lastConfirmUser = false;
   DateTime lastConfirmUserAt = DateTime.now();
   String lastConfirmUserName = '';
@@ -1472,8 +1473,14 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                         ReportConfirmButton(
                           confirm: lastConfirmLock,
                           confirmTime: dateText('HH:mm', lastConfirmLockAt),
+                          confirmLabel: lastConfirmLockName,
                           onPressed: () => _showConfirm(
                             confirm: lastConfirmLock,
+                            confirmLabel: lastConfirmLockName,
+                            onChanged: (value) {
+                              lastConfirmLockName = value;
+                              setState(() {});
+                            },
                             yesAction: () {
                               lastConfirmLock = !lastConfirmLock;
                               lastConfirmLockAt = DateTime.now();
@@ -1555,6 +1562,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
             lastConfirmMoneyAt: lastConfirmMoneyAt,
             lastConfirmLock: lastConfirmLock,
             lastConfirmLockAt: lastConfirmLockAt,
+            lastConfirmLockName: lastConfirmLockName,
             lastConfirmUser: lastConfirmUser,
             lastConfirmUserAt: lastConfirmUserAt,
             lastConfirmUserName: lastConfirmUserName,

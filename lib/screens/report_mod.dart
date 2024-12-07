@@ -82,6 +82,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
   DateTime lastConfirmMoneyAt = DateTime.now();
   bool lastConfirmLock = false;
   DateTime lastConfirmLockAt = DateTime.now();
+  String lastConfirmLockName = '';
   bool lastConfirmUser = false;
   DateTime lastConfirmUserAt = DateTime.now();
   String lastConfirmUserName = '';
@@ -206,6 +207,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
     lastConfirmMoneyAt = widget.report.lastConfirmMoneyAt;
     lastConfirmLock = widget.report.lastConfirmLock;
     lastConfirmLockAt = widget.report.lastConfirmLockAt;
+    lastConfirmLockName = widget.report.lastConfirmLockName;
     lastConfirmUser = widget.report.lastConfirmUser;
     lastConfirmUserAt = widget.report.lastConfirmUserAt;
     lastConfirmUserName = widget.report.lastConfirmUserName;
@@ -1428,8 +1430,14 @@ class _ReportModScreenState extends State<ReportModScreen> {
                         ReportConfirmButton(
                           confirm: lastConfirmLock,
                           confirmTime: dateText('HH:mm', lastConfirmLockAt),
+                          confirmLabel: lastConfirmLockName,
                           onPressed: () => _showConfirm(
                             confirm: lastConfirmLock,
+                            confirmLabel: lastConfirmLockName,
+                            onChanged: (value) {
+                              lastConfirmLockName = value;
+                              setState(() {});
+                            },
                             yesAction: () {
                               lastConfirmLock = !lastConfirmLock;
                               lastConfirmLockAt = DateTime.now();
@@ -1537,6 +1545,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
                 lastConfirmMoneyAt: lastConfirmMoneyAt,
                 lastConfirmLock: lastConfirmLock,
                 lastConfirmLockAt: lastConfirmLockAt,
+                lastConfirmLockName: lastConfirmLockName,
                 lastConfirmUser: lastConfirmUser,
                 lastConfirmUserAt: lastConfirmUserAt,
                 lastConfirmUserName: lastConfirmUserName,

@@ -52,6 +52,7 @@ class ReportModel {
   DateTime _lastConfirmMoneyAt = DateTime.now();
   bool _lastConfirmLock = false;
   DateTime _lastConfirmLockAt = DateTime.now();
+  String _lastConfirmLockName = '';
   bool _lastConfirmUser = false;
   DateTime _lastConfirmUserAt = DateTime.now();
   String _lastConfirmUserName = '';
@@ -94,6 +95,7 @@ class ReportModel {
   DateTime get lastConfirmMoneyAt => _lastConfirmMoneyAt;
   bool get lastConfirmLock => _lastConfirmLock;
   DateTime get lastConfirmLockAt => _lastConfirmLockAt;
+  String get lastConfirmLockName => _lastConfirmLockName;
   bool get lastConfirmUser => _lastConfirmUser;
   DateTime get lastConfirmUserAt => _lastConfirmUserAt;
   String get lastConfirmUserName => _lastConfirmUserName;
@@ -154,6 +156,7 @@ class ReportModel {
     _lastConfirmMoneyAt = data['lastConfirmMoneyAt'].toDate() ?? DateTime.now();
     _lastConfirmLock = data['lastConfirmLock'] ?? false;
     _lastConfirmLockAt = data['lastConfirmLockAt'].toDate() ?? DateTime.now();
+    _lastConfirmLockName = data['lastConfirmLockName'] ?? '';
     _lastConfirmUser = data['lastConfirmUser'] ?? false;
     _lastConfirmUserAt = data['lastConfirmUserAt'].toDate() ?? DateTime.now();
     _lastConfirmUserName = data['lastConfirmUserName'] ?? '';
