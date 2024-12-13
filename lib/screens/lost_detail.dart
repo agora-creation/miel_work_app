@@ -276,6 +276,30 @@ class _LostDetailScreenState extends State<LostDetailScreen> {
                       )
                     : Container(),
                 const SizedBox(height: 8),
+                widget.lost.status == 0
+                    ? CustomButton(
+                        type: ButtonSizeType.lg,
+                        label: '破棄済にする',
+                        labelColor: kWhiteColor,
+                        backgroundColor: kRejectColor,
+                        onPressed: () async {
+                          String? error = await lostProvider.updateReject(
+                            organization: widget.loginProvider.organization,
+                            lost: widget.lost,
+                            loginUser: widget.loginProvider.user,
+                          );
+                          if (error != null) {
+                            if (!mounted) return;
+                            showMessage(context, error, false);
+                            return;
+                          }
+                          if (!mounted) return;
+                          showMessage(context, '破棄されました', true);
+                          Navigator.pop(context);
+                        },
+                      )
+                    : Container(),
+                const SizedBox(height: 8),
                 Container(
                   color: kGreyColor.withOpacity(0.2),
                   padding: const EdgeInsets.all(16),

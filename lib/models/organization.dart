@@ -8,6 +8,7 @@ class OrganizationModel {
   String _password = '';
   String _shiftLoginId = '';
   String _shiftPassword = '';
+  String _contact = '';
   DateTime _createdAt = DateTime.now();
 
   String get id => _id;
@@ -16,6 +17,7 @@ class OrganizationModel {
   String get password => _password;
   String get shiftLoginId => _shiftLoginId;
   String get shiftPassword => _shiftPassword;
+  String get contact => _contact;
   DateTime get createdAt => _createdAt;
 
   OrganizationModel.fromSnapshot(
@@ -24,11 +26,12 @@ class OrganizationModel {
     if (data == null) return;
     _id = data['id'] ?? '';
     _name = data['name'] ?? '';
-    userIds = _convertUserIds(data['userIds']);
+    userIds = _convertUserIds(data['userIds'] ?? []);
     _loginId = data['loginId'] ?? '';
     _password = data['password'] ?? '';
     _shiftLoginId = data['shiftLoginId'] ?? '';
     _shiftPassword = data['shiftPassword'] ?? '';
+    _contact = data['contact'] ?? '';
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
   }
 

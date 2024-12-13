@@ -11,6 +11,9 @@ class ReportVisitorModel {
   int floor4_12 = 0;
   int floor4_20 = 0;
   int floor4_22 = 0;
+  int floor5_12 = 0;
+  int floor5_20 = 0;
+  int floor5_22 = 0;
 
   ReportVisitorModel.fromMap(Map data) {
     floor1_12 = data['floor1_12'] ?? 0;
@@ -25,6 +28,9 @@ class ReportVisitorModel {
     floor4_12 = data['floor4_12'] ?? 0;
     floor4_20 = data['floor4_20'] ?? 0;
     floor4_22 = data['floor4_22'] ?? 0;
+    floor5_12 = data['floor5_12'] ?? 0;
+    floor5_20 = data['floor5_20'] ?? 0;
+    floor5_22 = data['floor5_22'] ?? 0;
   }
 
   ReportVisitorModel.addMap(Map data) {
@@ -40,6 +46,9 @@ class ReportVisitorModel {
     floor4_12 = data['floor4_12'];
     floor4_20 = data['floor4_20'];
     floor4_22 = data['floor4_22'];
+    floor5_12 = data['floor5_12'];
+    floor5_20 = data['floor5_20'];
+    floor5_22 = data['floor5_22'];
   }
 
   Map toMap() => {
@@ -55,5 +64,8 @@ class ReportVisitorModel {
         'floor4_12': floor4_12,
         'floor4_20': floor4_20,
         'floor4_22': floor4_22,
+        'floor5_12': floor5_12,
+        'floor5_20': floor5_20,
+        'floor5_22': floor5_22,
       };
 }

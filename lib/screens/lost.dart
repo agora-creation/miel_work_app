@@ -124,7 +124,7 @@ class _LostScreenState extends State<LostScreen> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: Text('破棄', style: TextStyle(fontSize: 18)),
+                child: Text('破棄済', style: TextStyle(fontSize: 18)),
               ),
             ],
             indicator: UnderlineTabIndicator(

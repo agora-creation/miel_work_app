@@ -173,6 +173,25 @@ class LostProvider with ChangeNotifier {
     return error;
   }
 
+  Future<String?> updateReject({
+    required OrganizationModel? organization,
+    required LostModel lost,
+    required UserModel? loginUser,
+  }) async {
+    String? error;
+    if (organization == null) return '落とし物の破棄に失敗しました';
+    if (loginUser == null) return '落とし物の破棄に失敗しました';
+    try {
+      _lostService.update({
+        'id': lost.id,
+        'status': 9,
+      });
+    } catch (e) {
+      error = '落とし物の破棄に失敗しました';
+    }
+    return error;
+  }
+
   Future<String?> addComment({
     required LostModel lost,
     required String content,

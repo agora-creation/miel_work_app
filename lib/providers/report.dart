@@ -20,6 +20,9 @@ class ReportProvider with ChangeNotifier {
     required OrganizationModel? organization,
     required DateTime createdAt,
     required List<ReportWorkerModel> reportWorkers,
+    required List<ReportWorkerModel> reportWorkersGuardsman,
+    required List<ReportWorkerModel> reportWorkersGarbageman,
+    required List<ReportWorkerModel> reportWorkersCycle,
     required ReportVisitorModel reportVisitor,
     required ReportLockerModel reportLocker,
     required List<ReportPlanModel> reportPlans,
@@ -53,6 +56,7 @@ class ReportProvider with ChangeNotifier {
     required DateTime lastConfirmTelAt,
     required bool lastConfirmCoupon,
     required DateTime lastConfirmCouponAt,
+    required String lastConfirmCouponNumber,
     required bool lastConfirmCalendar,
     required DateTime lastConfirmCalendarAt,
     required bool lastConfirmMoney,
@@ -63,6 +67,9 @@ class ReportProvider with ChangeNotifier {
     required bool lastConfirmUser,
     required DateTime lastConfirmUserAt,
     required String lastConfirmUserName,
+    required bool lastExitUser,
+    required DateTime lastExitUserAt,
+    required String lastExitUserName,
     required UserModel? loginUser,
   }) async {
     String? error;
@@ -73,6 +80,18 @@ class ReportProvider with ChangeNotifier {
       List<Map> reportWorkersMap = [];
       for (final data in reportWorkers) {
         reportWorkersMap.add(data.toMap());
+      }
+      List<Map> reportWorkersGuardsmanMap = [];
+      for (final data in reportWorkersGuardsman) {
+        reportWorkersGuardsmanMap.add(data.toMap());
+      }
+      List<Map> reportWorkersGarbagemanMap = [];
+      for (final data in reportWorkersGarbageman) {
+        reportWorkersGarbagemanMap.add(data.toMap());
+      }
+      List<Map> reportWorkersCycleMap = [];
+      for (final data in reportWorkersCycle) {
+        reportWorkersCycleMap.add(data.toMap());
       }
       List<Map> reportPlansMap = [];
       for (final data in reportPlans) {
@@ -98,6 +117,9 @@ class ReportProvider with ChangeNotifier {
         'id': id,
         'organizationId': organization.id,
         'reportWorkers': reportWorkersMap,
+        'reportWorkersGuardsman': reportWorkersGuardsmanMap,
+        'reportWorkersGarbageman': reportWorkersGarbagemanMap,
+        'reportWorkersCycle': reportWorkersCycleMap,
         'reportVisitor': reportVisitor.toMap(),
         'reportLocker': reportLocker.toMap(),
         'reportPlans': reportPlansMap,
@@ -131,6 +153,7 @@ class ReportProvider with ChangeNotifier {
         'lastConfirmTelAt': lastConfirmTelAt,
         'lastConfirmCoupon': lastConfirmCoupon,
         'lastConfirmCouponAt': lastConfirmCouponAt,
+        'lastConfirmCouponNumber': lastConfirmCouponNumber,
         'lastConfirmCalendar': lastConfirmCalendar,
         'lastConfirmCalendarAt': lastConfirmCalendarAt,
         'lastConfirmMoney': lastConfirmMoney,
@@ -141,6 +164,9 @@ class ReportProvider with ChangeNotifier {
         'lastConfirmUser': lastConfirmUser,
         'lastConfirmUserAt': lastConfirmUserAt,
         'lastConfirmUserName': lastConfirmUserName,
+        'lastExitUser': lastExitUser,
+        'lastExitUserAt': lastExitUserAt,
+        'lastExitUserName': lastExitUserName,
         'approval': 0,
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -156,6 +182,9 @@ class ReportProvider with ChangeNotifier {
   Future<String?> update({
     required ReportModel report,
     required List<ReportWorkerModel> reportWorkers,
+    required List<ReportWorkerModel> reportWorkersGuardsman,
+    required List<ReportWorkerModel> reportWorkersGarbageman,
+    required List<ReportWorkerModel> reportWorkersCycle,
     required ReportVisitorModel reportVisitor,
     required ReportLockerModel reportLocker,
     required List<ReportPlanModel> reportPlans,
@@ -189,6 +218,7 @@ class ReportProvider with ChangeNotifier {
     required DateTime lastConfirmTelAt,
     required bool lastConfirmCoupon,
     required DateTime lastConfirmCouponAt,
+    required String lastConfirmCouponNumber,
     required bool lastConfirmCalendar,
     required DateTime lastConfirmCalendarAt,
     required bool lastConfirmMoney,
@@ -199,6 +229,9 @@ class ReportProvider with ChangeNotifier {
     required bool lastConfirmUser,
     required DateTime lastConfirmUserAt,
     required String lastConfirmUserName,
+    required bool lastExitUser,
+    required DateTime lastExitUserAt,
+    required String lastExitUserName,
     required UserModel? loginUser,
   }) async {
     String? error;
@@ -207,6 +240,18 @@ class ReportProvider with ChangeNotifier {
       List<Map> reportWorkersMap = [];
       for (final data in reportWorkers) {
         reportWorkersMap.add(data.toMap());
+      }
+      List<Map> reportWorkersGuardsmanMap = [];
+      for (final data in reportWorkersGuardsman) {
+        reportWorkersGuardsmanMap.add(data.toMap());
+      }
+      List<Map> reportWorkersGarbagemanMap = [];
+      for (final data in reportWorkersGarbageman) {
+        reportWorkersGarbagemanMap.add(data.toMap());
+      }
+      List<Map> reportWorkersCycleMap = [];
+      for (final data in reportWorkersCycle) {
+        reportWorkersCycleMap.add(data.toMap());
       }
       List<Map> reportPlansMap = [];
       for (final data in reportPlans) {
@@ -231,6 +276,9 @@ class ReportProvider with ChangeNotifier {
       _reportService.update({
         'id': report.id,
         'reportWorkers': reportWorkersMap,
+        'reportWorkersGuardsman': reportWorkersGuardsmanMap,
+        'reportWorkersGarbageman': reportWorkersGarbagemanMap,
+        'reportWorkersCycle': reportWorkersCycleMap,
         'reportVisitor': reportVisitor.toMap(),
         'reportLocker': reportLocker.toMap(),
         'reportPlans': reportPlansMap,
@@ -264,6 +312,7 @@ class ReportProvider with ChangeNotifier {
         'lastConfirmTelAt': lastConfirmTelAt,
         'lastConfirmCoupon': lastConfirmCoupon,
         'lastConfirmCouponAt': lastConfirmCouponAt,
+        'lastConfirmCouponNumber': lastConfirmCouponNumber,
         'lastConfirmCalendar': lastConfirmCalendar,
         'lastConfirmCalendarAt': lastConfirmCalendarAt,
         'lastConfirmMoney': lastConfirmMoney,
@@ -274,6 +323,9 @@ class ReportProvider with ChangeNotifier {
         'lastConfirmUser': lastConfirmUser,
         'lastConfirmUserAt': lastConfirmUserAt,
         'lastConfirmUserName': lastConfirmUserName,
+        'lastExitUser': lastExitUser,
+        'lastExitUserAt': lastExitUserAt,
+        'lastExitUserName': lastExitUserName,
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
       });

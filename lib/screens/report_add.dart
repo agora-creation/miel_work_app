@@ -24,6 +24,7 @@ import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
+import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/form_value.dart';
 import 'package:miel_work_app/widgets/report_confirm_button.dart';
 import 'package:miel_work_app/widgets/report_table_button.dart';
@@ -51,6 +52,9 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
   ProblemService problemService = ProblemService();
   DateTime createdAt = DateTime.now();
   List<ReportWorkerModel> reportWorkers = [];
+  List<ReportWorkerModel> reportWorkersGuardsman = [];
+  List<ReportWorkerModel> reportWorkersGarbageman = [];
+  List<ReportWorkerModel> reportWorkersCycle = [];
   ReportVisitorModel reportVisitor = ReportVisitorModel.fromMap({});
   ReportLockerModel reportLocker = ReportLockerModel.fromMap({});
   List<ReportPlanModel> reportPlans = [];
@@ -84,6 +88,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
   DateTime lastConfirmTelAt = DateTime.now();
   bool lastConfirmCoupon = false;
   DateTime lastConfirmCouponAt = DateTime.now();
+  String lastConfirmCouponNumber = '';
   bool lastConfirmCalendar = false;
   DateTime lastConfirmCalendarAt = DateTime.now();
   bool lastConfirmMoney = false;
@@ -94,6 +99,9 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
   bool lastConfirmUser = false;
   DateTime lastConfirmUserAt = DateTime.now();
   String lastConfirmUserName = '';
+  bool lastExitUser = false;
+  DateTime lastExitUserAt = DateTime.now();
+  String lastExitUserName = '';
 
   void _showTextField({
     required String text,
@@ -122,6 +130,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
   void _showConfirm({
     required bool confirm,
     String? confirmLabel,
+    String? confirmLabelHead,
     Function(String)? onChanged,
     required Function() yesAction,
   }) {
@@ -142,11 +151,14 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
             ),
             const SizedBox(height: 8),
             !confirm && confirmLabel != null
-                ? CustomTextField(
-                    controller: TextEditingController(text: confirmLabel),
-                    textInputType: TextInputType.text,
-                    maxLines: 1,
-                    onChanged: onChanged,
+                ? FormLabel(
+                    confirmLabelHead ?? '',
+                    child: CustomTextField(
+                      controller: TextEditingController(text: confirmLabel),
+                      textInputType: TextInputType.text,
+                      maxLines: 1,
+                      onChanged: onChanged,
+                    ),
                   )
                 : Container(),
           ],
@@ -374,6 +386,209 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                     ),
                   ],
                 ),
+                const Text(
+                  '出勤者(警備員)',
+                  style: kReportHeaderStyle,
+                ),
+                Table(
+                  border: TableBorder.all(color: kBorderColor),
+                  columnWidths: const {
+                    0: FlexColumnWidth(1),
+                    1: FlexColumnWidth(2),
+                  },
+                  children: [
+                    const TableRow(
+                      children: [
+                        ReportTableTh('名前'),
+                        ReportTableTh('時間帯'),
+                      ],
+                    ),
+                    ...reportWorkersGuardsman.map((reportWorker) {
+                      return TableRow(
+                        children: [
+                          FormValue(
+                            reportWorker.name,
+                            onTap: () => _showTextField(
+                              text: reportWorker.name,
+                              onChanged: (value) {
+                                reportWorker.name = value;
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                          FormValue(
+                            reportWorker.time,
+                            onTap: () => _showTextField(
+                              text: reportWorker.time,
+                              onChanged: (value) {
+                                reportWorker.time = value;
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ReportTableButton(
+                      label: '削除',
+                      color: kRedColor.withOpacity(0.3),
+                      onPressed: () {
+                        reportWorkersGuardsman.removeLast();
+                        setState(() {});
+                      },
+                    ),
+                    const SizedBox(width: 4),
+                    ReportTableButton(
+                      label: '追加',
+                      color: kBlueColor.withOpacity(0.3),
+                      onPressed: () {
+                        reportWorkersGuardsman
+                            .add(ReportWorkerModel.fromMap({}));
+                        setState(() {});
+                      },
+                    ),
+                  ],
+                ),
+                const Text(
+                  '出勤者(清掃員)',
+                  style: kReportHeaderStyle,
+                ),
+                Table(
+                  border: TableBorder.all(color: kBorderColor),
+                  columnWidths: const {
+                    0: FlexColumnWidth(1),
+                    1: FlexColumnWidth(2),
+                  },
+                  children: [
+                    const TableRow(
+                      children: [
+                        ReportTableTh('名前'),
+                        ReportTableTh('時間帯'),
+                      ],
+                    ),
+                    ...reportWorkersGarbageman.map((reportWorker) {
+                      return TableRow(
+                        children: [
+                          FormValue(
+                            reportWorker.name,
+                            onTap: () => _showTextField(
+                              text: reportWorker.name,
+                              onChanged: (value) {
+                                reportWorker.name = value;
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                          FormValue(
+                            reportWorker.time,
+                            onTap: () => _showTextField(
+                              text: reportWorker.time,
+                              onChanged: (value) {
+                                reportWorker.time = value;
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ReportTableButton(
+                      label: '削除',
+                      color: kRedColor.withOpacity(0.3),
+                      onPressed: () {
+                        reportWorkersGarbageman.removeLast();
+                        setState(() {});
+                      },
+                    ),
+                    const SizedBox(width: 4),
+                    ReportTableButton(
+                      label: '追加',
+                      color: kBlueColor.withOpacity(0.3),
+                      onPressed: () {
+                        reportWorkersGarbageman
+                            .add(ReportWorkerModel.fromMap({}));
+                        setState(() {});
+                      },
+                    ),
+                  ],
+                ),
+                const Text(
+                  '出勤者(自転車整理)',
+                  style: kReportHeaderStyle,
+                ),
+                Table(
+                  border: TableBorder.all(color: kBorderColor),
+                  columnWidths: const {
+                    0: FlexColumnWidth(1),
+                    1: FlexColumnWidth(2),
+                  },
+                  children: [
+                    const TableRow(
+                      children: [
+                        ReportTableTh('名前'),
+                        ReportTableTh('時間帯'),
+                      ],
+                    ),
+                    ...reportWorkersCycle.map((reportWorker) {
+                      return TableRow(
+                        children: [
+                          FormValue(
+                            reportWorker.name,
+                            onTap: () => _showTextField(
+                              text: reportWorker.name,
+                              onChanged: (value) {
+                                reportWorker.name = value;
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                          FormValue(
+                            reportWorker.time,
+                            onTap: () => _showTextField(
+                              text: reportWorker.time,
+                              onChanged: (value) {
+                                reportWorker.time = value;
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ReportTableButton(
+                      label: '削除',
+                      color: kRedColor.withOpacity(0.3),
+                      onPressed: () {
+                        reportWorkersCycle.removeLast();
+                        setState(() {});
+                      },
+                    ),
+                    const SizedBox(width: 4),
+                    ReportTableButton(
+                      label: '追加',
+                      color: kBlueColor.withOpacity(0.3),
+                      onPressed: () {
+                        reportWorkersCycle.add(ReportWorkerModel.fromMap({}));
+                        setState(() {});
+                      },
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 16),
                 const Text(
                   '入場者数',
@@ -538,15 +753,50 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                     ),
                     TableRow(
                       children: [
+                        const ReportTableTh('バルコーナー'),
+                        FormValue(
+                          '${reportVisitor.floor5_12}',
+                          onTap: () => _showTextField(
+                            text: '${reportVisitor.floor5_12}',
+                            onChanged: (value) {
+                              reportVisitor.floor5_12 = int.parse(value);
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                        FormValue(
+                          '${reportVisitor.floor5_20}',
+                          onTap: () => _showTextField(
+                            text: '${reportVisitor.floor5_20}',
+                            onChanged: (value) {
+                              reportVisitor.floor5_20 = int.parse(value);
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                        FormValue(
+                          '${reportVisitor.floor5_22}',
+                          onTap: () => _showTextField(
+                            text: '${reportVisitor.floor5_22}',
+                            onChanged: (value) {
+                              reportVisitor.floor5_22 = int.parse(value);
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
                         const ReportTableTh('合計'),
                         ReportTableTh(
-                          '${reportVisitor.floor1_12 + reportVisitor.floor2_12 + reportVisitor.floor3_12 + reportVisitor.floor4_12}',
+                          '${reportVisitor.floor1_12 + reportVisitor.floor2_12 + reportVisitor.floor3_12 + reportVisitor.floor4_12 + reportVisitor.floor5_12}',
                         ),
                         ReportTableTh(
-                          '${reportVisitor.floor1_20 + reportVisitor.floor2_20 + reportVisitor.floor3_20 + reportVisitor.floor4_20}',
+                          '${reportVisitor.floor1_20 + reportVisitor.floor2_20 + reportVisitor.floor3_20 + reportVisitor.floor4_20 + reportVisitor.floor5_20}',
                         ),
                         ReportTableTh(
-                          '${reportVisitor.floor1_22 + reportVisitor.floor2_22 + reportVisitor.floor3_22 + reportVisitor.floor4_22}',
+                          '${reportVisitor.floor1_22 + reportVisitor.floor2_22 + reportVisitor.floor3_22 + reportVisitor.floor4_22 + reportVisitor.floor5_22}',
                         ),
                       ],
                     ),
@@ -610,6 +860,70 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                     1: FlexColumnWidth(1),
                   },
                   children: [
+                    TableRow(
+                      children: [
+                        const ReportTableTh('ロッカー番号'),
+                        FormValue(
+                          reportLocker.number,
+                          onTap: () => _showTextField(
+                            text: reportLocker.number,
+                            textInputType: TextInputType.text,
+                            onChanged: (value) {
+                              reportLocker.number = value;
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        const ReportTableTh('連続使用日数'),
+                        FormValue(
+                          reportLocker.days,
+                          onTap: () => _showTextField(
+                            text: reportLocker.days,
+                            textInputType: TextInputType.text,
+                            onChanged: (value) {
+                              reportLocker.days = value;
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        const ReportTableTh('金額'),
+                        FormValue(
+                          reportLocker.price,
+                          onTap: () => _showTextField(
+                            text: reportLocker.price,
+                            textInputType: TextInputType.text,
+                            onChanged: (value) {
+                              reportLocker.price = value;
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        const ReportTableTh('備考'),
+                        FormValue(
+                          reportLocker.remarks,
+                          onTap: () => _showTextField(
+                            text: reportLocker.remarks,
+                            textInputType: TextInputType.multiline,
+                            onChanged: (value) {
+                              reportLocker.remarks = value;
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                     TableRow(
                       children: [
                         const ReportTableTh('回収'),
@@ -1014,7 +1328,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                       children: [
                         ReportTableTh('種別'),
                         ReportTableTh('内容'),
-                        ReportTableTh('金額'),
+                        ReportTableTh('部数'),
                       ],
                     ),
                     ...reportPamphlets.map((reportPamphlet) {
@@ -1259,6 +1573,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                           onPressed: () => _showConfirm(
                             confirm: lastConfirmShop,
                             confirmLabel: lastConfirmShopName,
+                            confirmLabelHead: '店舗名',
                             onChanged: (value) {
                               lastConfirmShopName = value;
                               setState(() {});
@@ -1411,7 +1726,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                     const TableRow(
                       children: [
                         ReportTableTh('クーポン券'),
-                        ReportTableTh('日付確認'),
+                        ReportTableTh('日付印確認'),
                         ReportTableTh('両替'),
                       ],
                     ),
@@ -1420,8 +1735,15 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                         ReportConfirmButton(
                           confirm: lastConfirmCoupon,
                           confirmTime: dateText('HH:mm', lastConfirmCouponAt),
+                          confirmLabel: lastConfirmCouponNumber,
                           onPressed: () => _showConfirm(
                             confirm: lastConfirmCoupon,
+                            confirmLabel: lastConfirmCouponNumber,
+                            confirmLabelHead: '残枚数',
+                            onChanged: (value) {
+                              lastConfirmCouponNumber = value;
+                              setState(() {});
+                            },
                             yesAction: () {
                               lastConfirmCoupon = !lastConfirmCoupon;
                               lastConfirmCouponAt = DateTime.now();
@@ -1465,7 +1787,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                       children: [
                         ReportTableTh('施錠'),
                         ReportTableTh('日報最終確認'),
-                        ReportTableTh(''),
+                        ReportTableTh('最終退出確認'),
                       ],
                     ),
                     TableRow(
@@ -1477,6 +1799,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                           onPressed: () => _showConfirm(
                             confirm: lastConfirmLock,
                             confirmLabel: lastConfirmLockName,
+                            confirmLabelHead: '施錠者名',
                             onChanged: (value) {
                               lastConfirmLockName = value;
                               setState(() {});
@@ -1495,6 +1818,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                           onPressed: () => _showConfirm(
                             confirm: lastConfirmUser,
                             confirmLabel: lastConfirmUserName,
+                            confirmLabelHead: '確認者名',
                             onChanged: (value) {
                               lastConfirmUserName = value;
                               setState(() {});
@@ -1506,7 +1830,25 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                             },
                           ),
                         ),
-                        Container(),
+                        ReportConfirmButton(
+                          confirm: lastExitUser,
+                          confirmTime: dateText('HH:mm', lastExitUserAt),
+                          confirmLabel: lastExitUserName,
+                          onPressed: () => _showConfirm(
+                            confirm: lastExitUser,
+                            confirmLabel: lastExitUserName,
+                            confirmLabelHead: '確認者名',
+                            onChanged: (value) {
+                              lastExitUserName = value;
+                              setState(() {});
+                            },
+                            yesAction: () {
+                              lastExitUser = !lastExitUser;
+                              lastExitUserAt = DateTime.now();
+                              setState(() {});
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -1523,6 +1865,9 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
             organization: widget.loginProvider.organization,
             createdAt: createdAt,
             reportWorkers: reportWorkers,
+            reportWorkersGuardsman: reportWorkersGuardsman,
+            reportWorkersGarbageman: reportWorkersGarbageman,
+            reportWorkersCycle: reportWorkersCycle,
             reportVisitor: reportVisitor,
             reportLocker: reportLocker,
             reportPlans: reportPlans,
@@ -1556,6 +1901,7 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
             lastConfirmTelAt: lastConfirmTelAt,
             lastConfirmCoupon: lastConfirmCoupon,
             lastConfirmCouponAt: lastConfirmCouponAt,
+            lastConfirmCouponNumber: lastConfirmCouponNumber,
             lastConfirmCalendar: lastConfirmCalendar,
             lastConfirmCalendarAt: lastConfirmCalendarAt,
             lastConfirmMoney: lastConfirmMoney,
@@ -1566,6 +1912,9 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
             lastConfirmUser: lastConfirmUser,
             lastConfirmUserAt: lastConfirmUserAt,
             lastConfirmUserName: lastConfirmUserName,
+            lastExitUser: lastExitUser,
+            lastExitUserAt: lastExitUserAt,
+            lastExitUserName: lastExitUserName,
             loginUser: widget.loginProvider.user,
           );
           if (error != null) {

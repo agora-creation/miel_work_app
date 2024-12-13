@@ -13,6 +13,9 @@ class ReportModel {
   String _id = '';
   String _organizationId = '';
   List<ReportWorkerModel> reportWorkers = [];
+  List<ReportWorkerModel> reportWorkersGuardsman = [];
+  List<ReportWorkerModel> reportWorkersGarbageman = [];
+  List<ReportWorkerModel> reportWorkersCycle = [];
   ReportVisitorModel reportVisitor = ReportVisitorModel.fromMap({});
   ReportLockerModel reportLocker = ReportLockerModel.fromMap({});
   List<ReportPlanModel> reportPlans = [];
@@ -46,6 +49,7 @@ class ReportModel {
   DateTime _lastConfirmTelAt = DateTime.now();
   bool _lastConfirmCoupon = false;
   DateTime _lastConfirmCouponAt = DateTime.now();
+  String _lastConfirmCouponNumber = '';
   bool _lastConfirmCalendar = false;
   DateTime _lastConfirmCalendarAt = DateTime.now();
   bool _lastConfirmMoney = false;
@@ -56,6 +60,9 @@ class ReportModel {
   bool _lastConfirmUser = false;
   DateTime _lastConfirmUserAt = DateTime.now();
   String _lastConfirmUserName = '';
+  bool _lastExitUser = false;
+  DateTime _lastExitUserAt = DateTime.now();
+  String _lastExitUserName = '';
   int _approval = 0;
   String _createdUserId = '';
   String _createdUserName = '';
@@ -89,6 +96,7 @@ class ReportModel {
   DateTime get lastConfirmTelAt => _lastConfirmTelAt;
   bool get lastConfirmCoupon => _lastConfirmCoupon;
   DateTime get lastConfirmCouponAt => _lastConfirmCouponAt;
+  String get lastConfirmCouponNumber => _lastConfirmCouponNumber;
   bool get lastConfirmCalendar => _lastConfirmCalendar;
   DateTime get lastConfirmCalendarAt => _lastConfirmCalendarAt;
   bool get lastConfirmMoney => _lastConfirmMoney;
@@ -99,6 +107,9 @@ class ReportModel {
   bool get lastConfirmUser => _lastConfirmUser;
   DateTime get lastConfirmUserAt => _lastConfirmUserAt;
   String get lastConfirmUserName => _lastConfirmUserName;
+  bool get lastExitUser => _lastExitUser;
+  DateTime get lastExitUserAt => _lastExitUserAt;
+  String get lastExitUserName => _lastExitUserName;
   int get approval => _approval;
   String get createdUserId => _createdUserId;
   String get createdUserName => _createdUserName;
@@ -111,6 +122,12 @@ class ReportModel {
     _id = data['id'] ?? '';
     _organizationId = data['organizationId'] ?? '';
     reportWorkers = _convertReportWorkers(data['reportWorkers'] ?? []);
+    reportWorkersGuardsman =
+        _convertReportWorkers(data['reportWorkersGuardsman'] ?? []);
+    reportWorkersGarbageman =
+        _convertReportWorkers(data['reportWorkersGarbageman'] ?? []);
+    reportWorkersCycle =
+        _convertReportWorkers(data['reportWorkersCycle'] ?? []);
     reportVisitor = ReportVisitorModel.fromMap(data['reportVisitor']);
     reportLocker = ReportLockerModel.fromMap(data['reportLocker']);
     reportPlans = _convertReportPlans(data['reportPlans'] ?? []);
@@ -149,6 +166,7 @@ class ReportModel {
     _lastConfirmCoupon = data['lastConfirmCoupon'] ?? false;
     _lastConfirmCouponAt =
         data['lastConfirmCouponAt'].toDate() ?? DateTime.now();
+    _lastConfirmCouponNumber = data['lastConfirmCouponNumber'] ?? '';
     _lastConfirmCalendar = data['lastConfirmCalendar'] ?? false;
     _lastConfirmCalendarAt =
         data['lastConfirmCalendarAt'].toDate() ?? DateTime.now();
@@ -160,6 +178,11 @@ class ReportModel {
     _lastConfirmUser = data['lastConfirmUser'] ?? false;
     _lastConfirmUserAt = data['lastConfirmUserAt'].toDate() ?? DateTime.now();
     _lastConfirmUserName = data['lastConfirmUserName'] ?? '';
+    _lastExitUser = data['lastExitUser'] ?? false;
+    if (data['lastExitUserAt'] != null) {
+      _lastExitUserAt = data['lastExitUserAt'].toDate() ?? DateTime.now();
+    }
+    _lastExitUserName = data['lastExitUserName'] ?? '';
     _approval = data['approval'] ?? 0;
     _createdUserId = data['createdUserId'] ?? '';
     _createdUserName = data['createdUserName'] ?? '';
