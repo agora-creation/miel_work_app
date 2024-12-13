@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/report.dart';
+import 'package:miel_work_app/models/report_visitor.dart';
 
 class ReportService {
   String collection = 'report';
@@ -51,6 +52,54 @@ class ReportService {
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
       ret.add(ReportModel.fromSnapshot(doc));
     }
+    return ret;
+  }
+
+  Future<List<int>> getVisitorAll({
+    required String? organizationId,
+    required DateTime day,
+  }) async {
+    List<int> ret = [0, 0, 0];
+    DateTime dayStart = DateTime(day.year, day.month, day.day);
+    DateTime dayEnd = DateTime(
+      day.year,
+      day.month,
+      day.day,
+      23,
+      59,
+      59,
+    );
+    Timestamp startAt = convertTimestamp(dayStart, false);
+    Timestamp endAt = convertTimestamp(dayEnd, true);
+    await firestore
+        .collection(collection)
+        .where('organizationId', isEqualTo: organizationId ?? 'error')
+        .orderBy('createdAt', descending: false)
+        .startAt([startAt])
+        .endAt([endAt])
+        .get()
+        .then((value) {
+          if (value.docs.isNotEmpty) {
+            ReportModel report = ReportModel.fromSnapshot(value.docs.first);
+            ReportVisitorModel reportVisitor = report.reportVisitor;
+            int floor12 = reportVisitor.floor1_12 +
+                reportVisitor.floor2_12 +
+                reportVisitor.floor3_12 +
+                reportVisitor.floor4_12 +
+                reportVisitor.floor5_12;
+            int floor20 = reportVisitor.floor1_20 +
+                reportVisitor.floor2_20 +
+                reportVisitor.floor3_20 +
+                reportVisitor.floor4_20 +
+                reportVisitor.floor5_20;
+            int floor22 = reportVisitor.floor1_22 +
+                reportVisitor.floor2_22 +
+                reportVisitor.floor3_22 +
+                reportVisitor.floor4_22 +
+                reportVisitor.floor5_22;
+            ret = [floor12, floor20, floor22];
+          }
+        });
     return ret;
   }
 }

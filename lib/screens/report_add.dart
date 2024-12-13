@@ -56,6 +56,8 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
   List<ReportWorkerModel> reportWorkersGarbageman = [];
   List<ReportWorkerModel> reportWorkersCycle = [];
   ReportVisitorModel reportVisitor = ReportVisitorModel.fromMap({});
+  List<int> visitor1DayAlls = [0, 0, 0];
+  List<int> visitor1YearAlls = [0, 0, 0];
   ReportLockerModel reportLocker = ReportLockerModel.fromMap({});
   List<ReportPlanModel> reportPlans = [];
   ReportCheckModel reportCheck = ReportCheckModel.fromMap({});
@@ -800,12 +802,20 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
                         ),
                       ],
                     ),
-                    const TableRow(
+                    TableRow(
                       children: [
-                        ReportTableTh('前年同曜日'),
-                        ReportTableTh('0'),
-                        ReportTableTh('0'),
-                        ReportTableTh('0'),
+                        const ReportTableTh('前日合計\n※自動取得'),
+                        ReportTableTh('${visitor1DayAlls[0]}'),
+                        ReportTableTh('${visitor1DayAlls[1]}'),
+                        ReportTableTh('${visitor1DayAlls[2]}'),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        const ReportTableTh('前年合計\n※自動取得'),
+                        ReportTableTh('${visitor1YearAlls[0]}'),
+                        ReportTableTh('${visitor1YearAlls[1]}'),
+                        ReportTableTh('${visitor1YearAlls[2]}'),
                       ],
                     ),
                   ],
