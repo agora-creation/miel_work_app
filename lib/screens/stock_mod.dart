@@ -67,12 +67,12 @@ class _StockModScreenState extends State<StockModScreen> {
               child: Column(
                 children: [
                   FormLabel(
-                    '在庫No',
+                    '管理No',
                     child: FormValue(widget.stock.number),
                   ),
                   const SizedBox(height: 16),
                   FormLabel(
-                    '在庫品名',
+                    '品名',
                     child: CustomTextField(
                       controller: nameController,
                       textInputType: TextInputType.text,
@@ -80,10 +80,12 @@ class _StockModScreenState extends State<StockModScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  FormLabel(
-                    '現在の在庫数',
-                    child: FormValue(widget.stock.quantity.toString()),
-                  ),
+                  widget.stock.category == 0
+                      ? FormLabel(
+                          '現在の在庫数',
+                          child: FormValue(widget.stock.quantity.toString()),
+                        )
+                      : Container(),
                   const SizedBox(height: 100),
                 ],
               ),

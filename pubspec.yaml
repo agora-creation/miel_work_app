@@ -3,7 +3,7 @@ description: "A new Flutter project."
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.8.5+1
+version: 1.8.6+1
 
 environment:
   sdk: '>=3.2.6 <4.0.0'
@@ -63,6 +63,10 @@ dependency_overrides:
       url: https://github.com/mchome/flutter_colorpicker
       ref: master  # or 786d04363f587b818ce585d25b9c2bb62de95aba
   url_launcher_ios: ^6.3.1
+  flutter_app_badger:
+    git:
+      url: https://github.com/g123k/flutter_app_badger.git
+      ref: 33cbee6
 
 dev_dependencies:
   flutter_test:

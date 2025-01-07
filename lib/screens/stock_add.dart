@@ -14,10 +14,12 @@ import 'package:provider/provider.dart';
 class StockAddScreen extends StatefulWidget {
   final LoginProvider loginProvider;
   final HomeProvider homeProvider;
+  final int category;
 
   const StockAddScreen({
     required this.loginProvider,
     required this.homeProvider,
+    required this.category,
     super.key,
   });
 
@@ -74,7 +76,7 @@ class _StockAddScreenState extends State<StockAddScreen> {
               child: Column(
                 children: [
                   FormLabel(
-                    '在庫No',
+                    '管理No',
                     child: CustomTextField(
                       controller: numberController,
                       textInputType: TextInputType.number,
@@ -83,7 +85,7 @@ class _StockAddScreenState extends State<StockAddScreen> {
                   ),
                   const SizedBox(height: 16),
                   FormLabel(
-                    '在庫品名',
+                    '品名',
                     child: CustomTextField(
                       controller: nameController,
                       textInputType: TextInputType.text,
@@ -91,14 +93,16 @@ class _StockAddScreenState extends State<StockAddScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  FormLabel(
-                    '最初の在庫数',
-                    child: CustomTextField(
-                      controller: quantityController,
-                      textInputType: TextInputType.number,
-                      maxLines: 1,
-                    ),
-                  ),
+                  widget.category == 0
+                      ? FormLabel(
+                          '最初の在庫数',
+                          child: CustomTextField(
+                            controller: quantityController,
+                            textInputType: TextInputType.number,
+                            maxLines: 1,
+                          ),
+                        )
+                      : Container(),
                   const SizedBox(height: 100),
                 ],
               ),
@@ -110,6 +114,7 @@ class _StockAddScreenState extends State<StockAddScreen> {
         onPressed: () async {
           String? error = await stockProvider.create(
             organization: widget.loginProvider.organization,
+            category: widget.category,
             number: numberController.text,
             name: nameController.text,
             quantity: int.parse(quantityController.text),

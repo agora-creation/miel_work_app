@@ -29,7 +29,7 @@ class StockList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '在庫No: ${stock.number}',
+                    '管理No: ${stock.number}',
                     style: const TextStyle(fontSize: 12),
                   ),
                   Text(
@@ -42,7 +42,7 @@ class StockList extends StatelessWidget {
                 ],
               ),
             ),
-            Text('在庫数: ${stock.quantity}'),
+            stock.category == 0 ? Text('在庫数: ${stock.quantity}') : Container(),
           ],
         ),
       ),

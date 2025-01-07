@@ -11,6 +11,7 @@ class StockProvider with ChangeNotifier {
 
   Future<String?> create({
     required OrganizationModel? organization,
+    required int category,
     required String number,
     required String name,
     required int quantity,
@@ -18,28 +19,31 @@ class StockProvider with ChangeNotifier {
   }) async {
     String? error;
     if (organization == null) return '在庫品の追加に失敗しました';
-    if (number == '') return '在庫Noは必須入力です';
-    if (name == '') return '在庫品名は必須入力です';
+    if (number == '') return '管理Noは必須入力です';
+    if (name == '') return '品名は必須入力です';
     if (loginUser == null) return '在庫品の追加に失敗しました';
     try {
       String id = _stockService.id();
       _stockService.create({
         'id': id,
         'organizationId': organization.id,
+        'category': category,
         'number': number,
         'name': name,
         'quantity': quantity,
         'createdAt': DateTime.now(),
       });
-      String stockHistoryId = _stockHistoryService.id();
-      _stockHistoryService.create({
-        'id': stockHistoryId,
-        'stockId': id,
-        'type': 1,
-        'quantity': quantity,
-        'createdUserName': loginUser.name,
-        'createdAt': DateTime.now(),
-      });
+      if (category == 0) {
+        String stockHistoryId = _stockHistoryService.id();
+        _stockHistoryService.create({
+          'id': stockHistoryId,
+          'stockId': id,
+          'type': 1,
+          'quantity': quantity,
+          'createdUserName': loginUser.name,
+          'createdAt': DateTime.now(),
+        });
+      }
     } catch (e) {
       error = '在庫品の追加に失敗しました';
     }

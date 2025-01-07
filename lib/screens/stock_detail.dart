@@ -101,95 +101,112 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  '登録日時：${dateText('yyyy/MM/dd HH:mm', widget.stock.createdAt)}',
+                  style: const TextStyle(
+                    color: kGreyColor,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
               FormLabel(
-                '在庫No',
+                '管理No',
                 child: FormValue(widget.stock.number),
               ),
               const SizedBox(height: 8),
               FormLabel(
-                '在庫品名',
+                '品名',
                 child: FormValue(widget.stock.name),
               ),
               const SizedBox(height: 8),
-              FormLabel(
-                '現在の在庫数',
-                child: FormValue(widget.stock.quantity.toString()),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CustomButton(
-                    type: ButtonSizeType.sm,
-                    label: '(−)出庫',
-                    labelColor: kWhiteColor,
-                    backgroundColor: kRedColor,
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (context) => AddStockType0Dialog(
-                        loginProvider: widget.loginProvider,
-                        homeProvider: widget.homeProvider,
-                        stock: widget.stock,
-                      ),
-                    ),
-                    disabled: widget.stock.quantity == 0,
-                  ),
-                  CustomButton(
-                    type: ButtonSizeType.sm,
-                    label: '(+)入庫',
-                    labelColor: kWhiteColor,
-                    backgroundColor: kBlueColor,
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (context) => AddStockType1Dialog(
-                        loginProvider: widget.loginProvider,
-                        homeProvider: widget.homeProvider,
-                        stock: widget.stock,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const Text('在庫変動履歴一覧'),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                    stream: stockHistoryService.streamList(
-                      stockId: widget.stock.id,
-                      searchStart: null,
-                      searchEnd: null,
-                    ),
-                    builder: (context, snapshot) {
-                      List<StockHistoryModel> stockHistories = [];
-                      if (snapshot.hasData) {
-                        stockHistories = stockHistoryService.generateList(
-                          data: snapshot.data,
-                        );
-                      }
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: stockHistories.length,
-                        itemBuilder: (context, index) {
-                          StockHistoryModel stockHistory =
-                              stockHistories[index];
-                          return StockHistoryList(
-                            stockHistory: stockHistory,
-                            onTap: () => showDialog(
-                              context: context,
-                              builder: (context) => DelStockHistoryDialog(
-                                loginProvider: widget.loginProvider,
-                                homeProvider: widget.homeProvider,
-                                stock: widget.stock,
-                                stockHistory: stockHistory,
-                              ),
+              widget.stock.category == 0
+                  ? FormLabel(
+                      '現在の在庫数',
+                      child: FormValue(widget.stock.quantity.toString()),
+                    )
+                  : Container(),
+              widget.stock.category == 0
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomButton(
+                          type: ButtonSizeType.sm,
+                          label: '(−)出庫',
+                          labelColor: kWhiteColor,
+                          backgroundColor: kRedColor,
+                          onPressed: () => showDialog(
+                            context: context,
+                            builder: (context) => AddStockType0Dialog(
+                              loginProvider: widget.loginProvider,
+                              homeProvider: widget.homeProvider,
+                              stock: widget.stock,
                             ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ),
+                          ),
+                          disabled: widget.stock.quantity == 0,
+                        ),
+                        CustomButton(
+                          type: ButtonSizeType.sm,
+                          label: '(+)入庫',
+                          labelColor: kWhiteColor,
+                          backgroundColor: kBlueColor,
+                          onPressed: () => showDialog(
+                            context: context,
+                            builder: (context) => AddStockType1Dialog(
+                              loginProvider: widget.loginProvider,
+                              homeProvider: widget.homeProvider,
+                              stock: widget.stock,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(),
+              widget.stock.category == 0 ? const Text('在庫変動履歴一覧') : Container(),
+              widget.stock.category == 0
+                  ? Expanded(
+                      child: SingleChildScrollView(
+                        child:
+                            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                          stream: stockHistoryService.streamList(
+                            stockId: widget.stock.id,
+                            searchStart: null,
+                            searchEnd: null,
+                          ),
+                          builder: (context, snapshot) {
+                            List<StockHistoryModel> stockHistories = [];
+                            if (snapshot.hasData) {
+                              stockHistories = stockHistoryService.generateList(
+                                data: snapshot.data,
+                              );
+                            }
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: stockHistories.length,
+                              itemBuilder: (context, index) {
+                                StockHistoryModel stockHistory =
+                                    stockHistories[index];
+                                return StockHistoryList(
+                                  stockHistory: stockHistory,
+                                  onTap: () => showDialog(
+                                    context: context,
+                                    builder: (context) => DelStockHistoryDialog(
+                                      loginProvider: widget.loginProvider,
+                                      homeProvider: widget.homeProvider,
+                                      stock: widget.stock,
+                                      stockHistory: stockHistory,
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    )
+                  : Container(),
               const SizedBox(height: 8),
             ],
           ),
