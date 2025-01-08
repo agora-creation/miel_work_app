@@ -58,7 +58,7 @@ class StockProvider with ChangeNotifier {
   }) async {
     String? error;
     if (organization == null) return '在庫品情報の編集に失敗しました';
-    if (name == '') return '在庫品名は必須入力です';
+    if (name == '') return '品名は必須入力です';
     if (loginUser == null) return '在庫品情報の編集に失敗しました';
     try {
       _stockService.update({
