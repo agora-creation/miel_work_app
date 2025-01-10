@@ -67,7 +67,19 @@ class PlanList extends StatelessWidget {
                 ],
               ),
               Text(
-                '[${plan.category}]${plan.subject}',
+                plan.category,
+                style: const TextStyle(
+                  color: kWhiteColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'SourceHanSansJP-Bold',
+                ),
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+              Text(
+                plan.subject,
                 style: const TextStyle(
                   color: kWhiteColor,
                   fontSize: 20,

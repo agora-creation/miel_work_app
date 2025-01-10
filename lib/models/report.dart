@@ -15,7 +15,6 @@ class ReportModel {
   List<ReportWorkerModel> reportWorkers = [];
   List<ReportWorkerModel> reportWorkersGuardsman = [];
   List<ReportWorkerModel> reportWorkersGarbageman = [];
-  List<ReportWorkerModel> reportWorkersCycle = [];
   ReportVisitorModel reportVisitor = ReportVisitorModel.fromMap({});
   ReportLockerModel reportLocker = ReportLockerModel.fromMap({});
   List<ReportPlanModel> reportPlans = [];
@@ -126,8 +125,6 @@ class ReportModel {
         _convertReportWorkers(data['reportWorkersGuardsman'] ?? []);
     reportWorkersGarbageman =
         _convertReportWorkers(data['reportWorkersGarbageman'] ?? []);
-    reportWorkersCycle =
-        _convertReportWorkers(data['reportWorkersCycle'] ?? []);
     reportVisitor = ReportVisitorModel.fromMap(data['reportVisitor']);
     reportLocker = ReportLockerModel.fromMap(data['reportLocker']);
     reportPlans = _convertReportPlans(data['reportPlans'] ?? []);

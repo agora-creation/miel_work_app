@@ -22,7 +22,6 @@ class ReportProvider with ChangeNotifier {
     required List<ReportWorkerModel> reportWorkers,
     required List<ReportWorkerModel> reportWorkersGuardsman,
     required List<ReportWorkerModel> reportWorkersGarbageman,
-    required List<ReportWorkerModel> reportWorkersCycle,
     required ReportVisitorModel reportVisitor,
     required ReportLockerModel reportLocker,
     required List<ReportPlanModel> reportPlans,
@@ -89,10 +88,6 @@ class ReportProvider with ChangeNotifier {
       for (final data in reportWorkersGarbageman) {
         reportWorkersGarbagemanMap.add(data.toMap());
       }
-      List<Map> reportWorkersCycleMap = [];
-      for (final data in reportWorkersCycle) {
-        reportWorkersCycleMap.add(data.toMap());
-      }
       List<Map> reportPlansMap = [];
       for (final data in reportPlans) {
         reportPlansMap.add(data.toMap());
@@ -119,7 +114,6 @@ class ReportProvider with ChangeNotifier {
         'reportWorkers': reportWorkersMap,
         'reportWorkersGuardsman': reportWorkersGuardsmanMap,
         'reportWorkersGarbageman': reportWorkersGarbagemanMap,
-        'reportWorkersCycle': reportWorkersCycleMap,
         'reportVisitor': reportVisitor.toMap(),
         'reportLocker': reportLocker.toMap(),
         'reportPlans': reportPlansMap,
@@ -184,7 +178,6 @@ class ReportProvider with ChangeNotifier {
     required List<ReportWorkerModel> reportWorkers,
     required List<ReportWorkerModel> reportWorkersGuardsman,
     required List<ReportWorkerModel> reportWorkersGarbageman,
-    required List<ReportWorkerModel> reportWorkersCycle,
     required ReportVisitorModel reportVisitor,
     required ReportLockerModel reportLocker,
     required List<ReportPlanModel> reportPlans,
@@ -249,10 +242,6 @@ class ReportProvider with ChangeNotifier {
       for (final data in reportWorkersGarbageman) {
         reportWorkersGarbagemanMap.add(data.toMap());
       }
-      List<Map> reportWorkersCycleMap = [];
-      for (final data in reportWorkersCycle) {
-        reportWorkersCycleMap.add(data.toMap());
-      }
       List<Map> reportPlansMap = [];
       for (final data in reportPlans) {
         reportPlansMap.add(data.toMap());
@@ -278,7 +267,6 @@ class ReportProvider with ChangeNotifier {
         'reportWorkers': reportWorkersMap,
         'reportWorkersGuardsman': reportWorkersGuardsmanMap,
         'reportWorkersGarbageman': reportWorkersGarbagemanMap,
-        'reportWorkersCycle': reportWorkersCycleMap,
         'reportVisitor': reportVisitor.toMap(),
         'reportLocker': reportLocker.toMap(),
         'reportPlans': reportPlansMap,

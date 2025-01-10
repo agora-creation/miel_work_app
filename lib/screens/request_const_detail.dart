@@ -374,17 +374,20 @@ class _RequestConstDetailScreenState extends State<RequestConstDetailScreen> {
                             builder: (context) => CustomAlertDialog(
                               content: SizedBox(
                                 width: 600,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const SizedBox(height: 8),
-                                    CustomTextField(
-                                      controller: commentContentController,
-                                      textInputType: TextInputType.multiline,
-                                      maxLines: null,
-                                    ),
-                                  ],
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const SizedBox(height: 8),
+                                      CustomTextField(
+                                        controller: commentContentController,
+                                        textInputType: TextInputType.multiline,
+                                        maxLines: null,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               actions: [
