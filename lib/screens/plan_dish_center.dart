@@ -43,6 +43,7 @@ class PlanDishCenterScreen extends StatefulWidget {
 
 class _PlanDishCenterScreenState extends State<PlanDishCenterScreen> {
   EventController controller = EventController();
+  GlobalKey<MonthViewState> globalKey = GlobalKey<MonthViewState>();
   PlanDishCenterService dishCenterService = PlanDishCenterService();
   DateTime searchMonth = DateTime.now();
   List<DateTime> days = [];
@@ -50,6 +51,9 @@ class _PlanDishCenterScreenState extends State<PlanDishCenterScreen> {
   void _changeMonth(DateTime value) {
     searchMonth = value;
     days = generateDays(value);
+    if (globalKey.currentState != null) {
+      globalKey.currentState?.jumpToMonth(searchMonth);
+    }
     setState(() {});
   }
 
@@ -130,6 +134,7 @@ class _PlanDishCenterScreenState extends State<PlanDishCenterScreen> {
                   }
                   return CustomCalendar(
                     controller: controller,
+                    globalKey: globalKey,
                     initialMonth: searchMonth,
                     onPageChange: (month, page) {
                       _changeMonth(month);

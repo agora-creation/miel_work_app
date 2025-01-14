@@ -5,6 +5,7 @@ import 'package:miel_work_app/common/style.dart';
 
 class CustomCalendar extends StatelessWidget {
   final EventController<Object?> controller;
+  final GlobalKey<MonthViewState> globalKey;
   final DateTime? initialMonth;
   final double cellAspectRatio;
   final Function(DateTime, int)? onPageChange;
@@ -12,6 +13,7 @@ class CustomCalendar extends StatelessWidget {
 
   const CustomCalendar({
     required this.controller,
+    required this.globalKey,
     required this.initialMonth,
     this.cellAspectRatio = 0.55,
     this.onPageChange,
@@ -24,6 +26,7 @@ class CustomCalendar extends StatelessWidget {
     return CalendarControllerProvider(
       controller: controller,
       child: MonthView(
+        key: globalKey,
         borderColor: kBorderColor,
         cellBuilder: (day, events, isToday, isInMonth, isInYear) {
           if (!isInMonth) {
