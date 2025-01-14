@@ -234,7 +234,11 @@ class _ReportModScreenState extends State<ReportModScreen> {
     lastExitUserName = widget.report.lastExitUserName;
     visitor1DayAlls = await reportService.getVisitorAll(
       organizationId: widget.loginProvider.organization?.id,
-      day: widget.report.createdAt,
+      day: DateTime(
+        widget.report.createdAt.year,
+        widget.report.createdAt.month,
+        widget.report.createdAt.day,
+      ).subtract(const Duration(days: 1)),
     );
     visitor1YearAlls = await reportService.getVisitorAll(
       organizationId: widget.loginProvider.organization?.id,

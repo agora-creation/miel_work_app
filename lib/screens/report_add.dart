@@ -20,6 +20,7 @@ import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/report.dart';
 import 'package:miel_work_app/services/plan.dart';
 import 'package:miel_work_app/services/problem.dart';
+import 'package:miel_work_app/services/report.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
@@ -50,6 +51,7 @@ class ReportAddScreen extends StatefulWidget {
 class _ReportAddScreenState extends State<ReportAddScreen> {
   PlanService planService = PlanService();
   ProblemService problemService = ProblemService();
+  ReportService reportService = ReportService();
   DateTime createdAt = DateTime.now();
   List<ReportWorkerModel> reportWorkers = [];
   List<ReportWorkerModel> reportWorkersGuardsman = [];
@@ -250,6 +252,22 @@ class _ReportAddScreenState extends State<ReportAddScreen> {
     }
     reportPamphlets.add(ReportPamphletModel.fromMap({}));
     reportEquipments.add(ReportEquipmentModel.fromMap({}));
+    visitor1DayAlls = await reportService.getVisitorAll(
+      organizationId: widget.loginProvider.organization?.id,
+      day: DateTime(
+        widget.date.year,
+        widget.date.month,
+        widget.date.day,
+      ).subtract(const Duration(days: 1)),
+    );
+    visitor1YearAlls = await reportService.getVisitorAll(
+      organizationId: widget.loginProvider.organization?.id,
+      day: DateTime(
+        widget.date.year - 1,
+        widget.date.month,
+        widget.date.day,
+      ),
+    );
     setState(() {});
   }
 
