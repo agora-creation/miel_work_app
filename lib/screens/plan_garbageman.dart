@@ -13,6 +13,7 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/plan_garbageman.dart';
 import 'package:miel_work_app/screens/plan_garbageman_timeline.dart';
+import 'package:miel_work_app/screens/plan_garbageman_week.dart';
 import 'package:miel_work_app/services/organization_group.dart';
 import 'package:miel_work_app/services/plan_garbageman.dart';
 import 'package:miel_work_app/services/user.dart';
@@ -80,6 +81,25 @@ class _PlanGarbagemanScreenState extends State<PlanGarbagemanScreen> {
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
+          IconButton(
+            icon: const FaIcon(
+              FontAwesomeIcons.calendarWeek,
+              color: kCyanColor,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  type: PageTransitionType.rightToLeft,
+                  child: PlanGarbagemanWeekScreen(
+                    loginProvider: widget.loginProvider,
+                    homeProvider: widget.homeProvider,
+                    days: days,
+                  ),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const FaIcon(
               FontAwesomeIcons.xmark,

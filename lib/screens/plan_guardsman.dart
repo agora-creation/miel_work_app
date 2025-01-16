@@ -11,6 +11,7 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/plan_guardsman.dart';
 import 'package:miel_work_app/screens/plan_guardsman_timeline.dart';
+import 'package:miel_work_app/screens/plan_guardsman_week.dart';
 import 'package:miel_work_app/services/plan_guardsman.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
@@ -76,6 +77,25 @@ class _PlanGuardsmanScreenState extends State<PlanGuardsmanScreen> {
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
+          IconButton(
+            icon: const FaIcon(
+              FontAwesomeIcons.calendarWeek,
+              color: kCyanColor,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  type: PageTransitionType.rightToLeft,
+                  child: PlanGuardsmanWeekScreen(
+                    loginProvider: widget.loginProvider,
+                    homeProvider: widget.homeProvider,
+                    days: days,
+                  ),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const FaIcon(
               FontAwesomeIcons.xmark,

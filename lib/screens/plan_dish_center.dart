@@ -13,6 +13,7 @@ import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/plan_dish_center.dart';
 import 'package:miel_work_app/screens/plan_dish_center_timeline.dart';
+import 'package:miel_work_app/screens/plan_dish_center_week.dart';
 import 'package:miel_work_app/services/organization_group.dart';
 import 'package:miel_work_app/services/plan_dish_center.dart';
 import 'package:miel_work_app/services/user.dart';
@@ -80,6 +81,25 @@ class _PlanDishCenterScreenState extends State<PlanDishCenterScreen> {
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
+          IconButton(
+            icon: const FaIcon(
+              FontAwesomeIcons.calendarWeek,
+              color: kCyanColor,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                PageTransition(
+                  type: PageTransitionType.rightToLeft,
+                  child: PlanDishCenterWeekScreen(
+                    loginProvider: widget.loginProvider,
+                    homeProvider: widget.homeProvider,
+                    days: days,
+                  ),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const FaIcon(
               FontAwesomeIcons.xmark,

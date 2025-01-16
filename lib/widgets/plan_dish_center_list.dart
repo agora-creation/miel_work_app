@@ -22,7 +22,7 @@ class PlanDishCenterList extends StatelessWidget {
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            color: kGreyColor.withOpacity(0.3),
+            color: kLightBlueColor.withOpacity(0.2),
             borderRadius: BorderRadius.circular(4),
           ),
           padding: const EdgeInsets.symmetric(
