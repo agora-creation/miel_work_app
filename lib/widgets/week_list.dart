@@ -32,7 +32,7 @@ class WeekList extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8),
-            child: Expanded(child: child),
+            child: child,
           ),
         ],
       ),
