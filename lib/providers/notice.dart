@@ -170,6 +170,7 @@ class NoticeProvider with ChangeNotifier {
       _noticeService.update({
         'id': notice.id,
         'comments': comments,
+        'readUserIds': [loginUser.id],
       });
     } catch (e) {
       error = '社内コメントの追記に失敗しました';
