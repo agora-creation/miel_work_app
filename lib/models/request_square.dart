@@ -11,6 +11,7 @@ class RequestSquareModel {
   String _companyAddress = '';
   String _useCompanyName = '';
   String _useCompanyUserName = '';
+  String _useLocationFile = '';
   DateTime _useStartedAt = DateTime.now();
   DateTime _useEndedAt = DateTime.now();
   bool _useAtPending = false;
@@ -35,6 +36,7 @@ class RequestSquareModel {
   String get companyAddress => _companyAddress;
   String get useCompanyName => _useCompanyName;
   String get useCompanyUserName => _useCompanyUserName;
+  String get useLocationFile => _useLocationFile;
   DateTime get useStartedAt => _useStartedAt;
   DateTime get useEndedAt => _useEndedAt;
   bool get useAtPending => _useAtPending;
@@ -60,6 +62,7 @@ class RequestSquareModel {
     _companyAddress = data['companyAddress'] ?? '';
     _useCompanyName = data['useCompanyName'] ?? '';
     _useCompanyUserName = data['useCompanyUserName'] ?? '';
+    _useLocationFile = data['useLocationFile'] ?? '';
     _useStartedAt = data['useStartedAt'].toDate() ?? DateTime.now();
     _useEndedAt = data['useEndedAt'].toDate() ?? DateTime.now();
     _useAtPending = data['useAtPending'] ?? false;

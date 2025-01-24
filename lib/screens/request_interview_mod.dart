@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as picker;
@@ -8,12 +10,16 @@ import 'package:miel_work_app/models/request_interview.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/request_interview.dart';
+import 'package:miel_work_app/widgets/attached_file_list.dart';
 import 'package:miel_work_app/widgets/custom_checkbox.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/datetime_range_form.dart';
 import 'package:miel_work_app/widgets/dotted_divider.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
+import 'package:miel_work_app/widgets/image_detail_dialog.dart';
+import 'package:miel_work_app/widgets/pdf_detail_dialog.dart';
+import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 
 class RequestInterviewModScreen extends StatefulWidget {
@@ -656,6 +662,45 @@ class _RequestInterviewModScreenState extends State<RequestInterviewModScreen> {
                   controller: remarks,
                   textInputType: TextInputType.multiline,
                   maxLines: 5,
+                ),
+              ),
+              const SizedBox(height: 16),
+              const DottedDivider(),
+              const SizedBox(height: 16),
+              FormLabel(
+                '添付ファイル',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: widget.interview.attachedFiles.map((file) {
+                        return AttachedFileList(
+                          fileName: p.basename(file),
+                          onTap: () {
+                            String ext = p.extension(file);
+                            if (imageExtensions.contains(ext)) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => ImageDetailDialog(
+                                  File(file).path,
+                                  onPressedClose: () => Navigator.pop(context),
+                                ),
+                              );
+                            }
+                            if (pdfExtensions.contains(ext)) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => PdfDetailDialog(
+                                  File(file).path,
+                                  onPressedClose: () => Navigator.pop(context),
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 16),
