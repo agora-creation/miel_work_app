@@ -11,6 +11,8 @@ class RequestConstModel {
   String _constName = '';
   String _constUserName = '';
   String _constUserTel = '';
+  String _chargeUserName = '';
+  String _chargeUserTel = '';
   DateTime _constStartedAt = DateTime.now();
   DateTime _constEndedAt = DateTime.now();
   bool _constAtPending = false;
@@ -39,6 +41,8 @@ class RequestConstModel {
   String get constName => _constName;
   String get constUserName => _constUserName;
   String get constUserTel => _constUserTel;
+  String get chargeUserName => _chargeUserName;
+  String get chargeUserTel => _chargeUserTel;
   DateTime get constStartedAt => _constStartedAt;
   DateTime get constEndedAt => _constEndedAt;
   bool get constAtPending => _constAtPending;
@@ -68,6 +72,8 @@ class RequestConstModel {
     _constName = data['constName'] ?? '';
     _constUserName = data['constUserName'] ?? '';
     _constUserTel = data['constUserTel'] ?? '';
+    _chargeUserName = data['chargeUserName'] ?? '';
+    _chargeUserTel = data['chargeUserTel'] ?? '';
     _constStartedAt = data['constStartedAt'].toDate() ?? DateTime.now();
     _constEndedAt = data['constEndedAt'].toDate() ?? DateTime.now();
     _constAtPending = data['constAtPending'] ?? false;

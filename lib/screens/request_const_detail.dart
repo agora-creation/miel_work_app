@@ -249,6 +249,16 @@ class _RequestConstDetailScreenState extends State<RequestConstDetailScreen> {
               ),
               const SizedBox(height: 8),
               FormLabel(
+                '当日担当者名',
+                child: FormValue(widget.requestConst.chargeUserName),
+              ),
+              const SizedBox(height: 8),
+              FormLabel(
+                '当日担当者電話番号',
+                child: FormValue(widget.requestConst.chargeUserTel),
+              ),
+              const SizedBox(height: 8),
+              FormLabel(
                 '施工予定日時',
                 child: FormValue(
                   widget.requestConst.constAtPending

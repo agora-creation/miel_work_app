@@ -19,6 +19,8 @@ class RequestConstProvider with ChangeNotifier {
     required String constName,
     required String constUserName,
     required String constUserTel,
+    required String chargeUserName,
+    required String chargeUserTel,
     required DateTime constStartedAt,
     required DateTime constEndedAt,
     required bool constAtPending,
@@ -41,6 +43,8 @@ class RequestConstProvider with ChangeNotifier {
         'constName': constName,
         'constUserName': constUserName,
         'constUserTel': constUserTel,
+        'chargeUserName': chargeUserName,
+        'chargeUserTel': chargeUserTel,
         'constStartedAt': constStartedAt,
         'constEndedAt': constEndedAt,
         'constAtPending': constAtPending,
@@ -170,6 +174,8 @@ $caution
 【工事施工会社名】${requestConst.constName}
 【工事施工代表者名】${requestConst.constUserName}
 【工事施工代表者電話番号】${requestConst.constUserTel}
+【当日担当者名】${requestConst.chargeUserName}
+【当日担当者電話番号】${requestConst.chargeUserTel}
 【施工予定日時】$constAtText
 【施工内容】
 ${requestConst.constContent}
@@ -246,6 +252,8 @@ $attachedFilesText
 【工事施工会社名】${requestConst.constName}
 【工事施工代表者名】${requestConst.constUserName}
 【工事施工代表者電話番号】${requestConst.constUserTel}
+【当日担当者名】${requestConst.chargeUserName}
+【当日担当者電話番号】${requestConst.chargeUserTel}
 【施工予定日時】$constAtText
 【施工内容】
 ${requestConst.constContent}
