@@ -120,8 +120,6 @@ class SplashController extends StatelessWidget {
         return const LoginScreen();
       case AuthStatus.authenticated:
         return const HomeScreen();
-      default:
-        return const LoginScreen();
     }
   }
 }
