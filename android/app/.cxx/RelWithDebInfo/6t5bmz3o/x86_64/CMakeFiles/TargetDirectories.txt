@@ -1,0 +1,2 @@
+/Volumes/SSD-PUTA/StudioProjects/miel_work_app/android/app/.cxx/RelWithDebInfo/6t5bmz3o/x86_64/CMakeFiles/edit_cache.dir
+/Volumes/SSD-PUTA/StudioProjects/miel_work_app/android/app/.cxx/RelWithDebInfo/6t5bmz3o/x86_64/CMakeFiles/rebuild_cache.dir
