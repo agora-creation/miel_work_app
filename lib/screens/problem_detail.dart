@@ -294,6 +294,8 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                     onPressed: () async {
                                       String? error =
                                           await problemProvider.addComment(
+                                        organization:
+                                            widget.loginProvider.organization,
                                         problem: widget.problem,
                                         content: commentContentController.text,
                                         loginUser: widget.loginProvider.user,

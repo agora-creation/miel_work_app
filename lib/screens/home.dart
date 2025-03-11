@@ -27,7 +27,6 @@ import 'package:miel_work_app/screens/request_square.dart';
 import 'package:miel_work_app/screens/stock.dart';
 import 'package:miel_work_app/screens/user.dart';
 import 'package:miel_work_app/screens/user_setting.dart';
-import 'package:miel_work_app/screens/work.dart';
 import 'package:miel_work_app/services/apply.dart';
 import 'package:miel_work_app/services/chat_message.dart';
 import 'package:miel_work_app/services/loan.dart';
@@ -482,21 +481,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               ),
-                              HomeIconCard(
-                                icon: FontAwesomeIcons.businessTime,
-                                iconSize: 42,
-                                label: '勤怠打刻',
-                                labelFontSize: 16,
-                                color: kBlackColor,
-                                backgroundColor: kWhiteColor,
-                                onTap: () => showBottomUpScreen(
-                                  context,
-                                  WorkScreen(
-                                    loginProvider: loginProvider,
-                                    homeProvider: homeProvider,
-                                  ),
-                                ),
-                              ),
+                              // HomeIconCard(
+                              //   icon: FontAwesomeIcons.businessTime,
+                              //   iconSize: 42,
+                              //   label: '勤怠打刻',
+                              //   labelFontSize: 16,
+                              //   color: kBlackColor,
+                              //   backgroundColor: kWhiteColor,
+                              //   onTap: () => showBottomUpScreen(
+                              //     context,
+                              //     WorkScreen(
+                              //       loginProvider: loginProvider,
+                              //       homeProvider: homeProvider,
+                              //     ),
+                              //   ),
+                              // ),
                               HomeIconCard(
                                 icon: FontAwesomeIcons.clipboardCheck,
                                 iconSize: 42,

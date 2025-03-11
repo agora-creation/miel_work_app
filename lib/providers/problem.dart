@@ -200,11 +200,13 @@ class ProblemProvider with ChangeNotifier {
   }
 
   Future<String?> addComment({
+    required OrganizationModel? organization,
     required ProblemModel problem,
     required String content,
     required UserModel? loginUser,
   }) async {
     String? error;
+    if (organization == null) return '社内コメントの追記に失敗しました';
     if (content == '') return '社内コメントの追記に失敗しました';
     if (loginUser == null) return '社内コメントの追記に失敗しました';
     try {
@@ -225,6 +227,23 @@ class ProblemProvider with ChangeNotifier {
         'id': problem.id,
         'comments': comments,
       });
+      //通知
+      List<UserModel> sendUsers = [];
+      sendUsers = await _userService.selectList(
+        userIds: organization.userIds,
+      );
+      if (sendUsers.isNotEmpty) {
+        for (UserModel user in sendUsers) {
+          if (user.id == loginUser.id) continue;
+          for (final token in user.tokens) {
+            _fmService.send(
+              token: token,
+              title: '『[クレーム／要望情報]${problem.title}』に社内コメントが追記されました',
+              body: content,
+            );
+          }
+        }
+      }
     } catch (e) {
       error = '社内コメントの追記に失敗しました';
     }

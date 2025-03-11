@@ -340,6 +340,8 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
                                     onPressed: () async {
                                       String? error =
                                           await loanProvider.addComment(
+                                        organization:
+                                            widget.loginProvider.organization,
                                         loan: widget.loan,
                                         content: commentContentController.text,
                                         loginUser: widget.loginProvider.user,

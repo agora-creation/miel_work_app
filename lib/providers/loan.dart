@@ -177,11 +177,13 @@ class LoanProvider with ChangeNotifier {
   }
 
   Future<String?> addComment({
+    required OrganizationModel? organization,
     required LoanModel loan,
     required String content,
     required UserModel? loginUser,
   }) async {
     String? error;
+    if (organization == null) return '社内コメントの追記に失敗しました';
     if (content == '') return '社内コメントの追記に失敗しました';
     if (loginUser == null) return '社内コメントの追記に失敗しました';
     try {
@@ -202,6 +204,23 @@ class LoanProvider with ChangeNotifier {
         'id': loan.id,
         'comments': comments,
       });
+      //通知
+      List<UserModel> sendUsers = [];
+      sendUsers = await _userService.selectList(
+        userIds: organization.userIds,
+      );
+      if (sendUsers.isNotEmpty) {
+        for (UserModel user in sendUsers) {
+          if (user.id == loginUser.id) continue;
+          for (final token in user.tokens) {
+            _fmService.send(
+              token: token,
+              title: '『[貸出物]${loan.itemName}』に社内コメントが追記されました',
+              body: content,
+            );
+          }
+        }
+      }
     } catch (e) {
       error = '社内コメントの追記に失敗しました';
     }

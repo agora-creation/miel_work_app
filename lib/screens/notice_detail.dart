@@ -259,6 +259,8 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
                                     onPressed: () async {
                                       String? error =
                                           await noticeProvider.addComment(
+                                        organization:
+                                            widget.loginProvider.organization,
                                         notice: widget.notice,
                                         content: commentContentController.text,
                                         loginUser: widget.loginProvider.user,
