@@ -64,6 +64,10 @@ class _StockScreenState extends State<StockScreen>
           ),
           actions: [
             IconButton(
+              onPressed: () {},
+              icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
+            ),
+            IconButton(
               icon: const FaIcon(
                 FontAwesomeIcons.xmark,
                 color: kBlackColor,

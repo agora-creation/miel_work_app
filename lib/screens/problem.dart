@@ -58,6 +58,10 @@ class _ProblemScreenState extends State<ProblemScreen> {
           ),
           actions: [
             IconButton(
+              onPressed: () {},
+              icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
+            ),
+            IconButton(
               onPressed: () async {
                 var selected = await showDataRangePickerDialog(
                   context: context,

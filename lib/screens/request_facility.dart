@@ -57,6 +57,10 @@ class _RequestFacilityScreenState extends State<RequestFacilityScreen> {
           ),
           actions: [
             IconButton(
+              onPressed: () {},
+              icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
+            ),
+            IconButton(
               onPressed: () async {
                 var selected = await showDataRangePickerDialog(
                   context: context,
