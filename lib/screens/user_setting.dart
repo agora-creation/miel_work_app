@@ -85,6 +85,15 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
               ),
             ),
             SettingList(
+              label: 'PUSH通知の再設定',
+              value: '',
+              onTap: () async {
+                await widget.loginProvider.reloadTokens();
+                if (!mounted) return;
+                showMessage(context, 'PUSH通知の再設定が完了しました', true);
+              },
+            ),
+            SettingList(
               label: 'このアプリの使い方',
               value: '',
               onTap: () {

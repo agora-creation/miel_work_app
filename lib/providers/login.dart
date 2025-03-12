@@ -161,6 +161,20 @@ class LoginProvider with ChangeNotifier {
     return error;
   }
 
+  Future reloadTokens() async {
+    await _fmService.initNotifications();
+    //Token更新
+    String token = await _fmService.getToken() ?? '';
+    List<String> tokens = _user?.tokens ?? [];
+    if (!tokens.contains(token)) {
+      tokens.add(token);
+    }
+    _userService.update({
+      'id': _user?.id,
+      'tokens': tokens,
+    });
+  }
+
   Future logout() async {
     _userService.update({
       'id': _user?.id,
