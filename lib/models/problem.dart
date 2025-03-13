@@ -30,6 +30,8 @@ class ProblemModel {
   List<CommentModel> comments = [];
   bool _processed = false;
   List<String> readUserIds = [];
+  String _createdUserId = '';
+  String _createdUserName = '';
   DateTime _createdAt = DateTime.now();
   DateTime _expirationAt = DateTime.now();
 
@@ -48,6 +50,8 @@ class ProblemModel {
   String get image3 => _image3;
   int get count => _count;
   bool get processed => _processed;
+  String get createdUserId => _createdUserId;
+  String get createdUserName => _createdUserName;
   DateTime get createdAt => _createdAt;
   DateTime get expirationAt => _expirationAt;
 
@@ -72,6 +76,8 @@ class ProblemModel {
     comments = _convertComments(data['comments'] ?? []);
     _processed = data['processed'] ?? false;
     readUserIds = _convertReadUserIds(data['readUserIds'] ?? []);
+    _createdUserId = data['createdUserId'] ?? '';
+    _createdUserName = data['createdUserName'] ?? '';
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
     _expirationAt = data['expirationAt'].toDate() ?? DateTime.now();
   }

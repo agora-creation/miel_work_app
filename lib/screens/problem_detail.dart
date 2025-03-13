@@ -79,7 +79,8 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
           style: TextStyle(color: kBlackColor),
         ),
         actions: [
-          !widget.problem.processed
+          !widget.problem.processed ||
+                  widget.problem.createdUserId == widget.loginProvider.user!.id
               ? IconButton(
                   onPressed: () => showDialog(
                     context: context,
