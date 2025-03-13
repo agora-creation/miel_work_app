@@ -125,7 +125,6 @@ class NoticeProvider with ChangeNotifier {
           'title': title,
           'content': content,
           'readUserIds': [loginUser.id],
-          'expirationAt': DateTime.now().add(const Duration(days: 365)),
         });
       } else {
         _noticeService.update({
@@ -136,7 +135,6 @@ class NoticeProvider with ChangeNotifier {
           'file': file,
           'fileExt': fileExt,
           'readUserIds': [loginUser.id],
-          'expirationAt': DateTime.now().add(const Duration(days: 365)),
         });
       }
     } catch (e) {

@@ -184,8 +184,6 @@ class ApplyProvider with ChangeNotifier {
         'title': title,
         'content': content,
         'price': price,
-        'createdUserId': loginUser.id,
-        'createdUserName': loginUser.name,
       });
     } catch (e) {
       error = '申請情報の編集に失敗しました';

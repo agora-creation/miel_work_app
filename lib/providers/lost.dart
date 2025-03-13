@@ -62,6 +62,8 @@ class LostProvider with ChangeNotifier {
         'returnUser': '',
         'signImage': '',
         'readUserIds': [loginUser.id],
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
         'createdAt': DateTime.now(),
         'expirationAt': DateTime.now().add(const Duration(days: 365)),
       });

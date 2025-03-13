@@ -17,6 +17,8 @@ class LostModel {
   String _signImage = '';
   List<CommentModel> comments = [];
   List<String> readUserIds = [];
+  String _createdUserId = '';
+  String _createdUserName = '';
   DateTime _createdAt = DateTime.now();
   DateTime _expirationAt = DateTime.now();
 
@@ -33,6 +35,8 @@ class LostModel {
   DateTime get returnAt => _returnAt;
   String get returnUser => _returnUser;
   String get signImage => _signImage;
+  String get createdUserId => _createdUserId;
+  String get createdUserName => _createdUserName;
   DateTime get createdAt => _createdAt;
   DateTime get expirationAt => _expirationAt;
 
@@ -54,6 +58,8 @@ class LostModel {
     _signImage = data['signImage'] ?? '';
     comments = _convertComments(data['comments'] ?? []);
     readUserIds = _convertReadUserIds(data['readUserIds'] ?? []);
+    _createdUserId = data['createdUserId'] ?? '';
+    _createdUserName = data['createdUserName'] ?? '';
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
     _expirationAt = data['expirationAt'].toDate() ?? DateTime.now();
   }

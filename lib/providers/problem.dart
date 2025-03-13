@@ -175,10 +175,6 @@ class ProblemProvider with ChangeNotifier {
           'image3': image3,
           'states': states,
           'count': count,
-          'createdUserId': loginUser.id,
-          'createdUserName': loginUser.name,
-          'createdAt': createdAt,
-          'expirationAt': createdAt.add(const Duration(days: 365)),
         });
       } else {
         _problemService.update({
@@ -193,10 +189,6 @@ class ProblemProvider with ChangeNotifier {
           'details': details,
           'states': states,
           'count': count,
-          'createdUserId': loginUser.id,
-          'createdUserName': loginUser.name,
-          'createdAt': createdAt,
-          'expirationAt': createdAt.add(const Duration(days: 365)),
         });
       }
     } catch (e) {
