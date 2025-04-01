@@ -23,6 +23,22 @@ class ReportService {
     firestore.collection(collection).doc(values['id']).delete();
   }
 
+  Future<ReportModel?> selectData({
+    required String id,
+  }) async {
+    ReportModel? ret;
+    await firestore
+        .collection(collection)
+        .where('id', isEqualTo: id)
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        ret = ReportModel.fromSnapshot(value.docs.first);
+      }
+    });
+    return ret;
+  }
+
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
     required DateTime? searchStart,

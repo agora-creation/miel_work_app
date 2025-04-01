@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/report.dart';
 import 'package:miel_work_app/models/report_check.dart';
@@ -319,6 +320,40 @@ class ReportProvider with ChangeNotifier {
       });
     } catch (e) {
       error = '日報の保存に失敗しました';
+    }
+    return error;
+  }
+
+  Future<String?> addComment({
+    required OrganizationModel? organization,
+    required ReportModel report,
+    required String content,
+    required UserModel? loginUser,
+  }) async {
+    String? error;
+    if (organization == null) return '社内コメントの追記に失敗しました';
+    if (content == '') return '社内コメントの追記に失敗しました';
+    if (loginUser == null) return '社内コメントの追記に失敗しました';
+    try {
+      List<Map> comments = [];
+      if (report.comments.isNotEmpty) {
+        for (final comment in report.comments) {
+          comments.add(comment.toMap());
+        }
+      }
+      comments.add({
+        'id': dateText('yyyyMMddHHmm', DateTime.now()),
+        'userId': loginUser.id,
+        'userName': loginUser.name,
+        'content': content,
+        'createdAt': DateTime.now(),
+      });
+      _reportService.update({
+        'id': report.id,
+        'comments': comments,
+      });
+    } catch (e) {
+      error = '社内コメントの追記に失敗しました';
     }
     return error;
   }

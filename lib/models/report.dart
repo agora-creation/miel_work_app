@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:miel_work_app/models/comment.dart';
 import 'package:miel_work_app/models/report_check.dart';
 import 'package:miel_work_app/models/report_equipment.dart';
 import 'package:miel_work_app/models/report_locker.dart';
@@ -62,6 +63,7 @@ class ReportModel {
   bool _lastExitUser = false;
   DateTime _lastExitUserAt = DateTime.now();
   String _lastExitUserName = '';
+  List<CommentModel> comments = [];
   int _approval = 0;
   String _createdUserId = '';
   String _createdUserName = '';
@@ -180,6 +182,7 @@ class ReportModel {
       _lastExitUserAt = data['lastExitUserAt'].toDate() ?? DateTime.now();
     }
     _lastExitUserName = data['lastExitUserName'] ?? '';
+    comments = _convertComments(data['comments'] ?? []);
     _approval = data['approval'] ?? 0;
     _createdUserId = data['createdUserId'] ?? '';
     _createdUserName = data['createdUserName'] ?? '';
@@ -244,5 +247,13 @@ class ReportModel {
       default:
         return '承認待ち';
     }
+  }
+
+  List<CommentModel> _convertComments(List list) {
+    List<CommentModel> converted = [];
+    for (Map data in list) {
+      converted.add(CommentModel.fromMap(data));
+    }
+    return converted;
   }
 }
