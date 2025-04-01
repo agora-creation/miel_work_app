@@ -109,20 +109,6 @@ class _RequestOvertimeDetailScreenState
         ),
         actions: [
           IconButton(
-            onPressed: () => showDialog(
-              context: context,
-              builder: (context) => DelRequestOvertimeDialog(
-                loginProvider: widget.loginProvider,
-                homeProvider: widget.homeProvider,
-                overtime: widget.overtime,
-              ),
-            ),
-            icon: const FaIcon(
-              FontAwesomeIcons.trash,
-              color: kRedColor,
-            ),
-          ),
-          IconButton(
             onPressed: () {
               Navigator.push(
                 context,
@@ -432,74 +418,6 @@ class _RequestOvertimeDetailScreenState
         loginProvider: widget.loginProvider,
         homeProvider: widget.homeProvider,
       ),
-    );
-  }
-}
-
-class DelRequestOvertimeDialog extends StatefulWidget {
-  final LoginProvider loginProvider;
-  final HomeProvider homeProvider;
-  final RequestOvertimeModel overtime;
-
-  const DelRequestOvertimeDialog({
-    required this.loginProvider,
-    required this.homeProvider,
-    required this.overtime,
-    super.key,
-  });
-
-  @override
-  State<DelRequestOvertimeDialog> createState() =>
-      _DelRequestOvertimeDialogState();
-}
-
-class _DelRequestOvertimeDialogState extends State<DelRequestOvertimeDialog> {
-  @override
-  Widget build(BuildContext context) {
-    final overtimeProvider = Provider.of<RequestOvertimeProvider>(context);
-    return CustomAlertDialog(
-      content: const SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: 8),
-            Text(
-              '本当に削除しますか？',
-              style: TextStyle(color: kRedColor),
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        CustomButton(
-          type: ButtonSizeType.sm,
-          label: 'キャンセル',
-          labelColor: kWhiteColor,
-          backgroundColor: kGreyColor,
-          onPressed: () => Navigator.pop(context),
-        ),
-        CustomButton(
-          type: ButtonSizeType.sm,
-          label: '削除する',
-          labelColor: kWhiteColor,
-          backgroundColor: kRedColor,
-          onPressed: () async {
-            String? error = await overtimeProvider.delete(
-              overtime: widget.overtime,
-            );
-            if (error != null) {
-              if (!mounted) return;
-              showMessage(context, error, false);
-              return;
-            }
-            if (!mounted) return;
-            showMessage(context, '申請情報が削除されました', true);
-            Navigator.pop(context);
-            Navigator.of(context, rootNavigator: true).pop();
-          },
-        ),
-      ],
     );
   }
 }

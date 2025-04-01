@@ -398,18 +398,4 @@ ${interview.remarks}
     }
     return error;
   }
-
-  Future<String?> delete({
-    required RequestInterviewModel interview,
-  }) async {
-    String? error;
-    try {
-      _interviewService.delete({
-        'id': interview.id,
-      });
-    } catch (e) {
-      error = '申請情報の削除に失敗しました';
-    }
-    return error;
-  }
 }

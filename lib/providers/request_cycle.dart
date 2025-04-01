@@ -161,18 +161,4 @@ class RequestCycleProvider with ChangeNotifier {
     }
     return error;
   }
-
-  Future<String?> delete({
-    required RequestCycleModel cycle,
-  }) async {
-    String? error;
-    try {
-      _cycleService.delete({
-        'id': cycle.id,
-      });
-    } catch (e) {
-      error = '申請情報の削除に失敗しました';
-    }
-    return error;
-  }
 }

@@ -268,18 +268,4 @@ $attachedFilesText
     }
     return error;
   }
-
-  Future<String?> delete({
-    required RequestSquareModel square,
-  }) async {
-    String? error;
-    try {
-      _squareService.delete({
-        'id': square.id,
-      });
-    } catch (e) {
-      error = '申請情報の削除に失敗しました';
-    }
-    return error;
-  }
 }

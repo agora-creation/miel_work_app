@@ -212,18 +212,4 @@ $attachedFilesText
     }
     return error;
   }
-
-  Future<String?> delete({
-    required RequestFacilityModel facility,
-  }) async {
-    String? error;
-    try {
-      _facilityService.delete({
-        'id': facility.id,
-      });
-    } catch (e) {
-      error = '申請情報の削除に失敗しました';
-    }
-    return error;
-  }
 }
