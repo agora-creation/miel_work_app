@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as picker;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/comment.dart';
@@ -46,6 +47,10 @@ class _LostDetailScreenState extends State<LostDetailScreen> {
   LostService lostService = LostService();
   DateTime returnAt = DateTime.now();
   TextEditingController returnUserController = TextEditingController();
+  TextEditingController returnCustomerController = TextEditingController();
+  TextEditingController returnCustomerAddressController =
+      TextEditingController();
+  XFile? returnCustomerIDImageXFile;
   SignatureController signImageController = SignatureController(
     penStrokeWidth: 2,
     exportBackgroundColor: kWhiteColor,
@@ -217,6 +222,58 @@ class _LostDetailScreenState extends State<LostDetailScreen> {
                 ),
                 const SizedBox(height: 16),
                 FormLabel(
+                  'お客様名',
+                  child: widget.lost.status == 0
+                      ? CustomTextField(
+                          controller: returnCustomerController,
+                          textInputType: TextInputType.text,
+                          maxLines: 1,
+                        )
+                      : FormValue(widget.lost.returnCustomer),
+                ),
+                const SizedBox(height: 16),
+                FormLabel(
+                  'お客様住所',
+                  child: widget.lost.status == 0
+                      ? CustomTextField(
+                          controller: returnCustomerAddressController,
+                          textInputType: TextInputType.text,
+                          maxLines: 1,
+                        )
+                      : FormValue(widget.lost.returnCustomerAddress),
+                ),
+                const SizedBox(height: 16),
+                FormLabel(
+                  '本人確認身分証明書写真',
+                  child: GestureDetector(
+                    onTap: () async {
+                      final result = await ImagePicker().pickImage(
+                        source: ImageSource.gallery,
+                      );
+                      setState(() {
+                        returnCustomerIDImageXFile = result;
+                      });
+                    },
+                    child: returnCustomerIDImageXFile != null
+                        ? Image.file(
+                            File(returnCustomerIDImageXFile!.path),
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          )
+                        : widget.lost.returnCustomerIDImage != ''
+                            ? FileLink(file: widget.lost.returnCustomerIDImage)
+                            : Container(
+                                color: kGreyColor.withOpacity(0.3),
+                                width: double.infinity,
+                                height: 100,
+                                child: const Center(
+                                  child: Text('写真が選択されていません'),
+                                ),
+                              ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                FormLabel(
                   '署名',
                   child: widget.lost.status == 0
                       ? Column(
@@ -261,6 +318,11 @@ class _LostDetailScreenState extends State<LostDetailScreen> {
                             lost: widget.lost,
                             returnAt: returnAt,
                             returnUser: returnUserController.text,
+                            returnCustomer: returnCustomerController.text,
+                            returnCustomerAddress:
+                                returnCustomerAddressController.text,
+                            returnCustomerIDImageXFile:
+                                returnCustomerIDImageXFile,
                             signImageController: signImageController,
                             loginUser: widget.loginProvider.user,
                           );

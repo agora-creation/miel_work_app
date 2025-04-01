@@ -146,6 +146,9 @@ class LostProvider with ChangeNotifier {
     required LostModel lost,
     required DateTime returnAt,
     required String returnUser,
+    required String returnCustomer,
+    required String returnCustomerAddress,
+    required XFile? returnCustomerIDImageXFile,
     required SignatureController signImageController,
     required UserModel? loginUser,
   }) async {
@@ -154,6 +157,15 @@ class LostProvider with ChangeNotifier {
     if (returnUser == '') return '返却スタッフは必須入力です';
     if (loginUser == null) return '落とし物の返却に失敗しました';
     try {
+      String returnCustomerIDImage = '';
+      if (returnCustomerIDImageXFile != null) {
+        File returnCustomerIDImageFile = File(returnCustomerIDImageXFile.path);
+        FirebaseStorage storage = FirebaseStorage.instance;
+        String storagePath = 'lost/${lost.id}';
+        final task =
+            await storage.ref(storagePath).putFile(returnCustomerIDImageFile);
+        returnCustomerIDImage = (await task.ref.getDownloadURL());
+      }
       Uint8List? uploadFile = await signImageController.toPngBytes();
       if (uploadFile == null) return '署名のアップロードに失敗しました';
       String fileName = 'sign.png';
@@ -167,6 +179,9 @@ class LostProvider with ChangeNotifier {
         'status': 1,
         'returnAt': returnAt,
         'returnUser': returnUser,
+        'returnCustomer': returnCustomer,
+        'returnCustomerAddress': returnCustomerAddress,
+        'returnCustomerIDImage': returnCustomerIDImage,
         'signImage': signImage,
       });
     } catch (e) {

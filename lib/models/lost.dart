@@ -14,6 +14,9 @@ class LostModel {
   int _status = 0;
   DateTime _returnAt = DateTime.now();
   String _returnUser = '';
+  String _returnCustomer = '';
+  String _returnCustomerAddress = '';
+  String _returnCustomerIDImage = '';
   String _signImage = '';
   List<CommentModel> comments = [];
   List<String> readUserIds = [];
@@ -34,6 +37,9 @@ class LostModel {
   int get status => _status;
   DateTime get returnAt => _returnAt;
   String get returnUser => _returnUser;
+  String get returnCustomer => _returnCustomer;
+  String get returnCustomerAddress => _returnCustomerAddress;
+  String get returnCustomerIDImage => _returnCustomerIDImage;
   String get signImage => _signImage;
   String get createdUserId => _createdUserId;
   String get createdUserName => _createdUserName;
@@ -55,6 +61,9 @@ class LostModel {
     _status = data['status'] ?? 0;
     _returnAt = data['returnAt'].toDate() ?? DateTime.now();
     _returnUser = data['returnUser'] ?? '';
+    _returnCustomer = data['returnCustomer'] ?? '';
+    _returnCustomerAddress = data['returnCustomerAddress'] ?? '';
+    _returnCustomerIDImage = data['returnCustomerIDImage'] ?? '';
     _signImage = data['signImage'] ?? '';
     comments = _convertComments(data['comments'] ?? []);
     readUserIds = _convertReadUserIds(data['readUserIds'] ?? []);
