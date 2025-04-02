@@ -30,7 +30,7 @@ class PlanDishCenterList extends StatelessWidget {
             horizontal: 12,
           ),
           child: Text(
-            '[${dishCenter.userName}]${dateText('HH:mm', dishCenter.startedAt)}〜${dateText('HH:mm', dishCenter.endedAt)}',
+            '[${dishCenter.userName}]${dateText('HH:mm', dishCenter.startedAt)}〜${dateText('HH:mm', dishCenter.endedAt)} ${dishCenter.remarks}',
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

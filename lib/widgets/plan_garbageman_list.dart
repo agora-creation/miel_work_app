@@ -30,7 +30,7 @@ class PlanGarbagemanList extends StatelessWidget {
             horizontal: 12,
           ),
           child: Text(
-            '[${garbageman.userName}]${dateText('HH:mm', garbageman.startedAt)}〜${dateText('HH:mm', garbageman.endedAt)}',
+            '[${garbageman.userName}]${dateText('HH:mm', garbageman.startedAt)}〜${dateText('HH:mm', garbageman.endedAt)} ${garbageman.remarks}',
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

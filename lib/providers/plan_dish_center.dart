@@ -14,6 +14,7 @@ class PlanDishCenterProvider with ChangeNotifier {
     required UserModel? user,
     required DateTime startedAt,
     required DateTime endedAt,
+    required String remarks,
   }) async {
     String? error;
     if (organization == null) return '勤務予定の追加に失敗しました';
@@ -27,6 +28,7 @@ class PlanDishCenterProvider with ChangeNotifier {
         'userName': user.name,
         'startedAt': startedAt,
         'endedAt': endedAt,
+        'remarks': remarks,
         'createdAt': DateTime.now(),
         'expirationAt': startedAt.add(const Duration(days: 365)),
       });
@@ -72,6 +74,7 @@ class PlanDishCenterProvider with ChangeNotifier {
               'userName': dishCenterWeek.userName,
               'startedAt': startedAt,
               'endedAt': endedAt,
+              'remarks': '',
               'createdAt': DateTime.now(),
               'expirationAt': startedAt.add(const Duration(days: 365)),
             });
@@ -90,6 +93,7 @@ class PlanDishCenterProvider with ChangeNotifier {
     required UserModel? user,
     required DateTime startedAt,
     required DateTime endedAt,
+    required String remarks,
   }) async {
     String? error;
     if (organization == null) return '勤務予定の編集に失敗しました';
@@ -102,6 +106,7 @@ class PlanDishCenterProvider with ChangeNotifier {
         'userName': user.name,
         'startedAt': startedAt,
         'endedAt': endedAt,
+        'remarks': remarks,
         'expirationAt': startedAt.add(const Duration(days: 365)),
       });
     } catch (e) {

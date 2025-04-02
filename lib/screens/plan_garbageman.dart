@@ -21,6 +21,7 @@ import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
 import 'package:miel_work_app/widgets/custom_calendar.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
+import 'package:miel_work_app/widgets/custom_text_field.dart';
 import 'package:miel_work_app/widgets/datetime_range_form.dart';
 import 'package:miel_work_app/widgets/form_label.dart';
 import 'package:miel_work_app/widgets/month_picker_button.dart';
@@ -232,6 +233,7 @@ class _AddGarbagemanDialogState extends State<AddGarbagemanDialog> {
   UserModel? selectedUser;
   DateTime startedAt = DateTime.now();
   DateTime endedAt = DateTime.now();
+  TextEditingController remarksController = TextEditingController();
 
   void _init() async {
     OrganizationGroupModel? group = await groupService.selectDataName(
@@ -331,6 +333,15 @@ class _AddGarbagemanDialogState extends State<AddGarbagemanDialog> {
               ),
             ),
           ),
+          const SizedBox(height: 8),
+          FormLabel(
+            '備考',
+            child: CustomTextField(
+              controller: remarksController,
+              textInputType: TextInputType.name,
+              maxLines: 1,
+            ),
+          ),
         ],
       ),
       actions: [
@@ -352,6 +363,7 @@ class _AddGarbagemanDialogState extends State<AddGarbagemanDialog> {
               user: selectedUser,
               startedAt: startedAt,
               endedAt: endedAt,
+              remarks: remarksController.text,
             );
             if (error != null) {
               if (!mounted) return;

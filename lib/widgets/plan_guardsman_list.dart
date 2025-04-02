@@ -30,7 +30,7 @@ class PlanGuardsmanList extends StatelessWidget {
             horizontal: 12,
           ),
           child: Text(
-            '${dateText('HH:mm', guardsman.startedAt)}〜${dateText('HH:mm', guardsman.endedAt)}',
+            '${dateText('HH:mm', guardsman.startedAt)}〜${dateText('HH:mm', guardsman.endedAt)} ${guardsman.remarks}',
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

@@ -12,6 +12,7 @@ class PlanGuardsmanProvider with ChangeNotifier {
     required OrganizationModel? organization,
     required DateTime startedAt,
     required DateTime endedAt,
+    required String remarks,
   }) async {
     String? error;
     if (organization == null) return '勤務予定の追加に失敗しました';
@@ -22,6 +23,7 @@ class PlanGuardsmanProvider with ChangeNotifier {
         'organizationId': organization.id,
         'startedAt': startedAt,
         'endedAt': endedAt,
+        'remarks': remarks,
         'createdAt': DateTime.now(),
         'expirationAt': startedAt.add(const Duration(days: 365)),
       });
@@ -65,6 +67,7 @@ class PlanGuardsmanProvider with ChangeNotifier {
               'organizationId': organization.id,
               'startedAt': startedAt,
               'endedAt': endedAt,
+              'remarks': '',
               'createdAt': DateTime.now(),
               'expirationAt': startedAt.add(const Duration(days: 365)),
             });
@@ -82,6 +85,7 @@ class PlanGuardsmanProvider with ChangeNotifier {
     required OrganizationModel? organization,
     required DateTime startedAt,
     required DateTime endedAt,
+    required String remarks,
   }) async {
     String? error;
     if (organization == null) return '勤務予定の編集に失敗しました';
@@ -91,6 +95,7 @@ class PlanGuardsmanProvider with ChangeNotifier {
         'organizationId': organization.id,
         'startedAt': startedAt,
         'endedAt': endedAt,
+        'remarks': remarks,
         'expirationAt': startedAt.add(const Duration(days: 365)),
       });
     } catch (e) {

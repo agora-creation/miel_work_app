@@ -7,6 +7,7 @@ class PlanDishCenterModel {
   String _userName = '';
   DateTime _startedAt = DateTime.now();
   DateTime _endedAt = DateTime.now();
+  String _remarks = '';
   DateTime _createdAt = DateTime.now();
   DateTime _expirationAt = DateTime.now();
 
@@ -16,6 +17,7 @@ class PlanDishCenterModel {
   String get userName => _userName;
   DateTime get startedAt => _startedAt;
   DateTime get endedAt => _endedAt;
+  String get remarks => _remarks;
   DateTime get createdAt => _createdAt;
   DateTime get expirationAt => _expirationAt;
 
@@ -29,6 +31,7 @@ class PlanDishCenterModel {
     _userName = data['userName'] ?? '';
     _startedAt = data['startedAt'].toDate() ?? DateTime.now();
     _endedAt = data['endedAt'].toDate() ?? DateTime.now();
+    _remarks = data['remarks'] ?? '';
     _createdAt = data['createdAt'].toDate() ?? DateTime.now();
     _expirationAt = data['expirationAt'].toDate() ?? DateTime.now();
   }
