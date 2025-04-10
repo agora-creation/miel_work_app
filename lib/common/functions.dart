@@ -3,6 +3,8 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:intl/intl.dart';
 import 'package:miel_work_app/common/date_machine_util.dart';
 import 'package:miel_work_app/common/style.dart';
@@ -243,4 +245,11 @@ extension TextEx on Text {
     );
     return RichText(text: TextSpan(children: textSpans));
   }
+}
+
+Future<Uint8List> compressBytes(Uint8List list) async {
+  return await FlutterImageCompress.compressWithList(
+    list,
+    quality: 60,
+  );
 }

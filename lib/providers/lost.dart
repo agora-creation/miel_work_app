@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/lost.dart';
 import 'package:miel_work_app/models/organization.dart';
@@ -41,7 +41,11 @@ class LostProvider with ChangeNotifier {
         File itemImageFile = File(itemImageXFile.path);
         FirebaseStorage storage = FirebaseStorage.instance;
         String storagePath = 'lost/$id';
-        final task = await storage.ref(storagePath).putFile(itemImageFile);
+        Uint8List? bytes = await FlutterImageCompress.compressWithFile(
+          itemImageFile.path,
+          quality: 60,
+        );
+        final task = await storage.ref(storagePath).putData(bytes!);
         itemImage = (await task.ref.getDownloadURL());
       }
       String itemNumber = await _lostService.getLastItemNumber(
@@ -112,7 +116,11 @@ class LostProvider with ChangeNotifier {
         File itemImageFile = File(itemImageXFile.path);
         FirebaseStorage storage = FirebaseStorage.instance;
         String storagePath = 'lost/${lost.id}';
-        final task = await storage.ref(storagePath).putFile(itemImageFile);
+        Uint8List? bytes = await FlutterImageCompress.compressWithFile(
+          itemImageFile.path,
+          quality: 60,
+        );
+        final task = await storage.ref(storagePath).putData(bytes!);
         itemImage = (await task.ref.getDownloadURL());
       }
       if (itemImage != null) {
@@ -171,6 +179,7 @@ class LostProvider with ChangeNotifier {
       String fileName = 'sign.png';
       Reference storageRef =
           FirebaseStorage.instance.ref().child('lost/${lost.id}/$fileName');
+      uploadFile = await compressBytes(uploadFile);
       UploadTask uploadTask = storageRef.putData(uploadFile);
       TaskSnapshot downloadUrl = await uploadTask;
       String signImage = (await downloadUrl.ref.getDownloadURL());

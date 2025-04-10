@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:miel_work_app/models/chat.dart';
 import 'package:miel_work_app/models/chat_message.dart';
 import 'package:miel_work_app/models/reply_source.dart';
@@ -99,7 +100,11 @@ class ChatMessageProvider with ChangeNotifier {
       File imageFile = File(imageXFile.path);
       FirebaseStorage storage = FirebaseStorage.instance;
       String storagePath = 'chat/${chat.id}/$id';
-      final task = await storage.ref(storagePath).putFile(imageFile);
+      Uint8List? bytes = await FlutterImageCompress.compressWithFile(
+        imageFile.path,
+        quality: 60,
+      );
+      final task = await storage.ref(storagePath).putData(bytes!);
       List<Map> readUsers = [];
       readUsers.add({
         'userId': loginUser.id,

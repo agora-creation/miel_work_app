@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/problem.dart';
@@ -46,7 +47,11 @@ class ProblemProvider with ChangeNotifier {
         File imageFile = File(imageXFile.path);
         FirebaseStorage storage = FirebaseStorage.instance;
         String storagePath = 'problem/$id';
-        final task = await storage.ref(storagePath).putFile(imageFile);
+        Uint8List? bytes = await FlutterImageCompress.compressWithFile(
+          imageFile.path,
+          quality: 60,
+        );
+        final task = await storage.ref(storagePath).putData(bytes!);
         image = (await task.ref.getDownloadURL());
       }
       String image2 = '';
@@ -54,7 +59,11 @@ class ProblemProvider with ChangeNotifier {
         File image2File = File(image2XFile.path);
         FirebaseStorage storage = FirebaseStorage.instance;
         String storagePath = 'problem/$id';
-        final task = await storage.ref(storagePath).putFile(image2File);
+        Uint8List? bytes = await FlutterImageCompress.compressWithFile(
+          image2File.path,
+          quality: 60,
+        );
+        final task = await storage.ref(storagePath).putData(bytes!);
         image2 = (await task.ref.getDownloadURL());
       }
       String image3 = '';
@@ -62,7 +71,11 @@ class ProblemProvider with ChangeNotifier {
         File image3File = File(image3XFile.path);
         FirebaseStorage storage = FirebaseStorage.instance;
         String storagePath = 'problem/$id';
-        final task = await storage.ref(storagePath).putFile(image3File);
+        Uint8List? bytes = await FlutterImageCompress.compressWithFile(
+          image3File.path,
+          quality: 60,
+        );
+        final task = await storage.ref(storagePath).putData(bytes!);
         image3 = (await task.ref.getDownloadURL());
       }
       _problemService.create({
@@ -140,7 +153,11 @@ class ProblemProvider with ChangeNotifier {
         File imageFile = File(imageXFile.path);
         FirebaseStorage storage = FirebaseStorage.instance;
         String storagePath = 'problem/${problem.id}';
-        final task = await storage.ref(storagePath).putFile(imageFile);
+        Uint8List? bytes = await FlutterImageCompress.compressWithFile(
+          imageFile.path,
+          quality: 60,
+        );
+        final task = await storage.ref(storagePath).putData(bytes!);
         image = (await task.ref.getDownloadURL());
       }
       String? image2;
@@ -148,7 +165,11 @@ class ProblemProvider with ChangeNotifier {
         File image2File = File(image2XFile.path);
         FirebaseStorage storage = FirebaseStorage.instance;
         String storagePath = 'problem/${problem.id}';
-        final task = await storage.ref(storagePath).putFile(image2File);
+        Uint8List? bytes = await FlutterImageCompress.compressWithFile(
+          image2File.path,
+          quality: 60,
+        );
+        final task = await storage.ref(storagePath).putData(bytes!);
         image2 = (await task.ref.getDownloadURL());
       }
       String? image3;
@@ -156,7 +177,11 @@ class ProblemProvider with ChangeNotifier {
         File image3File = File(image3XFile.path);
         FirebaseStorage storage = FirebaseStorage.instance;
         String storagePath = 'problem/${problem.id}';
-        final task = await storage.ref(storagePath).putFile(image3File);
+        Uint8List? bytes = await FlutterImageCompress.compressWithFile(
+          image3File.path,
+          quality: 60,
+        );
+        final task = await storage.ref(storagePath).putData(bytes!);
         image3 = (await task.ref.getDownloadURL());
       }
       if (image != null || image2 != null || image3 != null) {
