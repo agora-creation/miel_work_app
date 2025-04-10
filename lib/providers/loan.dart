@@ -170,7 +170,10 @@ class LoanProvider with ChangeNotifier {
       String fileName = 'sign.png';
       Reference storageRef =
           FirebaseStorage.instance.ref().child('loan/${loan.id}/$fileName');
-      uploadFile = await compressBytes(uploadFile);
+      uploadFile = await FlutterImageCompress.compressWithList(
+        uploadFile,
+        quality: 60,
+      );
       UploadTask uploadTask = storageRef.putData(uploadFile);
       TaskSnapshot downloadUrl = await uploadTask;
       String signImage = (await downloadUrl.ref.getDownloadURL());

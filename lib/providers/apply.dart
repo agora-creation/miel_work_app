@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/apply.dart';
@@ -53,7 +54,10 @@ class ApplyProvider with ChangeNotifier {
             .child('/$id$ext');
         Uint8List? bytes;
         if (imageExtensions.contains(ext)) {
-          bytes = await compressBytes(pickedFile.readAsBytesSync());
+          bytes = await FlutterImageCompress.compressWithList(
+            pickedFile.readAsBytesSync(),
+            quality: 60,
+          );
         } else {
           bytes = pickedFile.readAsBytesSync();
         }
@@ -73,7 +77,10 @@ class ApplyProvider with ChangeNotifier {
             .child('/${id}_2$ext');
         Uint8List? bytes;
         if (imageExtensions.contains(ext)) {
-          bytes = await compressBytes(pickedFile2.readAsBytesSync());
+          bytes = await FlutterImageCompress.compressWithList(
+            pickedFile2.readAsBytesSync(),
+            quality: 60,
+          );
         } else {
           bytes = pickedFile2.readAsBytesSync();
         }
@@ -93,7 +100,10 @@ class ApplyProvider with ChangeNotifier {
             .child('/${id}_3$ext');
         Uint8List? bytes;
         if (imageExtensions.contains(ext)) {
-          bytes = await compressBytes(pickedFile3.readAsBytesSync());
+          bytes = await FlutterImageCompress.compressWithList(
+            pickedFile3.readAsBytesSync(),
+            quality: 60,
+          );
         } else {
           bytes = pickedFile3.readAsBytesSync();
         }
@@ -113,7 +123,10 @@ class ApplyProvider with ChangeNotifier {
             .child('/${id}_4$ext');
         Uint8List? bytes;
         if (imageExtensions.contains(ext)) {
-          bytes = await compressBytes(pickedFile4.readAsBytesSync());
+          bytes = await FlutterImageCompress.compressWithList(
+            pickedFile4.readAsBytesSync(),
+            quality: 60,
+          );
         } else {
           bytes = pickedFile4.readAsBytesSync();
         }
@@ -133,7 +146,10 @@ class ApplyProvider with ChangeNotifier {
             .child('/${id}_5$ext');
         Uint8List? bytes;
         if (imageExtensions.contains(ext)) {
-          bytes = await compressBytes(pickedFile5.readAsBytesSync());
+          bytes = await FlutterImageCompress.compressWithList(
+            pickedFile5.readAsBytesSync(),
+            quality: 60,
+          );
         } else {
           bytes = pickedFile5.readAsBytesSync();
         }
