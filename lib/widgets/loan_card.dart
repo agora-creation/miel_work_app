@@ -27,19 +27,6 @@ class LoanCard extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             child: Column(
               children: [
-                loan.itemImage != ''
-                    ? Image.network(
-                        loan.itemImage,
-                        fit: BoxFit.cover,
-                      )
-                    : Container(
-                        color: kGreyColor.withOpacity(0.3),
-                        width: double.infinity,
-                        height: 150,
-                        child: const Center(
-                          child: Text('写真なし'),
-                        ),
-                      ),
                 Table(
                   border: TableBorder.all(color: kBorderColor),
                   columnWidths: const {

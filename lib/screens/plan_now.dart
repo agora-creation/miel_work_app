@@ -95,9 +95,10 @@ class _PlanNowScreenState extends State<PlanNowScreen> {
         icon: const FaIcon(
           FontAwesomeIcons.downLong,
           color: kWhiteColor,
+          size: 16,
         ),
         label: const Text(
-          'ホームへ',
+          'ホームへ戻る',
           style: TextStyle(
             color: kWhiteColor,
             fontSize: 18,

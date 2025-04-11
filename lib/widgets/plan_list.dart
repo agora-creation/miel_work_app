@@ -58,7 +58,7 @@ class PlanList extends StatelessWidget {
                     groupName,
                     style: const TextStyle(
                       color: kWhiteColor,
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,

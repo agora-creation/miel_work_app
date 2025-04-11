@@ -22,7 +22,7 @@ class RequestInterviewList extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(color: kBorderColor)),
         ),
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -39,11 +39,17 @@ class RequestInterviewList extends StatelessWidget {
                   ),
                   Text(
                     '申込担当者名: ${interview.companyUserName}',
-                    style: const TextStyle(fontSize: 14),
+                    style: const TextStyle(
+                      color: kGreyColor,
+                      fontSize: 14,
+                    ),
                   ),
                   Text(
                     '申込日時: ${dateText('yyyy/MM/dd HH:mm', interview.createdAt)}',
-                    style: const TextStyle(fontSize: 14),
+                    style: const TextStyle(
+                      color: kGreyColor,
+                      fontSize: 14,
+                    ),
                   ),
                   interview.approval == 1
                       ? Text(
@@ -51,7 +57,6 @@ class RequestInterviewList extends StatelessWidget {
                           style: const TextStyle(
                             color: kRedColor,
                             fontSize: 14,
-                            fontWeight: FontWeight.bold,
                           ),
                         )
                       : Container(),

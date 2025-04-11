@@ -28,7 +28,7 @@ class NoticeList extends StatelessWidget {
               : kWhiteColor,
           border: Border(bottom: BorderSide(color: kBorderColor)),
         ),
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -45,22 +45,30 @@ class NoticeList extends StatelessWidget {
                   ),
                   Text(
                     dateText('yyyy/MM/dd HH:mm', notice.createdAt),
-                    style: const TextStyle(fontSize: 14),
+                    style: const TextStyle(
+                      color: kGreyColor,
+                      fontSize: 14,
+                    ),
                   ),
-                  notice.file != ''
-                      ? Chip(
-                          label: const Text('添付あり'),
-                          backgroundColor: kCyanColor.withOpacity(0.3),
-                        )
-                      : Container(),
                 ],
               ),
             ),
-            const FaIcon(
-              FontAwesomeIcons.chevronRight,
-              color: kDisabledColor,
-              size: 16,
-            ),
+            notice.file != ''
+                ? const Chip(
+                    label: Icon(Icons.file_present),
+                    backgroundColor: kCyanColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8),
+                      ),
+                      side: BorderSide.none,
+                    ),
+                  )
+                : const FaIcon(
+                    FontAwesomeIcons.chevronRight,
+                    color: kDisabledColor,
+                    size: 16,
+                  ),
           ],
         ),
       ),

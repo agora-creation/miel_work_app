@@ -22,7 +22,7 @@ class RequestFacilityList extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(color: kBorderColor)),
         ),
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -39,11 +39,17 @@ class RequestFacilityList extends StatelessWidget {
                   ),
                   Text(
                     '店舗責任者名: ${facility.companyUserName}',
-                    style: const TextStyle(fontSize: 14),
+                    style: const TextStyle(
+                      color: kGreyColor,
+                      fontSize: 14,
+                    ),
                   ),
                   Text(
                     '申込日時: ${dateText('yyyy/MM/dd HH:mm', facility.createdAt)}',
-                    style: const TextStyle(fontSize: 14),
+                    style: const TextStyle(
+                      color: kGreyColor,
+                      fontSize: 14,
+                    ),
                   ),
                   facility.approval == 1
                       ? Text(
@@ -51,7 +57,6 @@ class RequestFacilityList extends StatelessWidget {
                           style: const TextStyle(
                             color: kRedColor,
                             fontSize: 14,
-                            fontWeight: FontWeight.bold,
                           ),
                         )
                       : Container(),

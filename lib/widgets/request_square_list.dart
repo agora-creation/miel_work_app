@@ -22,7 +22,7 @@ class RequestSquareList extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(color: kBorderColor)),
         ),
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -39,11 +39,17 @@ class RequestSquareList extends StatelessWidget {
                   ),
                   Text(
                     '申込担当者名: ${square.companyUserName}',
-                    style: const TextStyle(fontSize: 14),
+                    style: const TextStyle(
+                      color: kGreyColor,
+                      fontSize: 14,
+                    ),
                   ),
                   Text(
                     '申込日時: ${dateText('yyyy/MM/dd HH:mm', square.createdAt)}',
-                    style: const TextStyle(fontSize: 14),
+                    style: const TextStyle(
+                      color: kGreyColor,
+                      fontSize: 14,
+                    ),
                   ),
                   square.approval == 1
                       ? Text(
@@ -51,7 +57,6 @@ class RequestSquareList extends StatelessWidget {
                           style: const TextStyle(
                             color: kRedColor,
                             fontSize: 14,
-                            fontWeight: FontWeight.bold,
                           ),
                         )
                       : Container(),
