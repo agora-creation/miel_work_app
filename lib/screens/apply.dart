@@ -92,7 +92,12 @@ class _ApplyScreenState extends State<ApplyScreen> {
           body: SafeArea(
             child: Column(
               children: [
-                SearchField(controller: keywordController),
+                SearchField(
+                  controller: keywordController,
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                ),
                 Expanded(
                   child: TabBarView(
                     children: [

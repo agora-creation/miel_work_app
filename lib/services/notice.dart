@@ -78,9 +78,23 @@ class NoticeService {
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
       NoticeModel notice = NoticeModel.fromSnapshot(doc);
       if (currentGroup == null) {
-        ret.add(notice);
+        if (keyword != null && keyword != '') {
+          if (notice.title.contains(keyword) ||
+              notice.content.contains(keyword)) {
+            ret.add(notice);
+          }
+        } else {
+          ret.add(notice);
+        }
       } else if (notice.groupId == currentGroup.id || notice.groupId == '') {
-        ret.add(notice);
+        if (keyword != null && keyword != '') {
+          if (notice.title.contains(keyword) ||
+              notice.content.contains(keyword)) {
+            ret.add(notice);
+          }
+        } else {
+          ret.add(notice);
+        }
       }
     }
     return ret;

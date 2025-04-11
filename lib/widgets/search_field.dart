@@ -3,16 +3,19 @@ import 'package:miel_work_app/common/style.dart';
 
 class SearchField extends StatelessWidget {
   final TextEditingController controller;
+  final Function(String) onChanged;
 
   const SearchField({
     required this.controller,
+    required this.onChanged,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: TextEditingController(),
+      controller: controller,
+      onChanged: onChanged,
       decoration: InputDecoration(
         hintText: 'キーワード検索',
         prefixIcon: const Icon(Icons.search),

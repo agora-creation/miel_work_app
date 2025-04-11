@@ -68,7 +68,17 @@ class LoanService {
   }) {
     List<LoanModel> ret = [];
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
-      ret.add(LoanModel.fromSnapshot(doc));
+      LoanModel loan = LoanModel.fromSnapshot(doc);
+      if (keyword != null && keyword != '') {
+        if (loan.loanUser.contains(keyword) ||
+            loan.loanCompany.contains(keyword) ||
+            loan.loanStaff.contains(keyword) ||
+            loan.itemName.contains(keyword)) {
+          ret.add(loan);
+        }
+      } else {
+        ret.add(loan);
+      }
     }
     return ret;
   }

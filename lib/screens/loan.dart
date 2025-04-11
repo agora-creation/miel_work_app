@@ -92,7 +92,12 @@ class _LoanScreenState extends State<LoanScreen> {
           body: SafeArea(
             child: Column(
               children: [
-                SearchField(controller: keywordController),
+                SearchField(
+                  controller: keywordController,
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                ),
                 Expanded(
                   child: TabBarView(
                     children: [

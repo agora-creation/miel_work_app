@@ -92,7 +92,17 @@ class ProblemService {
   }) {
     List<ProblemModel> ret = [];
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
-      ret.add(ProblemModel.fromSnapshot(doc));
+      ProblemModel problem = ProblemModel.fromSnapshot(doc);
+      if (keyword != null && keyword != '') {
+        if (problem.title.contains(keyword) ||
+            problem.picName.contains(keyword) ||
+            problem.targetName.contains(keyword) ||
+            problem.details.contains(keyword)) {
+          ret.add(problem);
+        }
+      } else {
+        ret.add(problem);
+      }
     }
     return ret;
   }

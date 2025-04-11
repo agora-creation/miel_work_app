@@ -88,7 +88,12 @@ class _ProblemScreenState extends State<ProblemScreen> {
           body: SafeArea(
             child: Column(
               children: [
-                SearchField(controller: TextEditingController()),
+                SearchField(
+                  controller: keywordController,
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                ),
                 Expanded(
                   child: TabBarView(
                     children: [

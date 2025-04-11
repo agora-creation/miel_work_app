@@ -87,7 +87,16 @@ class LostService {
   }) {
     List<LostModel> ret = [];
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
-      ret.add(LostModel.fromSnapshot(doc));
+      LostModel lost = LostModel.fromSnapshot(doc);
+      if (keyword != null && keyword != '') {
+        if (lost.discoveryPlace.contains(keyword) ||
+            lost.discoveryUser.contains(keyword) ||
+            lost.itemName.contains(keyword)) {
+          ret.add(lost);
+        }
+      } else {
+        ret.add(lost);
+      }
     }
     return ret;
   }

@@ -72,9 +72,23 @@ class ApplyService {
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
       ApplyModel apply = ApplyModel.fromSnapshot(doc);
       if (currentGroup == null) {
-        ret.add(apply);
+        if (keyword != null && keyword != '') {
+          if (apply.title.contains(keyword) ||
+              apply.content.contains(keyword)) {
+            ret.add(apply);
+          }
+        } else {
+          ret.add(apply);
+        }
       } else if (apply.groupId == currentGroup.id || apply.groupId == '') {
-        ret.add(apply);
+        if (keyword != null && keyword != '') {
+          if (apply.title.contains(keyword) ||
+              apply.content.contains(keyword)) {
+            ret.add(apply);
+          }
+        } else {
+          ret.add(apply);
+        }
       }
     }
     return ret;

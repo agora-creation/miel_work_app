@@ -75,7 +75,12 @@ class _NoticeScreenState extends State<NoticeScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              SearchField(controller: keywordController),
+              SearchField(
+                controller: keywordController,
+                onChanged: (value) {
+                  setState(() {});
+                },
+              ),
               Expanded(
                 child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                   stream: noticeService.streamList(
