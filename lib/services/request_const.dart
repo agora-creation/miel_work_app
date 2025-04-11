@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/request_const.dart';
 
 class RequestConstService {
@@ -31,25 +30,13 @@ class RequestConstService {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
-    required DateTime? searchStart,
-    required DateTime? searchEnd,
     required List<int> approval,
   }) {
-    if (searchStart != null && searchEnd != null) {
-      Timestamp startAt = convertTimestamp(searchStart, false);
-      Timestamp endAt = convertTimestamp(searchEnd, true);
-      return FirebaseFirestore.instance
-          .collection(collection)
-          .where('approval', whereIn: approval)
-          .orderBy('createdAt', descending: true)
-          .startAt([endAt]).endAt([startAt]).snapshots();
-    } else {
-      return FirebaseFirestore.instance
-          .collection(collection)
-          .where('approval', whereIn: approval)
-          .orderBy('createdAt', descending: true)
-          .snapshots();
-    }
+    return FirebaseFirestore.instance
+        .collection(collection)
+        .where('approval', whereIn: approval)
+        .orderBy('createdAt', descending: true)
+        .snapshots();
   }
 
   bool checkAlert({

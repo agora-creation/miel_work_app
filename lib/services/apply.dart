@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/apply.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 
@@ -41,27 +40,14 @@ class ApplyService {
 
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
-    required DateTime? searchStart,
-    required DateTime? searchEnd,
     required List<int> approval,
   }) {
-    if (searchStart != null && searchEnd != null) {
-      Timestamp startAt = convertTimestamp(searchStart, false);
-      Timestamp endAt = convertTimestamp(searchEnd, true);
-      return FirebaseFirestore.instance
-          .collection(collection)
-          .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .where('approval', whereIn: approval)
-          .orderBy('createdAt', descending: true)
-          .startAt([endAt]).endAt([startAt]).snapshots();
-    } else {
-      return FirebaseFirestore.instance
-          .collection(collection)
-          .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .where('approval', whereIn: approval)
-          .orderBy('createdAt', descending: true)
-          .snapshots();
-    }
+    return FirebaseFirestore.instance
+        .collection(collection)
+        .where('organizationId', isEqualTo: organizationId ?? 'error')
+        .where('approval', whereIn: approval)
+        .orderBy('createdAt', descending: true)
+        .snapshots();
   }
 
   bool checkAlert({
@@ -80,6 +66,7 @@ class ApplyService {
   List<ApplyModel> generateList({
     required QuerySnapshot<Map<String, dynamic>>? data,
     required OrganizationGroupModel? currentGroup,
+    String? keyword,
   }) {
     List<ApplyModel> ret = [];
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {

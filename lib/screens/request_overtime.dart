@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/request_overtime.dart';
 import 'package:miel_work_app/providers/home.dart';
@@ -29,8 +28,6 @@ class RequestOvertimeScreen extends StatefulWidget {
 
 class _RequestOvertimeScreenState extends State<RequestOvertimeScreen> {
   RequestOvertimeService overtimeService = RequestOvertimeService();
-  DateTime? searchStart;
-  DateTime? searchEnd;
 
   void _init() async {
     await ConfigService().checkReview();
@@ -56,37 +53,6 @@ class _RequestOvertimeScreenState extends State<RequestOvertimeScreen> {
             style: TextStyle(color: kBlackColor),
           ),
           actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
-            ),
-            IconButton(
-              onPressed: () async {
-                var selected = await showDataRangePickerDialog(
-                  context: context,
-                  startValue: searchStart,
-                  endValue: searchEnd,
-                );
-                if (selected != null &&
-                    selected.first != null &&
-                    selected.last != null) {
-                  var diff = selected.last!.difference(selected.first!);
-                  int diffDays = diff.inDays;
-                  if (diffDays > 31) {
-                    if (!mounted) return;
-                    showMessage(context, '1ヵ月以上の範囲が選択されています', false);
-                    return;
-                  }
-                  searchStart = selected.first;
-                  searchEnd = selected.last;
-                  setState(() {});
-                }
-              },
-              icon: const FaIcon(
-                FontAwesomeIcons.calendarDays,
-                color: kBlackColor,
-              ),
-            ),
             IconButton(
               icon: const FaIcon(
                 FontAwesomeIcons.xmark,
@@ -122,8 +88,6 @@ class _RequestOvertimeScreenState extends State<RequestOvertimeScreen> {
             children: [
               StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: overtimeService.streamList(
-                  searchStart: searchStart,
-                  searchEnd: searchEnd,
                   approval: [0],
                 ),
                 builder: (context, snapshot) {
@@ -160,8 +124,6 @@ class _RequestOvertimeScreenState extends State<RequestOvertimeScreen> {
               ),
               StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: overtimeService.streamList(
-                  searchStart: searchStart,
-                  searchEnd: searchEnd,
                   approval: [1],
                 ),
                 builder: (context, snapshot) {
@@ -198,8 +160,6 @@ class _RequestOvertimeScreenState extends State<RequestOvertimeScreen> {
               ),
               StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: overtimeService.streamList(
-                  searchStart: searchStart,
-                  searchEnd: searchEnd,
                   approval: [9],
                 ),
                 builder: (context, snapshot) {

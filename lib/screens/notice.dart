@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/notice.dart';
 import 'package:miel_work_app/providers/home.dart';
@@ -12,6 +11,7 @@ import 'package:miel_work_app/services/config.dart';
 import 'package:miel_work_app/services/notice.dart';
 import 'package:miel_work_app/widgets/custom_footer.dart';
 import 'package:miel_work_app/widgets/notice_list.dart';
+import 'package:miel_work_app/widgets/search_field.dart';
 import 'package:page_transition/page_transition.dart';
 
 class NoticeScreen extends StatefulWidget {
@@ -30,8 +30,7 @@ class NoticeScreen extends StatefulWidget {
 
 class _NoticeScreenState extends State<NoticeScreen> {
   NoticeService noticeService = NoticeService();
-  DateTime? searchStart;
-  DateTime? searchEnd;
+  TextEditingController keywordController = TextEditingController();
 
   void _init() async {
     await ConfigService().checkReview();
@@ -51,126 +50,106 @@ class _NoticeScreenState extends State<NoticeScreen> {
     } else {
       appBarTitle = '全てのお知らせ';
     }
-    return Scaffold(
-      backgroundColor: kWhiteColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
         backgroundColor: kWhiteColor,
-        title: Text(
-          appBarTitle,
-          style: const TextStyle(color: kBlackColor),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: kWhiteColor,
+          title: Text(
+            appBarTitle,
+            style: const TextStyle(color: kBlackColor),
+          ),
+          actions: [
+            IconButton(
+              icon: const FaIcon(
+                FontAwesomeIcons.xmark,
+                color: kBlackColor,
+              ),
+              onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+            ),
+          ],
+          shape: Border(bottom: BorderSide(color: kBorderColor)),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
-          ),
-          IconButton(
-            onPressed: () async {
-              var selected = await showDataRangePickerDialog(
-                context: context,
-                startValue: searchStart,
-                endValue: searchEnd,
-              );
-              if (selected != null &&
-                  selected.first != null &&
-                  selected.last != null) {
-                var diff = selected.last!.difference(selected.first!);
-                int diffDays = diff.inDays;
-                if (diffDays > 31) {
-                  if (!mounted) return;
-                  showMessage(context, '1ヵ月以上の範囲が選択されています', false);
-                  return;
-                }
-                searchStart = selected.first;
-                searchEnd = selected.last;
-                setState(() {});
-              }
-            },
-            icon: const FaIcon(
-              FontAwesomeIcons.calendarDays,
-              color: kBlackColor,
-            ),
-          ),
-          IconButton(
-            icon: const FaIcon(
-              FontAwesomeIcons.xmark,
-              color: kBlackColor,
-            ),
-            onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
-          ),
-        ],
-        shape: Border(bottom: BorderSide(color: kBorderColor)),
-      ),
-      body: SafeArea(
-        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: noticeService.streamList(
-            organizationId: widget.loginProvider.organization?.id,
-            searchStart: searchStart,
-            searchEnd: searchEnd,
-          ),
-          builder: (context, snapshot) {
-            List<NoticeModel> notices = [];
-            if (snapshot.hasData) {
-              notices = noticeService.generateList(
-                data: snapshot.data,
-                currentGroup: widget.homeProvider.currentGroup,
-              );
-            }
-            if (notices.isEmpty) {
-              return const Center(child: Text('お知らせはありません'));
-            }
-            return ListView.builder(
-              itemCount: notices.length,
-              itemBuilder: (context, index) {
-                NoticeModel notice = notices[index];
-                return NoticeList(
-                  notice: notice,
-                  user: widget.loginProvider.user,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                        type: PageTransitionType.rightToLeft,
-                        child: NoticeDetailScreen(
-                          loginProvider: widget.loginProvider,
-                          homeProvider: widget.homeProvider,
+        body: SafeArea(
+          child: Column(
+            children: [
+              SearchField(controller: keywordController),
+              Expanded(
+                child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                  stream: noticeService.streamList(
+                    organizationId: widget.loginProvider.organization?.id,
+                  ),
+                  builder: (context, snapshot) {
+                    List<NoticeModel> notices = [];
+                    if (snapshot.hasData) {
+                      notices = noticeService.generateList(
+                        data: snapshot.data,
+                        currentGroup: widget.homeProvider.currentGroup,
+                        keyword: keywordController.text,
+                      );
+                    }
+                    if (notices.isEmpty) {
+                      return const Center(child: Text('お知らせはありません'));
+                    }
+                    return ListView.builder(
+                      itemCount: notices.length,
+                      itemBuilder: (context, index) {
+                        NoticeModel notice = notices[index];
+                        return NoticeList(
                           notice: notice,
-                        ),
-                      ),
+                          user: widget.loginProvider.user,
+                          onTap: () {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: NoticeDetailScreen(
+                                  loginProvider: widget.loginProvider,
+                                  homeProvider: widget.homeProvider,
+                                  notice: notice,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
                     );
                   },
-                );
-              },
+                ),
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+            Navigator.push(
+              context,
+              PageTransition(
+                type: PageTransitionType.rightToLeft,
+                child: NoticeAddScreen(
+                  loginProvider: widget.loginProvider,
+                  homeProvider: widget.homeProvider,
+                ),
+              ),
             );
           },
+          icon: const FaIcon(
+            FontAwesomeIcons.plus,
+            color: kWhiteColor,
+          ),
+          label: const Text(
+            '追加する',
+            style: TextStyle(color: kWhiteColor),
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-            context,
-            PageTransition(
-              type: PageTransitionType.rightToLeft,
-              child: NoticeAddScreen(
-                loginProvider: widget.loginProvider,
-                homeProvider: widget.homeProvider,
-              ),
-            ),
-          );
-        },
-        icon: const FaIcon(
-          FontAwesomeIcons.plus,
-          color: kWhiteColor,
+        bottomNavigationBar: CustomFooter(
+          loginProvider: widget.loginProvider,
+          homeProvider: widget.homeProvider,
         ),
-        label: const Text(
-          '追加する',
-          style: TextStyle(color: kWhiteColor),
-        ),
-      ),
-      bottomNavigationBar: CustomFooter(
-        loginProvider: widget.loginProvider,
-        homeProvider: widget.homeProvider,
       ),
     );
   }

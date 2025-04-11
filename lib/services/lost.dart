@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/lost.dart';
 
 class LostService {
@@ -59,27 +58,14 @@ class LostService {
 
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
-    required DateTime? searchStart,
-    required DateTime? searchEnd,
     required List<int> searchStatus,
   }) {
-    if (searchStart != null && searchEnd != null) {
-      Timestamp startAt = convertTimestamp(searchStart, false);
-      Timestamp endAt = convertTimestamp(searchEnd, true);
-      return FirebaseFirestore.instance
-          .collection(collection)
-          .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .where('status', whereIn: searchStatus)
-          .orderBy('createdAt', descending: true)
-          .startAt([endAt]).endAt([startAt]).snapshots();
-    } else {
-      return FirebaseFirestore.instance
-          .collection(collection)
-          .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .where('status', whereIn: searchStatus)
-          .orderBy('createdAt', descending: true)
-          .snapshots();
-    }
+    return FirebaseFirestore.instance
+        .collection(collection)
+        .where('organizationId', isEqualTo: organizationId ?? 'error')
+        .where('status', whereIn: searchStatus)
+        .orderBy('createdAt', descending: true)
+        .snapshots();
   }
 
   bool checkAlert({
@@ -97,18 +83,11 @@ class LostService {
 
   List<LostModel> generateList({
     required QuerySnapshot<Map<String, dynamic>>? data,
-    String? itemName,
+    String? keyword,
   }) {
     List<LostModel> ret = [];
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {
-      LostModel lost = LostModel.fromSnapshot(doc);
-      if (itemName != null) {
-        if (lost.itemName.contains(itemName)) {
-          ret.add(lost);
-        }
-      } else {
-        ret.add(lost);
-      }
+      ret.add(LostModel.fromSnapshot(doc));
     }
     return ret;
   }

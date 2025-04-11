@@ -122,8 +122,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 stream: noticeService.streamList(
                                   organizationId:
                                       loginProvider.organization?.id,
-                                  searchStart: null,
-                                  searchEnd: null,
                                 ),
                                 builder: (context, snapshot) {
                                   bool alert = false;
@@ -220,8 +218,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 stream: applyService.streamList(
                                   organizationId:
                                       loginProvider.organization?.id,
-                                  searchStart: null,
-                                  searchEnd: null,
                                   approval: [0],
                                 ),
                                 builder: (context, snapshot) {
@@ -257,33 +253,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                   QuerySnapshot<Map<String, dynamic>>>(
                                 streams: StreamTuple6(
                                   interviewService.streamList(
-                                    searchStart: null,
-                                    searchEnd: null,
                                     approval: [0],
                                   )!,
                                   squareService.streamList(
-                                    searchStart: null,
-                                    searchEnd: null,
                                     approval: [0],
                                   )!,
                                   facilityService.streamList(
-                                    searchStart: null,
-                                    searchEnd: null,
                                     approval: [0],
                                   )!,
                                   cycleService.streamList(
-                                    searchStart: null,
-                                    searchEnd: null,
                                     approval: [0],
                                   )!,
                                   overtimeService.streamList(
-                                    searchStart: null,
-                                    searchEnd: null,
                                     approval: [0],
                                   )!,
                                   constService.streamList(
-                                    searchStart: null,
-                                    searchEnd: null,
                                     approval: [0],
                                   )!,
                                 ),
@@ -353,8 +337,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 stream: lostService.streamList(
                                   organizationId:
                                       loginProvider.organization?.id,
-                                  searchStart: null,
-                                  searchEnd: null,
                                   searchStatus: [0],
                                 ),
                                 builder: (context, snapshot) {
@@ -386,8 +368,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 stream: loanService.streamList(
                                   organizationId:
                                       loginProvider.organization?.id,
-                                  searchStart: null,
-                                  searchEnd: null,
                                   searchStatus: [0],
                                 ),
                                 builder: (context, snapshot) {
@@ -611,8 +591,6 @@ class RequestSelectDialog extends StatelessWidget {
             children: [
               StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: interviewService.streamList(
-                  searchStart: null,
-                  searchEnd: null,
                   approval: [0],
                 ),
                 builder: (context, snapshot) {
@@ -637,8 +615,6 @@ class RequestSelectDialog extends StatelessWidget {
               ),
               StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: squareService.streamList(
-                  searchStart: null,
-                  searchEnd: null,
                   approval: [0],
                 ),
                 builder: (context, snapshot) {
@@ -663,8 +639,6 @@ class RequestSelectDialog extends StatelessWidget {
               ),
               StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: facilityService.streamList(
-                  searchStart: null,
-                  searchEnd: null,
                   approval: [0],
                 ),
                 builder: (context, snapshot) {
@@ -689,8 +663,6 @@ class RequestSelectDialog extends StatelessWidget {
               ),
               StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: cycleService.streamList(
-                  searchStart: null,
-                  searchEnd: null,
                   approval: [0],
                 ),
                 builder: (context, snapshot) {
@@ -715,8 +687,6 @@ class RequestSelectDialog extends StatelessWidget {
               ),
               StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: overtimeService.streamList(
-                  searchStart: null,
-                  searchEnd: null,
                   approval: [0],
                 ),
                 builder: (context, snapshot) {
@@ -741,8 +711,6 @@ class RequestSelectDialog extends StatelessWidget {
               ),
               StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: constService.streamList(
-                  searchStart: null,
-                  searchEnd: null,
                   approval: [0],
                 ),
                 builder: (context, snapshot) {

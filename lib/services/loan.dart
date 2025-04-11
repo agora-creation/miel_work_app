@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/loan.dart';
 
 class LoanService {
@@ -40,27 +39,14 @@ class LoanService {
 
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
-    required DateTime? searchStart,
-    required DateTime? searchEnd,
     required List<int> searchStatus,
   }) {
-    if (searchStart != null && searchEnd != null) {
-      Timestamp startAt = convertTimestamp(searchStart, false);
-      Timestamp endAt = convertTimestamp(searchEnd, true);
-      return FirebaseFirestore.instance
-          .collection(collection)
-          .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .where('status', whereIn: searchStatus)
-          .orderBy('createdAt', descending: true)
-          .startAt([endAt]).endAt([startAt]).snapshots();
-    } else {
-      return FirebaseFirestore.instance
-          .collection(collection)
-          .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .where('status', whereIn: searchStatus)
-          .orderBy('createdAt', descending: true)
-          .snapshots();
-    }
+    return FirebaseFirestore.instance
+        .collection(collection)
+        .where('organizationId', isEqualTo: organizationId ?? 'error')
+        .where('status', whereIn: searchStatus)
+        .orderBy('createdAt', descending: true)
+        .snapshots();
   }
 
   bool checkAlert({
@@ -78,6 +64,7 @@ class LoanService {
 
   List<LoanModel> generateList({
     required QuerySnapshot<Map<String, dynamic>>? data,
+    String? keyword,
   }) {
     List<LoanModel> ret = [];
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {

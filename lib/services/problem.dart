@@ -76,31 +76,19 @@ class ProblemService {
 
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
-    required DateTime? searchStart,
-    required DateTime? searchEnd,
     required bool processed,
   }) {
-    if (searchStart != null && searchEnd != null) {
-      Timestamp startAt = convertTimestamp(searchStart, false);
-      Timestamp endAt = convertTimestamp(searchEnd, true);
-      return FirebaseFirestore.instance
-          .collection(collection)
-          .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .where('processed', isEqualTo: processed)
-          .orderBy('createdAt', descending: true)
-          .startAt([endAt]).endAt([startAt]).snapshots();
-    } else {
-      return FirebaseFirestore.instance
-          .collection(collection)
-          .where('organizationId', isEqualTo: organizationId ?? 'error')
-          .where('processed', isEqualTo: processed)
-          .orderBy('createdAt', descending: true)
-          .snapshots();
-    }
+    return FirebaseFirestore.instance
+        .collection(collection)
+        .where('organizationId', isEqualTo: organizationId ?? 'error')
+        .where('processed', isEqualTo: processed)
+        .orderBy('createdAt', descending: true)
+        .snapshots();
   }
 
   List<ProblemModel> generateList({
     required QuerySnapshot<Map<String, dynamic>>? data,
+    String? keyword,
   }) {
     List<ProblemModel> ret = [];
     for (DocumentSnapshot<Map<String, dynamic>> doc in data!.docs) {

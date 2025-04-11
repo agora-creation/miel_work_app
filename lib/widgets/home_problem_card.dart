@@ -65,8 +65,6 @@ class _HomeProblemCardState extends State<HomeProblemCard> {
                 child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                   stream: problemService.streamList(
                     organizationId: widget.loginProvider.organization?.id,
-                    searchStart: null,
-                    searchEnd: null,
                     processed: false,
                   ),
                   builder: (context, snapshot) {
