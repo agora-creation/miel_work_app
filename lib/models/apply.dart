@@ -27,6 +27,7 @@ class ApplyModel {
   String _file5 = '';
   String _file5Ext = '';
   String _reason = '';
+  bool _pending = false;
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
   List<ApprovalUserModel> approvalUsers = [];
@@ -57,6 +58,7 @@ class ApplyModel {
   String get file5 => _file5;
   String get file5Ext => _file5Ext;
   String get reason => _reason;
+  bool get pending => _pending;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
   String get approvalNumber => _approvalNumber;
@@ -88,6 +90,7 @@ class ApplyModel {
     _file5 = data['file5'] ?? '';
     _file5Ext = data['file5Ext'] ?? '';
     _reason = data['reason'] ?? '';
+    _pending = data['pending'] ?? false;
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
     approvalUsers = _convertApprovalUsers(data['approvalUsers'] ?? []);

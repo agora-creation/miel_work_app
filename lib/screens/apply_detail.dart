@@ -594,12 +594,99 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                   ),
                 )
               : Container(),
+          const SizedBox(height: 8),
+          widget.apply.approval == 0
+              ? FloatingActionButton.extended(
+                  heroTag: 'pending',
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (context) => PendingApplyDialog(
+                      loginProvider: widget.loginProvider,
+                      homeProvider: widget.homeProvider,
+                      apply: widget.apply,
+                    ),
+                  ),
+                  backgroundColor: kYellowColor,
+                  icon: const Icon(
+                    Icons.pending,
+                    color: kBlackColor,
+                  ),
+                  label: const Text(
+                    '保留中にする',
+                    style: TextStyle(color: kBlackColor),
+                  ),
+                )
+              : Container(),
         ],
       ),
       bottomNavigationBar: CustomFooter(
         loginProvider: widget.loginProvider,
         homeProvider: widget.homeProvider,
       ),
+    );
+  }
+}
+
+class PendingApplyDialog extends StatefulWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final ApplyModel apply;
+
+  const PendingApplyDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.apply,
+    super.key,
+  });
+
+  @override
+  State<PendingApplyDialog> createState() => _PendingApplyDialogState();
+}
+
+class _PendingApplyDialogState extends State<PendingApplyDialog> {
+  @override
+  Widget build(BuildContext context) {
+    final applyProvider = Provider.of<ApplyProvider>(context);
+    return CustomAlertDialog(
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 8),
+          Text(
+            '本当に保留中にしますか？',
+            style: TextStyle(color: kRedColor),
+          ),
+        ],
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '保留中にする',
+          labelColor: kBlackColor,
+          backgroundColor: kYellowColor,
+          onPressed: () async {
+            String? error = await applyProvider.pending(
+              apply: widget.apply,
+            );
+            if (error != null) {
+              if (!mounted) return;
+              showMessage(context, error, false);
+              return;
+            }
+            if (!mounted) return;
+            showMessage(context, '保留中にしました', true);
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }

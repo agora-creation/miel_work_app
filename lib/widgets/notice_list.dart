@@ -63,6 +63,7 @@ class NoticeList extends StatelessWidget {
                       ),
                       side: BorderSide.none,
                     ),
+                    side: BorderSide.none,
                   )
                 : const FaIcon(
                     FontAwesomeIcons.chevronRight,

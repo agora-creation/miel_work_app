@@ -290,6 +290,21 @@ class ApplyProvider with ChangeNotifier {
     return error;
   }
 
+  Future<String?> pending({
+    required ApplyModel apply,
+  }) async {
+    String? error;
+    try {
+      _applyService.update({
+        'id': apply.id,
+        'pending': true,
+      });
+    } catch (e) {
+      error = '申請情報の更新に失敗しました';
+    }
+    return error;
+  }
+
   Future<String?> approval({
     required ApplyModel apply,
     required UserModel? loginUser,
@@ -314,6 +329,7 @@ class ApplyProvider with ChangeNotifier {
       if (loginUser.president) {
         _applyService.update({
           'id': apply.id,
+          'pending': false,
           'approval': 1,
           'approvedAt': DateTime.now(),
           'approvalUsers': approvalUsers,
@@ -362,6 +378,7 @@ class ApplyProvider with ChangeNotifier {
       _applyService.update({
         'id': apply.id,
         'reason': reason,
+        'pending': false,
         'approval': 9,
       });
       //通知
