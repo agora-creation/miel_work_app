@@ -11,6 +11,7 @@ import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/services/fm.dart';
 import 'package:miel_work_app/services/problem.dart';
 import 'package:miel_work_app/services/user.dart';
+import 'package:path/path.dart' as p;
 
 class ProblemProvider with ChangeNotifier {
   final ProblemService _problemService = ProblemService();
@@ -46,7 +47,8 @@ class ProblemProvider with ChangeNotifier {
       if (imageXFile != null) {
         File imageFile = File(imageXFile.path);
         FirebaseStorage storage = FirebaseStorage.instance;
-        String storagePath = 'problem/$id';
+        String fileName = p.basename(imageXFile.name);
+        String storagePath = 'problem/$id/$fileName';
         Uint8List? bytes = await FlutterImageCompress.compressWithFile(
           imageFile.path,
           quality: 60,
@@ -58,7 +60,8 @@ class ProblemProvider with ChangeNotifier {
       if (image2XFile != null) {
         File image2File = File(image2XFile.path);
         FirebaseStorage storage = FirebaseStorage.instance;
-        String storagePath = 'problem/$id';
+        String fileName = p.basename(image2XFile.name);
+        String storagePath = 'problem/$id/$fileName';
         Uint8List? bytes = await FlutterImageCompress.compressWithFile(
           image2File.path,
           quality: 60,
@@ -70,7 +73,8 @@ class ProblemProvider with ChangeNotifier {
       if (image3XFile != null) {
         File image3File = File(image3XFile.path);
         FirebaseStorage storage = FirebaseStorage.instance;
-        String storagePath = 'problem/$id';
+        String fileName = p.basename(image3XFile.name);
+        String storagePath = 'problem/$id/$fileName';
         Uint8List? bytes = await FlutterImageCompress.compressWithFile(
           image3File.path,
           quality: 60,
@@ -152,7 +156,8 @@ class ProblemProvider with ChangeNotifier {
       if (imageXFile != null) {
         File imageFile = File(imageXFile.path);
         FirebaseStorage storage = FirebaseStorage.instance;
-        String storagePath = 'problem/${problem.id}';
+        String fileName = p.basename(imageXFile.name);
+        String storagePath = 'problem/${problem.id}/$fileName';
         Uint8List? bytes = await FlutterImageCompress.compressWithFile(
           imageFile.path,
           quality: 60,
@@ -164,7 +169,8 @@ class ProblemProvider with ChangeNotifier {
       if (image2XFile != null) {
         File image2File = File(image2XFile.path);
         FirebaseStorage storage = FirebaseStorage.instance;
-        String storagePath = 'problem/${problem.id}';
+        String fileName = p.basename(image2XFile.name);
+        String storagePath = 'problem/${problem.id}/$fileName';
         Uint8List? bytes = await FlutterImageCompress.compressWithFile(
           image2File.path,
           quality: 60,
@@ -176,7 +182,8 @@ class ProblemProvider with ChangeNotifier {
       if (image3XFile != null) {
         File image3File = File(image3XFile.path);
         FirebaseStorage storage = FirebaseStorage.instance;
-        String storagePath = 'problem/${problem.id}';
+        String fileName = p.basename(image3XFile.name);
+        String storagePath = 'problem/${problem.id}/$fileName';
         Uint8List? bytes = await FlutterImageCompress.compressWithFile(
           image3File.path,
           quality: 60,
