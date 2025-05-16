@@ -674,10 +674,11 @@ class _RequestInterviewModScreenState extends State<RequestInterviewModScreen> {
                   children: [
                     Column(
                       children: widget.interview.attachedFiles.map((file) {
+                        String fileName = getFileNameFromUrl(file);
                         return AttachedFileList(
-                          fileName: p.basename(file),
+                          fileName: fileName,
                           onTap: () {
-                            String ext = p.extension(file);
+                            String ext = p.extension(fileName);
                             if (imageExtensions.contains(ext)) {
                               showDialog(
                                 context: context,

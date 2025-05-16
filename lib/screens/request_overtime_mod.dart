@@ -231,10 +231,11 @@ class _RequestOvertimeModScreenState extends State<RequestOvertimeModScreen> {
                   children: [
                     Column(
                       children: widget.overtime.attachedFiles.map((file) {
+                        String fileName = getFileNameFromUrl(file);
                         return AttachedFileList(
-                          fileName: p.basename(file),
+                          fileName: fileName,
                           onTap: () {
-                            String ext = p.extension(file);
+                            String ext = p.extension(fileName);
                             if (imageExtensions.contains(ext)) {
                               showDialog(
                                 context: context,

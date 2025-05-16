@@ -244,3 +244,11 @@ extension TextEx on Text {
     return RichText(text: TextSpan(children: textSpans));
   }
 }
+
+String getFileNameFromUrl(String url) {
+  final uri = Uri.parse(url);
+  final path = uri.pathSegments.contains('o') ? uri.pathSegments.last : '';
+  final decodedPath = Uri.decodeFull(path);
+  final fileName = decodedPath.split('/').last;
+  return fileName;
+}

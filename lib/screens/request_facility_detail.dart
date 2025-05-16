@@ -217,20 +217,12 @@ class _RequestFacilityDetailScreenState
               const SizedBox(height: 16),
               const DottedDivider(),
               const SizedBox(height: 16),
-              const Text(
-                '旧梵屋跡の倉庫を使用します (貸出面積：約12㎡)',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'SourceHanSansJP-Bold',
-                ),
-              ),
-              const SizedBox(height: 8),
               FormLabel(
                 '使用場所を記したPDFファイル',
                 child: widget.facility.useLocationFile != ''
                     ? AttachedFileList(
-                        fileName: p.basename(widget.facility.useLocationFile),
+                        fileName:
+                            getFileNameFromUrl(widget.facility.useLocationFile),
                         onTap: () {
                           showDialog(
                             context: context,
@@ -269,10 +261,11 @@ class _RequestFacilityDetailScreenState
                   children: [
                     Column(
                       children: widget.facility.attachedFiles.map((file) {
+                        String fileName = getFileNameFromUrl(file);
                         return AttachedFileList(
-                          fileName: p.basename(file),
+                          fileName: fileName,
                           onTap: () {
-                            String ext = p.extension(file);
+                            String ext = p.extension(fileName);
                             if (imageExtensions.contains(ext)) {
                               showDialog(
                                 context: context,

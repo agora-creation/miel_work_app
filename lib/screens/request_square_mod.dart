@@ -246,7 +246,8 @@ class _RequestSquareModScreenState extends State<RequestSquareModScreen> {
                 '使用場所を記したPDFファイル',
                 child: widget.square.useLocationFile != ''
                     ? AttachedFileList(
-                        fileName: p.basename(widget.square.useLocationFile),
+                        fileName:
+                            getFileNameFromUrl(widget.square.useLocationFile),
                         onTap: () {
                           showDialog(
                             context: context,
@@ -366,10 +367,11 @@ class _RequestSquareModScreenState extends State<RequestSquareModScreen> {
                   children: [
                     Column(
                       children: widget.square.attachedFiles.map((file) {
+                        String fileName = getFileNameFromUrl(file);
                         return AttachedFileList(
-                          fileName: p.basename(file),
+                          fileName: fileName,
                           onTap: () {
-                            String ext = p.extension(file);
+                            String ext = p.extension(fileName);
                             if (imageExtensions.contains(ext)) {
                               showDialog(
                                 context: context,
