@@ -6,6 +6,7 @@ import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/comment.dart';
 import 'package:miel_work_app/models/problem.dart';
+import 'package:miel_work_app/providers/chat_message.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/problem.dart';
@@ -61,6 +62,7 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final problemProvider = Provider.of<ProblemProvider>(context);
+    final messageProvider = Provider.of<ChatMessageProvider>(context);
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
@@ -301,7 +303,18 @@ class _ProblemDetailScreenState extends State<ProblemDetailScreen> {
                                         content: commentContentController.text,
                                         loginUser: widget.loginProvider.user,
                                       );
-                                      if (error != null) {
+                                      String content = '''
+クレーム／要望の「${widget.problem.title}」に、社内コメントを追記しました。
+コメント内容:
+${commentContentController.text}
+                                    ''';
+                                      error = await messageProvider.sendComment(
+                                        organization:
+                                            widget.loginProvider.organization,
+                                        content: content,
+                                        loginUser: widget.loginProvider.user,
+                                      );
+                                      if (error != null && error != '') {
                                         if (!mounted) return;
                                         showMessage(context, error, false);
                                         return;

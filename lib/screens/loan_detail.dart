@@ -8,6 +8,7 @@ import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/comment.dart';
 import 'package:miel_work_app/models/loan.dart';
+import 'package:miel_work_app/providers/chat_message.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/loan.dart';
 import 'package:miel_work_app/providers/login.dart';
@@ -70,6 +71,7 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final loanProvider = Provider.of<LoanProvider>(context);
+    final messageProvider = Provider.of<ChatMessageProvider>(context);
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
@@ -346,7 +348,18 @@ class _LoanDetailScreenState extends State<LoanDetailScreen> {
                                         content: commentContentController.text,
                                         loginUser: widget.loginProvider.user,
                                       );
-                                      if (error != null) {
+                                      String content = '''
+貸出／返却の「${widget.loan.itemName}」に、社内コメントを追記しました。
+コメント内容:
+${commentContentController.text}
+                                    ''';
+                                      error = await messageProvider.sendComment(
+                                        organization:
+                                            widget.loginProvider.organization,
+                                        content: content,
+                                        loginUser: widget.loginProvider.user,
+                                      );
+                                      if (error != null && error != '') {
                                         if (!mounted) return;
                                         showMessage(context, error, false);
                                         return;

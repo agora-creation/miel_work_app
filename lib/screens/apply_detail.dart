@@ -8,6 +8,7 @@ import 'package:miel_work_app/models/apply.dart';
 import 'package:miel_work_app/models/approval_user.dart';
 import 'package:miel_work_app/models/comment.dart';
 import 'package:miel_work_app/providers/apply.dart';
+import 'package:miel_work_app/providers/chat_message.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/apply_mod.dart';
@@ -70,6 +71,7 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final applyProvider = Provider.of<ApplyProvider>(context);
+    final messageProvider = Provider.of<ChatMessageProvider>(context);
     bool isApproval = true;
     bool isReject = true;
     bool isDelete = true;
@@ -519,7 +521,18 @@ class _ApplyDetailScreenState extends State<ApplyDetailScreen> {
                                       content: commentContentController.text,
                                       loginUser: widget.loginProvider.user,
                                     );
-                                    if (error != null) {
+                                    String content = '''
+${widget.apply.type}申請の「${widget.apply.title}」に、社内コメントを追記しました。
+コメント内容:
+${commentContentController.text}
+                                    ''';
+                                    error = await messageProvider.sendComment(
+                                      organization:
+                                          widget.loginProvider.organization,
+                                      content: content,
+                                      loginUser: widget.loginProvider.user,
+                                    );
+                                    if (error != null && error != '') {
                                       if (!mounted) return;
                                       showMessage(context, error, false);
                                       return;

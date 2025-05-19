@@ -13,6 +13,7 @@ import 'package:miel_work_app/models/report_problem.dart';
 import 'package:miel_work_app/models/report_repair.dart';
 import 'package:miel_work_app/models/report_visitor.dart';
 import 'package:miel_work_app/models/report_worker.dart';
+import 'package:miel_work_app/providers/chat_message.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/report.dart';
@@ -273,6 +274,7 @@ class _ReportModScreenState extends State<ReportModScreen> {
   @override
   Widget build(BuildContext context) {
     final reportProvider = Provider.of<ReportProvider>(context);
+    final messageProvider = Provider.of<ChatMessageProvider>(context);
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
@@ -1858,7 +1860,18 @@ class _ReportModScreenState extends State<ReportModScreen> {
                                         content: commentContentController.text,
                                         loginUser: widget.loginProvider.user,
                                       );
-                                      if (error != null) {
+                                      String content = '''
+業務日報の「${dateText('MM月dd日', widget.report.createdAt)}分」に、社内コメントを追記しました。
+コメント内容:
+${commentContentController.text}
+                                    ''';
+                                      error = await messageProvider.sendComment(
+                                        organization:
+                                            widget.loginProvider.organization,
+                                        content: content,
+                                        loginUser: widget.loginProvider.user,
+                                      );
+                                      if (error != null && error != '') {
                                         if (!mounted) return;
                                         showMessage(context, error, false);
                                         return;

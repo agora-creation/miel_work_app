@@ -7,6 +7,7 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/comment.dart';
 import 'package:miel_work_app/models/notice.dart';
 import 'package:miel_work_app/models/user.dart';
+import 'package:miel_work_app/providers/chat_message.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/providers/notice.dart';
@@ -77,6 +78,7 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final noticeProvider = Provider.of<NoticeProvider>(context);
+    final messageProvider = Provider.of<ChatMessageProvider>(context);
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
@@ -265,7 +267,18 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
                                         content: commentContentController.text,
                                         loginUser: widget.loginProvider.user,
                                       );
-                                      if (error != null) {
+                                      String content = '''
+お知らせの「${widget.notice.title}」に、社内コメントを追記しました。
+コメント内容:
+${commentContentController.text}
+                                    ''';
+                                      error = await messageProvider.sendComment(
+                                        organization:
+                                            widget.loginProvider.organization,
+                                        content: content,
+                                        loginUser: widget.loginProvider.user,
+                                      );
+                                      if (error != null && error != '') {
                                         if (!mounted) return;
                                         showMessage(context, error, false);
                                         return;

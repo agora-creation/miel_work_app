@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:miel_work_app/models/chat.dart';
 import 'package:miel_work_app/models/chat_message.dart';
+import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/reply_source.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/services/chat.dart';
@@ -222,6 +223,72 @@ class ChatMessageProvider with ChangeNotifier {
       }
       contentController.clear();
       contentFocusNode.unfocus();
+    } catch (e) {
+      error = 'メッセージの送信に失敗しました';
+    }
+    return error;
+  }
+
+  Future<String?> sendComment({
+    required OrganizationModel? organization,
+    required String content,
+    required UserModel? loginUser,
+  }) async {
+    String? error;
+    if (organization == null) return 'メッセージの送信に失敗しました';
+    if (content == '') return 'メッセージの送信に失敗しました';
+    if (loginUser == null) return 'メッセージの送信に失敗しました';
+    ChatModel? chat = await _chatService.selectData(
+      organizationId: organization.id,
+      groupId: '',
+    );
+    if (chat == null) return 'メッセージの送信に失敗しました';
+    try {
+      String id = _messageService.id();
+      List<Map> readUsers = [];
+      readUsers.add({
+        'userId': loginUser.id,
+        'userName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
+      _messageService.create({
+        'id': id,
+        'organizationId': chat.organizationId,
+        'groupId': chat.groupId,
+        'chatId': chat.id,
+        'content': content,
+        'image': '',
+        'file': '',
+        'fileExt': '',
+        'readUsers': readUsers,
+        'favoriteUserIds': [],
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+        'expirationAt': DateTime.now().add(const Duration(days: 365)),
+        'replySource': null,
+      });
+      _chatService.update({
+        'id': chat.id,
+        'lastMessage': content,
+        'updatedAt': DateTime.now(),
+      });
+      //通知
+      List<UserModel> sendUsers = await _userService.selectList(
+        userIds: chat.userIds,
+      );
+      if (sendUsers.isNotEmpty) {
+        for (UserModel user in sendUsers) {
+          if (user.id == loginUser.id) continue;
+          for (final token in user.tokens) {
+            _fmService.send(
+              token: token,
+              title: '[${chat.name}]${loginUser.name}からのメッセージ',
+              body: content,
+            );
+          }
+        }
+      }
     } catch (e) {
       error = 'メッセージの送信に失敗しました';
     }
