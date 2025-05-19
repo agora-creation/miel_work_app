@@ -19,128 +19,154 @@ class LostCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: GestureDetector(
         onTap: onTap,
-        child: Card(
-          color: kWhiteColor,
-          elevation: 8,
-          child: Container(
-            margin: const EdgeInsets.all(8),
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              children: [
-                Table(
-                  border: TableBorder.all(color: kBorderColor),
-                  columnWidths: const {
-                    0: IntrinsicColumnWidth(),
-                    1: FlexColumnWidth(2),
-                  },
+        child: Stack(
+          children: [
+            Card(
+              color: kWhiteColor,
+              elevation: 8,
+              child: Container(
+                margin: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
+                child: Column(
                   children: [
-                    TableRow(
+                    Table(
+                      border: TableBorder.all(color: kBorderColor),
+                      columnWidths: const {
+                        0: IntrinsicColumnWidth(),
+                        1: FlexColumnWidth(2),
+                      },
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.all(4),
-                          child: Text('落とし物No'),
+                        TableRow(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(4),
+                              child: Text('落とし物No'),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Text(
+                                lost.itemNumber,
+                                softWrap: false,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(4),
-                          child: Text(
-                            lost.itemNumber,
-                            softWrap: false,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
+                        TableRow(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(4),
+                              child: Text('品名'),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Text(
+                                lost.itemName,
+                                softWrap: false,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(4),
-                          child: Text('品名'),
+                        TableRow(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(4),
+                              child: Text('発見日'),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Text(
+                                dateText('yyyy/MM/dd', lost.discoveryAt),
+                                softWrap: false,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(4),
-                          child: Text(
-                            lost.itemName,
-                            softWrap: false,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
+                        TableRow(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(4),
+                              child: Text('発見場所'),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Text(
+                                lost.discoveryPlace,
+                                softWrap: false,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(4),
-                          child: Text('発見日'),
+                        TableRow(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(4),
+                              child: Text('発見者'),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Text(
+                                lost.discoveryUser,
+                                softWrap: false,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(4),
-                          child: Text(
-                            dateText('yyyy/MM/dd', lost.discoveryAt),
-                            softWrap: false,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(4),
-                          child: Text('発見場所'),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(4),
-                          child: Text(
-                            lost.discoveryPlace,
-                            softWrap: false,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(4),
-                          child: Text('発見者'),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(4),
-                          child: Text(
-                            lost.discoveryUser,
-                            softWrap: false,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                        ),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(4),
-                          child: Text('備考'),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(4),
-                          child: Text(
-                            lost.remarks,
-                            softWrap: false,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
+                        TableRow(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(4),
+                              child: Text('備考'),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Text(
+                                lost.remarks,
+                                softWrap: false,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
+            lost.comments.isNotEmpty
+                ? const Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Chip(
+                      label: Text(
+                        'コメントあり',
+                        style: TextStyle(
+                          color: kLightGreenColor,
+                          fontSize: 10,
+                        ),
+                      ),
+                      backgroundColor: kWhiteColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8),
+                        ),
+                      ),
+                      side: BorderSide(color: kLightGreenColor),
+                    ),
+                  )
+                : Container(),
+          ],
         ),
       ),
     );

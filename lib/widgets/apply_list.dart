@@ -80,6 +80,27 @@ class ApplyList extends StatelessWidget {
                           ),
                         )
                       : Container(),
+                  apply.comments.isNotEmpty
+                      ? const Padding(
+                          padding: EdgeInsets.only(top: 4),
+                          child: Chip(
+                            label: Text(
+                              'コメントあり',
+                              style: TextStyle(
+                                color: kLightGreenColor,
+                                fontSize: 12,
+                              ),
+                            ),
+                            backgroundColor: kWhiteColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8),
+                              ),
+                            ),
+                            side: BorderSide(color: kLightGreenColor),
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
             ),
