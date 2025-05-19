@@ -532,7 +532,7 @@ ${commentContentController.text}
                                       content: content,
                                       loginUser: widget.loginProvider.user,
                                     );
-                                    if (error != null && error != '') {
+                                    if (error != null) {
                                       if (!mounted) return;
                                       showMessage(context, error, false);
                                       return;
