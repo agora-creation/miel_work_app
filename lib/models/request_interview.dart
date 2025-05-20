@@ -43,6 +43,7 @@ class RequestInterviewModel {
   List<String> attachedFiles = [];
   String _remarks = '';
   List<CommentModel> comments = [];
+  bool _pending = false;
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
   List<ApprovalUserModel> approvalUsers = [];
@@ -86,6 +87,7 @@ class RequestInterviewModel {
   String get insertedVisitors => _insertedVisitors;
   String get insertedContent => _insertedContent;
   String get remarks => _remarks;
+  bool get pending => _pending;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
   DateTime get createdAt => _createdAt;
@@ -135,6 +137,7 @@ class RequestInterviewModel {
     attachedFiles = _convertAttachedFiles(data['attachedFiles'] ?? []);
     _remarks = data['remarks'] ?? '';
     comments = _convertComments(data['comments'] ?? []);
+    _pending = data['pending'] ?? false;
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
     approvalUsers = _convertApprovalUsers(data['approvalUsers'] ?? []);

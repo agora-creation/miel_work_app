@@ -147,6 +147,46 @@ class _RequestFacilityDetailScreenState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              widget.facility.approval == 1
+                  ? widget.facility.pending == true
+                      ? Align(
+                          alignment: Alignment.centerRight,
+                          child: CustomButton(
+                            type: ButtonSizeType.sm,
+                            label: '保留を解除する',
+                            labelColor: kBlackColor,
+                            backgroundColor: kYellowColor,
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  PendingCancelRequestFacilityDialog(
+                                loginProvider: widget.loginProvider,
+                                homeProvider: widget.homeProvider,
+                                facility: widget.facility,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Align(
+                          alignment: Alignment.centerRight,
+                          child: CustomButton(
+                            type: ButtonSizeType.sm,
+                            label: '保留中にする',
+                            labelColor: kBlackColor,
+                            backgroundColor: kYellowColor,
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  PendingRequestFacilityDialog(
+                                loginProvider: widget.loginProvider,
+                                homeProvider: widget.homeProvider,
+                                facility: widget.facility,
+                              ),
+                            ),
+                          ),
+                        )
+                  : Container(),
+              const SizedBox(height: 4),
               Text(
                 '申込日時: ${dateText('yyyy/MM/dd HH:mm', widget.facility.createdAt)}',
                 style: const TextStyle(
@@ -453,6 +493,120 @@ ${commentContentController.text}
         loginProvider: widget.loginProvider,
         homeProvider: widget.homeProvider,
       ),
+    );
+  }
+}
+
+class PendingRequestFacilityDialog extends StatelessWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final RequestFacilityModel facility;
+
+  const PendingRequestFacilityDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.facility,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final facilityProvider = Provider.of<RequestFacilityProvider>(context);
+    return CustomAlertDialog(
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 8),
+          Text(
+            '本当に保留中にしますか？',
+            style: TextStyle(color: kRedColor),
+          ),
+        ],
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '保留中にする',
+          labelColor: kBlackColor,
+          backgroundColor: kYellowColor,
+          onPressed: () async {
+            String? error = await facilityProvider.pending(
+              facility: facility,
+            );
+            if (error != null) {
+              showMessage(context, error, false);
+              return;
+            }
+            showMessage(context, '保留中にしました', true);
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class PendingCancelRequestFacilityDialog extends StatelessWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final RequestFacilityModel facility;
+
+  const PendingCancelRequestFacilityDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.facility,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final facilityProvider = Provider.of<RequestFacilityProvider>(context);
+    return CustomAlertDialog(
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 8),
+          Text(
+            '本当に保留中にしますか？',
+            style: TextStyle(color: kRedColor),
+          ),
+        ],
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '保留中にする',
+          labelColor: kBlackColor,
+          backgroundColor: kYellowColor,
+          onPressed: () async {
+            String? error = await facilityProvider.pendingCancel(
+              facility: facility,
+            );
+            if (error != null) {
+              showMessage(context, error, false);
+              return;
+            }
+            showMessage(context, '保留中にしました', true);
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }

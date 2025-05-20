@@ -130,6 +130,36 @@ class RequestInterviewProvider with ChangeNotifier {
     return error;
   }
 
+  Future<String?> pending({
+    required RequestInterviewModel interview,
+  }) async {
+    String? error;
+    try {
+      _interviewService.update({
+        'id': interview.id,
+        'pending': true,
+      });
+    } catch (e) {
+      error = '申請情報の更新に失敗しました';
+    }
+    return error;
+  }
+
+  Future<String?> pendingCancel({
+    required RequestInterviewModel interview,
+  }) async {
+    String? error;
+    try {
+      _interviewService.update({
+        'id': interview.id,
+        'pending': false,
+      });
+    } catch (e) {
+      error = '申請情報の更新に失敗しました';
+    }
+    return error;
+  }
+
   Future<String?> approval({
     required RequestInterviewModel interview,
     required UserModel? loginUser,

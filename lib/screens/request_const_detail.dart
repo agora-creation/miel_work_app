@@ -140,6 +140,45 @@ class _RequestConstDetailScreenState extends State<RequestConstDetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              widget.requestConst.approval == 1
+                  ? widget.requestConst.pending == true
+                      ? Align(
+                          alignment: Alignment.centerRight,
+                          child: CustomButton(
+                            type: ButtonSizeType.sm,
+                            label: '保留を解除する',
+                            labelColor: kBlackColor,
+                            backgroundColor: kYellowColor,
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  PendingCancelRequestConstDialog(
+                                loginProvider: widget.loginProvider,
+                                homeProvider: widget.homeProvider,
+                                requestConst: widget.requestConst,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Align(
+                          alignment: Alignment.centerRight,
+                          child: CustomButton(
+                            type: ButtonSizeType.sm,
+                            label: '保留中にする',
+                            labelColor: kBlackColor,
+                            backgroundColor: kYellowColor,
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (context) => PendingRequestConstDialog(
+                                loginProvider: widget.loginProvider,
+                                homeProvider: widget.homeProvider,
+                                requestConst: widget.requestConst,
+                              ),
+                            ),
+                          ),
+                        )
+                  : Container(),
+              const SizedBox(height: 4),
               Text(
                 '申請日時: ${dateText('yyyy/MM/dd HH:mm', widget.requestConst.createdAt)}',
                 style: const TextStyle(
@@ -501,6 +540,120 @@ ${commentContentController.text}
         loginProvider: widget.loginProvider,
         homeProvider: widget.homeProvider,
       ),
+    );
+  }
+}
+
+class PendingRequestConstDialog extends StatelessWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final RequestConstModel requestConst;
+
+  const PendingRequestConstDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.requestConst,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final constProvider = Provider.of<RequestConstProvider>(context);
+    return CustomAlertDialog(
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 8),
+          Text(
+            '本当に保留中にしますか？',
+            style: TextStyle(color: kRedColor),
+          ),
+        ],
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '保留中にする',
+          labelColor: kBlackColor,
+          backgroundColor: kYellowColor,
+          onPressed: () async {
+            String? error = await constProvider.pending(
+              requestConst: requestConst,
+            );
+            if (error != null) {
+              showMessage(context, error, false);
+              return;
+            }
+            showMessage(context, '保留中にしました', true);
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class PendingCancelRequestConstDialog extends StatelessWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final RequestConstModel requestConst;
+
+  const PendingCancelRequestConstDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.requestConst,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final constProvider = Provider.of<RequestConstProvider>(context);
+    return CustomAlertDialog(
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 8),
+          Text(
+            '本当に保留中にしますか？',
+            style: TextStyle(color: kRedColor),
+          ),
+        ],
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '保留中にする',
+          labelColor: kBlackColor,
+          backgroundColor: kYellowColor,
+          onPressed: () async {
+            String? error = await constProvider.pendingCancel(
+              requestConst: requestConst,
+            );
+            if (error != null) {
+              showMessage(context, error, false);
+              return;
+            }
+            showMessage(context, '保留中にしました', true);
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }

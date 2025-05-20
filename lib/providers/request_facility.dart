@@ -71,6 +71,36 @@ class RequestFacilityProvider with ChangeNotifier {
     return error;
   }
 
+  Future<String?> pending({
+    required RequestFacilityModel facility,
+  }) async {
+    String? error;
+    try {
+      _facilityService.update({
+        'id': facility.id,
+        'pending': true,
+      });
+    } catch (e) {
+      error = '申請情報の更新に失敗しました';
+    }
+    return error;
+  }
+
+  Future<String?> pendingCancel({
+    required RequestFacilityModel facility,
+  }) async {
+    String? error;
+    try {
+      _facilityService.update({
+        'id': facility.id,
+        'pending': false,
+      });
+    } catch (e) {
+      error = '申請情報の更新に失敗しました';
+    }
+    return error;
+  }
+
   Future<String?> approval({
     required RequestFacilityModel facility,
     required UserModel? loginUser,

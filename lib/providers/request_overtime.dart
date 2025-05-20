@@ -71,6 +71,36 @@ class RequestOvertimeProvider with ChangeNotifier {
     return error;
   }
 
+  Future<String?> pending({
+    required RequestOvertimeModel overtime,
+  }) async {
+    String? error;
+    try {
+      _overtimeService.update({
+        'id': overtime.id,
+        'pending': true,
+      });
+    } catch (e) {
+      error = '申請情報の更新に失敗しました';
+    }
+    return error;
+  }
+
+  Future<String?> pendingCancel({
+    required RequestOvertimeModel overtime,
+  }) async {
+    String? error;
+    try {
+      _overtimeService.update({
+        'id': overtime.id,
+        'pending': false,
+      });
+    } catch (e) {
+      error = '申請情報の更新に失敗しました';
+    }
+    return error;
+  }
+
   Future<String?> approval({
     required RequestOvertimeModel overtime,
     required UserModel? loginUser,

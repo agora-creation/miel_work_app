@@ -138,6 +138,46 @@ class _RequestInterviewDetailScreenState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              widget.interview.approval == 1
+                  ? widget.interview.pending == true
+                      ? Align(
+                          alignment: Alignment.centerRight,
+                          child: CustomButton(
+                            type: ButtonSizeType.sm,
+                            label: '保留を解除する',
+                            labelColor: kBlackColor,
+                            backgroundColor: kYellowColor,
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  PendingCancelRequestInterviewDialog(
+                                loginProvider: widget.loginProvider,
+                                homeProvider: widget.homeProvider,
+                                interview: widget.interview,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Align(
+                          alignment: Alignment.centerRight,
+                          child: CustomButton(
+                            type: ButtonSizeType.sm,
+                            label: '保留中にする',
+                            labelColor: kBlackColor,
+                            backgroundColor: kYellowColor,
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  PendingRequestInterviewDialog(
+                                loginProvider: widget.loginProvider,
+                                homeProvider: widget.homeProvider,
+                                interview: widget.interview,
+                              ),
+                            ),
+                          ),
+                        )
+                  : Container(),
+              const SizedBox(height: 4),
               Text(
                 '申込日時: ${dateText('yyyy/MM/dd HH:mm', widget.interview.createdAt)}',
                 style: const TextStyle(
@@ -595,6 +635,120 @@ ${commentContentController.text}
         loginProvider: widget.loginProvider,
         homeProvider: widget.homeProvider,
       ),
+    );
+  }
+}
+
+class PendingRequestInterviewDialog extends StatelessWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final RequestInterviewModel interview;
+
+  const PendingRequestInterviewDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.interview,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final interviewProvider = Provider.of<RequestInterviewProvider>(context);
+    return CustomAlertDialog(
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 8),
+          Text(
+            '本当に保留中にしますか？',
+            style: TextStyle(color: kRedColor),
+          ),
+        ],
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '保留中にする',
+          labelColor: kBlackColor,
+          backgroundColor: kYellowColor,
+          onPressed: () async {
+            String? error = await interviewProvider.pending(
+              interview: interview,
+            );
+            if (error != null) {
+              showMessage(context, error, false);
+              return;
+            }
+            showMessage(context, '保留中にしました', true);
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class PendingCancelRequestInterviewDialog extends StatelessWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final RequestInterviewModel interview;
+
+  const PendingCancelRequestInterviewDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.interview,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final interviewProvider = Provider.of<RequestInterviewProvider>(context);
+    return CustomAlertDialog(
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 8),
+          Text(
+            '本当に保留中にしますか？',
+            style: TextStyle(color: kRedColor),
+          ),
+        ],
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '保留中にする',
+          labelColor: kBlackColor,
+          backgroundColor: kYellowColor,
+          onPressed: () async {
+            String? error = await interviewProvider.pendingCancel(
+              interview: interview,
+            );
+            if (error != null) {
+              showMessage(context, error, false);
+              return;
+            }
+            showMessage(context, '保留中にしました', true);
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }

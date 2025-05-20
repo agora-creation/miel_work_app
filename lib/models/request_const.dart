@@ -28,6 +28,7 @@ class RequestConstModel {
   DateTime _meetingAt = DateTime.now();
   String _caution = '';
   List<CommentModel> comments = [];
+  bool _pending = false;
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
   List<ApprovalUserModel> approvalUsers = [];
@@ -56,6 +57,7 @@ class RequestConstModel {
   bool get meeting => _meeting;
   DateTime get meetingAt => _meetingAt;
   String get caution => _caution;
+  bool get pending => _pending;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
   DateTime get createdAt => _createdAt;
@@ -89,6 +91,7 @@ class RequestConstModel {
     _meetingAt = data['meetingAt'].toDate() ?? DateTime.now();
     _caution = data['caution'] ?? '';
     comments = _convertComments(data['comments'] ?? []);
+    _pending = data['pending'] ?? false;
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
     approvalUsers = _convertApprovalUsers(data['approvalUsers'] ?? []);

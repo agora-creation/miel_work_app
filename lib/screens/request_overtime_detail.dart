@@ -138,6 +138,46 @@ class _RequestOvertimeDetailScreenState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              widget.overtime.approval == 1
+                  ? widget.overtime.pending == true
+                      ? Align(
+                          alignment: Alignment.centerRight,
+                          child: CustomButton(
+                            type: ButtonSizeType.sm,
+                            label: '保留を解除する',
+                            labelColor: kBlackColor,
+                            backgroundColor: kYellowColor,
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  PendingCancelRequestOvertimeDialog(
+                                loginProvider: widget.loginProvider,
+                                homeProvider: widget.homeProvider,
+                                overtime: widget.overtime,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Align(
+                          alignment: Alignment.centerRight,
+                          child: CustomButton(
+                            type: ButtonSizeType.sm,
+                            label: '保留中にする',
+                            labelColor: kBlackColor,
+                            backgroundColor: kYellowColor,
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  PendingRequestOvertimeDialog(
+                                loginProvider: widget.loginProvider,
+                                homeProvider: widget.homeProvider,
+                                overtime: widget.overtime,
+                              ),
+                            ),
+                          ),
+                        )
+                  : Container(),
+              const SizedBox(height: 4),
               Text(
                 '申請日時: ${dateText('yyyy/MM/dd HH:mm', widget.overtime.createdAt)}',
                 style: const TextStyle(
@@ -432,6 +472,120 @@ ${commentContentController.text}
         loginProvider: widget.loginProvider,
         homeProvider: widget.homeProvider,
       ),
+    );
+  }
+}
+
+class PendingRequestOvertimeDialog extends StatelessWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final RequestOvertimeModel overtime;
+
+  const PendingRequestOvertimeDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.overtime,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final overtimeProvider = Provider.of<RequestOvertimeProvider>(context);
+    return CustomAlertDialog(
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 8),
+          Text(
+            '本当に保留中にしますか？',
+            style: TextStyle(color: kRedColor),
+          ),
+        ],
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '保留中にする',
+          labelColor: kBlackColor,
+          backgroundColor: kYellowColor,
+          onPressed: () async {
+            String? error = await overtimeProvider.pending(
+              overtime: overtime,
+            );
+            if (error != null) {
+              showMessage(context, error, false);
+              return;
+            }
+            showMessage(context, '保留中にしました', true);
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class PendingCancelRequestOvertimeDialog extends StatelessWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final RequestOvertimeModel overtime;
+
+  const PendingCancelRequestOvertimeDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.overtime,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final overtimeProvider = Provider.of<RequestOvertimeProvider>(context);
+    return CustomAlertDialog(
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 8),
+          Text(
+            '本当に保留中にしますか？',
+            style: TextStyle(color: kRedColor),
+          ),
+        ],
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '保留中にする',
+          labelColor: kBlackColor,
+          backgroundColor: kYellowColor,
+          onPressed: () async {
+            String? error = await overtimeProvider.pendingCancel(
+              overtime: overtime,
+            );
+            if (error != null) {
+              showMessage(context, error, false);
+              return;
+            }
+            showMessage(context, '保留中にしました', true);
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }

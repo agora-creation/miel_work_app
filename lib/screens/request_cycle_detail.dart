@@ -131,6 +131,45 @@ class _RequestCycleDetailScreenState extends State<RequestCycleDetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              widget.cycle.approval == 1
+                  ? widget.cycle.pending == true
+                      ? Align(
+                          alignment: Alignment.centerRight,
+                          child: CustomButton(
+                            type: ButtonSizeType.sm,
+                            label: '保留を解除する',
+                            labelColor: kBlackColor,
+                            backgroundColor: kYellowColor,
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  PendingCancelRequestCycleDialog(
+                                loginProvider: widget.loginProvider,
+                                homeProvider: widget.homeProvider,
+                                cycle: widget.cycle,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Align(
+                          alignment: Alignment.centerRight,
+                          child: CustomButton(
+                            type: ButtonSizeType.sm,
+                            label: '保留中にする',
+                            labelColor: kBlackColor,
+                            backgroundColor: kYellowColor,
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (context) => PendingRequestCycleDialog(
+                                loginProvider: widget.loginProvider,
+                                homeProvider: widget.homeProvider,
+                                cycle: widget.cycle,
+                              ),
+                            ),
+                          ),
+                        )
+                  : Container(),
+              const SizedBox(height: 4),
               Text(
                 '申込日時: ${dateText('yyyy/MM/dd HH:mm', widget.cycle.createdAt)}',
                 style: const TextStyle(
@@ -365,6 +404,120 @@ ${commentContentController.text}
         loginProvider: widget.loginProvider,
         homeProvider: widget.homeProvider,
       ),
+    );
+  }
+}
+
+class PendingRequestCycleDialog extends StatelessWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final RequestCycleModel cycle;
+
+  const PendingRequestCycleDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.cycle,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cycleProvider = Provider.of<RequestCycleProvider>(context);
+    return CustomAlertDialog(
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 8),
+          Text(
+            '本当に保留中にしますか？',
+            style: TextStyle(color: kRedColor),
+          ),
+        ],
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '保留中にする',
+          labelColor: kBlackColor,
+          backgroundColor: kYellowColor,
+          onPressed: () async {
+            String? error = await cycleProvider.pending(
+              cycle: cycle,
+            );
+            if (error != null) {
+              showMessage(context, error, false);
+              return;
+            }
+            showMessage(context, '保留中にしました', true);
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class PendingCancelRequestCycleDialog extends StatelessWidget {
+  final LoginProvider loginProvider;
+  final HomeProvider homeProvider;
+  final RequestCycleModel cycle;
+
+  const PendingCancelRequestCycleDialog({
+    required this.loginProvider,
+    required this.homeProvider,
+    required this.cycle,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cycleProvider = Provider.of<RequestCycleProvider>(context);
+    return CustomAlertDialog(
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 8),
+          Text(
+            '本当に保留中にしますか？',
+            style: TextStyle(color: kRedColor),
+          ),
+        ],
+      ),
+      actions: [
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: 'キャンセル',
+          labelColor: kWhiteColor,
+          backgroundColor: kGreyColor,
+          onPressed: () => Navigator.pop(context),
+        ),
+        CustomButton(
+          type: ButtonSizeType.sm,
+          label: '保留中にする',
+          labelColor: kBlackColor,
+          backgroundColor: kYellowColor,
+          onPressed: () async {
+            String? error = await cycleProvider.pendingCancel(
+              cycle: cycle,
+            );
+            if (error != null) {
+              showMessage(context, error, false);
+              return;
+            }
+            showMessage(context, '保留中にしました', true);
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }

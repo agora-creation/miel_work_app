@@ -94,6 +94,36 @@ class RequestConstProvider with ChangeNotifier {
     return error;
   }
 
+  Future<String?> pending({
+    required RequestConstModel requestConst,
+  }) async {
+    String? error;
+    try {
+      _constService.update({
+        'id': requestConst.id,
+        'pending': true,
+      });
+    } catch (e) {
+      error = '申請情報の更新に失敗しました';
+    }
+    return error;
+  }
+
+  Future<String?> pendingCancel({
+    required RequestConstModel requestConst,
+  }) async {
+    String? error;
+    try {
+      _constService.update({
+        'id': requestConst.id,
+        'pending': false,
+      });
+    } catch (e) {
+      error = '申請情報の更新に失敗しました';
+    }
+    return error;
+  }
+
   Future<String?> approval({
     required RequestConstModel requestConst,
     required bool meeting,

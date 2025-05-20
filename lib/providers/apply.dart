@@ -305,6 +305,21 @@ class ApplyProvider with ChangeNotifier {
     return error;
   }
 
+  Future<String?> pendingCancel({
+    required ApplyModel apply,
+  }) async {
+    String? error;
+    try {
+      _applyService.update({
+        'id': apply.id,
+        'pending': false,
+      });
+    } catch (e) {
+      error = '申請情報の更新に失敗しました';
+    }
+    return error;
+  }
+
   Future<String?> approval({
     required ApplyModel apply,
     required UserModel? loginUser,

@@ -11,6 +11,7 @@ class RequestCycleModel {
   String _companyAddress = '';
   String _lockNumber = '';
   List<CommentModel> comments = [];
+  bool _pending = false;
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
   List<ApprovalUserModel> approvalUsers = [];
@@ -23,6 +24,7 @@ class RequestCycleModel {
   String get companyUserTel => _companyUserTel;
   String get companyAddress => _companyAddress;
   String get lockNumber => _lockNumber;
+  bool get pending => _pending;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
   DateTime get createdAt => _createdAt;
@@ -39,6 +41,7 @@ class RequestCycleModel {
     _companyAddress = data['companyAddress'] ?? '';
     _lockNumber = data['lockNumber'] ?? '';
     comments = _convertComments(data['comments'] ?? []);
+    _pending = data['pending'] ?? false;
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
     approvalUsers = _convertApprovalUsers(data['approvalUsers'] ?? []);

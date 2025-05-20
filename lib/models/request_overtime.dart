@@ -14,6 +14,7 @@ class RequestOvertimeModel {
   String _useContent = '';
   List<String> attachedFiles = [];
   List<CommentModel> comments = [];
+  bool _pending = false;
   int _approval = 0;
   DateTime _approvedAt = DateTime.now();
   List<ApprovalUserModel> approvalUsers = [];
@@ -28,6 +29,7 @@ class RequestOvertimeModel {
   DateTime get useEndedAt => _useEndedAt;
   bool get useAtPending => _useAtPending;
   String get useContent => _useContent;
+  bool get pending => _pending;
   int get approval => _approval;
   DateTime get approvedAt => _approvedAt;
   DateTime get createdAt => _createdAt;
@@ -47,6 +49,7 @@ class RequestOvertimeModel {
     _useContent = data['useContent'] ?? '';
     attachedFiles = _convertAttachedFiles(data['attachedFiles'] ?? []);
     comments = _convertComments(data['comments'] ?? []);
+    _pending = data['pending'] ?? false;
     _approval = data['approval'] ?? 0;
     _approvedAt = data['approvedAt'].toDate() ?? DateTime.now();
     approvalUsers = _convertApprovalUsers(data['approvalUsers'] ?? []);

@@ -88,6 +88,36 @@ class RequestSquareProvider with ChangeNotifier {
     return error;
   }
 
+  Future<String?> pending({
+    required RequestSquareModel square,
+  }) async {
+    String? error;
+    try {
+      _squareService.update({
+        'id': square.id,
+        'pending': true,
+      });
+    } catch (e) {
+      error = '申請情報の更新に失敗しました';
+    }
+    return error;
+  }
+
+  Future<String?> pendingCancel({
+    required RequestSquareModel square,
+  }) async {
+    String? error;
+    try {
+      _squareService.update({
+        'id': square.id,
+        'pending': false,
+      });
+    } catch (e) {
+      error = '申請情報の更新に失敗しました';
+    }
+    return error;
+  }
+
   Future<String?> approval({
     required RequestSquareModel square,
     required UserModel? loginUser,

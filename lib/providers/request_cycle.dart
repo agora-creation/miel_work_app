@@ -66,6 +66,36 @@ class RequestCycleProvider with ChangeNotifier {
     return error;
   }
 
+  Future<String?> pending({
+    required RequestCycleModel cycle,
+  }) async {
+    String? error;
+    try {
+      _cycleService.update({
+        'id': cycle.id,
+        'pending': true,
+      });
+    } catch (e) {
+      error = '申請情報の更新に失敗しました';
+    }
+    return error;
+  }
+
+  Future<String?> pendingCancel({
+    required RequestCycleModel cycle,
+  }) async {
+    String? error;
+    try {
+      _cycleService.update({
+        'id': cycle.id,
+        'pending': false,
+      });
+    } catch (e) {
+      error = '申請情報の更新に失敗しました';
+    }
+    return error;
+  }
+
   Future<String?> approval({
     required RequestCycleModel cycle,
     required String lockNumber,
