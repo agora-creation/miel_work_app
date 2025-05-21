@@ -3,19 +3,30 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/request_overtime.dart';
+import 'package:miel_work_app/models/user.dart';
 
 class RequestOvertimeList extends StatelessWidget {
   final RequestOvertimeModel overtime;
+  final UserModel? user;
   final Function()? onTap;
 
   const RequestOvertimeList({
     required this.overtime,
+    required this.user,
     this.onTap,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    bool commentNotRead = true;
+    if (overtime.comments.isNotEmpty) {
+      for (final comment in overtime.comments) {
+        if (comment.readUserIds.contains(user?.id)) {
+          commentNotRead = false;
+        }
+      }
+    }
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -60,12 +71,12 @@ class RequestOvertimeList extends StatelessWidget {
                           ),
                         )
                       : Container(),
-                  overtime.comments.isNotEmpty
+                  commentNotRead && overtime.comments.isNotEmpty
                       ? const Padding(
                           padding: EdgeInsets.only(top: 4),
                           child: Chip(
                             label: Text(
-                              'コメントあり',
+                              '未読コメントあり',
                               style: TextStyle(
                                 color: kLightGreenColor,
                                 fontSize: 12,

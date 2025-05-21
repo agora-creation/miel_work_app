@@ -148,6 +148,7 @@ class _ReportScreenState extends State<ReportScreen> {
                           day,
                           child: ReportList(
                             report: report,
+                            user: widget.loginProvider.user,
                             onTap: () {
                               if (report == null) return;
                               Navigator.push(

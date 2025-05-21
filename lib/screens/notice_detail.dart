@@ -56,7 +56,7 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
     setState(() {});
   }
 
-  void _init() async {
+  void _read() async {
     UserModel? user = widget.loginProvider.user;
     List<String> readUserIds = widget.notice.readUserIds;
     if (!readUserIds.contains(user?.id)) {
@@ -66,11 +66,32 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
         'readUserIds': readUserIds,
       });
     }
+    bool commentNotRead = true;
+    List<Map> comments = [];
+    if (widget.notice.comments.isNotEmpty) {
+      for (final comment in widget.notice.comments) {
+        if (comment.readUserIds.contains(user?.id)) {
+          commentNotRead = false;
+        }
+        List<String> commentReadUserIds = comment.readUserIds;
+        if (!commentReadUserIds.contains(user?.id)) {
+          commentReadUserIds.add(user?.id ?? '');
+        }
+        comment.readUserIds = commentReadUserIds;
+        comments.add(comment.toMap());
+      }
+    }
+    if (commentNotRead) {
+      noticeService.update({
+        'id': widget.notice.id,
+        'comments': comments,
+      });
+    }
   }
 
   @override
   void initState() {
-    _init();
+    _read();
     comments = widget.notice.comments;
     super.initState();
   }

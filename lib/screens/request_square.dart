@@ -104,6 +104,7 @@ class _RequestSquareScreenState extends State<RequestSquareScreen> {
                       RequestSquareModel square = squares[index];
                       return RequestSquareList(
                         square: square,
+                        user: widget.loginProvider.user,
                         onTap: () {
                           Navigator.push(
                             context,
@@ -140,6 +141,7 @@ class _RequestSquareScreenState extends State<RequestSquareScreen> {
                       RequestSquareModel square = squares[index];
                       return RequestSquareList(
                         square: square,
+                        user: widget.loginProvider.user,
                         onTap: () {
                           Navigator.push(
                             context,
@@ -176,6 +178,7 @@ class _RequestSquareScreenState extends State<RequestSquareScreen> {
                       RequestSquareModel square = squares[index];
                       return RequestSquareList(
                         square: square,
+                        user: widget.loginProvider.user,
                         onTap: () {
                           Navigator.push(
                             context,

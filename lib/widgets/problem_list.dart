@@ -2,19 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/problem.dart';
+import 'package:miel_work_app/models/user.dart';
 
 class ProblemList extends StatelessWidget {
   final ProblemModel problem;
+  final UserModel? user;
   final Function()? onTap;
 
   const ProblemList({
     required this.problem,
+    required this.user,
     this.onTap,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    bool commentNotRead = true;
+    if (problem.comments.isNotEmpty) {
+      for (final comment in problem.comments) {
+        if (comment.readUserIds.contains(user?.id)) {
+          commentNotRead = false;
+        }
+      }
+    }
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: GestureDetector(
@@ -83,12 +94,12 @@ class ProblemList extends StatelessWidget {
                       maxLines: 1,
                     )
                   : Container(),
-              problem.comments.isNotEmpty
+              commentNotRead && problem.comments.isNotEmpty
                   ? const Padding(
                       padding: EdgeInsets.only(top: 4),
                       child: Chip(
                         label: Text(
-                          'コメントあり',
+                          '未読コメントあり',
                           style: TextStyle(
                             color: kLightGreenColor,
                             fontSize: 12,

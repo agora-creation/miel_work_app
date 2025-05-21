@@ -124,6 +124,7 @@ class _LostScreenState extends State<LostScreen> {
                               LostModel lost = losts[index];
                               return LostCard(
                                 lost: lost,
+                                user: widget.loginProvider.user,
                                 onTap: () {
                                   FocusManager.instance.primaryFocus?.unfocus();
                                   Navigator.push(
@@ -166,6 +167,7 @@ class _LostScreenState extends State<LostScreen> {
                               LostModel lost = losts[index];
                               return LostCard(
                                 lost: lost,
+                                user: widget.loginProvider.user,
                                 onTap: () {
                                   FocusManager.instance.primaryFocus?.unfocus();
                                   Navigator.push(
@@ -208,6 +210,7 @@ class _LostScreenState extends State<LostScreen> {
                               LostModel lost = losts[index];
                               return LostCard(
                                 lost: lost,
+                                user: widget.loginProvider.user,
                                 onTap: () {
                                   FocusManager.instance.primaryFocus?.unfocus();
                                   Navigator.push(

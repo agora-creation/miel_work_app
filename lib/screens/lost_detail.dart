@@ -9,6 +9,7 @@ import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/comment.dart';
 import 'package:miel_work_app/models/lost.dart';
+import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/chat_message.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
@@ -67,8 +68,34 @@ class _LostDetailScreenState extends State<LostDetailScreen> {
     setState(() {});
   }
 
+  void _read() async {
+    UserModel? user = widget.loginProvider.user;
+    bool commentNotRead = true;
+    List<Map> comments = [];
+    if (widget.lost.comments.isNotEmpty) {
+      for (final comment in widget.lost.comments) {
+        if (comment.readUserIds.contains(user?.id)) {
+          commentNotRead = false;
+        }
+        List<String> commentReadUserIds = comment.readUserIds;
+        if (!commentReadUserIds.contains(user?.id)) {
+          commentReadUserIds.add(user?.id ?? '');
+        }
+        comment.readUserIds = commentReadUserIds;
+        comments.add(comment.toMap());
+      }
+    }
+    if (commentNotRead) {
+      lostService.update({
+        'id': widget.lost.id,
+        'comments': comments,
+      });
+    }
+  }
+
   @override
   void initState() {
+    _read();
     comments = widget.lost.comments;
     super.initState();
   }

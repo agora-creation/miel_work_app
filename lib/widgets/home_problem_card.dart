@@ -80,7 +80,10 @@ class _HomeProblemCardState extends State<HomeProblemCard> {
                     }
                     return Column(
                       children: problems.map((problem) {
-                        return ProblemList(problem: problem);
+                        return ProblemList(
+                          problem: problem,
+                          user: widget.loginProvider.user,
+                        );
                       }).toList(),
                     );
                   },

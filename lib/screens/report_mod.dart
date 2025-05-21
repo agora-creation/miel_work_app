@@ -13,6 +13,7 @@ import 'package:miel_work_app/models/report_problem.dart';
 import 'package:miel_work_app/models/report_repair.dart';
 import 'package:miel_work_app/models/report_visitor.dart';
 import 'package:miel_work_app/models/report_worker.dart';
+import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/chat_message.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
@@ -194,7 +195,33 @@ class _ReportModScreenState extends State<ReportModScreen> {
     );
   }
 
+  void _read() async {
+    UserModel? user = widget.loginProvider.user;
+    bool commentNotRead = true;
+    List<Map> comments = [];
+    if (widget.report.comments.isNotEmpty) {
+      for (final comment in widget.report.comments) {
+        if (comment.readUserIds.contains(user?.id)) {
+          commentNotRead = false;
+        }
+        List<String> commentReadUserIds = comment.readUserIds;
+        if (!commentReadUserIds.contains(user?.id)) {
+          commentReadUserIds.add(user?.id ?? '');
+        }
+        comment.readUserIds = commentReadUserIds;
+        comments.add(comment.toMap());
+      }
+    }
+    if (commentNotRead) {
+      reportService.update({
+        'id': widget.report.id,
+        'comments': comments,
+      });
+    }
+  }
+
   void _init() async {
+    _read();
     reportWorkers = widget.report.reportWorkers;
     reportWorkersGuardsman = widget.report.reportWorkersGuardsman;
     reportWorkersGarbageman = widget.report.reportWorkersGarbageman;

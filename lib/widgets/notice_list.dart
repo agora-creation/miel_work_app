@@ -19,6 +19,14 @@ class NoticeList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool commentNotRead = true;
+    if (notice.comments.isNotEmpty) {
+      for (final comment in notice.comments) {
+        if (comment.readUserIds.contains(user?.id)) {
+          commentNotRead = false;
+        }
+      }
+    }
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -50,12 +58,12 @@ class NoticeList extends StatelessWidget {
                       fontSize: 14,
                     ),
                   ),
-                  notice.comments.isNotEmpty
+                  commentNotRead && notice.comments.isNotEmpty
                       ? const Padding(
                           padding: EdgeInsets.only(top: 4),
                           child: Chip(
                             label: Text(
-                              'コメントあり',
+                              '未読コメントあり',
                               style: TextStyle(
                                 color: kLightGreenColor,
                                 fontSize: 12,

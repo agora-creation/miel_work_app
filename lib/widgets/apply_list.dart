@@ -3,19 +3,30 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/apply.dart';
+import 'package:miel_work_app/models/user.dart';
 
 class ApplyList extends StatelessWidget {
   final ApplyModel apply;
+  final UserModel? user;
   final Function()? onTap;
 
   const ApplyList({
     required this.apply,
+    required this.user,
     this.onTap,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    bool commentNotRead = true;
+    if (apply.comments.isNotEmpty) {
+      for (final comment in apply.comments) {
+        if (comment.readUserIds.contains(user?.id)) {
+          commentNotRead = false;
+        }
+      }
+    }
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -80,12 +91,12 @@ class ApplyList extends StatelessWidget {
                           ),
                         )
                       : Container(),
-                  apply.comments.isNotEmpty
+                  commentNotRead && apply.comments.isNotEmpty
                       ? const Padding(
                           padding: EdgeInsets.only(top: 4),
                           child: Chip(
                             label: Text(
-                              'コメントあり',
+                              '未読コメントあり',
                               style: TextStyle(
                                 color: kLightGreenColor,
                                 fontSize: 12,

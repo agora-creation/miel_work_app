@@ -5,6 +5,7 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/approval_user.dart';
 import 'package:miel_work_app/models/comment.dart';
 import 'package:miel_work_app/models/request_cycle.dart';
+import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/providers/chat_message.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
@@ -55,7 +56,33 @@ class _RequestCycleDetailScreenState extends State<RequestCycleDetailScreen> {
     setState(() {});
   }
 
+  void _read() async {
+    UserModel? user = widget.loginProvider.user;
+    bool commentNotRead = true;
+    List<Map> comments = [];
+    if (widget.cycle.comments.isNotEmpty) {
+      for (final comment in widget.cycle.comments) {
+        if (comment.readUserIds.contains(user?.id)) {
+          commentNotRead = false;
+        }
+        List<String> commentReadUserIds = comment.readUserIds;
+        if (!commentReadUserIds.contains(user?.id)) {
+          commentReadUserIds.add(user?.id ?? '');
+        }
+        comment.readUserIds = commentReadUserIds;
+        comments.add(comment.toMap());
+      }
+    }
+    if (commentNotRead) {
+      cycleService.update({
+        'id': widget.cycle.id,
+        'comments': comments,
+      });
+    }
+  }
+
   void _init() async {
+    _read();
     comments = widget.cycle.comments;
     setState(() {});
   }

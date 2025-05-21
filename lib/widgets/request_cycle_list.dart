@@ -3,19 +3,30 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/request_cycle.dart';
+import 'package:miel_work_app/models/user.dart';
 
 class RequestCycleList extends StatelessWidget {
   final RequestCycleModel cycle;
+  final UserModel? user;
   final Function()? onTap;
 
   const RequestCycleList({
     required this.cycle,
+    required this.user,
     this.onTap,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    bool commentNotRead = true;
+    if (cycle.comments.isNotEmpty) {
+      for (final comment in cycle.comments) {
+        if (comment.readUserIds.contains(user?.id)) {
+          commentNotRead = false;
+        }
+      }
+    }
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -60,12 +71,12 @@ class RequestCycleList extends StatelessWidget {
                           ),
                         )
                       : Container(),
-                  cycle.comments.isNotEmpty
+                  commentNotRead && cycle.comments.isNotEmpty
                       ? const Padding(
                           padding: EdgeInsets.only(top: 4),
                           child: Chip(
                             label: Text(
-                              'コメントあり',
+                              '未読コメントあり',
                               style: TextStyle(
                                 color: kLightGreenColor,
                                 fontSize: 12,

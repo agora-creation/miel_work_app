@@ -120,6 +120,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
                               ProblemModel problem = problems[index];
                               return ProblemList(
                                 problem: problem,
+                                user: widget.loginProvider.user,
                                 onTap: () {
                                   FocusManager.instance.primaryFocus?.unfocus();
                                   Navigator.push(
@@ -162,6 +163,7 @@ class _ProblemScreenState extends State<ProblemScreen> {
                               ProblemModel problem = problems[index];
                               return ProblemList(
                                 problem: problem,
+                                user: widget.loginProvider.user,
                                 onTap: () {
                                   FocusManager.instance.primaryFocus?.unfocus();
                                   Navigator.push(

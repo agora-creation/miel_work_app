@@ -2,19 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/models/lost.dart';
+import 'package:miel_work_app/models/user.dart';
 
 class LostCard extends StatelessWidget {
   final LostModel lost;
+  final UserModel? user;
   final Function()? onTap;
 
   const LostCard({
     required this.lost,
+    required this.user,
     this.onTap,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    bool commentNotRead = true;
+    if (lost.comments.isNotEmpty) {
+      for (final comment in lost.comments) {
+        if (comment.readUserIds.contains(user?.id)) {
+          commentNotRead = false;
+        }
+      }
+    }
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: GestureDetector(
@@ -144,13 +155,13 @@ class LostCard extends StatelessWidget {
                 ),
               ),
             ),
-            lost.comments.isNotEmpty
+            commentNotRead && lost.comments.isNotEmpty
                 ? const Positioned(
                     top: 8,
                     right: 8,
                     child: Chip(
                       label: Text(
-                        'コメントあり',
+                        '未読コメントあり',
                         style: TextStyle(
                           color: kLightGreenColor,
                           fontSize: 10,

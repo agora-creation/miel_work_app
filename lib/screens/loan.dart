@@ -124,6 +124,7 @@ class _LoanScreenState extends State<LoanScreen> {
                               LoanModel loan = loans[index];
                               return LoanCard(
                                 loan: loan,
+                                user: widget.loginProvider.user,
                                 onTap: () {
                                   FocusManager.instance.primaryFocus?.unfocus();
                                   Navigator.push(
@@ -166,6 +167,7 @@ class _LoanScreenState extends State<LoanScreen> {
                               LoanModel loan = loans[index];
                               return LoanCard(
                                 loan: loan,
+                                user: widget.loginProvider.user,
                                 onTap: () {
                                   FocusManager.instance.primaryFocus?.unfocus();
                                   Navigator.push(
@@ -208,6 +210,7 @@ class _LoanScreenState extends State<LoanScreen> {
                               LoanModel loan = loans[index];
                               return LoanCard(
                                 loan: loan,
+                                user: widget.loginProvider.user,
                                 onTap: () {
                                   FocusManager.instance.primaryFocus?.unfocus();
                                   Navigator.push(
