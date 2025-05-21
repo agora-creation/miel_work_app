@@ -165,12 +165,12 @@ class NoticeProvider with ChangeNotifier {
         'userId': loginUser.id,
         'userName': loginUser.name,
         'content': content,
+        'readUserIds': [loginUser.id],
         'createdAt': DateTime.now(),
       });
       _noticeService.update({
         'id': notice.id,
         'comments': comments,
-        'readUserIds': [loginUser.id],
       });
       //通知
       List<UserModel> sendUsers = [];
