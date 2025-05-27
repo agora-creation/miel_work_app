@@ -5,6 +5,7 @@ import 'package:miel_work_app/common/style.dart';
 import 'package:miel_work_app/providers/home.dart';
 import 'package:miel_work_app/providers/login.dart';
 import 'package:miel_work_app/screens/how_to.dart';
+import 'package:miel_work_app/screens/log.dart';
 import 'package:miel_work_app/screens/login.dart';
 import 'package:miel_work_app/widgets/custom_alert_dialog.dart';
 import 'package:miel_work_app/widgets/custom_button.dart';
@@ -83,6 +84,22 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
                   loginProvider: widget.loginProvider,
                 ),
               ),
+            ),
+            SettingList(
+              label: '操作ログを確認する',
+              value: '',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.rightToLeft,
+                    child: LogScreen(
+                      loginProvider: widget.loginProvider,
+                      homeProvider: widget.homeProvider,
+                    ),
+                  ),
+                );
+              },
             ),
             SettingList(
               label: 'PUSH通知の再設定',
