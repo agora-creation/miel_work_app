@@ -212,7 +212,7 @@ class ApplyProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '新規申請を行いました。',
+        'content': '$type申請を行いました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
