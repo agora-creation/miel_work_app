@@ -106,6 +106,7 @@ class _RequestConstModScreenState extends State<RequestConstModScreen> {
           TextButton(
             onPressed: () async {
               String? error = await constProvider.update(
+                organization: widget.loginProvider.organization,
                 requestConst: widget.requestConst,
                 companyName: companyName.text,
                 companyUserName: companyUserName.text,
@@ -126,6 +127,7 @@ class _RequestConstModScreenState extends State<RequestConstModScreen> {
                 dustMeasures: dustMeasures.text,
                 fire: fire,
                 fireMeasures: fireMeasures.text,
+                loginUser: widget.loginProvider.user,
               );
               if (error != null) {
                 if (!mounted) return;

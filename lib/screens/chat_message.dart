@@ -190,6 +190,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                 menuController.hideMenu();
                                 String? error = await messageProvider.delete(
                                   message: message,
+                                  loginUser: widget.loginProvider.user,
                                 );
                                 if (error != null) {
                                   if (!mounted) return;
@@ -216,6 +217,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                     String? error =
                                         await messageProvider.delete(
                                       message: message,
+                                      loginUser: widget.loginProvider.user,
                                     );
                                     if (error != null) {
                                       if (!mounted) return;
@@ -241,6 +243,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                         showDialog(
                                           context: context,
                                           builder: (context) => DeleteDialog(
+                                            loginProvider: widget.loginProvider,
                                             messageProvider: messageProvider,
                                             message: message,
                                           ),
@@ -262,6 +265,7 @@ class _ChatMessageScreenState extends State<ChatMessageScreen> {
                                         showDialog(
                                           context: context,
                                           builder: (context) => DeleteDialog(
+                                            loginProvider: widget.loginProvider,
                                             messageProvider: messageProvider,
                                             message: message,
                                           ),
@@ -539,10 +543,12 @@ class _ReadUsersDialogState extends State<ReadUsersDialog> {
 }
 
 class DeleteDialog extends StatefulWidget {
+  final LoginProvider loginProvider;
   final ChatMessageProvider messageProvider;
   final ChatMessageModel message;
 
   const DeleteDialog({
+    required this.loginProvider,
     required this.messageProvider,
     required this.message,
     super.key,
@@ -586,6 +592,7 @@ class _DeleteDialogState extends State<DeleteDialog> {
           onPressed: () async {
             String? error = await widget.messageProvider.delete(
               message: widget.message,
+              loginUser: widget.loginProvider.user,
             );
             if (error != null) {
               if (!mounted) return;

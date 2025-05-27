@@ -83,6 +83,7 @@ class _RequestFacilityModScreenState extends State<RequestFacilityModScreen> {
           TextButton(
             onPressed: () async {
               String? error = await facilityProvider.update(
+                organization: widget.loginProvider.organization,
                 facility: widget.facility,
                 companyName: companyName.text,
                 companyUserName: companyUserName.text,
@@ -91,6 +92,7 @@ class _RequestFacilityModScreenState extends State<RequestFacilityModScreen> {
                 useStartedAt: useStartedAt,
                 useEndedAt: useEndedAt,
                 useAtPending: useAtPending,
+                loginUser: widget.loginProvider.user,
               );
               if (error != null) {
                 if (!mounted) return;

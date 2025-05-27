@@ -8,6 +8,7 @@ import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/services/fm.dart';
+import 'package:miel_work_app/services/log.dart';
 import 'package:miel_work_app/services/notice.dart';
 import 'package:miel_work_app/services/user.dart';
 import 'package:path/path.dart' as p;
@@ -16,6 +17,7 @@ class NoticeProvider with ChangeNotifier {
   final NoticeService _noticeService = NoticeService();
   final UserService _userService = UserService();
   final FmService _fmService = FmService();
+  final LogService _logService = LogService();
 
   Future<String?> create({
     required OrganizationModel? organization,
@@ -83,6 +85,17 @@ class NoticeProvider with ChangeNotifier {
           }
         }
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': 'お知らせを追加しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = 'お知らせの追加に失敗しました';
     }
@@ -137,6 +150,17 @@ class NoticeProvider with ChangeNotifier {
           'readUserIds': [loginUser.id],
         });
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': 'お知らせ情報を編集しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = 'お知らせの編集に失敗しました';
     }
@@ -189,6 +213,17 @@ class NoticeProvider with ChangeNotifier {
           }
         }
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': 'お知らせに社内コメントを追記しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '社内コメントの追記に失敗しました';
     }
@@ -197,8 +232,10 @@ class NoticeProvider with ChangeNotifier {
 
   Future<String?> delete({
     required NoticeModel notice,
+    required UserModel? loginUser,
   }) async {
     String? error;
+    if (loginUser == null) return 'お知らせの削除に失敗しました';
     try {
       _noticeService.delete({
         'id': notice.id,
@@ -210,6 +247,17 @@ class NoticeProvider with ChangeNotifier {
             .child('/${notice.id}${notice.fileExt}')
             .delete();
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': notice.organizationId,
+        'content': 'お知らせを削除しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = 'お知らせの削除に失敗しました';
     }

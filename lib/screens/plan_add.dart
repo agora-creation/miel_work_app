@@ -307,6 +307,7 @@ class _PlanAddScreenState extends State<PlanAddScreen> {
             repeatWeeks: [],
             memo: memoController.text,
             alertMinute: alertMinute,
+            loginUser: widget.loginProvider.user,
           );
           if (error != null) {
             if (!mounted) return;

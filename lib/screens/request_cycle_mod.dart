@@ -68,12 +68,14 @@ class _RequestCycleModScreenState extends State<RequestCycleModScreen> {
           TextButton(
             onPressed: () async {
               String? error = await cycleProvider.update(
+                organization: widget.loginProvider.organization,
                 cycle: widget.cycle,
                 companyName: companyName.text,
                 companyUserName: companyUserName.text,
                 companyUserEmail: companyUserEmail.text,
                 companyUserTel: companyUserTel.text,
                 companyAddress: companyAddress.text,
+                loginUser: widget.loginProvider.user,
               );
               if (error != null) {
                 if (!mounted) return;

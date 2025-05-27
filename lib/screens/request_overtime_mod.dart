@@ -84,6 +84,7 @@ class _RequestOvertimeModScreenState extends State<RequestOvertimeModScreen> {
           TextButton(
             onPressed: () async {
               String? error = await overtimeProvider.update(
+                organization: widget.loginProvider.organization,
                 overtime: widget.overtime,
                 companyName: companyName.text,
                 companyUserName: companyUserName.text,
@@ -93,6 +94,7 @@ class _RequestOvertimeModScreenState extends State<RequestOvertimeModScreen> {
                 useEndedAt: useEndedAt,
                 useAtPending: useAtPending,
                 useContent: useContent.text,
+                loginUser: widget.loginProvider.user,
               );
               if (error != null) {
                 if (!mounted) return;

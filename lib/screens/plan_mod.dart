@@ -318,6 +318,7 @@ class _PlanModScreenState extends State<PlanModScreen> {
             repeatWeeks: [],
             memo: memoController.text,
             alertMinute: alertMinute,
+            loginUser: widget.loginProvider.user,
           );
           if (error != null) {
             if (!mounted) return;

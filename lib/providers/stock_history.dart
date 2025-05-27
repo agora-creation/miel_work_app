@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/models/stock.dart';
 import 'package:miel_work_app/models/stock_history.dart';
 import 'package:miel_work_app/models/user.dart';
+import 'package:miel_work_app/services/log.dart';
 import 'package:miel_work_app/services/stock.dart';
 import 'package:miel_work_app/services/stock_history.dart';
 
 class StockHistoryProvider with ChangeNotifier {
   final StockService _stockService = StockService();
   final StockHistoryService _stockHistoryService = StockHistoryService();
+  final LogService _logService = LogService();
 
   Future<String?> create({
     required StockModel stock,
@@ -46,6 +48,17 @@ class StockHistoryProvider with ChangeNotifier {
         'id': stock.id,
         'quantity': newQuantity,
       });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': stock.organizationId,
+        'content': '在庫変動履歴を追加しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       print(e);
       error = '在庫変動履歴の追加に失敗しました';
@@ -56,8 +69,10 @@ class StockHistoryProvider with ChangeNotifier {
   Future<String?> delete({
     required StockModel stock,
     required StockHistoryModel stockHistory,
+    required UserModel? loginUser,
   }) async {
     String? error;
+    if (loginUser == null) return '在庫変動履歴の削除に失敗しました';
     try {
       _stockHistoryService.delete({
         'id': stockHistory.id,
@@ -80,6 +95,17 @@ class StockHistoryProvider with ChangeNotifier {
       _stockService.update({
         'id': stock.id,
         'quantity': newQuantity,
+      });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': stock.organizationId,
+        'content': '在庫変動履歴を削除しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
       });
     } catch (e) {
       error = '在庫変動履歴の削除に失敗しました';

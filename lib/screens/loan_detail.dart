@@ -471,6 +471,7 @@ class _DelLoanDialogState extends State<DelLoanDialog> {
           onPressed: () async {
             String? error = await loanProvider.delete(
               loan: widget.loan,
+              loginUser: widget.loginProvider.user,
             );
             if (error != null) {
               if (!mounted) return;

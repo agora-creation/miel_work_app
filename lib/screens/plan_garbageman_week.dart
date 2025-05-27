@@ -421,6 +421,7 @@ class _PlanGarbagemanWeekScreenState extends State<PlanGarbagemanWeekScreen> {
                       organization: widget.loginProvider.organization,
                       garbagemanWeeks: garbagemanWeeks,
                       days: widget.days,
+                      loginUser: widget.loginProvider.user,
                     );
                     if (error != null) {
                       if (!mounted) return;

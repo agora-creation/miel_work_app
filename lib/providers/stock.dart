@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/stock.dart';
 import 'package:miel_work_app/models/user.dart';
+import 'package:miel_work_app/services/log.dart';
 import 'package:miel_work_app/services/stock.dart';
 import 'package:miel_work_app/services/stock_history.dart';
 
 class StockProvider with ChangeNotifier {
   final StockService _stockService = StockService();
   final StockHistoryService _stockHistoryService = StockHistoryService();
+  final LogService _logService = LogService();
 
   Future<String?> create({
     required OrganizationModel? organization,
@@ -44,6 +46,17 @@ class StockProvider with ChangeNotifier {
           'createdAt': DateTime.now(),
         });
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '在庫品を追加しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '在庫品の追加に失敗しました';
     }
@@ -65,6 +78,17 @@ class StockProvider with ChangeNotifier {
         'id': stock.id,
         'name': name,
       });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '在庫品情報を編集しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '在庫品情報の編集に失敗しました';
     }
@@ -73,11 +97,24 @@ class StockProvider with ChangeNotifier {
 
   Future<String?> delete({
     required StockModel stock,
+    required UserModel? loginUser,
   }) async {
     String? error;
+    if (loginUser == null) return '在庫品の削除に失敗しました';
     try {
       _stockService.delete({
         'id': stock.id,
+      });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': stock.organizationId,
+        'content': '在庫品を削除しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
       });
     } catch (e) {
       error = '在庫品の削除に失敗しました';

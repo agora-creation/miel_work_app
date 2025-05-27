@@ -104,6 +104,7 @@ class _GroupModScreenState extends State<GroupModScreen> {
             organization: widget.loginProvider.organization,
             group: widget.group,
             name: nameController.text,
+            loginUser: widget.loginProvider.user,
           );
           if (error != null) {
             if (!mounted) return;
@@ -184,6 +185,7 @@ class _DelGroupDialogState extends State<DelGroupDialog> {
             String? error = await widget.homeProvider.groupDelete(
               organization: widget.loginProvider.organization,
               group: widget.group,
+              loginUser: widget.loginProvider.user,
             );
             if (error != null) {
               if (!mounted) return;

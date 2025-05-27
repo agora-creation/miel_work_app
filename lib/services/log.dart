@@ -21,22 +21,6 @@ class LogService {
     firestore.collection(collection).doc(values['id']).delete();
   }
 
-  Future<LogModel?> selectData({
-    required String id,
-  }) async {
-    LogModel? ret;
-    await firestore
-        .collection(collection)
-        .where('id', isEqualTo: id)
-        .get()
-        .then((value) {
-      if (value.docs.isNotEmpty) {
-        ret = LogModel.fromSnapshot(value.docs.first);
-      }
-    });
-    return ret;
-  }
-
   Stream<QuerySnapshot<Map<String, dynamic>>>? streamList({
     required String? organizationId,
   }) {

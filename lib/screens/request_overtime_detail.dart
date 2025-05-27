@@ -403,6 +403,8 @@ class _RequestOvertimeDetailScreenState
                                   onPressed: () async {
                                     String? error =
                                         await overtimeProvider.addComment(
+                                      organization:
+                                          widget.loginProvider.organization,
                                       overtime: widget.overtime,
                                       content: commentContentController.text,
                                       loginUser: widget.loginProvider.user,
@@ -545,7 +547,9 @@ class PendingRequestOvertimeDialog extends StatelessWidget {
           backgroundColor: kYellowColor,
           onPressed: () async {
             String? error = await overtimeProvider.pending(
+              organization: loginProvider.organization,
               overtime: overtime,
+              loginUser: loginProvider.user,
             );
             if (error != null) {
               showMessage(context, error, false);
@@ -602,7 +606,9 @@ class PendingCancelRequestOvertimeDialog extends StatelessWidget {
           backgroundColor: kYellowColor,
           onPressed: () async {
             String? error = await overtimeProvider.pendingCancel(
+              organization: loginProvider.organization,
               overtime: overtime,
+              loginUser: loginProvider.user,
             );
             if (error != null) {
               showMessage(context, error, false);
@@ -666,6 +672,7 @@ class _ApprovalRequestOvertimeDialogState
           backgroundColor: kApprovalColor,
           onPressed: () async {
             String? error = await overtimeProvider.approval(
+              organization: widget.loginProvider.organization,
               overtime: widget.overtime,
               loginUser: widget.loginProvider.user,
             );
@@ -734,6 +741,7 @@ class _RejectRequestOvertimeDialogState
           backgroundColor: kRejectColor,
           onPressed: () async {
             String? error = await overtimeProvider.reject(
+              organization: widget.loginProvider.organization,
               overtime: widget.overtime,
               loginUser: widget.loginProvider.user,
             );

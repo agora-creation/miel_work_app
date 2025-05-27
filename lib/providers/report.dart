@@ -12,10 +12,12 @@ import 'package:miel_work_app/models/report_repair.dart';
 import 'package:miel_work_app/models/report_visitor.dart';
 import 'package:miel_work_app/models/report_worker.dart';
 import 'package:miel_work_app/models/user.dart';
+import 'package:miel_work_app/services/log.dart';
 import 'package:miel_work_app/services/report.dart';
 
 class ReportProvider with ChangeNotifier {
   final ReportService _reportService = ReportService();
+  final LogService _logService = LogService();
 
   Future<String?> create({
     required OrganizationModel? organization,
@@ -168,6 +170,17 @@ class ReportProvider with ChangeNotifier {
         'createdAt': createdAt,
         'expirationAt': createdAt.add(const Duration(days: 365)),
       });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '日報を保存しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '日報の保存に失敗しました';
     }
@@ -318,6 +331,17 @@ class ReportProvider with ChangeNotifier {
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
       });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': report.organizationId,
+        'content': '日報を保存しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '日報の保存に失敗しました';
     }
@@ -353,6 +377,17 @@ class ReportProvider with ChangeNotifier {
         'id': report.id,
         'comments': comments,
       });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '日報に社内コメントを追記しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '社内コメントの追記に失敗しました';
     }
@@ -370,6 +405,17 @@ class ReportProvider with ChangeNotifier {
         'id': report.id,
         'approval': 1,
       });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': report.organizationId,
+        'content': '日報を承認しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '日報の承認に失敗しました';
     }
@@ -378,11 +424,24 @@ class ReportProvider with ChangeNotifier {
 
   Future<String?> delete({
     required ReportModel report,
+    required UserModel? loginUser,
   }) async {
     String? error;
+    if (loginUser == null) return '日報の削除に失敗しました';
     try {
       _reportService.delete({
         'id': report.id,
+      });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': report.organizationId,
+        'content': '日報を削除しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
       });
     } catch (e) {
       error = '日報の削除に失敗しました';

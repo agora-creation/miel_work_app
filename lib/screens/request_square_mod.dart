@@ -101,6 +101,7 @@ class _RequestSquareModScreenState extends State<RequestSquareModScreen> {
           TextButton(
             onPressed: () async {
               String? error = await squareProvider.update(
+                organization: widget.loginProvider.organization,
                 square: widget.square,
                 companyName: companyName.text,
                 companyUserName: companyUserName.text,
@@ -118,6 +119,7 @@ class _RequestSquareModScreenState extends State<RequestSquareModScreen> {
                 useDesk: useDesk,
                 useDeskNum: int.parse(useDeskNum.text),
                 useContent: useContent.text,
+                loginUser: widget.loginProvider.user,
               );
               if (error != null) {
                 if (!mounted) return;

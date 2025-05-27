@@ -9,6 +9,7 @@ import 'package:miel_work_app/models/lost.dart';
 import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/services/fm.dart';
+import 'package:miel_work_app/services/log.dart';
 import 'package:miel_work_app/services/lost.dart';
 import 'package:miel_work_app/services/user.dart';
 import 'package:signature/signature.dart';
@@ -17,6 +18,7 @@ class LostProvider with ChangeNotifier {
   final LostService _lostService = LostService();
   final UserService _userService = UserService();
   final FmService _fmService = FmService();
+  final LogService _logService = LogService();
 
   Future<String?> create({
     required OrganizationModel? organization,
@@ -87,6 +89,17 @@ class LostProvider with ChangeNotifier {
           }
         }
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '落とし物を追加しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '落とし物の追加に失敗しました';
     }
@@ -143,6 +156,17 @@ class LostProvider with ChangeNotifier {
           'remarks': remarks,
         });
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '落とし物情報を編集しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '落とし物情報の編集に失敗しました';
     }
@@ -196,6 +220,17 @@ class LostProvider with ChangeNotifier {
         'returnCustomerIDImage': returnCustomerIDImage,
         'signImage': signImage,
       });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '落とし物を返却しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '落とし物の返却に失敗しました';
     }
@@ -214,6 +249,17 @@ class LostProvider with ChangeNotifier {
       _lostService.update({
         'id': lost.id,
         'status': 9,
+      });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '落とし物を破棄しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
       });
     } catch (e) {
       error = '落とし物の破棄に失敗しました';
@@ -267,6 +313,17 @@ class LostProvider with ChangeNotifier {
           }
         }
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '落とし物に社内コメントを追記しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '社内コメントの追記に失敗しました';
     }
@@ -275,11 +332,24 @@ class LostProvider with ChangeNotifier {
 
   Future<String?> delete({
     required LostModel lost,
+    required UserModel? loginUser,
   }) async {
     String? error;
+    if (loginUser == null) return '落とし物情報の削除に失敗しました';
     try {
       _lostService.delete({
         'id': lost.id,
+      });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': lost.organizationId,
+        'content': '落とし物を削除しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
       });
     } catch (e) {
       error = '落とし物情報の削除に失敗しました';

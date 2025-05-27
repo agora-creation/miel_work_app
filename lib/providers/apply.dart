@@ -13,6 +13,7 @@ import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/services/apply.dart';
 import 'package:miel_work_app/services/fm.dart';
+import 'package:miel_work_app/services/log.dart';
 import 'package:miel_work_app/services/user.dart';
 import 'package:path/path.dart' as p;
 
@@ -20,6 +21,7 @@ class ApplyProvider with ChangeNotifier {
   final ApplyService _applyService = ApplyService();
   final UserService _userService = UserService();
   final FmService _fmService = FmService();
+  final LogService _logService = LogService();
 
   Future<String?> create({
     required OrganizationModel? organization,
@@ -205,6 +207,17 @@ class ApplyProvider with ChangeNotifier {
           }
         }
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '新規申請を行いました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '新規申請に失敗しました';
     }
@@ -232,6 +245,17 @@ class ApplyProvider with ChangeNotifier {
         'title': title,
         'content': content,
         'price': price,
+      });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': apply.organizationId,
+        'content': '申請情報を編集しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
       });
     } catch (e) {
       error = '申請情報の編集に失敗しました';
@@ -285,6 +309,17 @@ class ApplyProvider with ChangeNotifier {
           }
         }
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '申請に社内コメントを追記しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '社内コメントの追記に失敗しました';
     }
@@ -293,12 +328,25 @@ class ApplyProvider with ChangeNotifier {
 
   Future<String?> pending({
     required ApplyModel apply,
+    required UserModel? loginUser,
   }) async {
     String? error;
+    if (loginUser == null) return '申請情報の更新に失敗しました';
     try {
       _applyService.update({
         'id': apply.id,
         'pending': true,
+      });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': apply.organizationId,
+        'content': '申請を保留中にしました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
       });
     } catch (e) {
       error = '申請情報の更新に失敗しました';
@@ -308,12 +356,25 @@ class ApplyProvider with ChangeNotifier {
 
   Future<String?> pendingCancel({
     required ApplyModel apply,
+    required UserModel? loginUser,
   }) async {
     String? error;
+    if (loginUser == null) return '申請情報の更新に失敗しました';
     try {
       _applyService.update({
         'id': apply.id,
         'pending': false,
+      });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': apply.organizationId,
+        'content': '申請の保留中を解除しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
       });
     } catch (e) {
       error = '申請情報の更新に失敗しました';
@@ -377,6 +438,17 @@ class ApplyProvider with ChangeNotifier {
           'approvalReason': approvalReason,
         });
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': apply.organizationId,
+        'content': '申請を承認しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '申請の承認に失敗しました';
     }
@@ -414,6 +486,17 @@ class ApplyProvider with ChangeNotifier {
           }
         }
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': apply.organizationId,
+        'content': '申請を否決しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '申請の否決に失敗しました';
     }

@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:miel_work_app/common/functions.dart';
 import 'package:miel_work_app/models/approval_user.dart';
+import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/request_facility.dart';
 import 'package:miel_work_app/models/user.dart';
+import 'package:miel_work_app/services/log.dart';
 import 'package:miel_work_app/services/mail.dart';
 import 'package:miel_work_app/services/request_facility.dart';
 
 class RequestFacilityProvider with ChangeNotifier {
   final RequestFacilityService _facilityService = RequestFacilityService();
   final MailService _mailService = MailService();
+  final LogService _logService = LogService();
 
   Future<String?> update({
+    required OrganizationModel? organization,
     required RequestFacilityModel facility,
     required String companyName,
     required String companyUserName,
@@ -20,8 +24,11 @@ class RequestFacilityProvider with ChangeNotifier {
     required DateTime useStartedAt,
     required DateTime useEndedAt,
     required bool useAtPending,
+    required UserModel? loginUser,
   }) async {
     String? error;
+    if (organization == null) return '施設使用申込情報の編集に失敗しました';
+    if (loginUser == null) return '施設使用申込情報の編集に失敗しました';
     try {
       _facilityService.update({
         'id': facility.id,
@@ -33,6 +40,17 @@ class RequestFacilityProvider with ChangeNotifier {
         'useEndedAt': useEndedAt,
         'useAtPending': useAtPending,
       });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '施設使用申込を編集しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '施設使用申込情報の編集に失敗しました';
     }
@@ -40,11 +58,13 @@ class RequestFacilityProvider with ChangeNotifier {
   }
 
   Future<String?> addComment({
+    required OrganizationModel? organization,
     required RequestFacilityModel facility,
     required String content,
     required UserModel? loginUser,
   }) async {
     String? error;
+    if (organization == null) return '社内コメントの追記に失敗しました';
     if (content == '') return '社内コメントの追記に失敗しました';
     if (loginUser == null) return '社内コメントの追記に失敗しました';
     try {
@@ -66,6 +86,17 @@ class RequestFacilityProvider with ChangeNotifier {
         'id': facility.id,
         'comments': comments,
       });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '申請に社内コメントを追記しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '社内コメントの追記に失敗しました';
     }
@@ -73,13 +104,28 @@ class RequestFacilityProvider with ChangeNotifier {
   }
 
   Future<String?> pending({
+    required OrganizationModel? organization,
     required RequestFacilityModel facility,
+    required UserModel? loginUser,
   }) async {
     String? error;
+    if (organization == null) return '申請情報の更新に失敗しました';
+    if (loginUser == null) return '申請情報の更新に失敗しました';
     try {
       _facilityService.update({
         'id': facility.id,
         'pending': true,
+      });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '申請を保留中にしました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
       });
     } catch (e) {
       error = '申請情報の更新に失敗しました';
@@ -88,13 +134,28 @@ class RequestFacilityProvider with ChangeNotifier {
   }
 
   Future<String?> pendingCancel({
+    required OrganizationModel? organization,
     required RequestFacilityModel facility,
+    required UserModel? loginUser,
   }) async {
     String? error;
+    if (organization == null) return '申請情報の更新に失敗しました';
+    if (loginUser == null) return '申請情報の更新に失敗しました';
     try {
       _facilityService.update({
         'id': facility.id,
         'pending': false,
+      });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '申請の保留中を解除しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
       });
     } catch (e) {
       error = '申請情報の更新に失敗しました';
@@ -103,10 +164,12 @@ class RequestFacilityProvider with ChangeNotifier {
   }
 
   Future<String?> approval({
+    required OrganizationModel? organization,
     required RequestFacilityModel facility,
     required UserModel? loginUser,
   }) async {
     String? error;
+    if (organization == null) return '申請の承認に失敗しました';
     if (loginUser == null) return '申請の承認に失敗しました';
     try {
       List<Map> approvalUsers = [];
@@ -174,6 +237,17 @@ $attachedFilesText
         'createdAt': DateTime.now(),
         'expirationAt': DateTime.now().add(const Duration(hours: 1)),
       });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '申請を承認しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '申請の承認に失敗しました';
     }
@@ -181,10 +255,12 @@ $attachedFilesText
   }
 
   Future<String?> reject({
+    required OrganizationModel? organization,
     required RequestFacilityModel facility,
     required UserModel? loginUser,
   }) async {
     String? error;
+    if (organization == null) return '申請の否決に失敗しました';
     if (loginUser == null) return '申請の否決に失敗しました';
     try {
       _facilityService.update({
@@ -237,6 +313,17 @@ $attachedFilesText
         'message': message,
         'createdAt': DateTime.now(),
         'expirationAt': DateTime.now().add(const Duration(hours: 1)),
+      });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '申請を否決しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
       });
     } catch (e) {
       error = '申請の否決に失敗しました';

@@ -81,7 +81,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   category: category,
                   onTap: () => showDialog(
                     context: context,
-                    builder: (context) => DelCategoryDialog(category: category),
+                    builder: (context) => DelCategoryDialog(
+                      loginProvider: widget.loginProvider,
+                      category: category,
+                    ),
                   ),
                 );
               },
@@ -93,6 +96,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         onPressed: () => showDialog(
           context: context,
           builder: (context) => AddCategoryDialog(
+            loginProvider: widget.loginProvider,
             organization: widget.organization,
           ),
         ),
@@ -114,9 +118,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
 }
 
 class AddCategoryDialog extends StatefulWidget {
+  final LoginProvider loginProvider;
   final OrganizationModel? organization;
 
   const AddCategoryDialog({
+    required this.loginProvider,
     required this.organization,
     super.key,
   });
@@ -174,6 +180,7 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
               organization: widget.organization,
               name: nameController.text,
               color: color,
+              loginUser: widget.loginProvider.user,
             );
             if (error != null) {
               if (!mounted) return;
@@ -191,9 +198,11 @@ class _AddCategoryDialogState extends State<AddCategoryDialog> {
 }
 
 class DelCategoryDialog extends StatefulWidget {
+  final LoginProvider loginProvider;
   final CategoryModel category;
 
   const DelCategoryDialog({
+    required this.loginProvider,
     required this.category,
     super.key,
   });
@@ -233,6 +242,7 @@ class _DelCategoryDialogState extends State<DelCategoryDialog> {
           onPressed: () async {
             String? error = await categoryProvider.delete(
               category: widget.category,
+              loginUser: widget.loginProvider.user,
             );
             if (error != null) {
               if (!mounted) return;

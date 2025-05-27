@@ -555,6 +555,7 @@ class _DelLostDialogState extends State<DelLostDialog> {
           onPressed: () async {
             String? error = await lostProvider.delete(
               lost: widget.lost,
+              loginUser: widget.loginProvider.user,
             );
             if (error != null) {
               if (!mounted) return;

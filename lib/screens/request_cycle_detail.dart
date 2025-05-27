@@ -335,6 +335,8 @@ class _RequestCycleDetailScreenState extends State<RequestCycleDetailScreen> {
                                   onPressed: () async {
                                     String? error =
                                         await cycleProvider.addComment(
+                                      organization:
+                                          widget.loginProvider.organization,
                                       cycle: widget.cycle,
                                       content: commentContentController.text,
                                       loginUser: widget.loginProvider.user,
@@ -477,7 +479,9 @@ class PendingRequestCycleDialog extends StatelessWidget {
           backgroundColor: kYellowColor,
           onPressed: () async {
             String? error = await cycleProvider.pending(
+              organization: loginProvider.organization,
               cycle: cycle,
+              loginUser: loginProvider.user,
             );
             if (error != null) {
               showMessage(context, error, false);
@@ -534,7 +538,9 @@ class PendingCancelRequestCycleDialog extends StatelessWidget {
           backgroundColor: kYellowColor,
           onPressed: () async {
             String? error = await cycleProvider.pendingCancel(
+              organization: loginProvider.organization,
               cycle: cycle,
+              loginUser: loginProvider.user,
             );
             if (error != null) {
               showMessage(context, error, false);
@@ -609,6 +615,7 @@ class _ApprovalRequestCycleDialogState
           backgroundColor: kApprovalColor,
           onPressed: () async {
             String? error = await cycleProvider.approval(
+              organization: widget.loginProvider.organization,
               cycle: widget.cycle,
               lockNumber: lockNumberController.text,
               loginUser: widget.loginProvider.user,
@@ -677,6 +684,7 @@ class _RejectRequestCycleDialogState extends State<RejectRequestCycleDialog> {
           backgroundColor: kRejectColor,
           onPressed: () async {
             String? error = await cycleProvider.reject(
+              organization: widget.loginProvider.organization,
               cycle: widget.cycle,
               loginUser: widget.loginProvider.user,
             );

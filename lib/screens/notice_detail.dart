@@ -384,6 +384,7 @@ class _DelNoticeDialogState extends State<DelNoticeDialog> {
           onPressed: () async {
             String? error = await noticeProvider.delete(
               notice: widget.notice,
+              loginUser: widget.loginProvider.user,
             );
             if (error != null) {
               if (!mounted) return;

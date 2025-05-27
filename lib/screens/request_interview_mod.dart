@@ -143,6 +143,7 @@ class _RequestInterviewModScreenState extends State<RequestInterviewModScreen> {
           TextButton(
             onPressed: () async {
               String? error = await interviewProvider.update(
+                organization: widget.loginProvider.organization,
                 interview: widget.interview,
                 companyName: companyName.text,
                 companyUserName: companyUserName.text,
@@ -181,6 +182,7 @@ class _RequestInterviewModScreenState extends State<RequestInterviewModScreen> {
                 insertedVisitors: insertedVisitors.text,
                 insertedContent: insertedContent.text,
                 remarks: remarks.text,
+                loginUser: widget.loginProvider.user,
               );
               if (error != null) {
                 if (!mounted) return;

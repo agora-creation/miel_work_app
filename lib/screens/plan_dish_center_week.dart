@@ -421,6 +421,7 @@ class _PlanDishCenterWeekScreenState extends State<PlanDishCenterWeekScreen> {
                       organization: widget.loginProvider.organization,
                       dishCenterWeeks: dishCenterWeeks,
                       days: widget.days,
+                      loginUser: widget.loginProvider.user,
                     );
                     if (error != null) {
                       if (!mounted) return;

@@ -373,6 +373,7 @@ ${commentContentController.text}
               onPressed: () async {
                 String? error = await problemProvider.process(
                   problem: widget.problem,
+                  loginUser: widget.loginProvider.user,
                 );
                 if (error != null) {
                   if (!mounted) return;
@@ -452,6 +453,7 @@ class _DelProblemDialogState extends State<DelProblemDialog> {
           onPressed: () async {
             String? error = await problemProvider.delete(
               problem: widget.problem,
+              loginUser: widget.loginProvider.user,
             );
             if (error != null) {
               if (!mounted) return;

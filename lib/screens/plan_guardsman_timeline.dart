@@ -228,6 +228,7 @@ class _ModGuardsmanDialogState extends State<ModGuardsmanDialog> {
           onPressed: () async {
             String? error = await guardsmanProvider.delete(
               guardsman: widget.guardsman,
+              loginUser: widget.loginProvider.user,
             );
             if (error != null) {
               if (!mounted) return;
@@ -251,6 +252,7 @@ class _ModGuardsmanDialogState extends State<ModGuardsmanDialog> {
               startedAt: startedAt,
               endedAt: endedAt,
               remarks: remarksController.text,
+              loginUser: widget.loginProvider.user,
             );
             if (error != null) {
               if (!mounted) return;

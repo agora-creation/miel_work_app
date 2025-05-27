@@ -319,6 +319,7 @@ class _AddGuardsmanDialogState extends State<AddGuardsmanDialog> {
               startedAt: startedAt,
               endedAt: endedAt,
               remarks: remarksController.text,
+              loginUser: widget.loginProvider.user,
             );
             if (error != null) {
               if (!mounted) return;

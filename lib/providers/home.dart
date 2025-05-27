@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:miel_work_app/models/chat.dart';
 import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/organization_group.dart';
+import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/services/chat.dart';
+import 'package:miel_work_app/services/log.dart';
 import 'package:miel_work_app/services/organization_group.dart';
 
 class HomeProvider with ChangeNotifier {
   final OrganizationGroupService _groupService = OrganizationGroupService();
   final ChatService _chatService = ChatService();
+  final LogService _logService = LogService();
+
   List<OrganizationGroupModel> groups = [];
   OrganizationGroupModel? currentGroup;
 
@@ -40,10 +44,12 @@ class HomeProvider with ChangeNotifier {
   Future<String?> groupCreate({
     required OrganizationModel? organization,
     required String name,
+    required UserModel? loginUser,
   }) async {
     String? error;
     if (organization == null) return 'グループの追加に失敗しました';
     if (name == '') return 'グループ名は必須入力です';
+    if (loginUser == null) return 'グループの追加に失敗しました';
     try {
       String groupId = _groupService.id(organizationId: organization.id);
       _groupService.create({
@@ -80,6 +86,17 @@ class HomeProvider with ChangeNotifier {
         'createdAt': DateTime.now(),
       });
       setGroups(organizationId: organization.id);
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': 'グループを追加しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = 'グループの追加に失敗しました';
     }
@@ -90,11 +107,13 @@ class HomeProvider with ChangeNotifier {
     required OrganizationModel? organization,
     required OrganizationGroupModel? group,
     required String name,
+    required UserModel? loginUser,
   }) async {
     String? error;
     if (organization == null) return 'グループ名の変更に失敗しました';
     if (group == null) return 'グループ名の変更に失敗しました';
     if (name == '') return 'グループ名は必須入力です';
+    if (loginUser == null) return 'グループ名の変更に失敗しました';
     try {
       _groupService.update({
         'id': group.id,
@@ -112,6 +131,17 @@ class HomeProvider with ChangeNotifier {
         });
       }
       setGroups(organizationId: organization.id);
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': 'グループ名を変更しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = 'グループ名の変更に失敗しました';
     }
@@ -121,10 +151,12 @@ class HomeProvider with ChangeNotifier {
   Future<String?> groupDelete({
     required OrganizationModel? organization,
     required OrganizationGroupModel? group,
+    required UserModel? loginUser,
   }) async {
     String? error;
     if (organization == null) return 'グループの削除に失敗しました';
     if (group == null) return 'グループの削除に失敗しました';
+    if (loginUser == null) return 'グループの削除に失敗しました';
     try {
       _groupService.delete({
         'id': group.id,
@@ -140,6 +172,17 @@ class HomeProvider with ChangeNotifier {
         });
       }
       setGroups(organizationId: organization.id);
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': 'グループを削除しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = 'グループの削除に失敗しました';
     }

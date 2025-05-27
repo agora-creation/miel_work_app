@@ -364,6 +364,7 @@ class _AddDishCenterDialogState extends State<AddDishCenterDialog> {
               startedAt: startedAt,
               endedAt: endedAt,
               remarks: remarksController.text,
+              loginUser: widget.loginProvider.user,
             );
             if (error != null) {
               if (!mounted) return;

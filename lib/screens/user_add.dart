@@ -174,6 +174,7 @@ class _UserAddScreenState extends State<UserAddScreen> {
             group: selectedGroup,
             admin: admin,
             president: president,
+            loginUser: widget.loginProvider.user,
           );
           if (error != null) {
             if (!mounted) return;

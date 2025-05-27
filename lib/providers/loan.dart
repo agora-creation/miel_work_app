@@ -10,6 +10,7 @@ import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/services/fm.dart';
 import 'package:miel_work_app/services/loan.dart';
+import 'package:miel_work_app/services/log.dart';
 import 'package:miel_work_app/services/user.dart';
 import 'package:signature/signature.dart';
 
@@ -17,6 +18,7 @@ class LoanProvider with ChangeNotifier {
   final LoanService _loanService = LoanService();
   final UserService _userService = UserService();
   final FmService _fmService = FmService();
+  final LogService _logService = LogService();
 
   Future<String?> create({
     required OrganizationModel? organization,
@@ -86,6 +88,17 @@ class LoanProvider with ChangeNotifier {
           }
         }
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '貸出物を追加しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '貸出物の追加に失敗しました';
     }
@@ -146,6 +159,17 @@ class LoanProvider with ChangeNotifier {
           'itemName': itemName,
         });
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '貸出情報を編集しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '貸出情報の編集に失敗しました';
     }
@@ -183,6 +207,17 @@ class LoanProvider with ChangeNotifier {
         'returnAt': returnAt,
         'returnUser': returnUser,
         'signImage': signImage,
+      });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '貸出物を返却しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
       });
     } catch (e) {
       error = '貸出物の返却に失敗しました';
@@ -236,6 +271,17 @@ class LoanProvider with ChangeNotifier {
           }
         }
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '貸出物に社内コメントを追記しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '社内コメントの追記に失敗しました';
     }
@@ -244,11 +290,24 @@ class LoanProvider with ChangeNotifier {
 
   Future<String?> delete({
     required LoanModel loan,
+    required UserModel? loginUser,
   }) async {
     String? error;
+    if (loginUser == null) return '貸出情報の削除に失敗しました';
     try {
       _loanService.delete({
         'id': loan.id,
+      });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': loan.organizationId,
+        'content': '貸出物を削除しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
       });
     } catch (e) {
       error = '貸出情報の削除に失敗しました';

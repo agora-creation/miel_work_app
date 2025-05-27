@@ -236,6 +236,7 @@ class _DelPlanDialogState extends State<DelPlanDialog> {
           onPressed: () async {
             String? error = await planProvider.delete(
               plan: widget.plan,
+              loginUser: widget.loginProvider.user,
             );
             if (error != null) {
               if (!mounted) return;

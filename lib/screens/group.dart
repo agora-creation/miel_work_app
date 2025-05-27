@@ -183,6 +183,7 @@ class _AddGroupDialogState extends State<AddGroupDialog> {
             String? error = await widget.homeProvider.groupCreate(
               organization: widget.loginProvider.organization,
               name: nameController.text,
+              loginUser: widget.loginProvider.user,
             );
             if (error != null) {
               if (!mounted) return;

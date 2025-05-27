@@ -4,6 +4,7 @@ import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/services/chat.dart';
+import 'package:miel_work_app/services/log.dart';
 import 'package:miel_work_app/services/organization.dart';
 import 'package:miel_work_app/services/organization_group.dart';
 import 'package:miel_work_app/services/user.dart';
@@ -13,6 +14,7 @@ class UserProvider with ChangeNotifier {
   final OrganizationGroupService _groupService = OrganizationGroupService();
   final UserService _userService = UserService();
   final ChatService _chatService = ChatService();
+  final LogService _logService = LogService();
 
   Future<String?> create({
     required OrganizationModel? organization,
@@ -22,6 +24,7 @@ class UserProvider with ChangeNotifier {
     required OrganizationGroupModel? group,
     required bool admin,
     required bool president,
+    required UserModel? loginUser,
   }) async {
     String? error;
     if (organization == null) return 'スタッフの追加に失敗しました';
@@ -31,6 +34,7 @@ class UserProvider with ChangeNotifier {
     if (await _userService.emailCheck(email: email)) {
       return '他のメールアドレスを入力してください';
     }
+    if (loginUser == null) return 'スタッフの追加に失敗しました';
     try {
       String id = _userService.id();
       _userService.create({
@@ -101,6 +105,17 @@ class UserProvider with ChangeNotifier {
           });
         }
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': 'スタッフを追加しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = 'スタッフの追加に失敗しました';
     }
@@ -117,6 +132,7 @@ class UserProvider with ChangeNotifier {
     required OrganizationGroupModel? aftGroup,
     required bool admin,
     required bool president,
+    required UserModel? loginUser,
   }) async {
     String? error;
     if (organization == null) return 'スタッフ情報の編集に失敗しました';
@@ -128,6 +144,7 @@ class UserProvider with ChangeNotifier {
         return '他のメールアドレスを入力してください';
       }
     }
+    if (loginUser == null) return 'スタッフ情報の編集に失敗しました';
     try {
       _userService.update({
         'id': user.id,
@@ -261,6 +278,17 @@ class UserProvider with ChangeNotifier {
           }
         }
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': 'スタッフ情報を編集しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = 'スタッフ情報の編集に失敗しました';
     }
@@ -271,9 +299,11 @@ class UserProvider with ChangeNotifier {
     required OrganizationModel? organization,
     required UserModel user,
     required OrganizationGroupModel? group,
+    required UserModel? loginUser,
   }) async {
     String? error;
     if (organization == null) return 'スタッフ情報の削除に失敗しました';
+    if (loginUser == null) return 'スタッフ情報の削除に失敗しました';
     try {
       _userService.delete({
         'id': user.id,
@@ -314,6 +344,17 @@ class UserProvider with ChangeNotifier {
           'userIds': chatUserIds,
         });
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': 'スタッフを削除しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = 'スタッフ情報の削除に失敗しました';
     }

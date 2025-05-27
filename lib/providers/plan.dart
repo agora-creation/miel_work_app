@@ -3,10 +3,13 @@ import 'package:miel_work_app/models/category.dart';
 import 'package:miel_work_app/models/organization.dart';
 import 'package:miel_work_app/models/organization_group.dart';
 import 'package:miel_work_app/models/plan.dart';
+import 'package:miel_work_app/models/user.dart';
+import 'package:miel_work_app/services/log.dart';
 import 'package:miel_work_app/services/plan.dart';
 
 class PlanProvider with ChangeNotifier {
   final PlanService _planService = PlanService();
+  final LogService _logService = LogService();
 
   Future<String?> create({
     required OrganizationModel? organization,
@@ -22,6 +25,7 @@ class PlanProvider with ChangeNotifier {
     required List<String> repeatWeeks,
     required String memo,
     required int alertMinute,
+    required UserModel? loginUser,
   }) async {
     String? error;
     if (organization == null) return '予定の追加に失敗しました';
@@ -30,6 +34,7 @@ class PlanProvider with ChangeNotifier {
     if (startedAt.millisecondsSinceEpoch > endedAt.millisecondsSinceEpoch) {
       return '日時を正しく選択してください';
     }
+    if (loginUser == null) return '予定の追加に失敗しました';
     try {
       List<String> userIds = [];
       if (group != null) {
@@ -59,6 +64,17 @@ class PlanProvider with ChangeNotifier {
         'createdAt': DateTime.now(),
         'expirationAt': startedAt.add(const Duration(days: 365)),
       });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '予定を追加しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '予定の追加に失敗しました';
     }
@@ -80,6 +96,7 @@ class PlanProvider with ChangeNotifier {
     required List<String> repeatWeeks,
     required String memo,
     required int alertMinute,
+    required UserModel? loginUser,
   }) async {
     String? error;
     if (organization == null) return '予定の編集に失敗しました';
@@ -88,6 +105,7 @@ class PlanProvider with ChangeNotifier {
     if (startedAt.millisecondsSinceEpoch > endedAt.millisecondsSinceEpoch) {
       return '日時を正しく選択してください';
     }
+    if (loginUser == null) return '予定の編集に失敗しました';
     try {
       List<String> userIds = [];
       if (group != null) {
@@ -115,6 +133,17 @@ class PlanProvider with ChangeNotifier {
         'alertedAt': startedAt.subtract(Duration(minutes: alertMinute)),
         'expirationAt': startedAt.add(const Duration(days: 365)),
       });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': organization.id,
+        'content': '予定を編集しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = '予定の編集に失敗しました';
     }
@@ -123,11 +152,24 @@ class PlanProvider with ChangeNotifier {
 
   Future<String?> delete({
     required PlanModel plan,
+    required UserModel? loginUser,
   }) async {
     String? error;
+    if (loginUser == null) return '予定の削除に失敗しました';
     try {
       _planService.delete({
         'id': plan.id,
+      });
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': plan.organizationId,
+        'content': '予定を削除しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
       });
     } catch (e) {
       error = '予定の削除に失敗しました';

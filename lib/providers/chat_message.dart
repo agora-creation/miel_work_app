@@ -318,6 +318,7 @@ class ChatMessageProvider with ChangeNotifier {
 
   Future<String?> delete({
     required ChatMessageModel message,
+    required UserModel? loginUser,
   }) async {
     String? error;
     try {
