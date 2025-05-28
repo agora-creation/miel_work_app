@@ -53,7 +53,7 @@ class StockHistoryProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': stock.organizationId,
-        'content': '在庫変動履歴を追加しました。',
+        'content': '在庫品の在庫変動履歴を追加しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -101,7 +101,7 @@ class StockHistoryProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': stock.organizationId,
-        'content': '在庫変動履歴を削除しました。',
+        'content': '在庫品の在庫変動履歴を削除しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,

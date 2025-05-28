@@ -27,6 +27,9 @@ class LogList extends StatelessWidget {
               Text(
                 log.content,
                 style: const TextStyle(fontSize: 16),
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
               Text(
                 '操作日時: ${dateText('yyyy/MM/dd HH:mm', log.createdAt)}',

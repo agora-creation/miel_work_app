@@ -175,7 +175,7 @@ class ReportProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '日報を保存しました。',
+        'content': '業務日報(${dateText('MM月dd日(E)', createdAt)})を保存しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -336,7 +336,7 @@ class ReportProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': report.organizationId,
-        'content': '日報を保存しました。',
+        'content': '業務日報(${dateText('MM月dd日(E)', report.createdAt)})を保存しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -382,7 +382,8 @@ class ReportProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '日報に社内コメントを追記しました。',
+        'content':
+            '業務日報(${dateText('MM月dd日(E)', report.createdAt)})に社内コメントを追記しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -410,7 +411,7 @@ class ReportProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': report.organizationId,
-        'content': '日報を承認しました。',
+        'content': '業務日報(${dateText('MM月dd日(E)', report.createdAt)})を承認しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -437,7 +438,7 @@ class ReportProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': report.organizationId,
-        'content': '日報を削除しました。',
+        'content': '業務日報(${dateText('MM月dd日(E)', report.createdAt)})を削除しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,

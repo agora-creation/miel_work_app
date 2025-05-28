@@ -41,7 +41,7 @@ class PlanGarbagemanProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '勤務予定を追加しました。',
+        'content': '清掃員の勤務予定を追加しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -103,7 +103,7 @@ class PlanGarbagemanProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '勤務予定に1ヵ月分を反映しました。',
+        'content': '清掃員の勤務予定に1ヵ月分を反映しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -144,7 +144,7 @@ class PlanGarbagemanProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '勤務予定を編集しました。',
+        'content': '清掃員の勤務予定を編集しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -171,7 +171,7 @@ class PlanGarbagemanProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': garbageman.organizationId,
-        'content': '勤務予定を削除しました。',
+        'content': '清掃員の勤務予定を削除しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,

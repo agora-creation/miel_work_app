@@ -40,7 +40,7 @@ class RequestCycleProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '自転車置き場使用申込を編集しました。',
+        'content': '自社外申請:自転車置き場使用申込を編集しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -86,7 +86,7 @@ class RequestCycleProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '申請に社内コメントを追記しました。',
+        'content': '社外申請:自転車置き場使用申込に社内コメントを追記しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -116,7 +116,7 @@ class RequestCycleProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '申請を保留中にしました。',
+        'content': '社外申請:自転車置き場使用申込を保留中にしました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -146,7 +146,7 @@ class RequestCycleProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '申請の保留中を解除しました。',
+        'content': '社外申請:自転車置き場使用申込の保留中を解除しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -217,7 +217,7 @@ class RequestCycleProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '申請を承認しました。',
+        'content': '社外申請:自転車置き場使用申込を承認しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -268,7 +268,7 @@ class RequestCycleProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '申請を否決しました。',
+        'content': '社外申請:自転車置き場使用申込を否決しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,

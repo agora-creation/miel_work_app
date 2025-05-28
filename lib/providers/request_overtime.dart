@@ -45,7 +45,7 @@ class RequestOvertimeProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '夜間居残り作業申請を編集しました。',
+        'content': '社外申請:夜間居残り作業申請を編集しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -91,7 +91,7 @@ class RequestOvertimeProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '申請に社内コメントを追記しました。',
+        'content': '社外申請:夜間居残り作業申請に社内コメントを追記しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -121,7 +121,7 @@ class RequestOvertimeProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '申請を保留中にしました。',
+        'content': '社外申請:夜間居残り作業申請を保留中にしました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -151,7 +151,7 @@ class RequestOvertimeProvider with ChangeNotifier {
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '申請の保留中を解除しました。',
+        'content': '社外申請:夜間居残り作業申請の保留中を解除しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -236,7 +236,7 @@ $attachedFilesText
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '申請を承認しました。',
+        'content': '社外申請:夜間居残り作業申請を承認しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
@@ -307,7 +307,7 @@ $attachedFilesText
       _logService.create({
         'id': logId,
         'organizationId': organization.id,
-        'content': '申請を否決しました。',
+        'content': '社外申請:夜間居残り作業申請を否決しました。',
         'device': 'SP(アプリ)',
         'createdUserId': loginUser.id,
         'createdUserName': loginUser.name,
