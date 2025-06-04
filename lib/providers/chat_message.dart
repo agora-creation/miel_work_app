@@ -12,6 +12,7 @@ import 'package:miel_work_app/models/user.dart';
 import 'package:miel_work_app/services/chat.dart';
 import 'package:miel_work_app/services/chat_message.dart';
 import 'package:miel_work_app/services/fm.dart';
+import 'package:miel_work_app/services/log.dart';
 import 'package:miel_work_app/services/user.dart';
 import 'package:path/path.dart' as p;
 
@@ -20,6 +21,7 @@ class ChatMessageProvider with ChangeNotifier {
   final ChatMessageService _messageService = ChatMessageService();
   final UserService _userService = UserService();
   final FmService _fmService = FmService();
+  final LogService _logService = LogService();
 
   TextEditingController contentController = TextEditingController();
   FocusNode contentFocusNode = FocusNode();
@@ -321,6 +323,7 @@ class ChatMessageProvider with ChangeNotifier {
     required UserModel? loginUser,
   }) async {
     String? error;
+    if (loginUser == null) return 'メッセージの削除に失敗しました';
     try {
       _messageService.delete({
         'id': message.id,
@@ -337,6 +340,17 @@ class ChatMessageProvider with ChangeNotifier {
             .child('chat/${message.chatId}/${message.id}${message.fileExt}')
             .delete();
       }
+      //ログ保存
+      String logId = _logService.id();
+      _logService.create({
+        'id': logId,
+        'organizationId': message.organizationId,
+        'content': 'チャットメッセージを削除しました。',
+        'device': 'SP(アプリ)',
+        'createdUserId': loginUser.id,
+        'createdUserName': loginUser.name,
+        'createdAt': DateTime.now(),
+      });
     } catch (e) {
       error = 'メッセージの削除に失敗しました';
     }
